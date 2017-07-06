@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author lev проверить3в
+ * @author lev
  * 
  */  
 package com.dic.bill.mm;

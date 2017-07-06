@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author lev проверка!
+ * @author lev
  *
  */
 package com.dic.bill.dao;
