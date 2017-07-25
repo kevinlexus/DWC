@@ -9,13 +9,21 @@
 	<description>Model classes</description>
 
 	<properties>
+		<!-- Generic properties -->
+	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
 		<!-- Spring -->
 		<spring-framework.version>4.2.5.RELEASE</spring-framework.version>
-		<java.version>1.8</java.version>
+
 		<!-- Hibernate / JPA -->
 		<hibernate.version>5.1.0.Final</hibernate.version>
+
+		<!-- Test -->
+		<junit.version>4.12</junit.version>
+
+		<java.version>1.8</java.version>
 	</properties>
 
 <dependencies>
@@ -26,6 +34,12 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency> 
  -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.10</version>
+			<scope>provided</scope>
+		</dependency>
  
  		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
@@ -39,7 +53,35 @@
 		    <version>4.2.5.RELEASE</version>
 		</dependency>
  
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>1.7.25</version>
+		</dependency>
+ 
 </dependencies>
 
+<build>
+	<plugins>
+	
+	   <plugin>
+	       <groupId>org.apache.maven.plugins</groupId>
+	       <artifactId>maven-compiler-plugin</artifactId>
+	       <version>3.6.1</version>
+	       <configuration>
+	           <source>1.8</source>
+	           <target>1.8</target>
+	       </configuration>
+	   </plugin>
+	</plugins>
+
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering> 
+        </resource>
+    </resources>
+</build> 
 
 </project>

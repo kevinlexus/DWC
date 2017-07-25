@@ -14,10 +14,10 @@ import javax.persistence.Table;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "C_CHARGEPAY", schema="SCOTT")
-@IdClass(ChargePayId.class) // суррогатный первичный ключ
-public class ChargePay implements java.io.Serializable { 
+@IdClass(AchargeId.class) // суррогатный первичный ключ
+public class Acharge implements java.io.Serializable { 
 
-	public ChargePay() {
+	public Acharge() {
 	}
 
     @Id
@@ -29,13 +29,13 @@ public class ChargePay implements java.io.Serializable {
 	private Integer type; // Тип записи, 0 - начисление, 1 - оплата
     
     @Id
+    @Column(name = "usl", updatable = false, nullable = false)
+	private String usl; // период задолжности
+
+    @Id
     @Column(name = "mg", updatable = false, nullable = false)
 	private String mg; // период задолжности
     
-    @Id
-    @Column(name = "period", updatable = false, nullable = false)
-	private String period; // период бухгалтерский
-
     @Column(name = "summa", updatable = false, nullable = false)
 	private Double summa; // сумма задолжности
 
@@ -63,14 +63,6 @@ public class ChargePay implements java.io.Serializable {
 		this.mg = mg;
 	}
 
-	public String getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(String period) {
-		this.period = period;
-	}
-
 	public Double getSumma() {
 		return summa;
 	}
@@ -79,13 +71,21 @@ public class ChargePay implements java.io.Serializable {
 		this.summa = summa;
 	}
 
+	public String getUsl() {
+		return usl;
+	}
+
+	public void setUsl(String usl) {
+		this.usl = usl;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
 		result = prime * result + ((mg == null) ? 0 : mg.hashCode());
-		result = prime * result + ((period == null) ? 0 : period.hashCode());
+		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -98,10 +98,10 @@ public class ChargePay implements java.io.Serializable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof ChargePay)) {
+		if (!(obj instanceof Acharge)) {
 			return false;
 		}
-		ChargePay other = (ChargePay) obj;
+		Acharge other = (Acharge) obj;
 		if (lsk == null) {
 			if (other.lsk != null) {
 				return false;
@@ -116,11 +116,11 @@ public class ChargePay implements java.io.Serializable {
 		} else if (!mg.equals(other.mg)) {
 			return false;
 		}
-		if (period == null) {
-			if (other.period != null) {
+		if (usl == null) {
+			if (other.usl != null) {
 				return false;
 			}
-		} else if (!period.equals(other.period)) {
+		} else if (!usl.equals(other.usl)) {
 			return false;
 		}
 		if (type == null) {
