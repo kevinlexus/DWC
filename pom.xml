@@ -41,6 +41,14 @@
 			<scope>provided</scope>
 		</dependency>
  
+		<!-- BWC -->
+		<dependency>
+			<groupId>com.ric.bill</groupId>
+			<artifactId>BWC</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>

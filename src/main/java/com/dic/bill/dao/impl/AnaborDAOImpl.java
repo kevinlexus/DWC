@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.dic.bill.dao.AnaborDAO;
 import com.dic.bill.model.scott.Anabor;
-import com.dic.bill.model.scott.DebUsl;
 
 
 @Repository
@@ -21,12 +20,21 @@ public class AnaborDAOImpl implements AnaborDAO {
     private EntityManager em;
 
     /**
-     * Получить все элементы DebUsl
+     * Получить все элементы Anabor
      */
     public List<Anabor> getAll() {
 		Query query =em.createQuery("from Anabor t");
 		return query.getResultList();
 	}
 
+    /**
+     * Получить все элементы Anabor по лиц.счету
+     * @param lsk - лиц. счет
+     */
+    public List<Anabor> getByLsk(String lsk) {
+		Query query =em.createQuery("from Anabor t where t.lsk=:lsk order by t.mg1");
+		query.setParameter("lsk", lsk);
+		return query.getResultList();
+	}
 
 }

@@ -3,8 +3,9 @@ package com.dic.bill.model.scott;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
+
+import com.dic.bill.Compress;
 
 /**
  * Наборы услуг по периодам 
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "A_NABOR", schema="SCOTT")
-public class Anabor implements java.io.Serializable { 
+public class Anabor implements java.io.Serializable, Compress { 
 
 	public Anabor() {
 	}
@@ -33,10 +34,10 @@ public class Anabor implements java.io.Serializable {
 	private String mg; // период по-старому
 
 	@Column(name = "mg1", updatable = true, nullable = false)
-	private String mg1; // Начало действия записи
+	private Integer mg1; // Начало действия записи
 
 	@Column(name = "mg2", updatable = true, nullable = false)
-	private String mg2; // Окончание действия записи
+	private Integer mg2; // Окончание действия записи
 
 	@Column(name = "org", updatable = false, nullable = false)
 	private Double org; // код орг.
@@ -121,19 +122,19 @@ public class Anabor implements java.io.Serializable {
 		this.mg = mg;
 	}
 
-	public String getMg1() {
+	public Integer getMg1() {
 		return mg1;
 	}
 
-	public void setMg1(String mg1) {
+	public void setMg1(Integer mg1) {
 		this.mg1 = mg1;
 	}
 
-	public String getMg2() {
+	public Integer getMg2() {
 		return mg2;
 	}
 
-	public void setMg2(String mg2) {
+	public void setMg2(Integer mg2) {
 		this.mg2 = mg2;
 	}
 
@@ -273,34 +274,12 @@ public class Anabor implements java.io.Serializable {
 		this.nrmKpr2 = nrmKpr2;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((Limit == null) ? 0 : Limit.hashCode());
-		result = prime * result + ((fkDvb == null) ? 0 : fkDvb.hashCode());
-		result = prime * result + ((fkTarif == null) ? 0 : fkTarif.hashCode());
-		result = prime * result + ((fkVvod == null) ? 0 : fkVvod.hashCode());
-		result = prime * result + ((kfKpr == null) ? 0 : kfKpr.hashCode());
-		result = prime * result + ((kfKprSch == null) ? 0 : kfKprSch.hashCode());
-		result = prime * result + ((kfKprWro == null) ? 0 : kfKprWro.hashCode());
-		result = prime * result + ((kfKprWroSch == null) ? 0 : kfKprWroSch.hashCode());
-		result = prime * result + ((kfKprWrz == null) ? 0 : kfKprWrz.hashCode());
-		result = prime * result + ((kfKprWrzSch == null) ? 0 : kfKprWrzSch.hashCode());
-		result = prime * result + ((koeff == null) ? 0 : koeff.hashCode());
-		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
-		result = prime * result + ((nrmKpr == null) ? 0 : nrmKpr.hashCode());
-		result = prime * result + ((nrmKpr2 == null) ? 0 : nrmKpr2.hashCode());
-		result = prime * result + ((org == null) ? 0 : org.hashCode());
-		result = prime * result + ((schAuto == null) ? 0 : schAuto.hashCode());
-		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
-		result = prime * result + ((vol == null) ? 0 : vol.hashCode());
-		result = prime * result + ((volAdd == null) ? 0 : volAdd.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
+	/**
+	 * Сравнить тип объекта и все поля, кроме полей id, mg, mg1, mg2 
+	 * @param obj - Сравниваемый объект
+	 * @return
+	 */
+	public boolean same(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -405,7 +384,6 @@ public class Anabor implements java.io.Serializable {
 			return false;
 		return true;
 	}
-
 	
 }
 
