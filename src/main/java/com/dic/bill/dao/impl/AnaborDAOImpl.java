@@ -32,7 +32,7 @@ public class AnaborDAOImpl implements AnaborDAO {
      * @param lsk - лиц. счет
      */
     public List<Anabor> getByLsk(String lsk) {
-		Query query =em.createQuery("from Anabor t where t.lsk=:lsk order by t.mg1");
+		Query query =em.createQuery("from Anabor t where t.lsk=:lsk");
 		query.setParameter("lsk", lsk);
 		return query.getResultList();
 	}

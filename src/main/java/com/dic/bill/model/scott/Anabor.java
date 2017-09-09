@@ -14,7 +14,7 @@ import com.dic.bill.Compress;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "A_NABOR", schema="SCOTT")
+@Table(name = "A_NABOR2", schema="SCOTT")
 public class Anabor implements java.io.Serializable, Compress { 
 
 	public Anabor() {
