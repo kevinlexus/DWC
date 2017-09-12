@@ -29,7 +29,7 @@ public class KartDAOImpl implements KartDAO {
      * Получить все элементы Kart
      */
     public List<Kart> getAll() {
-		Query query =em.createQuery("from Kart t");
+		Query query =em.createQuery("from Kart t order by t.lsk");
 		return query.getResultList();
 	}
 

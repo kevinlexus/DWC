@@ -15,4 +15,7 @@ public interface Compress {
 	public Integer getMg2();
 	public void setMg2(Integer period);
 	
+	// не во всех таблицах есть USL, делать там поле Transient
+	public String getUsl();
+	
 }
