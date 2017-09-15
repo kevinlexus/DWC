@@ -33,4 +33,15 @@ public class KartDAOImpl implements KartDAO {
 		return query.getResultList();
 	}
 
+    /**
+     * Получить все элементы Kart, >= заданного лс
+     * @param firstLsk - заданный лс
+     */
+    public List<Kart> getAfterLsk(String firstLsk) {
+    	Query query =em.createQuery("from Kart t where t.lsk >= :lsk order by t.lsk");
+		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
+		query.setParameter("lsk", firstLsk);
+		return query.getResultList();
+	}
+
 }

@@ -9,5 +9,6 @@ public interface KartDAO {
 
 	
 	public List<Kart> getAll();
+	public List<Kart> getAfterLsk(String firstLsk);
 	
 }
