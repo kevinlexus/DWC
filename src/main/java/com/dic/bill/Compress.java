@@ -7,15 +7,15 @@ package com.dic.bill;
  */
 public interface Compress {
 
-	public boolean same(Object obj);
 
-	public Integer getMg1();
-	public void setMg1(Integer period);
+	public Integer getMgFrom();
+	public void setMgFrom(Integer period);
 
-	public Integer getMg2();
-	public void setMg2(Integer period);
+	public Integer getMgTo();
+	public void setMgTo(Integer period);
 	
-	// не во всех таблицах есть USL, делать там поле Transient
-	public String getUsl();
+	public Integer getKey();
+	public Integer getHash();
+	
 	
 }

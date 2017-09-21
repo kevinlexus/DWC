@@ -38,12 +38,13 @@ public class AnaborDAOImpl implements AnaborDAO {
 	}
 
     /**
-     * Получить все элементы Anabor по лиц.счету, начиная с заданного периода и чтобы mg1=mg2 (не сжатые периоды)
+     * Получить все элементы Anabor по лиц.счету, начиная с заданного периода
      * @param lsk - лиц. счет
      * @param period - период
      */
     public List<Anabor> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from Anabor t where t.lsk=:lsk and (t.mg2 = :period or t.mg1 >=:period)");
+		Query query =em.createQuery("from Anabor t where t.lsk>=:lsk and "
+				+ "t.mgFrom >=:period");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);
 		return query.getResultList();

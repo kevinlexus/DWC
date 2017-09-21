@@ -10,5 +10,5 @@ public interface AchargeDAO {
 
 	
 	public List<Acharge> getByLsk(String lsk);
-	
+	public List<Acharge> getByLskPeriod(String lsk, Integer period);
 }

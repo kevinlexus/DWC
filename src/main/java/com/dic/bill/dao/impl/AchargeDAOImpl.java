@@ -12,6 +12,7 @@ import com.dic.bill.dao.AchargeDAO;
 import com.dic.bill.dao.ChargePayDAO;
 import com.dic.bill.dao.SaldoUslDAO;
 import com.dic.bill.model.scott.Acharge;
+import com.dic.bill.model.scott.Anabor;
 import com.dic.bill.model.scott.ChargePay;
 import com.dic.bill.model.scott.SaldoUsl;
 
@@ -24,7 +25,7 @@ public class AchargeDAOImpl implements AchargeDAO {
     private EntityManager em;
 
     /**
-     * Получить все элементы SaldoUsl по lsk
+     * Получить все элементы по lsk
      * @param - lsk - лиц.счет
      */
     public List<Acharge> getByLsk(String lsk) {
@@ -33,5 +34,18 @@ public class AchargeDAOImpl implements AchargeDAO {
 		return query.getResultList();
 	}
 
+    /**
+     * Получить все элементы по лиц.счету, начиная с заданного периода
+     * @param lsk - лиц. счет
+     * @param period - период
+     */
+    public List<Acharge> getByLskPeriod(String lsk, Integer period) {
+		Query query =em.createQuery("from Acharge t where t.lsk>=:lsk and "
+				+ "t.mgFrom >=:period");
+		query.setParameter("period", period);
+		query.setParameter("lsk", lsk);
+		return query.getResultList();
+	}
+    
 
 }
