@@ -20,6 +20,7 @@ public class Anabor implements java.io.Serializable, Compress {
 	public Anabor() {
 	}
 
+	
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
 	private Integer id; // Id
@@ -57,6 +58,9 @@ public class Anabor implements java.io.Serializable, Compress {
 	@Column(name = "vol_add", updatable = false, nullable = false)
 	private Double volAdd;
 	
+	@Column(name = "norm", updatable = false, nullable = false)
+	private Double norm;
+
 	@Column(name = "kf_kpr", updatable = false, nullable = false)
 	private Double kfKpr;
 	
@@ -263,6 +267,14 @@ public class Anabor implements java.io.Serializable, Compress {
 		this.nrmKpr2 = nrmKpr2;
 	}
 
+	
+	public Double getNorm() {
+		return norm;
+	}
+
+	public void setNorm(Double norm) {
+		this.norm = norm;
+	}
 
 	public boolean equals(Object o) {
 	    if (this == o) return true;
@@ -287,7 +299,8 @@ public class Anabor implements java.io.Serializable, Compress {
 	}
 	
 	/**
-	 * Получить hash ключа, для поиска уникальных элементов
+	 * Получить hash ключа, для поиска уникальных элементов (конечно, нельзя искать по hash, 
+	 * если будут несколько полей.. придумать что нить потом) TODO 
 	 * @return hash
 	 */
 	public Integer getKey() {
@@ -296,12 +309,12 @@ public class Anabor implements java.io.Serializable, Compress {
 		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
 		return result;
 	}
-
+	
 	/**
-	 * Получить hash всех полей, кроме полей id, mgFrom, mgTo 
+	 * Получить hash всех полей, кроме id, mgFrom, mgTo - для компаратора
 	 * @return
 	 */
-	public Integer getHash() {
+	public int getHash() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((Limit == null) ? 0 : Limit.hashCode());
@@ -318,6 +331,7 @@ public class Anabor implements java.io.Serializable, Compress {
 		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
 		result = prime * result + ((nrmKpr == null) ? 0 : nrmKpr.hashCode());
 		result = prime * result + ((nrmKpr2 == null) ? 0 : nrmKpr2.hashCode());
+		result = prime * result + ((norm == null) ? 0 : norm.hashCode());
 		result = prime * result + ((org == null) ? 0 : org.hashCode());
 		result = prime * result + ((schAuto == null) ? 0 : schAuto.hashCode());
 		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
@@ -326,7 +340,113 @@ public class Anabor implements java.io.Serializable, Compress {
 		return result;
 	}
 
-	
+	/**
+	 * Сравнить все поля, кроме id, mgFrom, mgTo - для компаратора
+	 * @return
+	 */
+	public boolean isTheSame(Compress compr) {
+		Anabor other = (Anabor) compr;
+		if (norm == null) {
+			if (other.norm != null)
+				return false;
+		} else if (Limit == null) {
+			if (other.Limit != null)
+				return false;
+		} else if (!Limit.equals(other.Limit))
+			return false;
+		if (fkDvb == null) {
+			if (other.fkDvb != null)
+				return false;
+		} else if (!fkDvb.equals(other.fkDvb))
+			return false;
+		if (fkTarif == null) {
+			if (other.fkTarif != null)
+				return false;
+		} else if (!fkTarif.equals(other.fkTarif))
+			return false;
+		if (fkVvod == null) {
+			if (other.fkVvod != null)
+				return false;
+		} else if (!fkVvod.equals(other.fkVvod))
+			return false;
+		if (kfKpr == null) {
+			if (other.kfKpr != null)
+				return false;
+		} else if (!kfKpr.equals(other.kfKpr))
+			return false;
+		if (kfKprSch == null) {
+			if (other.kfKprSch != null)
+				return false;
+		} else if (!kfKprSch.equals(other.kfKprSch))
+			return false;
+		if (kfKprWro == null) {
+			if (other.kfKprWro != null)
+				return false;
+		} else if (!kfKprWro.equals(other.kfKprWro))
+			return false;
+		if (kfKprWroSch == null) {
+			if (other.kfKprWroSch != null)
+				return false;
+		} else if (!kfKprWroSch.equals(other.kfKprWroSch))
+			return false;
+		if (kfKprWrz == null) {
+			if (other.kfKprWrz != null)
+				return false;
+		} else if (!kfKprWrz.equals(other.kfKprWrz))
+			return false;
+		if (kfKprWrzSch == null) {
+			if (other.kfKprWrzSch != null)
+				return false;
+		} else if (!kfKprWrzSch.equals(other.kfKprWrzSch))
+			return false;
+		if (koeff == null) {
+			if (other.koeff != null)
+				return false;
+		} else if (!koeff.equals(other.koeff))
+			return false;
+		if (lsk == null) {
+			if (other.lsk != null)
+				return false;
+		} else if (!lsk.equals(other.lsk))
+			return false;
+		if (nrmKpr == null) {
+			if (other.nrmKpr != null)
+				return false;
+		} else if (!nrmKpr.equals(other.nrmKpr))
+			return false;
+		if (nrmKpr2 == null) {
+			if (other.nrmKpr2 != null)
+				return false;
+		} else if (!nrmKpr2.equals(other.nrmKpr2))
+			return false;
+		if (org == null) {
+			if (other.org != null)
+				return false;
+		} else if (!org.equals(other.org))
+			return false;
+		if (schAuto == null) {
+			if (other.schAuto != null)
+				return false;
+		} else if (!schAuto.equals(other.schAuto))
+			return false;
+		if (usl == null) {
+			if (other.usl != null)
+				return false;
+		} else if (!usl.equals(other.usl))
+			return false;
+		if (vol == null) {
+			if (other.vol != null)
+				return false;
+		} else if (!vol.equals(other.vol))
+			return false;
+		if (volAdd == null) {
+			if (other.volAdd != null)
+				return false;
+		} else if (!volAdd.equals(other.volAdd))
+			return false;
+		return true;
+	}
+
 
 }
 

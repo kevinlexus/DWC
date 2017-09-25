@@ -15,7 +15,8 @@ public interface Compress {
 	public void setMgTo(Integer period);
 	
 	public Integer getKey();
-	public Integer getHash();
 	
+	public int getHash();
+	public boolean isTheSame(Compress compr);
 	
 }

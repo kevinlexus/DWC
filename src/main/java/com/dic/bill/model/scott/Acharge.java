@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import com.dic.bill.Compress;
 
 import lombok.Getter;
+import org.apache.commons.collections4.Equator;;
 
 /**
  * Архивное начисление 
@@ -32,6 +33,9 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	@Column(name = "usl", updatable = false, nullable = false)
 	private String usl; // код.услуги
+
+	@Column(name = "summa", updatable = false, nullable = true)
+	private Double summa;
 
 	@Column(name = "kart_pr_id", updatable = false, nullable = true)
 	private Integer kartPrId;
@@ -110,6 +114,14 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	public void setUsl(String usl) {
 		this.usl = usl;
+	}
+
+	public Double getSumma() {
+		return summa;
+	}
+
+	public void setSumma(Double summa) {
+		this.summa = summa;
 	}
 
 	public Integer getKartPrId() {
@@ -277,10 +289,10 @@ public class Acharge implements java.io.Serializable, Compress {
 	        return super.hashCode();
 	    }
 	}
-
 	
 	/**
-	 * Получить hash ключа, для поиска уникальных элементов
+	 * Получить hash ключа, для поиска уникальных элементов (конечно, нельзя искать по hash, 
+	 * если будут несколько полей.. придумать что нить потом) TODO 
 	 * @return hash
 	 */
 	public Integer getKey() {
@@ -289,12 +301,13 @@ public class Acharge implements java.io.Serializable, Compress {
 		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
 		return result;
 	}
-
+	
+	
 	/**
-	 * Получить hash всех полей, кроме полей id, npp, mgFrom, mgTo 
+	 * Получить hash всех полей, кроме id, npp, mgFrom, mgTo - для компаратора 
 	 * @return
 	 */
-	public Integer getHash() {
+	public int getHash() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((kartPrId == null) ? 0 : kartPrId.hashCode());
@@ -308,6 +321,7 @@ public class Acharge implements java.io.Serializable, Compress {
 		result = prime * result + ((opl == null) ? 0 : opl.hashCode());
 		result = prime * result + ((sch == null) ? 0 : sch.hashCode());
 		result = prime * result + ((spkId == null) ? 0 : spkId.hashCode());
+		result = prime * result + ((summa == null) ? 0 : summa.hashCode());
 		result = prime * result + ((testCena == null) ? 0 : testCena.hashCode());
 		result = prime * result + ((testOpl == null) ? 0 : testOpl.hashCode());
 		result = prime * result + ((testSpkkoef == null) ? 0 : testSpkkoef.hashCode());
@@ -316,6 +330,107 @@ public class Acharge implements java.io.Serializable, Compress {
 		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
 		return result;
 	}
+	
+	/**
+	 * Сравнить все поля, кроме id, npp, mgFrom, mgTo - для компаратора 
+	 * @return
+	 */
+	public boolean isTheSame(Compress compr) {
+		Acharge other = (Acharge) compr;
+		if (kartPrId == null) {
+			if (other.kartPrId != null)
+				return false;
+		} else if (!kartPrId.equals(other.kartPrId))
+			return false;
+		if (kpr == null) {
+			if (other.kpr != null)
+				return false;
+		} else if (!kpr.equals(other.kpr))
+			return false;
+		if (kpr2 == null) {
+			if (other.kpr2 != null)
+				return false;
+		} else if (!kpr2.equals(other.kpr2))
+			return false;
+		if (kpro == null) {
+			if (other.kpro != null)
+				return false;
+		} else if (!kpro.equals(other.kpro))
+			return false;
+		if (kprz == null) {
+			if (other.kprz != null)
+				return false;
+		} else if (!kprz.equals(other.kprz))
+			return false;
+		if (lgDocId == null) {
+			if (other.lgDocId != null)
+				return false;
+		} else if (!lgDocId.equals(other.lgDocId))
+			return false;
+		if (lsk == null) {
+			if (other.lsk != null)
+				return false;
+		} else if (!lsk.equals(other.lsk))
+			return false;
+		if (main == null) {
+			if (other.main != null)
+				return false;
+		} else if (!main.equals(other.main))
+			return false;
+		if (opl == null) {
+			if (other.opl != null)
+				return false;
+		} else if (!opl.equals(other.opl))
+			return false;
+		if (sch == null) {
+			if (other.sch != null)
+				return false;
+		} else if (!sch.equals(other.sch))
+			return false;
+		if (spkId == null) {
+			if (other.spkId != null)
+				return false;
+		} else if (!spkId.equals(other.spkId))
+			return false;
+		if (summa == null) {
+			if (other.summa != null)
+				return false;
+		} else if (!summa.equals(other.summa))
+			return false;
+		if (testCena == null) {
+			if (other.testCena != null)
+				return false;
+		} else if (!testCena.equals(other.testCena))
+			return false;
+		if (testOpl == null) {
+			if (other.testOpl != null)
+				return false;
+		} else if (!testOpl.equals(other.testOpl))
+			return false;
+		if (testSpkkoef == null) {
+			if (other.testSpkkoef != null)
+				return false;
+		} else if (!testSpkkoef.equals(other.testSpkkoef))
+			return false;
+		if (testTarkoef == null) {
+			if (other.testTarkoef != null)
+				return false;
+		} else if (!testTarkoef.equals(other.testTarkoef))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		if (usl == null) {
+			if (other.usl != null)
+				return false;
+		} else if (!usl.equals(other.usl))
+			return false;
+		return true;
+	}
 
+	
+	
 }
 
