@@ -44,7 +44,7 @@ public class AnaborDAOImpl implements AnaborDAO {
      */
     public List<Anabor> getByLskPeriod(String lsk, Integer period) {
 		Query query =em.createQuery("from Anabor t where t.lsk>=:lsk and "
-				+ "t.mgFrom >=:period");
+				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);
 		return query.getResultList();

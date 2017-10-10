@@ -291,19 +291,6 @@ public class Acharge implements java.io.Serializable, Compress {
 	}
 	
 	/**
-	 * Получить hash ключа, для поиска уникальных элементов (конечно, нельзя искать по hash, 
-	 * если будут несколько полей.. придумать что нить потом) TODO 
-	 * @return hash
-	 */
-	public Integer getKey() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
-		return result;
-	}
-	
-	
-	/**
 	 * Получить hash всех полей, кроме id, npp, mgFrom, mgTo - для компаратора 
 	 * @return
 	 */
