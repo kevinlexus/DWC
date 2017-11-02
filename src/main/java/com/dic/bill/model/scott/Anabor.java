@@ -435,6 +435,10 @@ public class Anabor implements java.io.Serializable, Compress {
 		return true;
 	}
 
+	// ключ
+	public String getKey() {
+		return getUsl();
+	}
 
 }
 

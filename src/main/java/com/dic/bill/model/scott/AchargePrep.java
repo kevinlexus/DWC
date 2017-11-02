@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import com.dic.bill.Compress;;
 
 /**
@@ -43,10 +47,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	private Double kpro;
 	
 	@Column(name = "sch", updatable = false, nullable = true)
-	private Double sch;
+	private Integer sch;
 
 	@Column(name = "tp", updatable = false, nullable = true)
-	private Double tp;
+	private Integer tp;
 	
 	@Column(name = "vol_nrm", updatable = false, nullable = true)
 	private Double volNrm;
@@ -61,7 +65,7 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	private Double opl;
 	
 	@Column(name = "fk_spk", updatable = false, nullable = true)
-	private Double fkSpk;
+	private Integer fkSpk;
 	
 	@Column(name = "mgFrom", updatable = true, nullable = false)
 	private Integer mgFrom; // Начало действия записи
@@ -69,6 +73,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	@Column(name = "mgTo", updatable = true, nullable = false)
 	private Integer mgTo; // Окончание действия записи
 
+	// ключ, по которому фильтровать сравниваемые кортежи
+	@Formula("concat(USL,TP)")
+    private String key;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -125,19 +133,19 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		this.kpro = kpro;
 	}
 
-	public Double getSch() {
+	public Integer getSch() {
 		return sch;
 	}
 
-	public void setSch(Double sch) {
+	public void setSch(Integer sch) {
 		this.sch = sch;
 	}
 
-	public Double getTp() {
+	public Integer getTp() {
 		return tp;
 	}
 
-	public void setTp(Double tp) {
+	public void setTp(Integer tp) {
 		this.tp = tp;
 	}
 
@@ -173,11 +181,11 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		this.opl = opl;
 	}
 
-	public Double getFkSpk() {
+	public Integer getFkSpk() {
 		return fkSpk;
 	}
 
-	public void setFkSpk(Double fkSpk) {
+	public void setFkSpk(Integer fkSpk) {
 		this.fkSpk = fkSpk;
 	}
 
@@ -195,6 +203,14 @@ public class AchargePrep implements java.io.Serializable, Compress {
 
 	public void setMgTo(Integer mgTo) {
 		this.mgTo = mgTo;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public boolean equals(Object o) {
@@ -316,7 +332,13 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		return true;
 		}
 
-	
+	// ключ -  медленно работает! использовал @Formula
+	//public String getKey() {
+		//return getUsl().concat(String.valueOf(getTp())); <- очень медленно!
+		//return new StringBuilder(getUsl()).append(getTp()).toString(); // <- побыстрее!
+		//return getUsl()+getTp();
+		//return getFullName();
+	//}
 	
 }
 

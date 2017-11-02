@@ -9,7 +9,8 @@ import javax.persistence.Table;
 import com.dic.bill.Compress;
 
 import lombok.Getter;
-import org.apache.commons.collections4.Equator;;
+import org.apache.commons.collections4.Equator;
+import org.hibernate.annotations.Formula;;
 
 /**
  * Архивное начисление 
@@ -90,6 +91,10 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	@Column(name = "mgTo", updatable = true, nullable = false)
 	private Integer mgTo; // Окончание действия записи
+
+	// ключ, по которому фильтровать сравниваемые кортежи
+	@Formula("concat(USL,TYPE)")
+    private String key;
 
 	
 	public Integer getId() {
@@ -268,6 +273,14 @@ public class Acharge implements java.io.Serializable, Compress {
 		this.mgTo = mgTo;
 	}
 
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof Acharge))
@@ -417,7 +430,10 @@ public class Acharge implements java.io.Serializable, Compress {
 		return true;
 	}
 
-	
-	
+	// ключ -  медленно работает! использовал @Formula
+	/*public String getKey() {
+		return getUsl().concat(String.valueOf(getType()));
+	}*/
+
 }
 

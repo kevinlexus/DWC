@@ -14,7 +14,8 @@ public interface Compress {
 	public Integer getMgTo();
 	public void setMgTo(Integer period);
 	
-	public String getUsl();
+	// ключ по которому определяются строки для сжатия
+	public String getKey();
 	
 	public int getHash();
 	public boolean isTheSame(Compress compr);

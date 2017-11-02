@@ -14,6 +14,7 @@ import com.dic.bill.dao.SaldoUslDAO;
 import com.dic.bill.model.scott.Acharge;
 import com.dic.bill.model.scott.Anabor;
 import com.dic.bill.model.scott.ChargePay;
+import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.SaldoUsl;
 
 
@@ -47,5 +48,16 @@ public class AchargeDAOImpl implements AchargeDAO {
 		return query.getResultList();
 	}
     
+    /**
+     * Получить все элементы Kart, >= заданного лс
+     * @param firstLsk - заданный лс
+     */
+    public List<Kart> getAfterLsk(String firstLsk) {
+    	Query query =em.createQuery("select distinct t from Kart t join Acharge a "
+    			+ " with a.lsk=t.lsk where t.lsk >= :lsk order by t.lsk");
+		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
+		query.setParameter("lsk", firstLsk);
+		return query.getResultList();
+	}
 
 }

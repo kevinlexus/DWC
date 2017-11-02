@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dic.bill.dao.AchargePrepDAO;
 import com.dic.bill.model.scott.AchargePrep;
+import com.dic.bill.model.scott.Kart;
 
 
 @Repository
@@ -42,5 +43,16 @@ public class AchargePrepDAOImpl implements AchargePrepDAO {
 		return query.getResultList();
 	}
     
+    /**
+     * Получить все элементы Kart, >= заданного лс
+     * @param firstLsk - заданный лс
+     */
+    public List<Kart> getAfterLsk(String firstLsk) {
+    	Query query =em.createQuery("select distinct t from Kart t join AchargePrep a "
+    			+ " with a.lsk=t.lsk where t.lsk >= :lsk order by t.lsk");
+		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
+		query.setParameter("lsk", firstLsk);
+		return query.getResultList();
+	}
 
 }
