@@ -41,7 +41,7 @@ public class AchargeDAOImpl implements AchargeDAO {
      * @param period - период
      */
     public List<Acharge> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from Acharge t where t.lsk>=:lsk and "
+		Query query =em.createQuery("from Acharge t where t.lsk=:lsk and "
 				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);

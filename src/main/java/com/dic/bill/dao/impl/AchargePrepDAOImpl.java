@@ -36,7 +36,7 @@ public class AchargePrepDAOImpl implements AchargePrepDAO {
      * @param period - период
      */
     public List<AchargePrep> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from AchargePrep t where t.lsk>=:lsk and "
+		Query query =em.createQuery("from AchargePrep t where t.lsk=:lsk and "
 				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);

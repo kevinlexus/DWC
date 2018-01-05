@@ -12,7 +12,10 @@ import com.dic.bill.dao.AnaborDAO;
 import com.dic.bill.model.scott.Anabor;
 import com.dic.bill.model.scott.Kart;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Repository
 public class AnaborDAOImpl implements AnaborDAO {
 
@@ -33,8 +36,11 @@ public class AnaborDAOImpl implements AnaborDAO {
      * @param lsk - лиц. счет
      */
     public List<Anabor> getByLsk(String lsk) {
+		log.trace("1.7");
 		Query query =em.createQuery("from Anabor t where t.lsk=:lsk");
+		log.trace("1.8");
 		query.setParameter("lsk", lsk);
+		log.trace("1.9");
 		return query.getResultList();
 	}
 
@@ -44,7 +50,7 @@ public class AnaborDAOImpl implements AnaborDAO {
      * @param period - период
      */
     public List<Anabor> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from Anabor t where t.lsk>=:lsk and "
+		Query query =em.createQuery("from Anabor t where t.lsk=:lsk and "
 				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);
