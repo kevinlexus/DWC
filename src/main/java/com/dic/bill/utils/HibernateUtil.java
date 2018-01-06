@@ -14,7 +14,7 @@ public class HibernateUtil {
     
     protected static SessionFactory buildSessionFactory() {
         // A SessionFactory is set up once for an application!
-    	File configurationFile = new File("hibernate.cfg.xml");
+    	File configurationFile = new File("hibernate.cfg.xml"); 
     	
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(configurationFile).build();
         try {
