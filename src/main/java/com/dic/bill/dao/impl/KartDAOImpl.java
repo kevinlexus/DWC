@@ -18,7 +18,7 @@ import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.SaldoUsl;
 
 
-@Repository
+@Repository("dicKartDAO") // поименовал, иначе конфликтует с существующим в com.ric.bill.dao
 public class KartDAOImpl implements KartDAO {
 
 	//EntityManager - EM нужен на каждый DAO или сервис свой!

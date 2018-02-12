@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import com.dic.bill.Compress;
 
 import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.collections4.Equator;
 import org.hibernate.annotations.Formula;;
 
@@ -20,6 +22,7 @@ import org.hibernate.annotations.Formula;;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "A_CHARGE2", schema="SCOTT")
+@Getter @Setter
 public class Acharge implements java.io.Serializable, Compress { 
 
 	public Acharge() {
@@ -27,14 +30,17 @@ public class Acharge implements java.io.Serializable, Compress {
 
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id; // Id
+	private Integer id; 
 
+	 // лиц.счет
 	@Column(name = "lsk", updatable = false, nullable = false)
-	private String lsk; // лиц.счет
+	private String lsk; 
 
+	// код.услуги
 	@Column(name = "usl", updatable = false, nullable = false)
-	private String usl; // код.услуги
+	private String usl; 
 
+	// сумма начисления
 	@Column(name = "summa", updatable = false, nullable = true)
 	private Double summa;
 
@@ -86,200 +92,17 @@ public class Acharge implements java.io.Serializable, Compress {
 	@Column(name = "opl", updatable = false, nullable = true)
 	private Double opl;
 	
+	// начало действия записи
 	@Column(name = "mgFrom", updatable = true, nullable = false)
-	private Integer mgFrom; // Начало действия записи
+	private Integer mgFrom;
 
+	// окончание действия записи
 	@Column(name = "mgTo", updatable = true, nullable = false)
-	private Integer mgTo; // Окончание действия записи
+	private Integer mgTo; 
 
 	// ключ, по которому фильтровать сравниваемые кортежи
 	@Formula("concat(USL,TYPE)")
     private String key;
-
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getLsk() {
-		return lsk;
-	}
-
-	public void setLsk(String lsk) {
-		this.lsk = lsk;
-	}
-
-	public String getUsl() {
-		return usl;
-	}
-
-	public void setUsl(String usl) {
-		this.usl = usl;
-	}
-
-	public Double getSumma() {
-		return summa;
-	}
-
-	public void setSumma(Double summa) {
-		this.summa = summa;
-	}
-
-	public Integer getKartPrId() {
-		return kartPrId;
-	}
-
-	public void setKartPrId(Integer kartPrId) {
-		this.kartPrId = kartPrId;
-	}
-
-	public Integer getSpkId() {
-		return spkId;
-	}
-
-	public void setSpkId(Integer spkId) {
-		this.spkId = spkId;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public Double getTestOpl() {
-		return testOpl;
-	}
-
-	public void setTestOpl(Double testOpl) {
-		this.testOpl = testOpl;
-	}
-
-	public Double getTestCena() {
-		return testCena;
-	}
-
-	public void setTestCena(Double testCena) {
-		this.testCena = testCena;
-	}
-
-	public Double getTestTarkoef() {
-		return testTarkoef;
-	}
-
-	public void setTestTarkoef(Double testTarkoef) {
-		this.testTarkoef = testTarkoef;
-	}
-
-	public Double getTestSpkkoef() {
-		return testSpkkoef;
-	}
-
-	public void setTestSpkkoef(Double testSpkkoef) {
-		this.testSpkkoef = testSpkkoef;
-	}
-
-	public Integer getMain() {
-		return main;
-	}
-
-	public void setMain(Integer main) {
-		this.main = main;
-	}
-
-	public Integer getLgDocId() {
-		return lgDocId;
-	}
-
-	public void setLgDocId(Integer lgDocId) {
-		this.lgDocId = lgDocId;
-	}
-
-	public Integer getNpp() {
-		return npp;
-	}
-
-	public void setNpp(Integer npp) {
-		this.npp = npp;
-	}
-
-	public Integer getSch() {
-		return sch;
-	}
-
-	public void setSch(Integer sch) {
-		this.sch = sch;
-	}
-
-	public Double getKpr() {
-		return kpr;
-	}
-
-	public void setKpr(Double kpr) {
-		this.kpr = kpr;
-	}
-
-	public Double getKprz() {
-		return kprz;
-	}
-
-	public void setKprz(Double kprz) {
-		this.kprz = kprz;
-	}
-
-	public Double getKpro() {
-		return kpro;
-	}
-
-	public void setKpro(Double kpro) {
-		this.kpro = kpro;
-	}
-
-	public Double getKpr2() {
-		return kpr2;
-	}
-
-	public void setKpr2(Double kpr2) {
-		this.kpr2 = kpr2;
-	}
-
-	public Double getOpl() {
-		return opl;
-	}
-
-	public void setOpl(Double opl) {
-		this.opl = opl;
-	}
-
-	public Integer getMgFrom() {
-		return mgFrom;
-	}
-
-	public void setMgFrom(Integer mgFrom) {
-		this.mgFrom = mgFrom;
-	}
-
-	public Integer getMgTo() {
-		return mgTo;
-	}
-
-	public void setMgTo(Integer mgTo) {
-		this.mgTo = mgTo;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
 
 	public boolean equals(Object o) {
 	    if (this == o) return true;
