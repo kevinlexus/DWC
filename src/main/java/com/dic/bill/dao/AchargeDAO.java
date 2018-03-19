@@ -18,7 +18,7 @@ import com.ric.bill.dto.SumChrgRec;
 @Repository
 public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 
-	/**
+	/** ПОКА ЗАКОММЕНТИЛ - НЕ ЗАПУСКАЛСЯ ПРОЕКТ!
 	 * Получить сгруппированные записи начислений связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
 	 * @param orgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
 	 * @param lsk - лицевой счет
@@ -26,17 +26,15 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * @param type - тип записи 0 - начислено без учета льгот, 1 - начислено с учетом льгот
 	 * @return
 	 */
-/*	@Query(value = "select new com.ric.bill.dto.SumChrgRec(s, sum(t.summa), sum(t.testOpl), sum(t.testCena)) from Acharge t join Usl u with t.usl=u.id "
-			+ "join ServGis s with u.id=s.usl.id "
+	/*@Query(value = "select new com.ric.bill.dto.SumChrgRec(s, sum(t.summa), sum(t.testOpl), sum(t.testCena)) from Acharge t join Usl u with t.usl=u.id "
+		    + "join ServGis s with u.id=s.usl.id "
 			+ "where t.lsk = ?1 and ?2 between t.mgFrom and t.mgTo "
 			+ "and t.type = ?3 "
 			//+ "and ?4 = ?4 "
 			//+ "and nvl(s.org.id, ?4) = ?4 " // либо ServGis.fk_eolink - пусто, либо равно orgId 
 			+ "group by s")
-	  List<SumChrgRec> getGrp(String lsk, Integer mg, Integer type);
-	  
-	  пока закомментировал - не запускался проект
-	  */
+	  List<SumChrgRec> getGrp(String lsk, Integer mg, Integer type);*/
+	
     /**
      * Получить все элементы по lsk
      * @param - lsk - лиц.счет
