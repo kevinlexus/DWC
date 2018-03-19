@@ -5,38 +5,23 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 //Класс строки из temp_err, для показа сообщений об ошибках, по лиц.счетам и т.п.
 @Entity
-@Table(name = "PREP_ERR")
+@Table(name = "PREP_ERR", schema = "SCOTT")
+@Getter @Setter
 public class PrepErr {
-
-	private int id;
-	private String lsk, text;
 
 	@Id
 	@Column(name = "ID", unique = true, nullable = false)
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	private int id;
 	
 	@Column(name = "LSK", nullable = true)
-	public String getLsk() {
-		return lsk;
-	}
-	public void setLsk(String lsk) {
-		this.lsk = lsk;
-	}
+	private String lsk;
 
 	@Column(name = "TEXT", nullable = true)
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
+	private String text;
 	
 }

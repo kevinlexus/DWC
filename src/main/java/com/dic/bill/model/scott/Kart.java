@@ -2,18 +2,27 @@ package com.dic.bill.model.scott;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.dic.bill.model.scott.Ko;
+
+import lombok.Getter;
+import lombok.Setter;
 /**
- * Справочник лицевых счетов 
+ * Лицевой счет 
  * @author lev
  *
  */
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "KART", schema="SCOTT")
+@Getter @Setter
 public class Kart implements java.io.Serializable{ 
 
 	public Kart() {
@@ -32,40 +41,26 @@ public class Kart implements java.io.Serializable{
 
     @Column(name = "nd", updatable = false, nullable = false)
 	private String nd;
+    
+	// номер квартиры
+	@Column(name = "KW", nullable = true)
+	private String num;
 
-	public String getLsk() {
-		return lsk;
-	}
+	// Ko помешения (здесь OneToOne)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	private Ko koKw;
 
-	public void setLsk(String lsk) {
-		this.lsk = lsk;
-	}
+	// Ko лиц.счета (здесь OneToOne)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false, insertable = false)
+	private Ko koLsk;
 
+	// дом
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	private House house;
 	
-	public String getReu() {
-		return reu;
-	}
-
-	public void setReu(String reu) {
-		this.reu = reu;
-	}
-
-	public String getKul() {
-		return kul;
-	}
-
-	public void setKul(String kul) {
-		this.kul = kul;
-	}
-
-	public String getNd() {
-		return nd;
-	}
-
-	public void setNd(String nd) {
-		this.nd = nd;
-	}
-
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof Kart))

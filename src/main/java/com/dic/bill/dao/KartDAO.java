@@ -10,5 +10,5 @@ public interface KartDAO {
 	
 	public List<Kart> getAll();
 	public List<Kart> getAfterLsk(String firstLsk);
-	
+    public Kart getKwByNum(Integer klskId, String num);	
 }
