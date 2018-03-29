@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Задолжность по организациям - услугам - периодам 
+ * Задолженность по организациям - услугам - периодам 
  * @author lev
  *
  */
@@ -35,13 +35,13 @@ public class DebUsl implements java.io.Serializable{
 	private Integer org; // код организации
 
     @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период задолжности
+	private String mg; // период
     
     @Column(name = "period", updatable = false, nullable = false)
 	private String period; // период бухгалтерский
 
     @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма задолжности
+	private Double summa; // сумма
 
     
     public Integer getId() {

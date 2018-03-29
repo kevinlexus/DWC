@@ -11,29 +11,33 @@ import com.dic.bill.model.scott.Kart;
 import com.ric.bill.dto.SumChrgRec;
 
 /**
- * Методы доступа к таблице начислений приложения типа appTp=2
+ * DAO сущности начислений - Acharge (эксп.разработка)
  * @author Leo
  *
  */
 @Repository
 public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 
-	/** ПОКА ЗАКОММЕНТИЛ - НЕ ЗАПУСКАЛСЯ ПРОЕКТ!
-	 * Получить сгруппированные записи начислений связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
-	 * @param orgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
+	/**
+	 * Получить сгруппированные записи начислений (полного начисления, без учета льгот), 
+	 * связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
 	 * @param lsk - лицевой счет
 	 * @param mg - период
-	 * @param type - тип записи 0 - начислено без учета льгот, 1 - начислено с учетом льгот
+	 * @param orgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
 	 * @return
 	 */
-	/*@Query(value = "select new com.ric.bill.dto.SumChrgRec(s, sum(t.summa), sum(t.testOpl), sum(t.testCena)) from Acharge t join Usl u with t.usl=u.id "
-		    + "join ServGis s with u.id=s.usl.id "
-			+ "where t.lsk = ?1 and ?2 between t.mgFrom and t.mgTo "
-			+ "and t.type = ?3 "
-			//+ "and ?4 = ?4 "
-			//+ "and nvl(s.org.id, ?4) = ?4 " // либо ServGis.fk_eolink - пусто, либо равно orgId 
-			+ "group by s")
-	  List<SumChrgRec> getGrp(String lsk, Integer mg, Integer type);*/
+	@Query(value = "select t2.id as \"ulistId\", sum(t2.summa) as \"summa\", sum(t2.vol) as \"vol\", sum(price) as \"price\" from ( "
+			+ "select u.id, s.grp, sum(t.summa) as summa, sum(t.testOpl) as vol, min(t.testCena) as price "
+		+ "from scott.a_charge2 t "
+		+ "join exs.servgis s on t.fk_usl=s.fk_usl "
+		+ "join exs.u_list u on s.fk_list=u.id " 
+		+ "join exs.u_listtp tp on u.fk_listtp=tp.id "
+		+ "where t.lsk = ?1 and ?2 between t.mgFrom and t.mgTo "
+		+ "and NVL(tp.fk_eolink, ?3) = ?3 "
+		+ "and t.type = 0 "
+		+ "group by u.id, s.grp) t2 "
+		+ "group by t2.id", nativeQuery = true)
+	List<SumChrgRec> getChrgGrp(String lsk, Integer period, Integer orgId);
 	
     /**
      * Получить все элементы по lsk

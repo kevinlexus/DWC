@@ -20,7 +20,7 @@ public class SaldoMngImpl implements SaldoMng {
 	ChargePayDAO chargePayDAO;
 
 	/**
-	 * Распределить сальдо по периодам задолжности
+	 * Распределить сальдо по периодам задолженности
 	 */
 	public void distSalByChPay() {
 		log.info("Начало распределения сальдо!");

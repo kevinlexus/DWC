@@ -30,14 +30,14 @@ public class ChargePrep implements java.io.Serializable {
     
     @Id
     @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период задолжности
+	private String mg; // период
     
     @Id
     @Column(name = "period", updatable = false, nullable = false)
 	private String period; // период бухгалтерский
 
     @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма задолжности
+	private Double summa; // сумма
 
     
 		

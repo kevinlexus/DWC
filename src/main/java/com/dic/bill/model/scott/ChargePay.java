@@ -6,6 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Задолженности по периодам 
  * @author lev
@@ -15,6 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "C_CHARGEPAY", schema="SCOTT")
 @IdClass(ChargePayId.class) // суррогатный первичный ключ
+@Getter @Setter
 public class ChargePay implements java.io.Serializable { 
 
 	public ChargePay() {
@@ -30,110 +34,15 @@ public class ChargePay implements java.io.Serializable {
     
     @Id
     @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период задолжности
+	private String mg; // период задолженности
     
     @Id
     @Column(name = "period", updatable = false, nullable = false)
 	private String period; // период бухгалтерский
 
     @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма задолжности
+	private Double summa; // сумма задолженности
 
-	public String getLsk() {
-		return lsk;
-	}
-
-	public void setLsk(String lsk) {
-		this.lsk = lsk;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public String getMg() {
-		return mg;
-	}
-
-	public void setMg(String mg) {
-		this.mg = mg;
-	}
-
-	public String getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(String period) {
-		this.period = period;
-	}
-
-	public Double getSumma() {
-		return summa;
-	}
-
-	public void setSumma(Double summa) {
-		this.summa = summa;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
-		result = prime * result + ((mg == null) ? 0 : mg.hashCode());
-		result = prime * result + ((period == null) ? 0 : period.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof ChargePay)) {
-			return false;
-		}
-		ChargePay other = (ChargePay) obj;
-		if (lsk == null) {
-			if (other.lsk != null) {
-				return false;
-			}
-		} else if (!lsk.equals(other.lsk)) {
-			return false;
-		}
-		if (mg == null) {
-			if (other.mg != null) {
-				return false;
-			}
-		} else if (!mg.equals(other.mg)) {
-			return false;
-		}
-		if (period == null) {
-			if (other.period != null) {
-				return false;
-			}
-		} else if (!period.equals(other.period)) {
-			return false;
-		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
-		return true;
-	}
-
-    
 		
 }
 
