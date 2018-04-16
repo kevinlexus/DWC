@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 import com.dic.bill.model.scott.Org;
 
 /**
- * DAO сущности Org
+ * DAO сущности com.dic.bill.model.scott.Org
  * @author Lev
- * @version 1.00
+ * @version 1.01
  *
  */
 @Repository("OrgDAO_DWC")
@@ -21,7 +21,7 @@ public interface OrgDAO extends JpaRepository<Org, Integer> {
 	 * @param reu - код REU
 	 * @return
 	 */
-	@Query("select t from Org t where t.reu = ?1")
+	@Query("select t from com.dic.bill.model.scott.Org t where t.reu = ?1")
 	 Org getByReu(String reu);
 	
 	/**
@@ -29,7 +29,7 @@ public interface OrgDAO extends JpaRepository<Org, Integer> {
 	 * @param cd - код CD
 	 * @return
 	 */
-	@Query("select t from Org t where t.cd = ?1")
+	@Query("select t from com.dic.bill.model.scott.Org t where t.cd = ?1")
 	 Org getByCD(String cd);
 
 	/**
@@ -37,7 +37,7 @@ public interface OrgDAO extends JpaRepository<Org, Integer> {
 	 * @param cd - код CD
 	 * @return
 	 */
-	@Query("select t from Org t where t.orgTp.cd = ?1")
+	@Query("select t from com.dic.bill.model.scott.Org t where t.orgTp.cd = ?1")
 	 Org getByOrgTp(String tp);
 	
 }
