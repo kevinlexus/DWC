@@ -27,12 +27,13 @@
 
 <dependencies>
 
-<!--   		<dependency>
-			<groupId>com.ric.bill</groupId>
-			<artifactId>BillWeb</artifactId>
+		<!-- BillCommon -->
+		<dependency>
+			<groupId>com.ric.cmn</groupId>
+			<artifactId>BillCommon</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency> 
- -->
+		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
