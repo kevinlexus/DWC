@@ -1,6 +1,7 @@
 package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,20 +15,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Начисление
+ * Перерасчет
  * @author lev
  * @version 1.00
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGE", schema="SCOTT")
+@Table(name = "C_CHANGE", schema="SCOTT")
 @Getter @Setter
-public class Charge implements java.io.Serializable  {
+public class Change implements java.io.Serializable  {
 
-	public Charge() {
+	public Change() {
 	}
 
+	// Id
 	@Id
     @Column(name = "ID", unique=true, updatable = false, nullable = false)
 	private Integer id;
@@ -37,21 +39,25 @@ public class Charge implements java.io.Serializable  {
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
-	// Сумма
+	// сумма
 	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal summa;
 
-	// Тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
-	@Column(name = "TYPE", updatable = false)
-	private Integer type;
+	// период за который перерасчет
+	@Column(name = "MGCHANGE", updatable = false)
+	private String mgchange;
+
+	// Дата перерасчета
+	@Column(name = "DTEK", updatable = false)
+	private Date dt;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Charge))
+	    if (o == null || !(o instanceof Change))
 	        return false;
 
-	    Charge other = (Charge)o;
+	    Change other = (Change)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

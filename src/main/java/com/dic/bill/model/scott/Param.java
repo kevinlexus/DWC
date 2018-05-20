@@ -3,8 +3,10 @@ package com.dic.bill.model.scott;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Таблица параметров
@@ -14,25 +16,18 @@ import javax.persistence.Table;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "PARAMS", schema="SCOTT")
-public class Param implements java.io.Serializable { 
+@Getter @Setter
+public class Param implements java.io.Serializable {
 
 	public Param() {
 	}
 
     @Id
-	@Column(name = "period", updatable = false, nullable = false)
-	private String period; // ID, он же период
+	@Column(name = "ID", updatable = false, nullable = false)
+	private Integer id; // ID
 
-	public String getPeriod() {
-		return period;
-	}
+	@Column(name = "PERIOD", updatable = false, nullable = false)
+	private String period; // период
 
-	public void setPeriod(String period) {
-		this.period = period;
-	}
-
-
-    
-		
 }
 

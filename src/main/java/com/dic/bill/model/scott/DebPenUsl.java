@@ -1,5 +1,7 @@
 package com.dic.bill.model.scott;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,15 +18,15 @@ import lombok.Setter;
 /**
  * Задолженность по организациям - услугам - периодам
  * @author lev
- *
+ * @version 1.00
  */
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_DEB_USL", schema="SCOTT")
-public class DebUsl implements java.io.Serializable{
+@Table(name = "C_DEBPEN_USL", schema="SCOTT")
+public class DebPenUsl implements java.io.Serializable{
 
-	public DebUsl() {
+	public DebPenUsl() {
 	}
 
 	@Id
@@ -37,28 +39,31 @@ public class DebUsl implements java.io.Serializable{
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
-	@Column(name = "usl", updatable = false, nullable = false)
+	@Column(name = "USL", updatable = false, nullable = false)
 	private String usl; // код услуги
 
-    @Column(name = "org", updatable = false, nullable = false)
+    @Column(name = "ORG", updatable = false, nullable = false)
 	private Integer org; // код организации
 
-    @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период
+    @Column(name = "SUMMA", updatable = false, nullable = false)
+	private BigDecimal summa; // сумма задолженности
 
-    @Column(name = "period", updatable = false, nullable = false)
-	private String period; // период бухгалтерский
+    @Column(name = "PENYA", updatable = false, nullable = false)
+	private BigDecimal penya; // задолженность по пене
 
-    @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма
+    @Column(name = "MG", updatable = false, nullable = false)
+	private Integer mg; // период
 
-    @Override
+    @Column(name = "PERIOD", updatable = false, nullable = false)
+	private Integer period; // период бухгалтерский
+
+	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof DebUsl))
+	    if (o == null || !(o instanceof DebPenUsl))
 	        return false;
 
-	    DebUsl other = (DebUsl)o;
+	    DebPenUsl other = (DebPenUsl)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;
@@ -69,8 +74,8 @@ public class DebUsl implements java.io.Serializable{
 
 	@Override
 	public int hashCode() {
-	    if (kart != null) {
-	        return kart.hashCode();
+	    if (id != null) {
+	        return id.hashCode();
 	    } else {
 	        return super.hashCode();
 	    }

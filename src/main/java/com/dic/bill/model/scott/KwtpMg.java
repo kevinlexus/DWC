@@ -1,6 +1,7 @@
 package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,44 +15,49 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Начисление
+ * Оплата по периоду
  * @author lev
  * @version 1.00
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGE", schema="SCOTT")
+@Table(name = "C_KWTP_MGW", schema="SCOTT")
 @Getter @Setter
-public class Charge implements java.io.Serializable  {
+public class KwtpMg implements java.io.Serializable  {
 
-	public Charge() {
+	public KwtpMg() {
 	}
 
+	// Id
 	@Id
     @Column(name = "ID", unique=true, updatable = false, nullable = false)
 	private Integer id;
 
-	// лиц.счет
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK")
-	private Kart kart;
-
-	// Сумма
+	// сумма
 	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal summa;
 
-	// Тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
-	@Column(name = "TYPE", updatable = false)
-	private Integer type;
+	// период
+	@Column(name = "DOPL", updatable = false)
+	private String dopl;
+
+	// дата
+	@Column(name = "DTEK", updatable = false)
+	private Date dt;
+
+	// заголовок платежа
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="C_KWTP_ID", referencedColumnName="ID")
+	private Kwtp kwtp;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Charge))
+	    if (o == null || !(o instanceof KwtpMg))
 	        return false;
 
-	    Charge other = (Charge)o;
+	    KwtpMg other = (KwtpMg)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

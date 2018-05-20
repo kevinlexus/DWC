@@ -2,12 +2,15 @@ package com.dic.bill.model.scott;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Задолженности по периодам 
+ * Задолженности по периодам
  * @author lev
  *
  */
@@ -15,23 +18,25 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "C_CHARGEPREP", schema="SCOTT")
 @IdClass(ChargePrepId.class) // суррогантый первичный ключ
-public class ChargePrep implements java.io.Serializable { 
+public class ChargePrep implements java.io.Serializable {
 
 	public ChargePrep() {
 	}
 
     @Id
-	@Column(name = "lsk", updatable = false, nullable = false)
-	private String lsk; // лиц.счет
+	// лиц.счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	private Kart kart;
 
     @Id
 	@Column(name = "type", updatable = false, nullable = false)
 	private Integer type; // Тип записи, 0 - начисление, 1 - оплата
-    
+
     @Id
     @Column(name = "mg", updatable = false, nullable = false)
 	private String mg; // период
-    
+
     @Id
     @Column(name = "period", updatable = false, nullable = false)
 	private String period; // период бухгалтерский
@@ -39,7 +44,7 @@ public class ChargePrep implements java.io.Serializable {
     @Column(name = "summa", updatable = false, nullable = false)
 	private Double summa; // сумма
 
-    
-		
+
+
 }
 

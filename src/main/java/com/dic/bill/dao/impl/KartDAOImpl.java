@@ -9,16 +9,8 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.dic.bill.dao.AchargeDAO;
-import com.dic.bill.dao.ChargePayDAO;
 import com.dic.bill.dao.KartDAO;
-import com.dic.bill.dao.SaldoUslDAO;
-import com.dic.bill.model.scott.Acharge;
-import com.dic.bill.model.scott.ChargePay;
 import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.SaldoUsl;
-import com.ric.bill.model.bs.Org;
-import com.ric.bill.model.bs.Par;
 
 
 @Repository("dicKartDAO") // поименовал, иначе конфликтует с существующим в com.ric.bill.dao

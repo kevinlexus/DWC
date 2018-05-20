@@ -10,11 +10,8 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.dic.bill.dao.ChargePayDAO;
 import com.dic.bill.dao.SaldoUslDAO;
-import com.dic.bill.model.scott.ChargePay;
 import com.dic.bill.model.scott.SaldoUsl;
-import com.ric.bill.model.exs.Eolink;
 
 
 /**
@@ -43,7 +40,7 @@ public class SaldoUslDAOImpl implements SaldoUslDAO {
 	/**
 	 * Получить совокупное сальдо по лицевому счету
 	 * @param lsk лицевой счет
-	 * @param period - период 
+	 * @param period - период
 	 * @return
 	 */
     @Override
@@ -56,8 +53,8 @@ public class SaldoUslDAOImpl implements SaldoUslDAO {
 			return (BigDecimal) query.getSingleResult();
 		} catch (NoResultException e) {
 		  return null;
-		} 
+		}
 	}
 
-    
+
 }

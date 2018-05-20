@@ -3,68 +3,51 @@ package com.dic.bill.model.scott;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.ric.bill.model.exs.UlistTp;
+
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Организация эксперем.
+ * Элемент списка
  *
  *
  */
+@Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_ORG", schema="SCOTT")
-@Getter @Setter
-public class Org implements java.io.Serializable {
+@Table(name = "U_LIST", schema="SCOTT")
+public class Lst implements java.io.Serializable {
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
-	private Integer id;
+	private Integer id; //id
 
-	// CD
 	@Column(name = "CD", updatable = false, nullable = false)
-	private String cd;
+	private String cd; //cd
 
-	// код REU
-    @Column(name = "REU")
-	private String reu;
-
-	// код TREST
-    @Column(name = "TREST")
-	private String trest;
-
-	// Наименование
-    @Column(name = "NAME")
-	private String name;
-
-	// ИНН
-    @Column(name = "INN")
-	private String inn;
-
-	// БИК
-    @Column(name = "BIK")
-	private String bik;
-
-	// расчетный счет
-    @Column(name = "RASCHET_SCHET")
-	private String operAcc;
+    @Column(name = "NAME", updatable = false, nullable = false)
+	private String name; //Наименование
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_ORGTP", referencedColumnName="ID")
-	private OrgTp orgTp;
+	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")
+	private UlistTp ulistTp ;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Org))
+	    if (o == null || !(o instanceof Lst))
 	        return false;
 
-	    Org other = (Org)o;
+	    Lst other = (Lst)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

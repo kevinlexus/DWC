@@ -19,7 +19,7 @@ import com.ric.bill.dto.SumChrgRec;
 public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 
 	/**
-	 * Получить сгруппированные записи начислений (полного начисления, без учета льгот), 
+	 * Получить сгруппированные записи начислений (полного начисления, без учета льгот),
 	 * связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
 	 * @param lsk - лицевой счет
 	 * @param mg - период
@@ -30,7 +30,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 			+ "select u.id, s.grp, sum(t.summa) as summa, sum(t.testOpl) as vol, min(t.testCena) as price "
 		+ "from scott.a_charge2 t "
 		+ "join exs.servgis s on t.fk_usl=s.fk_usl "
-		+ "join exs.u_list u on s.fk_list=u.id " 
+		+ "join exs.u_list u on s.fk_list=u.id "
 		+ "join exs.u_listtp tp on u.fk_listtp=tp.id "
 		+ "where t.lsk = ?1 and ?2 between t.mgFrom and t.mgTo "
 		+ "and NVL(tp.fk_eolink, ?3) = ?3 "
@@ -38,26 +38,26 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 		+ "group by u.id, s.grp) t2 "
 		+ "group by t2.id", nativeQuery = true)
 	List<SumChrgRec> getChrgGrp(String lsk, Integer period, Integer orgId);
-	
+
     /**
      * Получить все элементы по lsk
      * @param - lsk - лиц.счет
      */
-	@Query("select t from Acharge t " 
+	@Query("select t from Acharge t "
 			+ "where t.lsk = ?1")
 	List<Acharge> getByLsk(String lsk);
-	
-	
+
+
 	/**
      * Получить все элементы по лиц.счету, начиная с заданного периода
      * @param lsk - лиц. счет
      * @param period - период
      */
-	@Query("select t from Acharge t " 
-			+ "where t.lsk=?1 and " 
+	@Query("select t from Acharge t "
+			+ "where t.lsk=?1 and "
 			+" (t.mgFrom >=?2 or ?2 between t.mgFrom and t.mgTo)")
 	List<Acharge> getByLskPeriod(String lsk, Integer period);
-    
+
 	/**
      * Получить все элементы Kart, >= заданного лс, по которым есть записи Acharge
      * @param firstLsk - заданный лс
@@ -66,5 +66,5 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 			+ " with a.lsk=t.lsk where t.lsk >= ?1 order by t.lsk")
 	List<Kart> getAfterLsk(String firstLsk);
 
-	
+
 }

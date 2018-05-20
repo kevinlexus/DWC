@@ -10,12 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.dic.bill.model.scott.Ko;
-
 import lombok.Getter;
 import lombok.Setter;
 /**
- * Лицевой счет 
+ * Лицевой счет
  * @author lev
  *
  */
@@ -23,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "KART", schema="SCOTT")
 @Getter @Setter
-public class Kart implements java.io.Serializable{ 
+public class Kart implements java.io.Serializable{
 
 	public Kart() {
 	}
@@ -32,7 +30,7 @@ public class Kart implements java.io.Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "lsk", updatable = false, nullable = false)
 	private String lsk; //id записи
-	
+
     @Column(name = "reu", updatable = false, nullable = false)
 	private String reu;
 
@@ -41,10 +39,19 @@ public class Kart implements java.io.Serializable{
 
     @Column(name = "nd", updatable = false, nullable = false)
 	private String nd;
-    
-	// номер квартиры
+
+    // дата ограничения пени
+    @Column(name = "pn_dt", updatable = false, nullable = false)
+	private String pnDt;
+
+    // номер квартиры
 	@Column(name = "KW", nullable = true)
 	private String num;
+
+	// тип лиц.счета
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_TP", referencedColumnName="ID", updatable = false, insertable = false)
+	private Lst tp;
 
 	// Ko помешения (здесь OneToOne)
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -60,7 +67,8 @@ public class Kart implements java.io.Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
 	private House house;
-	
+
+	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof Kart))
@@ -75,6 +83,7 @@ public class Kart implements java.io.Serializable{
 	    return lsk.equals(other.getLsk());
 	}
 
+	@Override
 	public int hashCode() {
 	    if (lsk != null) {
 	        return lsk.hashCode();
@@ -83,6 +92,6 @@ public class Kart implements java.io.Serializable{
 	    }
 	}
 
-	
+
 }
 

@@ -2,20 +2,21 @@ package com.dic.bill.model.scott;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Formula;
 
 import com.dic.bill.Compress;
 
 import lombok.Getter;
-import lombok.Setter;
-
-import org.apache.commons.collections4.Equator;
-import org.hibernate.annotations.Formula;;
+import lombok.Setter;;
 
 /**
- * Архивное начисление 
+ * Архивное начисление
  * @author lev
  *
  */
@@ -23,22 +24,23 @@ import org.hibernate.annotations.Formula;;
 @Entity
 @Table(name = "A_CHARGE2", schema="SCOTT")
 @Getter @Setter
-public class Acharge implements java.io.Serializable, Compress { 
+public class Acharge implements java.io.Serializable, Compress {
 
 	public Acharge() {
 	}
 
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id; 
+	private Integer id;
 
-	 // лиц.счет
-	@Column(name = "lsk", updatable = false, nullable = false)
-	private String lsk; 
+	// лиц.счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	private Kart kart;
 
 	// код.услуги
 	@Column(name = "usl", updatable = false, nullable = false)
-	private String usl; 
+	private String usl;
 
 	// сумма начисления
 	@Column(name = "summa", updatable = false, nullable = true)
@@ -52,34 +54,34 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	@Column(name = "type", updatable = false, nullable = true)
 	private Integer type;
-	
+
 	@Column(name = "test_opl", updatable = false, nullable = true)
 	private Double testOpl;
-	
+
 	@Column(name = "test_cena", updatable = false, nullable = true)
 	private Double testCena;
 
 	@Column(name = "test_tarkoef", updatable = false, nullable = true)
 	private Double testTarkoef;
-	
+
 	@Column(name = "test_spk_koef", updatable = false, nullable = true)
 	private Double testSpkkoef;
-	
+
 	@Column(name = "main", updatable = false, nullable = true)
 	private Integer main;
-	
+
 	@Column(name = "lg_doc_id", updatable = false, nullable = true)
 	private Integer lgDocId;
 
 	@Column(name = "npp", updatable = false, nullable = true)
 	private Integer npp;
-	
+
 	@Column(name = "sch", updatable = false, nullable = true)
 	private Integer sch;
 
 	@Column(name = "kpr", updatable = false, nullable = true)
 	private Double kpr;
-	
+
 	@Column(name = "kprz", updatable = false, nullable = true)
 	private Double kprz;
 
@@ -88,22 +90,23 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	@Column(name = "kpr2", updatable = false, nullable = true)
 	private Double kpr2;
-	
+
 	@Column(name = "opl", updatable = false, nullable = true)
 	private Double opl;
-	
+
 	// начало действия записи
 	@Column(name = "mgFrom", updatable = true, nullable = false)
 	private Integer mgFrom;
 
 	// окончание действия записи
 	@Column(name = "mgTo", updatable = true, nullable = false)
-	private Integer mgTo; 
+	private Integer mgTo;
 
 	// ключ, по которому фильтровать сравниваемые кортежи
 	@Formula("concat(USL,TYPE)")
     private String key;
 
+	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof Acharge))
@@ -118,6 +121,7 @@ public class Acharge implements java.io.Serializable, Compress {
 	    return id.equals(other.getId());
 	}
 
+	@Override
 	public int hashCode() {
 	    if (id != null) {
 	        return id.hashCode();
@@ -125,11 +129,12 @@ public class Acharge implements java.io.Serializable, Compress {
 	        return super.hashCode();
 	    }
 	}
-	
+
 	/**
-	 * Получить hash всех полей, кроме id, npp, mgFrom, mgTo - для компаратора 
+	 * Получить hash всех полей, кроме id, npp, mgFrom, mgTo - для компаратора
 	 * @return
 	 */
+	@Override
 	public int getHash() {
 		final int prime = 31;
 		int result = 1;
@@ -139,7 +144,7 @@ public class Acharge implements java.io.Serializable, Compress {
 		result = prime * result + ((kpro == null) ? 0 : kpro.hashCode());
 		result = prime * result + ((kprz == null) ? 0 : kprz.hashCode());
 		result = prime * result + ((lgDocId == null) ? 0 : lgDocId.hashCode());
-		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
+		result = prime * result + ((kart.getLsk() == null) ? 0 : kart.getLsk().hashCode());
 		result = prime * result + ((main == null) ? 0 : main.hashCode());
 		result = prime * result + ((opl == null) ? 0 : opl.hashCode());
 		result = prime * result + ((sch == null) ? 0 : sch.hashCode());
@@ -153,11 +158,12 @@ public class Acharge implements java.io.Serializable, Compress {
 		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
 		return result;
 	}
-	
+
 	/**
-	 * Сравнить все поля, кроме id, npp, mgFrom, mgTo - для компаратора 
+	 * Сравнить все поля, кроме id, npp, mgFrom, mgTo - для компаратора
 	 * @return
 	 */
+	@Override
 	public boolean isTheSame(Compress compr) {
 		Acharge other = (Acharge) compr;
 		if (kartPrId == null) {
@@ -190,10 +196,10 @@ public class Acharge implements java.io.Serializable, Compress {
 				return false;
 		} else if (!lgDocId.equals(other.lgDocId))
 			return false;
-		if (lsk == null) {
-			if (other.lsk != null)
+		if (kart == null) {
+			if (other.kart != null)
 				return false;
-		} else if (!lsk.equals(other.lsk))
+		} else if (!kart.equals(other.kart))
 			return false;
 		if (main == null) {
 			if (other.main != null)

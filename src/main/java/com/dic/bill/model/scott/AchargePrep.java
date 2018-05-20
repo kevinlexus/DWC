@@ -2,24 +2,29 @@ package com.dic.bill.model.scott;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
-import com.dic.bill.Compress;;
+import com.dic.bill.Compress;
+
+import lombok.Getter;
+import lombok.Setter;;
 
 /**
- * Архивное начисление 
+ * Архивное начисление
  * @author lev
  *
  */
+@Getter @Setter
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "A_CHARGE_PREP2", schema="SCOTT")
-public class AchargePrep implements java.io.Serializable, Compress { 
+public class AchargePrep implements java.io.Serializable, Compress {
 
 	public AchargePrep() {
 	}
@@ -28,8 +33,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Integer id; // Id
 
-	@Column(name = "lsk", updatable = false, nullable = false)
-	private String lsk; // лиц.счет
+	// лиц.счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	private Kart kart;
 
 	@Column(name = "usl", updatable = false, nullable = false)
 	private String usl; // код.услуги
@@ -39,19 +46,19 @@ public class AchargePrep implements java.io.Serializable, Compress {
 
 	@Column(name = "kpr", updatable = false, nullable = true)
 	private Double kpr;
-	
+
 	@Column(name = "kprz", updatable = false, nullable = true)
 	private Double kprz;
 
 	@Column(name = "kpro", updatable = false, nullable = true)
 	private Double kpro;
-	
+
 	@Column(name = "sch", updatable = false, nullable = true)
 	private Integer sch;
 
 	@Column(name = "tp", updatable = false, nullable = true)
 	private Integer tp;
-	
+
 	@Column(name = "vol_nrm", updatable = false, nullable = true)
 	private Double volNrm;
 
@@ -63,10 +70,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 
 	@Column(name = "opl", updatable = false, nullable = true)
 	private Double opl;
-	
+
 	@Column(name = "fk_spk", updatable = false, nullable = true)
 	private Integer fkSpk;
-	
+
 	@Column(name = "mgFrom", updatable = true, nullable = false)
 	private Integer mgFrom; // Начало действия записи
 
@@ -76,143 +83,8 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	// ключ, по которому фильтровать сравниваемые кортежи
 	@Formula("concat(USL,TP)")
     private String key;
-	
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getLsk() {
-		return lsk;
-	}
-
-	public void setLsk(String lsk) {
-		this.lsk = lsk;
-	}
-
-	public String getUsl() {
-		return usl;
-	}
-
-	public void setUsl(String usl) {
-		this.usl = usl;
-	}
-
-	public Double getVol() {
-		return vol;
-	}
-
-	public void setVol(Double vol) {
-		this.vol = vol;
-	}
-
-	public Double getKpr() {
-		return kpr;
-	}
-
-	public void setKpr(Double kpr) {
-		this.kpr = kpr;
-	}
-
-	public Double getKprz() {
-		return kprz;
-	}
-
-	public void setKprz(Double kprz) {
-		this.kprz = kprz;
-	}
-
-	public Double getKpro() {
-		return kpro;
-	}
-
-	public void setKpro(Double kpro) {
-		this.kpro = kpro;
-	}
-
-	public Integer getSch() {
-		return sch;
-	}
-
-	public void setSch(Integer sch) {
-		this.sch = sch;
-	}
-
-	public Integer getTp() {
-		return tp;
-	}
-
-	public void setTp(Integer tp) {
-		this.tp = tp;
-	}
-
-	public Double getVolNrm() {
-		return volNrm;
-	}
-
-	public void setVolNrm(Double volNrm) {
-		this.volNrm = volNrm;
-	}
-
-	public Double getVolSvNrm() {
-		return volSvNrm;
-	}
-
-	public void setVolSvNrm(Double volSvNrm) {
-		this.volSvNrm = volSvNrm;
-	}
-
-	public Double getKpr2() {
-		return kpr2;
-	}
-
-	public void setKpr2(Double kpr2) {
-		this.kpr2 = kpr2;
-	}
-
-	public Double getOpl() {
-		return opl;
-	}
-
-	public void setOpl(Double opl) {
-		this.opl = opl;
-	}
-
-	public Integer getFkSpk() {
-		return fkSpk;
-	}
-
-	public void setFkSpk(Integer fkSpk) {
-		this.fkSpk = fkSpk;
-	}
-
-	public Integer getMgFrom() {
-		return mgFrom;
-	}
-
-	public void setMgFrom(Integer mgFrom) {
-		this.mgFrom = mgFrom;
-	}
-
-	public Integer getMgTo() {
-		return mgTo;
-	}
-
-	public void setMgTo(Integer mgTo) {
-		this.mgTo = mgTo;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
+	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof AchargePrep))
@@ -227,6 +99,7 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	    return id.equals(other.getId());
 	}
 
+	@Override
 	public int hashCode() {
 	    if (id != null) {
 	        return id.hashCode();
@@ -234,11 +107,12 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	        return super.hashCode();
 	    }
 	}
-	
+
 	/**
-	 * Получить hash всех полей, кроме id, mgFrom, mgTo - для компаратора 
+	 * Получить hash всех полей, кроме id, mgFrom, mgTo - для компаратора
 	 * @return
 	 */
+	@Override
 	public int getHash() {
 		final int prime = 31;
 		int result = 1;
@@ -247,7 +121,7 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		result = prime * result + ((kpr2 == null) ? 0 : kpr2.hashCode());
 		result = prime * result + ((kpro == null) ? 0 : kpro.hashCode());
 		result = prime * result + ((kprz == null) ? 0 : kprz.hashCode());
-		result = prime * result + ((lsk == null) ? 0 : lsk.hashCode());
+		result = prime * result + ((kart.getLsk() == null) ? 0 : kart.getLsk().hashCode());
 		result = prime * result + ((opl == null) ? 0 : opl.hashCode());
 		result = prime * result + ((sch == null) ? 0 : sch.hashCode());
 		result = prime * result + ((tp == null) ? 0 : tp.hashCode());
@@ -257,11 +131,12 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		result = prime * result + ((volSvNrm == null) ? 0 : volSvNrm.hashCode());
 		return result;
 	}
-	
+
 	/**
-	 * Сравнить все поля, кроме id, mgFrom, mgTo - для компаратора 
+	 * Сравнить все поля, кроме id, mgFrom, mgTo - для компаратора
 	 * @return
 	 */
+	@Override
 	public boolean isTheSame(Compress compr) {
 		AchargePrep other = (AchargePrep) compr;
 		if (fkSpk == null) {
@@ -289,10 +164,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 				return false;
 		} else if (!kprz.equals(other.kprz))
 			return false;
-		if (lsk == null) {
-			if (other.lsk != null)
+		if (kart == null) {
+			if (other.kart != null)
 				return false;
-		} else if (!lsk.equals(other.lsk))
+		} else if (!kart.equals(other.kart))
 			return false;
 		if (opl == null) {
 			if (other.opl != null)
@@ -339,6 +214,6 @@ public class AchargePrep implements java.io.Serializable, Compress {
 		//return getUsl()+getTp();
 		//return getFullName();
 	//}
-	
+
 }
 
