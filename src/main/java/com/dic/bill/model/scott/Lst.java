@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.ric.bill.model.exs.UlistTp;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,7 +37,7 @@ public class Lst implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")
-	private UlistTp ulistTp ;
+	private LstTp lstTp ;
 
 	@Override
 	public boolean equals(Object o) {

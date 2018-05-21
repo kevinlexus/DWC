@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Apenya;
 import com.dic.bill.model.scott.ApenyaId;
-import com.dic.bill.model.scott.Org;
 
 /**
  * DAO сущности Apenya
@@ -20,7 +19,7 @@ import com.dic.bill.model.scott.Org;
 @Repository()
 public interface ApenyaDAO extends JpaRepository<Apenya, ApenyaId> {
 
-	 	
+
 	/**
 	 * Получить совокупную пеню по основным услугам
 	 * @param lsk - лиц.счет
@@ -28,7 +27,7 @@ public interface ApenyaDAO extends JpaRepository<Apenya, ApenyaId> {
 	 * @return
 	 */
 	@Query(value = "select sum(t.penya) from Apenya t "
-			+ "where t.lsk = ?1 and t.mg = TO_CHAR(?2,'YYYYMM')")
+			+ "where t.kart.id = ?1 and t.mg = TO_CHAR(?2,'YYYYMM')")
 	BigDecimal getPenAmnt(String lsk, Date dt);
-	
+
 }

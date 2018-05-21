@@ -44,7 +44,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
      * @param - lsk - лиц.счет
      */
 	@Query("select t from Acharge t "
-			+ "where t.lsk = ?1")
+			+ "where t.kart.id = ?1")
 	List<Acharge> getByLsk(String lsk);
 
 
@@ -54,7 +54,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
      * @param period - период
      */
 	@Query("select t from Acharge t "
-			+ "where t.lsk=?1 and "
+			+ "where t.kart.id=?1 and "
 			+" (t.mgFrom >=?2 or ?2 between t.mgFrom and t.mgTo)")
 	List<Acharge> getByLskPeriod(String lsk, Integer period);
 
@@ -63,7 +63,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
      * @param firstLsk - заданный лс
      */
 	@Query("select distinct t from Kart t join Acharge a "
-			+ " with a.lsk=t.lsk where t.lsk >= ?1 order by t.lsk")
+			+ " with a.kart.id=t.id where t.id >= ?1 order by t.id")
 	List<Kart> getAfterLsk(String firstLsk);
 
 

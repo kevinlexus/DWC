@@ -1,7 +1,5 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,18 +12,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Начисление
+ * Наборов услуг по организациям в лицевом счете
  * @author lev
  * @version 1.00
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGE", schema="SCOTT")
+@Table(name = "NABOR", schema="SCOTT")
 @Getter @Setter
-public class Charge implements java.io.Serializable  {
+public class Nabor implements java.io.Serializable  {
 
-	public Charge() {
+	public Nabor() {
 	}
 
 	@Id
@@ -42,21 +40,18 @@ public class Charge implements java.io.Serializable  {
 	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
 	private Usl usl;
 
-	// Сумма
-	@Column(name = "SUMMA", updatable = false)
-	private BigDecimal summa;
-
-	// Тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
-	@Column(name = "TYPE", updatable = false)
-	private Integer type;
+	// организация - поставщик услуги
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
+	private Org org;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Charge))
+	    if (o == null || !(o instanceof Nabor))
 	        return false;
 
-	    Charge other = (Charge)o;
+	    Nabor other = (Nabor)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

@@ -39,23 +39,31 @@ public class DebPenUsl implements java.io.Serializable{
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
-	@Column(name = "USL", updatable = false, nullable = false)
-	private String usl; // код услуги
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	private Usl usl;
 
-    @Column(name = "ORG", updatable = false, nullable = false)
-	private Integer org; // код организации
+	// организация
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
+	private Org org;
 
+	 // сумма задолженности
     @Column(name = "SUMMA", updatable = false, nullable = false)
-	private BigDecimal summa; // сумма задолженности
+	private BigDecimal summa;
 
+    // задолженность по пене
     @Column(name = "PENYA", updatable = false, nullable = false)
-	private BigDecimal penya; // задолженность по пене
+	private BigDecimal penya;
 
+    // период
     @Column(name = "MG", updatable = false, nullable = false)
-	private Integer mg; // период
+	private Integer mg;
 
+    // период бухгалтерский
     @Column(name = "PERIOD", updatable = false, nullable = false)
-	private Integer period; // период бухгалтерский
+	private Integer period;
 
 	@Override
 	public boolean equals(Object o) {

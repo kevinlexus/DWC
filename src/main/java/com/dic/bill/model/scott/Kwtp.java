@@ -1,7 +1,9 @@
 package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +53,7 @@ public class Kwtp implements java.io.Serializable  {
 	// детализация платежа
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="C_KWTP_ID", referencedColumnName="ID")
-	private KwtpMg kwtpMg;
+	private List<KwtpMg> kwtpMg = new ArrayList<KwtpMg>(0);
 
 	@Override
 	public boolean equals(Object o) {

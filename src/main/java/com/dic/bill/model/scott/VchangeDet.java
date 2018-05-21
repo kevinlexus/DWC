@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -15,26 +16,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Оплата, детализация по услугам
+ * Перерасчет сгруппированный из View
  * @author lev
  * @version 1.00
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KWTP_DAY", schema="SCOTT")
+@Table(name = "V_CHANGES_FOR_SALDO_DET", schema="SCOTT")
 @Getter @Setter
-public class KwtpDay implements java.io.Serializable  {
+@IdClass(VchangeDetId.class) // суррогатный первичный ключ
+public class VchangeDet implements java.io.Serializable  {
 
-	public KwtpDay() {
+	public VchangeDet() {
 	}
 
-	// Id
-	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
-	private Integer id;
-
 	// лиц.счет
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
@@ -43,47 +41,27 @@ public class KwtpDay implements java.io.Serializable  {
 	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal summa;
 
-	// дата принятия платежа
+	// период за который перерасчет
+	@Id
+	@Column(name = "MGCHANGE", updatable = false)
+	private String mgchange;
+
+	// Дата перерасчета
+	@Id
 	@Column(name = "DTEK", updatable = false)
 	private Date dt;
 
-	// дата инкассации
-	@Column(name = "DAT_INK", updatable = false)
-	private Date dtInk;
-
 	// услуга
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
 	private Usl usl;
 
 	// организация
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
-
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof KwtpDay))
-	        return false;
-
-	    KwtpDay other = (KwtpDay)o;
-
-	    if (id == other.getId()) return true;
-	    if (id == null) return false;
-
-	    // equivalence by id
-	    return id.equals(other.getId());
-	}
-
-	@Override
-	public int hashCode() {
-	    if (id != null) {
-	        return id.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
-	}
 
 }
 

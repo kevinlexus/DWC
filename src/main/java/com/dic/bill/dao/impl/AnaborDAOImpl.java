@@ -26,7 +26,8 @@ public class AnaborDAOImpl implements AnaborDAO {
     /**
      * Получить все элементы Anabor
      */
-    public List<Anabor> getAll() {
+    @Override
+	public List<Anabor> getAll() {
 		Query query =em.createQuery("from Anabor t");
 		return query.getResultList();
 	}
@@ -35,9 +36,10 @@ public class AnaborDAOImpl implements AnaborDAO {
      * Получить все элементы Anabor по лиц.счету
      * @param lsk - лиц. счет
      */
-    public List<Anabor> getByLsk(String lsk) {
+    @Override
+	public List<Anabor> getByLsk(String lsk) {
 		log.trace("1.7");
-		Query query =em.createQuery("from Anabor t where t.lsk=:lsk");
+		Query query =em.createQuery("from Anabor t where t.kart.id=:lsk");
 		log.trace("1.8");
 		query.setParameter("lsk", lsk);
 		log.trace("1.9");
@@ -49,24 +51,26 @@ public class AnaborDAOImpl implements AnaborDAO {
      * @param lsk - лиц. счет
      * @param period - период
      */
-    public List<Anabor> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from Anabor t where t.lsk=:lsk and "
+    @Override
+	public List<Anabor> getByLskPeriod(String lsk, Integer period) {
+		Query query =em.createQuery("from Anabor t where t.kart.id=:lsk and "
 				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);
 		return query.getResultList();
 	}
-    
+
     /**
      * Получить все элементы Kart, >= заданного лс
      * @param firstLsk - заданный лс
      */
-    public List<Kart> getAfterLsk(String firstLsk) {
+    @Override
+	public List<Kart> getAfterLsk(String firstLsk) {
     	Query query =em.createQuery("select distinct t from Kart t join Anabor a "
-    			+ " with a.lsk=t.lsk where t.lsk >= :lsk order by t.lsk");
+    			+ " with a.kart.id=t.id where t.id >= :lsk order by t.id");
 		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
 		query.setParameter("lsk", firstLsk);
 		return query.getResultList();
 	}
-    
+
 }

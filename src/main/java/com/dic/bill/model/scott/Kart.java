@@ -1,5 +1,8 @@
 package com.dic.bill.model.scott;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -67,6 +71,11 @@ public class Kart implements java.io.Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
 	private House house;
+
+	// набор услуг
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	private List<Nabor> nabor = new ArrayList<Nabor>(0);
 
 	@Override
 	public boolean equals(Object o) {
