@@ -15,41 +15,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Оплата, детализация по услугам
+ * Корректировки пени по организациям - услугам - периодам
  * @author lev
  * @version 1.00
- *
  */
+@Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KWTP_DAY", schema="SCOTT")
-@Getter @Setter
-public class KwtpDay implements java.io.Serializable  {
+@Table(name = "C_PEN_USL_CORR", schema="SCOTT")
+public class PenUslCorr implements java.io.Serializable{
 
-	public KwtpDay() {
+	public PenUslCorr() {
 	}
 
-	// Id
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+    @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false, nullable = false)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
-
-	// сумма
-	@Column(name = "SUMMA", updatable = false)
-	private BigDecimal summa;
-
-	// дата принятия платежа
-	@Column(name = "DTEK", updatable = false, nullable = false)
-	private Date dt;
-
-	// дата инкассации
-	@Column(name = "DAT_INK", updatable = false)
-	private Date dtInk;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -61,13 +47,17 @@ public class KwtpDay implements java.io.Serializable  {
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-	// тип поступления 1 - оплата, 0 - пеня
-	@Column(name = "PRIZNAK", updatable = false, nullable = false)
-	private Integer tp;
+	// период изменения
+	@Column(name = "MGCHANGE", updatable = false, nullable = false)
+	private String mgchange;
 
-	// период оплаты
-	@Column(name = "DOPL", updatable = false, nullable = false)
-	private String dopl;
+	// сумма корректировки
+    @Column(name = "PENYA", updatable = false, nullable = false)
+	private BigDecimal penya;
+
+	// дата корректировки
+	@Column(name = "DTEK", updatable = false, nullable = false)
+	private Date dt;
 
 	@Override
 	public boolean equals(Object o) {

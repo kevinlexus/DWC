@@ -15,18 +15,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Оплата, детализация по услугам
+ * Корректировки оплатой
  * @author lev
  * @version 1.00
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KWTP_DAY", schema="SCOTT")
+@Table(name = "T_CORRECTS_PAYMENTS", schema="SCOTT")
 @Getter @Setter
-public class KwtpDay implements java.io.Serializable  {
+public class CorrectPay implements java.io.Serializable  {
 
-	public KwtpDay() {
+	public CorrectPay() {
 	}
 
 	// Id
@@ -43,13 +43,9 @@ public class KwtpDay implements java.io.Serializable  {
 	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal summa;
 
-	// дата принятия платежа
-	@Column(name = "DTEK", updatable = false, nullable = false)
+	// дата
+	@Column(name = "DAT", updatable = false, nullable = false)
 	private Date dt;
-
-	// дата инкассации
-	@Column(name = "DAT_INK", updatable = false)
-	private Date dtInk;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -61,21 +57,21 @@ public class KwtpDay implements java.io.Serializable  {
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-	// тип поступления 1 - оплата, 0 - пеня
-	@Column(name = "PRIZNAK", updatable = false, nullable = false)
-	private Integer tp;
-
 	// период оплаты
 	@Column(name = "DOPL", updatable = false, nullable = false)
 	private String dopl;
 
+	// бухгалтерский период
+	@Column(name = "MG", updatable = false, nullable = false)
+	private String mg;
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof KwtpDay))
+	    if (o == null || !(o instanceof CorrectPay))
 	        return false;
 
-	    KwtpDay other = (KwtpDay)o;
+	    CorrectPay other = (CorrectPay)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

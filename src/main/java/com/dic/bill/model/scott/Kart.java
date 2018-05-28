@@ -1,6 +1,7 @@
 package com.dic.bill.model.scott;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -35,8 +36,10 @@ public class Kart implements java.io.Serializable{
     @Column(name = "lsk", updatable = false, nullable = false)
 	private String lsk; //id записи
 
-    @Column(name = "reu", updatable = false, nullable = false)
-	private String reu;
+	// УК
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="REU", referencedColumnName="REU")
+	private Org uk;
 
     @Column(name = "kul", updatable = false, nullable = false)
 	private String kul;
@@ -46,7 +49,7 @@ public class Kart implements java.io.Serializable{
 
     // дата ограничения пени
     @Column(name = "pn_dt", updatable = false, nullable = false)
-	private String pnDt;
+	private Date pnDt;
 
     // номер квартиры
 	@Column(name = "KW", nullable = true)

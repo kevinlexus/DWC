@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -30,7 +32,8 @@ public class DebPenUsl implements java.io.Serializable{
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEBPEN_USL")
+	@SequenceGenerator(name="SEQ_DEBPEN_USL", sequenceName="SCOTT.C_DEBPEN_USL_ID", allocationSize=1)
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id;
 
@@ -49,13 +52,13 @@ public class DebPenUsl implements java.io.Serializable{
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-	 // сумма задолженности
-    @Column(name = "SUMMA", updatable = false, nullable = false)
-	private BigDecimal summa;
+	 // сумма задолженности (исходящее сальдо по задолженности)
+    @Column(name = "DEBOUT", updatable = false, nullable = false)
+	private BigDecimal debOut;
 
     // задолженность по пене
-    @Column(name = "PENYA", updatable = false, nullable = false)
-	private BigDecimal penya;
+    @Column(name = "PENOUT", updatable = false, nullable = false)
+	private BigDecimal penOut;
 
     // период
     @Column(name = "MG", updatable = false, nullable = false)
@@ -64,6 +67,18 @@ public class DebPenUsl implements java.io.Serializable{
     // период бухгалтерский
     @Column(name = "PERIOD", updatable = false, nullable = false)
 	private Integer period;
+
+	@Generated("SparkTools")
+	private DebPenUsl(Builder builder) {
+		this.id = builder.id;
+		this.kart = builder.kart;
+		this.usl = builder.usl;
+		this.org = builder.org;
+		this.debOut = builder.debOut;
+		this.penOut = builder.penOut;
+		this.mg = builder.mg;
+		this.period = builder.period;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -87,6 +102,77 @@ public class DebPenUsl implements java.io.Serializable{
 	    } else {
 	        return super.hashCode();
 	    }
+	}
+
+	/**
+	 * Creates builder to build {@link DebPenUsl}.
+	 * @return created builder
+	 */
+	@Generated("SparkTools")
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	/**
+	 * Builder to build {@link DebPenUsl}.
+	 */
+	@Generated("SparkTools")
+	public static final class Builder {
+		private Integer id;
+		private Kart kart;
+		private Usl usl;
+		private Org org;
+		private BigDecimal debOut;
+		private BigDecimal penOut;
+		private Integer mg;
+		private Integer period;
+
+		private Builder() {
+		}
+
+		public Builder withId(Integer id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder withKart(Kart kart) {
+			this.kart = kart;
+			return this;
+		}
+
+		public Builder withUsl(Usl usl) {
+			this.usl = usl;
+			return this;
+		}
+
+		public Builder withOrg(Org org) {
+			this.org = org;
+			return this;
+		}
+
+		public Builder withDebOut(BigDecimal debOut) {
+			this.debOut = debOut;
+			return this;
+		}
+
+		public Builder withPenOut(BigDecimal penOut) {
+			this.penOut = penOut;
+			return this;
+		}
+
+		public Builder withMg(Integer mg) {
+			this.mg = mg;
+			return this;
+		}
+
+		public Builder withPeriod(Integer period) {
+			this.period = period;
+			return this;
+		}
+
+		public DebPenUsl build() {
+			return new DebPenUsl(this);
+		}
 	}
 
 

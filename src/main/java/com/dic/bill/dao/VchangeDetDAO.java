@@ -25,7 +25,7 @@ public interface VchangeDetDAO extends JpaRepository<VchangeDet, Integer> {
 			+ "t.mgchange as mg, 5 as tp, t.dt as dt from VchangeDet t "
 			+ "where t.kart.lsk=:lsk "
 			+ "and nvl(t.summa,0) <> 0")
-	List<SumRec> getVchangeDet(@Param("lsk") String lsk);
+	List<SumRec> getVchangeDetByLsk(@Param("lsk") String lsk);
 
 
 }

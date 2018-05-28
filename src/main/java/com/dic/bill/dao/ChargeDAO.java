@@ -26,7 +26,7 @@ public interface ChargeDAO extends JpaRepository<Charge, Integer> {
 			+ "2 as tp from Charge t join t.kart k join k.nabor n on n.usl.id=t.usl.id "
 			+ "where t.kart.lsk=:lsk and t.type=1 "
 			+ "and nvl(t.summa,0) <> 0")
-	List<SumRec> getCharge(@Param("lsk") String lsk);
+	List<SumRec> getChargeByLsk(@Param("lsk") String lsk);
 
 
 }

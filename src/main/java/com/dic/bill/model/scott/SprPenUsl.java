@@ -41,8 +41,9 @@ public class SprPenUsl {
 	@JoinColumn(name="USL", referencedColumnName="USL")
 	private Usl usl;
 
-	// REU по которому определена дата начала пени
-    @Column(name = "REU", updatable = false, nullable = true)
-    private String reu;
+	// УК по которой определена дата начала пени
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="REU", referencedColumnName="REU")
+	private Org uk;
 
 }
