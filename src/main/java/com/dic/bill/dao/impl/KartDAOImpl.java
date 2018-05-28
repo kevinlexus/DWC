@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 import com.dic.bill.dao.KartDAO;
 import com.dic.bill.model.scott.Kart;
 
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Repository("dicKartDAO") // поименовал, иначе конфликтует с существующим в com.ric.bill.dao
 public class KartDAOImpl implements KartDAO {
 

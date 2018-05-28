@@ -37,7 +37,7 @@ public class SprPenUsl {
     private Date dt;
 
 	// услуга
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER) // TODO WTF??? java.util.concurrent.ExecutionException если LAZY
 	@JoinColumn(name="USL", referencedColumnName="USL")
 	private Usl usl;
 
