@@ -33,7 +33,7 @@ public class DebPenUsl implements java.io.Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEBPEN_USL")
-	@SequenceGenerator(name="SEQ_DEBPEN_USL", sequenceName="SCOTT.C_DEBPEN_USL_ID", allocationSize=1)
+	@SequenceGenerator(name="SEQ_DEBPEN_USL", sequenceName="SCOTT.C_DEBPEN_USL_ID", allocationSize=10)
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id;
 

@@ -16,7 +16,7 @@ public interface DebPenUslTempDAO extends JpaRepository<DebPenUslTemp, Integer> 
 	 * @param period - бухгалтерский период
 	 */
 	@Modifying
-	@Query(value = "delete from DebPenUslTemp t where t.iter=:iter ")
-	void delByIter(@Param("iter") Integer iter);
+	@Query(value = "delete from DebPenUslTemp t where t.sessionDirect.id=:sessionDirectId ")
+	void delByIter(@Param("sessionDirectId") Integer sessionDirectId);
 
 }

@@ -33,7 +33,7 @@ public class DebPenUslTemp implements java.io.Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEBPEN_USL_TEMP")
-	@SequenceGenerator(name="SEQ_DEBPEN_USL_TEMP", sequenceName="SCOTT.C_DEBPEN_USL_TEMP_ID", allocationSize=1)
+	@SequenceGenerator(name="SEQ_DEBPEN_USL_TEMP", sequenceName="SCOTT.C_DEBPEN_USL_TEMP_ID", allocationSize=10)
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id;
 
@@ -103,9 +103,10 @@ public class DebPenUslTemp implements java.io.Serializable{
     @Column(name = "MG", updatable = false, nullable = false)
 	private Integer mg;
 
-    // ID расчета
-    @Column(name = "FK_ITER", updatable = false, nullable = false)
-	private Integer iter;
+    // сессия клиента, устанавливается в UTILS.prep_users_tree
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_SESSION", referencedColumnName="ID", updatable = false, nullable = false)
+	private SessionDirect sessionDirect;
 
 	@Generated("SparkTools")
 	private DebPenUslTemp(Builder builder) {
@@ -126,7 +127,7 @@ public class DebPenUslTemp implements java.io.Serializable{
 		this.penPay = builder.penPay;
 		this.days = builder.days;
 		this.mg = builder.mg;
-		this.iter = builder.iter;
+		this.sessionDirect = builder.sessionDirect;
 	}
 
 	@Override
@@ -184,7 +185,7 @@ public class DebPenUslTemp implements java.io.Serializable{
 		private BigDecimal penPay;
 		private Integer days;
 		private Integer mg;
-		private Integer iter;
+		private SessionDirect sessionDirect;
 
 		private Builder() {
 		}
@@ -274,8 +275,8 @@ public class DebPenUslTemp implements java.io.Serializable{
 			return this;
 		}
 
-		public Builder withIter(Integer iter) {
-			this.iter = iter;
+		public Builder withSessionDirect(SessionDirect sessionDirect) {
+			this.sessionDirect = sessionDirect;
 			return this;
 		}
 

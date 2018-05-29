@@ -33,8 +33,6 @@ public class SumPenRec {
 	BigDecimal debRolled;
 	// сумма пени (вх.сальдо по пене)
 	BigDecimal penyaIn;
-	// сумма пени (исх.сальдо по пене)
-	BigDecimal penyaOut;
 	// сумма рассчитанной, текущей пени
 	BigDecimal penyaChrg;
 	// сумма оплаты пени
