@@ -48,7 +48,7 @@ public class RedirPay {
 	// Организация - назначение (если не заполнено, не меняется)
 	// Использовать орг, которая обслуживает фонд (-1) (минус один) - изза этого не смог сделать Mapping ManyToOne!
     @Column(name = "FK_ORG_DST", updatable = false, nullable = true)
-	private String orgDstId;
+	private Integer orgDstId;
 
 	// УК по которой производится перенаправление, если пусто - то редирект для всех УК
 	@ManyToOne(fetch = FetchType.LAZY)
