@@ -14,7 +14,9 @@ import lombok.Setter;
 @Getter @Setter
 public class CalcStoreLocal {
 	// задолженность предыдущего периода
-	List<SumRec> lstDebFlow;
+	List<SumDebPenRec> lstDebFlow;
+	// задолженность предыдущего периода по ПЕНЕ
+	List<SumDebPenRec> lstDebPenFlow;
 	// текущее начисление
 	List<SumRec> lstChrgFlow;
 	// перерасчеты
@@ -31,16 +33,26 @@ public class CalcStoreLocal {
 	// общий список всех финансовых операций
 	List<UslOrg> lstAll;
 
+	// добавить список услуга+орг.
 	private void addLst(List<SumRec> lstChrgFlow2) {
 		lstAll.addAll(lstChrgFlow2.stream()
 		.map(t-> new UslOrg(t.getUslId(), t.getOrgId()))
 		.collect(Collectors.toList()));
 	}
 
+	// добавить список услуга+орг.
+	private void addLst2(List<SumDebPenRec> lstChrgFlow2) {
+		lstAll.addAll(lstChrgFlow2.stream()
+		.map(t-> new UslOrg(t.getUslId(), t.getOrgId()))
+		.collect(Collectors.toList()));
+	}
+
+	// создать список всех услуг+орг.
 	public void createUniqUslOrg() {
 		lstAll = lstDebFlow.stream()
 		.map(t-> new UslOrg(t.getUslId(), t.getOrgId()))
 		.collect(Collectors.toList());
+		addLst2(lstDebPenFlow);
 		addLst(lstChrgFlow);
 		addLst(lstChngFlow);
 		addLst(lstPayFlow);
@@ -49,6 +61,7 @@ public class CalcStoreLocal {
 		addLst(lstPenChrgCorrFlow);
 	}
 
+	// получить уникальный список услуг + организаций
 	public List<UslOrg> getUniqUslOrg() {
 		return lstAll.stream()
 		.map(t-> new UslOrg(t.getUslId(), t.getOrgId()))

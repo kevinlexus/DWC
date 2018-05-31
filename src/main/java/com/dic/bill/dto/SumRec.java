@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /*
- * DTO для хранения записи финансовой операции (долг, оплата и т.п.)
+ * DTO для хранения записи финансовой операции (оплата и т.п.)
  * @author - Lev
- * @ver 1.00
+ * @ver 1.01
  */
 public interface SumRec {
 

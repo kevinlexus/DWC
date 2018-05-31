@@ -18,24 +18,29 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Задолженность по организациям - услугам - периодам - для отчета
+ * Пеня по организациям - услугам - периодам - для отчета
  * @author lev
  * @version 1.00
  */
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_DEBPEN_USL_TEMP", schema="SCOTT")
-public class DebPenUslTemp implements java.io.Serializable{
+@Table(name = "PEN", schema="SCOTT")
+public class Pen implements java.io.Serializable{
 
-	public DebPenUslTemp() {
+	public Pen() {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEBPEN_USL_TEMP")
-	@SequenceGenerator(name="SEQ_DEBPEN_USL_TEMP", sequenceName="SCOTT.C_DEBPEN_USL_TEMP_ID", allocationSize=10)
-    @Column(name = "id", updatable = false, nullable = false)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PEN")
+	@SequenceGenerator(name="SEQ_PEN", sequenceName="SCOTT.PEN_ID", allocationSize=10)
+    @Column(name = "ID", updatable = false, nullable = false)
+	private Long id;
+
+	// лиц.счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	private Kart kart;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -47,41 +52,9 @@ public class DebPenUslTemp implements java.io.Serializable{
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-	 // входящее сальдо по задолженности
-    @Column(name = "DEBIN", updatable = false, nullable = false)
-	private BigDecimal debIn;
-
-    // исходящее сальдо по задолженности
-    @Column(name = "DEBOUT", updatable = false, nullable = false)
-	private BigDecimal debOut;
-
-    // свернутый долг
-    @Column(name = "DEBROLLED", updatable = false, nullable = false)
-	private BigDecimal debRolled;
-
-    // начисление
-    @Column(name = "CHRG", updatable = false, nullable = false)
-	private BigDecimal chrg;
-
-    // перерасчеты
-    @Column(name = "CHNG", updatable = false, nullable = false)
-	private BigDecimal chng;
-
-    // оплата задолженности
-    @Column(name = "DEBPAY", updatable = false, nullable = false)
-	private BigDecimal debPay;
-
-    // корректировки оплаты
-    @Column(name = "PAYCORR", updatable = false, nullable = false)
-	private BigDecimal payCorr;
-
     // входящее сальдо по пене
     @Column(name = "PENIN", updatable = false, nullable = false)
 	private BigDecimal penIn;
-
-    // исходящее сальдо по пене
-    @Column(name = "PENOUT", updatable = false, nullable = false)
-	private BigDecimal penOut;
 
     // пеня начисленная в текущем периоде (в т.ч. корректировки пени)
     @Column(name = "PENCHRG", updatable = false, nullable = false)
@@ -95,6 +68,10 @@ public class DebPenUslTemp implements java.io.Serializable{
     @Column(name = "PENPAY", updatable = false, nullable = false)
 	private BigDecimal penPay;
 
+    // исходящее сальдо по пене
+    @Column(name = "PENOUT", updatable = false, nullable = false)
+	private BigDecimal penOut;
+
     // дней просрочки
     @Column(name = "DAYS", updatable = false, nullable = false)
 	private Integer days;
@@ -103,40 +80,38 @@ public class DebPenUslTemp implements java.io.Serializable{
     @Column(name = "MG", updatable = false, nullable = false)
 	private Integer mg;
 
-    // сессия клиента, устанавливается в UTILS.prep_users_tree
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_SESSION", referencedColumnName="ID", updatable = false, nullable = false)
-	private SessionDirect sessionDirect;
+    // бухгалтерский период - начало
+    @Column(name = "MGFROM", updatable = false, nullable = false)
+	private Integer mgFrom;
+
+    // бухгалтерский период - окончание
+    @Column(name = "MGTO", updatable = false, nullable = false)
+	private Integer mgTo;
 
 	@Generated("SparkTools")
-	private DebPenUslTemp(Builder builder) {
+	private Pen(Builder builder) {
 		this.id = builder.id;
+		this.kart = builder.kart;
 		this.usl = builder.usl;
 		this.org = builder.org;
-		this.debIn = builder.debIn;
-		this.debOut = builder.debOut;
-		this.debRolled = builder.debRolled;
-		this.chrg = builder.chrg;
-		this.chng = builder.chng;
-		this.debPay = builder.debPay;
-		this.payCorr = builder.payCorr;
 		this.penIn = builder.penIn;
-		this.penOut = builder.penOut;
 		this.penChrg = builder.penChrg;
 		this.penCorr = builder.penCorr;
 		this.penPay = builder.penPay;
+		this.penOut = builder.penOut;
 		this.days = builder.days;
 		this.mg = builder.mg;
-		this.sessionDirect = builder.sessionDirect;
+		this.mgFrom = builder.mgFrom;
+		this.mgTo = builder.mgTo;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof DebPenUslTemp))
+	    if (o == null || !(o instanceof Pen))
 	        return false;
 
-	    DebPenUslTemp other = (DebPenUslTemp)o;
+	    Pen other = (Pen)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;
@@ -155,7 +130,7 @@ public class DebPenUslTemp implements java.io.Serializable{
 	}
 
 	/**
-	 * Creates builder to build {@link DebPenUslTemp}.
+	 * Creates builder to build {@link Pen}.
 	 * @return created builder
 	 */
 	@Generated("SparkTools")
@@ -164,34 +139,34 @@ public class DebPenUslTemp implements java.io.Serializable{
 	}
 
 	/**
-	 * Builder to build {@link DebPenUslTemp}.
+	 * Builder to build {@link Pen}.
 	 */
 	@Generated("SparkTools")
 	public static final class Builder {
-		private Integer id;
+		private Long id;
+		private Kart kart;
 		private Usl usl;
 		private Org org;
-		private BigDecimal debIn;
-		private BigDecimal debOut;
-		private BigDecimal debRolled;
-		private BigDecimal chrg;
-		private BigDecimal chng;
-		private BigDecimal debPay;
-		private BigDecimal payCorr;
 		private BigDecimal penIn;
-		private BigDecimal penOut;
 		private BigDecimal penChrg;
 		private BigDecimal penCorr;
 		private BigDecimal penPay;
+		private BigDecimal penOut;
 		private Integer days;
 		private Integer mg;
-		private SessionDirect sessionDirect;
+		private Integer mgFrom;
+		private Integer mgTo;
 
 		private Builder() {
 		}
 
-		public Builder withId(Integer id) {
+		public Builder withId(Long id) {
 			this.id = id;
+			return this;
+		}
+
+		public Builder withKart(Kart kart) {
+			this.kart = kart;
 			return this;
 		}
 
@@ -205,48 +180,8 @@ public class DebPenUslTemp implements java.io.Serializable{
 			return this;
 		}
 
-		public Builder withDebIn(BigDecimal debIn) {
-			this.debIn = debIn;
-			return this;
-		}
-
-		public Builder withDebOut(BigDecimal debOut) {
-			this.debOut = debOut;
-			return this;
-		}
-
-		public Builder withDebRolled(BigDecimal debRolled) {
-			this.debRolled = debRolled;
-			return this;
-		}
-
-		public Builder withChrg(BigDecimal chrg) {
-			this.chrg = chrg;
-			return this;
-		}
-
-		public Builder withChng(BigDecimal chng) {
-			this.chng = chng;
-			return this;
-		}
-
-		public Builder withDebPay(BigDecimal debPay) {
-			this.debPay = debPay;
-			return this;
-		}
-
-		public Builder withPayCorr(BigDecimal payCorr) {
-			this.payCorr = payCorr;
-			return this;
-		}
-
 		public Builder withPenIn(BigDecimal penIn) {
 			this.penIn = penIn;
-			return this;
-		}
-
-		public Builder withPenOut(BigDecimal penOut) {
-			this.penOut = penOut;
 			return this;
 		}
 
@@ -265,6 +200,11 @@ public class DebPenUslTemp implements java.io.Serializable{
 			return this;
 		}
 
+		public Builder withPenOut(BigDecimal penOut) {
+			this.penOut = penOut;
+			return this;
+		}
+
 		public Builder withDays(Integer days) {
 			this.days = days;
 			return this;
@@ -275,13 +215,18 @@ public class DebPenUslTemp implements java.io.Serializable{
 			return this;
 		}
 
-		public Builder withSessionDirect(SessionDirect sessionDirect) {
-			this.sessionDirect = sessionDirect;
+		public Builder withMgFrom(Integer mgFrom) {
+			this.mgFrom = mgFrom;
 			return this;
 		}
 
-		public DebPenUslTemp build() {
-			return new DebPenUslTemp(this);
+		public Builder withMgTo(Integer mgTo) {
+			this.mgTo = mgTo;
+			return this;
+		}
+
+		public Pen build() {
+			return new Pen(this);
 		}
 	}
 
