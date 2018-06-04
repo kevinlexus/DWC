@@ -4,24 +4,21 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Справочник дат начисления пени по услугам
+ * Справочник дат начисления пени по типам услуг
  * @author Lev
  * @version 1.00
  */
 @Entity
-@Table(name = "C_SPR_PEN_USL", schema="SCOTT")
+@Table(name = "PEN_DT", schema="SCOTT")
 @Getter @Setter
-public class SprPenUsl {
+public class PenDt {
 
 	// Id
 	@Id
@@ -36,14 +33,16 @@ public class SprPenUsl {
     @Column(name = "DT", updatable = false, nullable = true)
     private Date dt;
 
-	// услуга
-	@ManyToOne(fetch = FetchType.EAGER) // TODO WTF??? java.util.concurrent.ExecutionException если LAZY
-	@JoinColumn(name="USL", referencedColumnName="USL")
-	private Usl usl;
 
-	// УК по которой определена дата начала пени
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="REU", referencedColumnName="REU")
-	private Org uk;
+	// тип услуги -> USL.TP_PEN (0-обычная услуга, 1- капремонт)
+    @Column(name = "USL_TP_PEN", updatable = false, nullable = true)
+    private Integer uslTpPen;
 
+	// Начальный код УК
+    @Column(name = "REUFROM", updatable = false, nullable = true)
+    private String reuFrom;
+
+	// Конечный код УК
+    @Column(name = "REUTO", updatable = false, nullable = true)
+    private String reuTo;
 }

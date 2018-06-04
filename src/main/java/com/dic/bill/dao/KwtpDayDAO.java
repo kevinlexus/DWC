@@ -17,7 +17,7 @@ public interface KwtpDayDAO extends JpaRepository<KwtpDay, Integer> {
 	 * @param lsk - лицевой счет
 	 * @return
 	 */
-	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
+	@Query(value = "select '003' as uslId, t.org.id as orgId, "/*t.usl.idВРЕМЕННО!!!###*/
 			+ "t.summa as summa, t.dopl as mg, t.dt as dt, "
 			+ "3 as tp from KwtpDay t "
 			+ "where t.kart.lsk=:lsk and t.tp=1 "
@@ -29,7 +29,7 @@ public interface KwtpDayDAO extends JpaRepository<KwtpDay, Integer> {
 	 * @param lsk - лицевой счет
 	 * @return
 	 */
-	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
+	@Query(value = "select '003' as uslId, t.org.id as orgId, "/*t.usl.idВРЕМЕННО!!!###*/
 			+ "t.summa as summa, t.dopl as mg, t.dt as dt, "
 			+ "4 as tp from KwtpDay t "
 			+ "where t.kart.lsk=:lsk and t.tp=0 "

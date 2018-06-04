@@ -31,6 +31,14 @@ public class Usl implements java.io.Serializable  {
 	@Column(name = "NM")
 	private String nm;
 
+	// для справочника дат начала обязательств по долгу -  PEN_DT Тип услуги (0-прочие услуги, 1-капремонт)
+    @Column(name = "TP_PEN_DT", updatable = false, nullable = true)
+    private Integer tpPenDt;
+
+	// для справочника ставок рефинансирования - PEN_REF Тип услуги (0-прочие услуги, 1-капремонт)
+    @Column(name = "TP_PEN_REF", updatable = false, nullable = true)
+    private Integer tpPenRef;
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;

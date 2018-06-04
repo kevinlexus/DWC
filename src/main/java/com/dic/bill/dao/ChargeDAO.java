@@ -22,7 +22,7 @@ public interface ChargeDAO extends JpaRepository<Charge, Integer> {
 	 * @param lsk - лицевой счет
 	 * @return
 	 */
-	@Query(value = "select t.usl.id as uslId, n.org.id as orgId, t.summa as summa, "
+	@Query(value = "select '003' as uslId, n.org.id as orgId, t.summa as summa, "/*t.usl.id ВРЕМЕННО!!!###*/
 			+ "2 as tp from Charge t join t.kart k join k.nabor n on n.usl.id=t.usl.id "
 			+ "where t.kart.lsk=:lsk and t.type=1 "
 			+ "and nvl(t.summa,0) <> 0")

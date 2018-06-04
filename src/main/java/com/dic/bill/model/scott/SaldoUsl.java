@@ -20,7 +20,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "SALDO_USL", schema="SCOTT")
-@IdClass(SaldoUslId.class) // суррогантый первичный ключ
+@IdClass(SaldoUslId.class) // суррогатный первичный ключ
 @Getter @Setter
 public class SaldoUsl implements java.io.Serializable {
 

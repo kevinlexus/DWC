@@ -3,8 +3,8 @@ package com.dic.bill.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.dic.bill.model.scott.SprPenUsl;
-import com.dic.bill.model.scott.StavrUsl;
+import com.dic.bill.model.scott.PenDt;
+import com.dic.bill.model.scott.PenRef;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +25,9 @@ public class CalcStore {
 	// период - месяц назад
 	Integer periodBack;
 	// справочник дат начала пени
-	List<SprPenUsl> lstSprPenUsl;
+	List<PenDt> lstPenDt;
 	// справочник ставок рефинансирования
-	List<StavrUsl> lstStavrUsl;
+	List<PenRef> lstPenRef;
 	// уровень отладочной информации
 	Integer debugLvl;
 

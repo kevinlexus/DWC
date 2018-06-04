@@ -38,7 +38,7 @@ public interface PenDAO extends JpaRepository<Deb, Integer> {
 	 */
 	@Modifying
 	@Query(value = "delete from Pen t where t.mgFrom =:period and "
-			+ " t.kart.lsk=:lsk) "
+			+ " t.kart.lsk=:lsk "
 			)
 	void delByLskPeriod(@Param("lsk") String lsk, @Param("period") Integer period);
 
@@ -50,7 +50,7 @@ public interface PenDAO extends JpaRepository<Deb, Integer> {
 	 */
 	@Modifying
 	@Query(value = "update Pen t set t.mgTo=:periodBack where t.mgTo = :period and "
-			+ " t.kart.lsk=:lsk) "
+			+ " t.kart.lsk=:lsk "
 			)
 	void updByLskPeriod(@Param("lsk") String lsk, @Param("period") Integer period,
 			@Param("periodBack") Integer periodBack);

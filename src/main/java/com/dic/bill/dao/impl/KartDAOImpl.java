@@ -26,7 +26,8 @@ public class KartDAOImpl implements KartDAO {
     /**
      * Получить все элементы Kart
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<Kart> getAll() {
 		Query query =em.createQuery("from Kart t order by t.lsk");
 		return query.getResultList();
@@ -36,14 +37,24 @@ public class KartDAOImpl implements KartDAO {
      * Получить все элементы Kart, >= заданного лс
      * @param firstLsk - заданный лс
      */
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public List<Kart> getAfterLsk(String firstLsk) {
     	Query query =em.createQuery("from Kart t where t.lsk >= :lsk order by t.lsk");
-		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
 		query.setParameter("lsk", firstLsk);
 		return query.getResultList();
 	}
 
+    /**
+     * Получить элемент Kart, по заданному лс
+     * @param firstLsk - заданный лс
+     */
+    @Override
+    public Kart getByLsk(String lsk) {
+    	Query query =em.createQuery("from Kart t where t.lsk = :lsk");
+		query.setParameter("lsk", lsk);
+		return (Kart) query.getSingleResult();
+	}
 
 	/**
 	 * Найти лицевой счет по номеру и по klsk дома

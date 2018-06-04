@@ -5,31 +5,28 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Ставки рефинансирования по услугам
+ * Ставки рефинансирования по типам услуг
  * @author Lev
  * @version 1.00
  */
 @Entity
-@Table(name = "STAV_R_USl", schema="SCOTT")
+@Table(name = "PEN_REF", schema="SCOTT")
 @Getter @Setter
-public class StavrUsl {
+public class PenRef {
 
 	// Id
 	@Id
 	@Column(name = "ID", unique = true, nullable = false)
 	private Integer id;
 
-	// доля  от ставки рефинансирования
+	// % начисления пени
     @Column(name = "PROC", updatable = false, nullable = true)
     private BigDecimal proc;
 
@@ -41,10 +38,9 @@ public class StavrUsl {
     @Column(name = "DAYS2", updatable = false, nullable = true)
     private Integer days2;
 
-	// услуга
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USL")
-	private Usl usl;
+	// тип услуги -> USL.TP_REF (0-обычная услуга, 1- капремонт)
+    @Column(name = "USL_TP_REF", updatable = false, nullable = true)
+    private Integer uslTpRef;
 
     // дата начала
     @Column(name = "DT1", updatable = false, nullable = true)

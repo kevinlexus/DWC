@@ -18,7 +18,7 @@ public interface PenUslCorrDAO extends JpaRepository<PenUslCorr, Integer> {
 	 * @param period - бухгалтерский период
 	 * @return
 	 */
-	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, t.penya as summa, "
+	@Query(value = "select '003' as uslId, t.org.id as orgId, t.penya as summa, " /*t.usl.idВРЕМЕННО###*/
 			+ "t.mgchange as mg, t.dt as dt, 7 as tp from PenUslCorr t where t.kart.lsk=:lsk "
 			+ "and nvl(t.penya,0) <> 0 ")
 	List<SumRec> getPenUslCorrByLsk(@Param("lsk") String lsk);

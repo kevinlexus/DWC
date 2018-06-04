@@ -1,5 +1,7 @@
 package com.dic.bill.dto;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +11,12 @@ import lombok.Setter;
  *
  */
 @Getter @Setter
-public class UslOrg {
+public class UslOrg implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public UslOrg(String uslId, Integer orgId) {
 		super();
