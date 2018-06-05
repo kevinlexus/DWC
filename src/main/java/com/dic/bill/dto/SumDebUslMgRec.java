@@ -64,11 +64,6 @@ public class SumDebUslMgRec {
 		private Builder() {
 		}
 
-		public Builder withLog(org.slf4j.Logger log) {
-			this.log = log;
-			return this;
-		}
-
 		public Builder withUslId(String uslId) {
 			this.uslId = uslId;
 			return this;
