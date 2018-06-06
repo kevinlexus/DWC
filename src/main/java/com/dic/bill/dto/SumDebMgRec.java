@@ -44,17 +44,11 @@ public class SumDebMgRec {
 	 */
 	@Generated("SparkTools")
 	public static final class Builder {
-		private org.slf4j.Logger log;
 		private BigDecimal summa;
 		private Integer mg;
 		private Integer sign;
 
 		private Builder() {
-		}
-
-		public Builder withLog(org.slf4j.Logger log) {
-			this.log = log;
-			return this;
 		}
 
 		public Builder withSumma(BigDecimal summa) {
