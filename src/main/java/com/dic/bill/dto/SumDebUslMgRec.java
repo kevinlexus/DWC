@@ -29,6 +29,8 @@ public class SumDebUslMgRec {
 	Integer sign;
 	// период
 	Integer mg;
+	// суррогатная строка?
+	Boolean isSurrogate;
 
 	@Generated("SparkTools")
 	private SumDebUslMgRec(Builder builder) {
@@ -38,6 +40,7 @@ public class SumDebUslMgRec {
 		this.weigth = builder.weigth;
 		this.sign = builder.sign;
 		this.mg = builder.mg;
+		this.isSurrogate = builder.isSurrogate;
 	}
 
 	/**
@@ -53,13 +56,13 @@ public class SumDebUslMgRec {
 	 */
 	@Generated("SparkTools")
 	public static final class Builder {
-		private org.slf4j.Logger log;
 		private String uslId;
 		private Integer orgId;
 		private BigDecimal summa;
 		private BigDecimal weigth;
 		private Integer sign;
 		private Integer mg;
+		private Boolean isSurrogate;
 
 		private Builder() {
 		}
@@ -91,6 +94,11 @@ public class SumDebUslMgRec {
 
 		public Builder withMg(Integer mg) {
 			this.mg = mg;
+			return this;
+		}
+
+		public Builder withIsSurrogate(Boolean isSurrogate) {
+			this.isSurrogate = isSurrogate;
 			return this;
 		}
 
