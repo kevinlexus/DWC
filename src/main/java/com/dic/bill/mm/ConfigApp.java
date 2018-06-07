@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.dic.bill.Lock;
 
-public interface Config {
+public interface ConfigApp {
 
 	String getPeriod();
 

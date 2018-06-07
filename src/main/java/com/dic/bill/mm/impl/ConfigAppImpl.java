@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.dic.bill.Lock;
 import com.dic.bill.dao.ParamDAO;
-import com.dic.bill.mm.Config;
+import com.dic.bill.mm.ConfigApp;
 import com.dic.bill.model.scott.Param;
 import com.ric.cmn.Utl;
 
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class ConfigImpl implements Config {
+public class ConfigAppImpl implements ConfigApp {
 
 	@PersistenceContext
 	private EntityManager em;
