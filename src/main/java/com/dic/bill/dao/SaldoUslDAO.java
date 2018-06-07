@@ -1,5 +1,6 @@
 package com.dic.bill.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -53,5 +54,15 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 			+ "where t.lsk=:lsk and t.mg=:period "
 			+ "and nvl(t.summa,0) <> 0", nativeQuery = true)
 	List<SumUslOrgRec> getSaldoUslByLsk(@Param("lsk") String lsk, @Param("period") Integer period);
+
+	/**
+	 * Получить совокупное сальдо по лицевому счету
+	 * @param lsk лицевой счет
+	 * @param period - период
+	 * @return
+	 */
+	@Query("select sum(t.summa) from SaldoUsl t "
+			+ "where t.kart.lsk = ?1 and t.mg = ?2")
+	  BigDecimal getAmntByLsk(String lsk, String period);
 
 }
