@@ -17,11 +17,11 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 	 * @param lsk - лицевой счет
 	 * @return
 	 */
-	@Query(value = "select '003' as uslId, t.org.id as orgId, "/*t.usl.idВРЕМЕННО!!!###*/
+	@Query(value = "select '003' as uslId, 677 as orgId, "/*t.usl.id, t.org.idВРЕМЕННО!!!### TODO TODO TODO TODO TODO */
 			+ "t.summa as summa, t.dopl as mg, t.dt as dt, "
 			+ "6 as tp from CorrectPay t "
-			+ "where t.kart.lsk=:lsk "
+			+ "where t.kart.lsk=:lsk and t.mg=:period "
 			+ "and nvl(t.summa,0) <> 0")
-	List<SumRec> getCorrectPayByLsk(@Param("lsk") String lsk);
+	List<SumRec> getCorrectPayByLsk(@Param("lsk") String lsk, @Param("period") String period);
 
 }
