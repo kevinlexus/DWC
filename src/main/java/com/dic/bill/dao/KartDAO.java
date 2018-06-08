@@ -9,7 +9,7 @@ public interface KartDAO {
 
 
 	public List<Kart> getAll();
-	public List<Kart> getAfterLsk(String firstLsk);
     public Kart getByLsk(String lsk);
     public Kart getKwByNum(Integer klskId, String num);
+	List<Kart> getRangeLsk(String lskFrom, String lskTo);
 }

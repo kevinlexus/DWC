@@ -1,6 +1,7 @@
 package com.dic.bill.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Getter @Setter
 public class SumDebRec {
 
+	// дата
+	Date dt;
+	// флаг последней даты расчета (используется в DebitMngImpl, при группировке записей)
+	Boolean isLastDay;
+	// Id услуги
+	String uslId;
+	// Id организации
+	Integer orgId;
 	// начисление
 	BigDecimal chrg;
 	// перерасчеты
@@ -49,8 +58,6 @@ public class SumDebRec {
 	Integer mg;
 	// вспомогательный тип записи
 	Integer tp;
-	// флаг последней даты расчета (используется в DebitMngImpl, при группировке записей)
-	Boolean isLastDay;
 
 	/**
 	 * конструктор

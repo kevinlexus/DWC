@@ -34,14 +34,18 @@ public class KartDAOImpl implements KartDAO {
 	}
 
     /**
-     * Получить все элементы Kart, >= заданного лс
-     * @param firstLsk - заданный лс
+     * Получить все элементы Kart, по диапазону лс
+	 * @param lskFrom - начальный лиц.счет
+	 * @param lskTo - конечный лиц.счет
      */
     @SuppressWarnings("unchecked")
 	@Override
-    public List<Kart> getAfterLsk(String firstLsk) {
-    	Query query =em.createQuery("from Kart t where t.lsk >= :lsk order by t.lsk");
-		query.setParameter("lsk", firstLsk);
+    public List<Kart> getRangeLsk(String lskFrom, String lskTo) {
+    	Query query =em.createQuery("from Kart t "
+    			+ "where t.lsk between :lskFrom and :lskTo "
+    			+ "order by t.lsk");
+		query.setParameter("lskFrom", lskFrom);
+		query.setParameter("lskTo", lskTo);
 		return query.getResultList();
 	}
 

@@ -27,8 +27,10 @@ public class SumPenRec {
 	BigDecimal debIn;
 	// корректировки оплаты
 	BigDecimal payCorr;
-	// услуга и организация
-	UslOrg uslOrg;
+	// Id услуги
+	String uslId;
+	// Id организации
+	Integer orgId;
 	// сумма для расчета долга
 	BigDecimal debOut;
 	// сумма для свернутого долга (будут учтены переплаты ранних периодов)
@@ -53,7 +55,8 @@ public class SumPenRec {
 		this.debPay = builder.debPay;
 		this.debIn = builder.debIn;
 		this.payCorr = builder.payCorr;
-		this.uslOrg = builder.uslOrg;
+		this.uslId = builder.uslId;
+		this.orgId = builder.orgId;
 		this.debOut = builder.debOut;
 		this.debRolled = builder.debRolled;
 		this.penyaIn = builder.penyaIn;
@@ -65,7 +68,7 @@ public class SumPenRec {
 	}
 
 	public SumPenRec(BigDecimal debIn, BigDecimal penyaPay, BigDecimal payCorr, BigDecimal debPay,
-			BigDecimal chrg, BigDecimal chng, UslOrg uslOrg, BigDecimal debOut,
+			BigDecimal chrg, BigDecimal chng, String uslId, Integer orgId, BigDecimal debOut,
 			BigDecimal debRolled,
 			BigDecimal penyaIn, BigDecimal penyaCorr, Integer days, Integer mg) {
 		super();
@@ -136,7 +139,8 @@ public class SumPenRec {
 			this.days = days;
 		}
 
-		this.uslOrg = uslOrg;
+		this.uslId = uslId;
+		this.orgId = orgId;
 		this.penyaChrg = BigDecimal.ZERO;
 		this.mg = mg;
 	}
@@ -160,7 +164,8 @@ public class SumPenRec {
 		private BigDecimal debPay;
 		private BigDecimal debIn;
 		private BigDecimal payCorr;
-		private UslOrg uslOrg;
+		private String uslId;
+		private Integer orgId;
 		private BigDecimal debOut;
 		private BigDecimal debRolled;
 		private BigDecimal penyaIn;
@@ -171,6 +176,10 @@ public class SumPenRec {
 		private Integer mg;
 
 		private Builder() {
+		}
+
+		public Builder withLog(org.slf4j.Logger log) {
+			return this;
 		}
 
 		public Builder withChrg(BigDecimal chrg) {
@@ -198,8 +207,13 @@ public class SumPenRec {
 			return this;
 		}
 
-		public Builder withUslOrg(UslOrg uslOrg) {
-			this.uslOrg = uslOrg;
+		public Builder withUslId(String uslId) {
+			this.uslId = uslId;
+			return this;
+		}
+
+		public Builder withOrgId(Integer orgId) {
+			this.orgId = orgId;
 			return this;
 		}
 
