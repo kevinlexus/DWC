@@ -65,4 +65,23 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 			+ "where t.kart.lsk = ?1 and t.mg = ?2")
 	  BigDecimal getAmntByLsk(String lsk, String period);
 
+
+	/**
+	 * Получить записи всех лиц счетов, где есть долги или переплаты
+	 * @param lskFrom - начальный лиц.счет
+	 * @param lskTo - конечный лиц.счет
+	 * @return
+	 */
+	@Query(value = "select a.lsk  from ( " +
+			"select t.lsk, t.mg, sum(t.summa) as summa from scott.v_chargepay t " +
+			"where t.period=:period and t.lsk between :lskFrom and :lskTo " +
+			"group by t.lsk, t.mg " +
+			") a " +
+			"group by a.lsk " +
+			"having sum(a.summa) <> 0 " +
+			"order by a.lsk", nativeQuery = true)
+	List<String> getAllWithNonZeroDeb(@Param("lskFrom") String lskFrom, @Param("lskTo") String lskTo,
+			@Param("period") String period);
+
+
 }

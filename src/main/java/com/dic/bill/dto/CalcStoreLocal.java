@@ -29,9 +29,10 @@ public class CalcStoreLocal {
 	List<SumRec> lstPayCorrFlow;
 	// корректировки начисления пени
 	List<SumRec> lstPenChrgCorrFlow;
-
 	// общий список всех финансовых операций
 	List<UslOrg> lstAll;
+	// код УК в числовом выражении (для ускорения фильтров)
+	int reuId;
 
 	// добавить список услуга+орг.
 	private void addLst(List<SumRec> lstChrgFlow2) {

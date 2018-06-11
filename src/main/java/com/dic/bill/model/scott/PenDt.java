@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,11 +40,13 @@ public class PenDt {
     @Column(name = "USL_TP_PEN", updatable = false, nullable = true)
     private Integer uslTpPen;
 
-	// Начальный код УК
-    @Column(name = "REUFROM", updatable = false, nullable = true)
-    private String reuFrom;
+	// Начальный код УК, преобразовать в Integer
+    //@Column(name = "REUFROM", updatable = false, nullable = true)
+    @Formula(value = "to_number(reuFrom)")
+    private Integer reuFrom;
 
 	// Конечный код УК
-    @Column(name = "REUTO", updatable = false, nullable = true)
-    private String reuTo;
+    //@Column(name = "REUTO", updatable = false, nullable = true)
+    @Formula(value = "to_number(reuTo)")
+    private Integer reuTo;
 }
