@@ -15,6 +15,9 @@ public interface SprGenItmDAO extends JpaRepository<SprGenItm, Integer> {
 	@Query("select t from SprGenItm t order by t.npp2")
 	List<SprGenItm> getAllOrdered();
 
+	@Query("select t from SprGenItm t where t.sel = true order by t.npp2")
+	List<SprGenItm> getAllCheckedOrdered();
+
 	@Query("select t from SprGenItm t where t.cd=:cd ")
 	SprGenItm getByCd(@Param("cd") String cd);
 

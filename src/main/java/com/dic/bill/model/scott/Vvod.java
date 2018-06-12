@@ -13,18 +13,17 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 /**
- * Дом
+ * Ввод
  * @author lev
- * @version 1.01
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_HOUSES", schema="SCOTT")
+@Table(name = "C_VVOD", schema="SCOTT")
 @Getter @Setter
-public class House implements java.io.Serializable {
+public class Vvod implements java.io.Serializable {
 
-	public House() {
+	public Vvod() {
 
 	}
 
@@ -33,28 +32,29 @@ public class House implements java.io.Serializable {
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id; //id записи
 
-    @Column(name = "kul", updatable = false, nullable = false)
-	private String kul;
-
-    @Column(name = "nd", updatable = false, nullable = false)
-	private String nd;
-
-    // статус дома (0 - открытый, 1 - закрытый)
-    @Column(name = "psch", updatable = false, nullable = true)
-	private Integer psch;
-
-	// Ko помешения (здесь OneToOne)
+	// дом
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = false)
-	private Ko ko;
+	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	private House house;
+
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, insertable = false)
+	private Usl usl;
+
+	// распределение воды по дому (0, null-пропорционально расходу, 2-нет услуги, не считать вообще, 1 - проп. площади,
+	// 4-по дому, без ОДПУ, есть возм.установки, 5-по дому, без ОДПУ, нет возм.установки,
+	// 6-просто учитывать объем, 7 - информационно отобразить объем в Счете в ОДПУ)
+    @Column(name = "dist_tp", updatable = false, nullable = true)
+	private Integer distTp;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof House))
+	    if (o == null || !(o instanceof Vvod))
 	        return false;
 
-	    House other = (House)o;
+	    Vvod other = (Vvod)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;
