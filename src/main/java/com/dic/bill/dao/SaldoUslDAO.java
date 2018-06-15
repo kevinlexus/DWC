@@ -42,6 +42,18 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 			nativeQuery = true)
 	List<SumUslOrgRec> getChargeNaborByLsk(@Param("lsk") String lsk, @Param("period") Integer period);
 
+	/**
+	 * Получить записи начислений из XITOG3
+	 * @param lsk - лицевой счет
+	 * @param period - необходимый период
+	 * @return
+	 */
+	@Query(value = "select t.org as b1, t.charges as c1, t.usl as a1 from SCOTT.XITOG3_LSK t "
+			+ "where t.mg=:period "
+			+ "and t.lsk=:lsk "
+			+ "and nvl(t.charges,0) > 0", // только положительные значения!
+			nativeQuery = true)
+	List<SumUslOrgRec> getChargeXitog3ByLsk(@Param("lsk") String lsk, @Param("period") Integer period);
 
 	/**
 	 * Получить записи сальдо
