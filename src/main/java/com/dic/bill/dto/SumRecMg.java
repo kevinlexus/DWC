@@ -1,0 +1,16 @@
+package com.dic.bill.dto;
+
+import java.math.BigDecimal;
+
+/*
+ * DTO для хранения записи финансовой операции
+ * @author - Lev
+ * @ver 1.01
+ */
+public interface SumRecMg {
+
+	// период
+	Integer getMg();
+	// прочие суммы по операциям
+	BigDecimal getSumma();
+}
