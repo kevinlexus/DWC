@@ -24,8 +24,9 @@ public class AchargePrepDAOImpl implements AchargePrepDAO {
      * Получить все элементы по lsk
      * @param - lsk - лиц.счет
      */
-    public List<AchargePrep> getByLsk(String lsk) {
-		Query query =em.createQuery("from AchargePrep t where t.lsk=:lsk");
+    @Override
+	public List<AchargePrep> getByLsk(String lsk) {
+		Query query =em.createQuery("from AchargePrep t where t.kart.id=:lsk");
 		query.setParameter("lsk", lsk);
 		return query.getResultList();
 	}
@@ -35,21 +36,23 @@ public class AchargePrepDAOImpl implements AchargePrepDAO {
      * @param lsk - лиц. счет
      * @param period - период
      */
-    public List<AchargePrep> getByLskPeriod(String lsk, Integer period) {
-		Query query =em.createQuery("from AchargePrep t where t.lsk=:lsk and "
+    @Override
+	public List<AchargePrep> getByLskPeriod(String lsk, Integer period) {
+		Query query =em.createQuery("from AchargePrep t where t.kart.id=:lsk and "
 				+ " (t.mgFrom >=:period or :period between t.mgFrom and t.mgTo)");
 		query.setParameter("period", period);
 		query.setParameter("lsk", lsk);
 		return query.getResultList();
 	}
-    
+
     /**
      * Получить все элементы Kart, >= заданного лс
      * @param firstLsk - заданный лс
      */
-    public List<Kart> getAfterLsk(String firstLsk) {
-    	Query query =em.createQuery("select distinct t from Kart t join AchargePrep a "
-    			+ " with a.lsk=t.lsk where t.lsk >= :lsk order by t.lsk");
+    @Override
+	public List<Kart> getAfterLsk(String firstLsk) {
+    	Query query =em.createQuery("select distinct t from AchargePrep a join a.kart t "
+    			+ " where t.id >= :lsk order by t.id");
 		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
 		query.setParameter("lsk", firstLsk);
 		return query.getResultList();

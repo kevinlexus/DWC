@@ -66,8 +66,8 @@ public class AnaborDAOImpl implements AnaborDAO {
      */
     @Override
 	public List<Kart> getAfterLsk(String firstLsk) {
-    	Query query =em.createQuery("select distinct t from Kart t join Anabor a "
-    			+ " with a.kart.id=t.id where t.id >= :lsk order by t.id");
+    	Query query =em.createQuery("select distinct t from Anabor a join a.kart t "
+    			+ " where t.id >= :lsk order by t.id");
 		//Query query =em.createQuery("from Kart t where t.lsk = :lsk order by t.lsk");
 		query.setParameter("lsk", firstLsk);
 		return query.getResultList();

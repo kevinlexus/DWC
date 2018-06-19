@@ -22,8 +22,10 @@ public class ChargePayDAOImpl implements ChargePayDAO {
     /**
      * Получить все элементы ChargePay, отсортированные по lsk
      */
-    public List<ChargePay> getAllOrd() {
-		Query query =em.createQuery("from ChargePay t order by t.lsk");
+    @Override
+	@SuppressWarnings("unchecked")
+	public List<ChargePay> getAllOrd() {
+		Query query =em.createQuery("from ChargePay t order by t.kart.id");
 		return query.getResultList();
 	}
 

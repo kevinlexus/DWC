@@ -29,7 +29,7 @@ public class KartDAOImpl implements KartDAO {
     @SuppressWarnings("unchecked")
 	@Override
     public List<Kart> getAll() {
-		Query query =em.createQuery("from Kart t order by t.lsk");
+		Query query =em.createQuery("from Kart t order by t.id");
 		return query.getResultList();
 	}
 
@@ -42,8 +42,8 @@ public class KartDAOImpl implements KartDAO {
 	@Override
     public List<Kart> getRangeLsk(String lskFrom, String lskTo) {
     	Query query =em.createQuery("from Kart t "
-    			+ "where t.lsk between :lskFrom and :lskTo "
-    			+ "order by t.lsk");
+    			+ "where t.id between :lskFrom and :lskTo "
+    			+ "order by t.id");
 		query.setParameter("lskFrom", lskFrom);
 		query.setParameter("lskTo", lskTo);
 		return query.getResultList();
@@ -55,7 +55,7 @@ public class KartDAOImpl implements KartDAO {
      */
     @Override
     public Kart getByLsk(String lsk) {
-    	Query query =em.createQuery("from Kart t where t.lsk = :lsk");
+    	Query query =em.createQuery("from Kart t where t.id = :lsk");
 		query.setParameter("lsk", lsk);
 		return (Kart) query.getSingleResult();
 	}

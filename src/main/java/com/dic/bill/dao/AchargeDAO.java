@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Acharge;
+import com.dic.bill.model.scott.Kart;
 import com.ric.bill.dto.SumChrgRec;
 
 /**
@@ -61,9 +62,9 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
      * Получить все элементы Kart, >= заданного лс, по которым есть записи Acharge
      * @param firstLsk - заданный лс
      */
-	/*@Query("select distinct t from Kart t join Acharge a "
-			+ " with a.kart.id=t.id where t.id >= ?1 order by t.id")
-	List<Kart> getAfterLsk(String firstLsk);*/
+	@Query("select distinct t from Acharge a join a.kart t "
+			+ " where t.id >= ?1 order by t.id")
+	List<Kart> getAfterLsk(String firstLsk);
 
 
 }
