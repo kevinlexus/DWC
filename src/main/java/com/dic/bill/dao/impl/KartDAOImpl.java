@@ -57,7 +57,11 @@ public class KartDAOImpl implements KartDAO {
     public Kart getByLsk(String lsk) {
     	Query query =em.createQuery("from Kart t where t.id = :lsk");
 		query.setParameter("lsk", lsk);
-		return (Kart) query.getSingleResult();
+		try {
+			return (Kart) query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	/**

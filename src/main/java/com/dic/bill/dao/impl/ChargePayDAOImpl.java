@@ -25,7 +25,7 @@ public class ChargePayDAOImpl implements ChargePayDAO {
     @Override
 	@SuppressWarnings("unchecked")
 	public List<ChargePay> getAllOrd() {
-		Query query =em.createQuery("from ChargePay t order by t.kart.id");
+		Query query =em.createQuery("from com.dic.bill.model.scott.ChargePay t order by t.kart.id");
 		return query.getResultList();
 	}
 

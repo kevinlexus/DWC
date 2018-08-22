@@ -66,18 +66,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 			+ "from SCOTT.SALDO_USL t "
 			+ "where t.lsk=:lsk and t.mg=:period "
 			+ "and nvl(t.summa,0) <> 0", nativeQuery = true)
-	List<SumUslOrgRec> getSaldoUslByLsk(@Param("lsk") String lsk, @Param("period") Integer period);
-
-	/**
-	 * Получить совокупное сальдо по лицевому счету
-	 * @param lsk лицевой счет
-	 * @param period - период
-	 * @return
-	 */
-	@Query("select sum(t.summa) from SaldoUsl t "
-			+ "where t.kart.lsk = ?1 and t.mg = ?2")
-	  BigDecimal getAmntByLsk(String lsk, String period);
-
+	List<SumUslOrgRec> getSaldoUslByLsk(@Param("lsk") String lsk, @Param("period") String period);
 
 	/**
 	 * Получить записи всех лиц счетов, где есть долги или переплаты
@@ -98,14 +87,15 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 
 
 	/**
-	 * Получить сальдо по лицевому счету
+	 * Получить сальдо, оплату, перерасчеты по лицевому счету
 	 * @param lsk лицевой счет
 	 * @param period - период
 	 * @return
 	 */
 	@Query(value = "select sum(t.indebet) as \"indebet\", sum(t.inkredit) as \"inkredit\", "
-			+ "sum(t.outdebet) as \"outdebet\", sum(t.outkredit) as \"outkredit\", sum(t.payment) as \"payment\" "
-			+ "from SCOTT.XITOG3_LSK t "
+			+ "sum(t.outdebet) as \"outdebet\", sum(t.outkredit) as \"outkredit\", "
+			+ "sum(t.payment) as \"payment\" "
+            + "from SCOTT.XITOG3_LSK t "
 			+ "where t.lsk = :lsk and t.mg = :period",
 			nativeQuery = true)
 	  SumSaldoRec getSaldoByLsk(@Param("lsk") String lsk, @Param("period") String period);

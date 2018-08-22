@@ -54,6 +54,10 @@ public class Org implements java.io.Serializable {
     @Column(name = "RASCHET_SCHET")
 	private String operAcc;
 
+	// расчетный счет для гис ЖКХ
+	@Column(name = "R_SCH_GIS")
+	private String operAccGis;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_ORGTP", referencedColumnName="ID")
 	private OrgTp orgTp;

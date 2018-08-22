@@ -75,6 +75,10 @@ public class Kart implements java.io.Serializable{
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
 	private House house;
 
+	// общая площадь
+	@Column(name = "OPL", nullable = true)
+	private Double opl;
+
 	// набор услуг
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
