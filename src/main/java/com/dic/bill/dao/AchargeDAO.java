@@ -41,9 +41,12 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 */
 	@Query(value = "select e.id as \"ulistId\", nvl(a.summa,0) as \"chrg\", nvl(b.summa,0) as \"chng\", " +
             "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\" " +
-            "from exs.u_list e left join (select u.id as ulistId, sum(t.summa) as summa, " +
-			"sum(t.test_opl) as vol, min(t.test_cena) as price, " +
-			"min(k.opl) as sqr, max(n.norm) as norm " +
+            "from exs.u_list e left join ( " +
+			"select b.ulistId, sum(b.summa) as summa, sum(b.vol) as vol, sum(b.price) as price, " +
+            "max(b.sqr) as sqr, max(b.norm) as norm from ( " +
+			"select t.usl, u.id as ulistId, sum(t.summa) as summa, " +
+			"sum(t.test_opl) as vol, max(t.test_cena) as price, " +
+			"max(k.opl) as sqr, max(n.norm) as norm " +
 			"from scott.a_charge2 t " + // начисление
 			"join scott.kart k on t.lsk=k.lsk and ?2 between t.mgFrom and t.mgTo " +
 			"join scott.a_nabor2 n on t.lsk=n.lsk and t.usl=n.usl and ?2 between n.mgFrom and n.mgTo " +
@@ -53,7 +56,9 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 			"where t.lsk = ?1 " +
 			"and NVL(tp.fk_eolink, ?3) = ?3 " +
 			"and t.type = 1 " +
-			"group by u.id) a on e.id=a.ulistId " +
+			"group by t.usl, u.id) b " +
+            "group by b.ulistId " +
+			") a on e.id=a.ulistId " +
             "left join (select u.id as ulistId, sum(t.summa) as summa " +
             "from scott.a_change t " + // перерасчет
             "join scott.kart k on t.lsk=k.lsk " +

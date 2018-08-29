@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 /**
- * Лицевой счет
+ * Лицевой счет (он же - помещение)
  * @author lev
  *
  */
@@ -33,7 +33,7 @@ public class Kart implements java.io.Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "lsk", updatable = false, nullable = false)
+    @Column(name = "LSK", updatable = false, nullable = false)
 	private String lsk; //id записи
 
 	// УК
@@ -41,19 +41,23 @@ public class Kart implements java.io.Serializable{
 	@JoinColumn(name="REU", referencedColumnName="REU")
 	private Org uk;
 
-    @Column(name = "kul", updatable = false, nullable = false)
+    @Column(name = "KUL", updatable = false, nullable = false)
 	private String kul;
 
-    @Column(name = "nd", updatable = false, nullable = false)
+    @Column(name = "ND", updatable = false, nullable = false)
 	private String nd;
 
     // дата ограничения пени
-    @Column(name = "pn_dt", updatable = false, nullable = false)
+    @Column(name = "PN_DT", updatable = false, nullable = false)
 	private Date pnDt;
 
     // номер квартиры
 	@Column(name = "KW", nullable = true)
 	private String num;
+
+	// номер подъезда
+	@Column(name = "ENTR", nullable = true)
+	private Integer entry;
 
 	// тип лиц.счета
 	@ManyToOne(fetch = FetchType.LAZY)
