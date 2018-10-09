@@ -12,5 +12,5 @@ public interface AnaborDAO {
 	public List<Anabor> getByLsk(String lsk);
 	public List<Anabor> getByLskPeriod(String lsk, Integer period);
 	public List<Kart> getAfterLsk(String firstLsk);
-	
+
 }

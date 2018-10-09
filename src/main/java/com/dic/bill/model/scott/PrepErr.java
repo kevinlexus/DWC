@@ -17,11 +17,11 @@ public class PrepErr {
 	@Id
 	@Column(name = "ID", unique = true, nullable = false)
 	private int id;
-	
+
 	@Column(name = "LSK", nullable = true)
 	private String lsk;
 
 	@Column(name = "TEXT", nullable = true)
 	private String text;
-	
+
 }

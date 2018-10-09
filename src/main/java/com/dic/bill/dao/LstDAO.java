@@ -1,11 +1,14 @@
 package com.dic.bill.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-import com.dic.bill.model.scott.Lst;
+import com.dic.bill.model.bs.Lst;
 
 
-public interface LstDAO extends JpaRepository<Lst, Integer> {
+public interface LstDAO {
 
+	public Lst getByCD(String cd);
+
+	public List<Lst> getByTp(String cdTp);
 
 }

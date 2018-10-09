@@ -73,6 +73,5 @@ public class Charge implements java.io.Serializable  {
 	        return super.hashCode();
 	    }
 	}
-
 }
 

@@ -51,7 +51,7 @@ public class KartDAOImpl implements KartDAO {
 
     /**
      * Получить элемент Kart, по заданному лс
-     * @param firstLsk - заданный лс
+     * @param lsk - заданный лс
      */
     @Override
     public Kart getByLsk(String lsk) {
@@ -67,7 +67,7 @@ public class KartDAOImpl implements KartDAO {
 	/**
 	 * Найти лицевой счет по номеру и по klsk дома
 	 * @param klskId - Klsk дома
-	 * @param kw - номер помещения
+	 * @param num - номер помещения
 	 * @return
 	 */
     @Override

@@ -30,7 +30,7 @@ public class Ko implements java.io.Serializable {
 	public Ko() {
 		super();
 	}
-    
+
 	public boolean equals(Object o) {
 	    if (this == o) return true;
 	    if (o == null || !(o instanceof Ko))
@@ -51,7 +51,7 @@ public class Ko implements java.io.Serializable {
 	    } else {
 	        return super.hashCode();
 	    }
-	}	
-	
+	}
+
 }
 

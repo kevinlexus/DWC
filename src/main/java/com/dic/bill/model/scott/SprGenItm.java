@@ -45,18 +45,18 @@ public class SprGenItm {
 
 	@Column(name = "ERR", nullable = true)
 	private Integer err;
-	
+
 	@Column(name = "PROC", nullable = true)
 	private Double proc;
-	
+
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "SEL", nullable = true)
 	private Boolean sel;
-	
+
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Krasnoyarsk")
 	@Column(name = "DT1", nullable = true)
 	private Date dt1;
-	
+
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Krasnoyarsk")
 	@Column(name = "DT2", nullable = true)
 	private Date dt2;

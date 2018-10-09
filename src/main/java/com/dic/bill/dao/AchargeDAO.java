@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Acharge;
 import com.dic.bill.model.scott.Kart;
-import com.ric.bill.dto.SumChrgRec;
+import com.dic.bill.dto.SumChrgRec;
 
 /**
  * DAO сущности начислений - Acharge (эксп.разработка)
@@ -70,21 +70,6 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
             "group by u.id) b on e.id=b.ulistId " +
              "where nvl(a.summa,0)<>0 or nvl(b.summa,0)<>0", nativeQuery = true)
 	List<SumChrgRec> getChrgGrp(String lsk, Integer period, Integer eolOrgId);
-/*
-    @Query(value = "select u.id as \"ulistId\", sum(t.summa) as \"summa\", " +
-            "sum(t.test_opl) as \"vol\", min(t.test_cena) as \"price\", " +
-            "min(k.opl) as \"sqr\" "
-            + "from scott.a_charge2 t "
-            + "join scott.kart k on t.lsk=k.lsk "
-            + "join exs.servgis s on t.usl=s.fk_usl and s.fk_eolink=?3 "
-            + "join exs.u_list u on s.fk_list=u.id "
-            + "join exs.u_listtp tp on u.fk_listtp=tp.id "
-            + "where t.lsk = ?1 and ?2 between t.mgFrom and t.mgTo "
-            + "and NVL(tp.fk_eolink, ?3) = ?3 "
-            + "and t.type = 1 "
-            + "group by u.id", nativeQuery = true)
-*/
-
 
     /**
      * Получить все элементы по lsk

@@ -5,12 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.dic.bill.model.scott.Charge;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Тип организации
- * 
+ *
  *
  */
 @SuppressWarnings("serial")
@@ -25,11 +26,11 @@ public class OrgTp implements java.io.Serializable {
 
 	// CD
 	@Column(name = "CD", updatable = false, nullable = false)
-	private String cd; 
+	private String cd;
 
 	// Наименование
     @Column(name = "NAME")
-	private String name; 
+	private String name;
 
 	@Override
 	public boolean equals(Object o) {
