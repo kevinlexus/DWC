@@ -49,7 +49,24 @@ public class KartDAOImpl implements KartDAO {
 		return query.getResultList();
 	}
 
-    /**
+	/**
+	 * Получить все элементы Kart, по параметрам
+	 * @param kul - код улицы
+	 * @param nd - № дома
+	 * @param kw - № квартиры
+	 * @return
+	 */
+	@Override
+	public List<Kart> findByKulNdKw(String kul, String nd, String kw) {
+		Query query =em.createQuery("from Kart t " +
+				"where t.kul = :kul and t.nd=:nd and t.num=:kw");
+		query.setParameter("kul", kul);
+		query.setParameter("nd", nd);
+		query.setParameter("kw", kw);
+		return query.getResultList();
+	}
+
+	/**
      * Получить элемент Kart, по заданному лс
      * @param lsk - заданный лс
      */

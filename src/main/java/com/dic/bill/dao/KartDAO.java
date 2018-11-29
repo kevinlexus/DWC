@@ -12,4 +12,5 @@ public interface KartDAO {
     public Kart getByLsk(String lsk);
     public Kart getKwByNum(Integer klskId, String num);
 	List<Kart> getRangeLsk(String lskFrom, String lskTo);
+    List<Kart> findByKulNdKw(String s, String s1, String s2);
 }
