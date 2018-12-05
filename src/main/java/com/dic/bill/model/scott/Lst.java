@@ -29,12 +29,15 @@ public class Lst implements java.io.Serializable {
     @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 
+	// CD
 	@Column(name = "CD", updatable = false, nullable = false)
-	private String cd; //cd
+	private String cd;
 
+	// наименование
     @Column(name = "NAME", updatable = false, nullable = false)
-	private String name; //Наименование
+	private String name;
 
+    // тип списка
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")
 	private LstTp lstTp ;

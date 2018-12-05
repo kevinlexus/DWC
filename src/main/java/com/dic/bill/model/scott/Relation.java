@@ -1,25 +1,18 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 /**
- * Тип элемента списка
- *
- *
+ * Родственная связь
  */
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "U_LISTTP", schema="SCOTT")
-public class LstTp implements java.io.Serializable {
+@Table(name = "RELATIONS", schema="SCOTT")
+public class Relation implements java.io.Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,16 +24,24 @@ public class LstTp implements java.io.Serializable {
 	private String cd;
 
 	// наименование
-    @Column(name = "NAME", updatable = false, nullable = false)
+    @Column(name = "NAME", updatable = false, nullable = true)
 	private String name;
+
+	// наименование (2 вариант)
+	@Column(name = "NAME2", updatable = false, nullable = true)
+	private String name2;
+
+	// тип отношения (если 1, - то Квартиросъемщик)
+	@Column(name = "FK_RELAT_TP", updatable = false, nullable = true)
+	private String relationTp;
 
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof LstTp))
+	    if (o == null || !(o instanceof Relation))
 	        return false;
 
-	    LstTp other = (LstTp)o;
+	    Relation other = (Relation)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

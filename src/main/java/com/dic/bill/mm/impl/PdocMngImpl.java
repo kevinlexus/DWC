@@ -24,7 +24,7 @@ public class PdocMngImpl implements PdocMng {
 	/**
 	 * Получить список незагруженных ПД в ГИС по Дому, по всем помещениям
 	 * отсортированно по номеру документа в биллинге
-	 * @param house - дом
+	 * @param houseEol - дом
 	 * @param dt - дата ПД
 	 * @return
 	 */

@@ -11,5 +11,5 @@ import java.util.List;
 public interface KartMng {
 
 
-	Ko getKlskByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
+	Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
 }

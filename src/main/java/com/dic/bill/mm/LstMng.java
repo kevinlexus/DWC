@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.dic.bill.model.bs.AddrTp;
 import com.dic.bill.model.bs.Lst;
-import com.dic.bill.model.oralv.Ko;
+import com.dic.bill.model.scott.Ko;
 
 public interface LstMng {
 

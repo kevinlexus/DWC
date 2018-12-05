@@ -6,13 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.dic.bill.model.scott.Ko;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.dao.KoDAO;
 import com.dic.bill.model.bs.AddrTp;
-import com.dic.bill.model.oralv.Ko;
 
 
 @Slf4j

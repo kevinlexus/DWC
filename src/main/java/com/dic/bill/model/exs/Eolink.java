@@ -25,7 +25,7 @@ import javax.persistence.Table;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.bs.AddrTp;
 import com.dic.bill.model.bs.Lst;
-import com.dic.bill.model.oralv.Ko;
+import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.sec.User;
 
 import lombok.Getter;

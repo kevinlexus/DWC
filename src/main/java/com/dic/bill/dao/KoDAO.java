@@ -1,8 +1,9 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.model.scott.Ko;
+
 import java.util.List;
 
-import com.dic.bill.model.oralv.Ko;
 
 
 public interface KoDAO {

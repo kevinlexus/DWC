@@ -33,7 +33,7 @@ public class KartMngImpl implements KartMng {
 	 * @return
 	 */
 	@Override
-	public Ko getKlskByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
+	public Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
 		List<Kart> lst = kartDao.findByKulNdKw(kul, nd, kw);
 		Ko ko = null;
 		for (Kart kart : lst) {

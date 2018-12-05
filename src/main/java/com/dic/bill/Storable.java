@@ -2,7 +2,7 @@ package com.dic.bill;
 
 import java.util.List;
 import com.dic.bill.model.bs.Dw;
-import com.dic.bill.model.oralv.Ko;
+import com.dic.bill.model.scott.Ko;
 
 /**
  * Интерфейс - объект квартплаты
