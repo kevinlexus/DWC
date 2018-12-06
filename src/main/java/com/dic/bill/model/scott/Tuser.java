@@ -1,43 +1,43 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.*;
-
-import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.Simple;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 /**
- * Справочник всех объектов Klsk Objects - KO
- * @author Lev
- * @version 1.00
+ * Пользователь (сделан Tuser потому что уже есть sec.User)
+ *
  *
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "K_LSK", schema="SCOTT")
+@Table(name = "T_USER", schema="SCOTT")
 @Getter @Setter
-public class Ko implements java.io.Serializable {
+public class Tuser implements java.io.Serializable, Simple {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 
-	// объект Eolink
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ID", referencedColumnName="FK_KLSK_OBJ", updatable = false, insertable = false)
-	private Eolink eolink;
+    @Column(name = "CD")
+	private String cd; // CD пользователя
 
-	public Ko() {
+    @Column(name = "IP")
+	private String ip; // Ip
+
+	public Tuser() {
 		super();
 	}
 
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Ko))
+	    if (o == null || !(o instanceof Tuser))
 	        return false;
 
-	    Ko other = (Ko)o;
+	    Tuser other = (Tuser)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;
@@ -53,6 +53,7 @@ public class Ko implements java.io.Serializable {
 	        return super.hashCode();
 	    }
 	}
+
 
 }
 

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /*
- * DTO для хранения записи финансовой операции (оплата и т.п.)
+ * Projection для хранения записи финансовой операции (оплата и т.п.)
  * @author - Lev
  * @ver 1.01
  */
