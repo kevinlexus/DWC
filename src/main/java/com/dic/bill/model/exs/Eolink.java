@@ -119,7 +119,7 @@ public class Eolink implements java.io.Serializable  {
 
 	// идентификатор объекта связанного с EOLINK, в новой разработке
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID")
+	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = true)
 	private Ko koObj;
 
 	// лицевой счет (если объект Eolink - является лиц.счетом)

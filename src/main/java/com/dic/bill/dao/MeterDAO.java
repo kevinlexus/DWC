@@ -34,16 +34,13 @@ public interface MeterDAO extends JpaRepository<Apenya, ApenyaId> {
 
 	/**
 	 * Получить Timestamp показаний и GUID счетчиков, по которым они были приняты
-	 * @return
-	 */
-	/**
-	 *
-	 * @param userCd
-	 * @param dt
-	 * @param lstCd
+	 * @param userCd - CD внёсшего пользователя
+	 * @param dtFrom - дата начала
+	 * @param dtTo - дата окончания
+	 * @param lstCd - тип действия
 	 * @return
 	 */
 	@Query(value = "select t.ts as ts, t.ko.eolink.guid as guid from ObjPar t "
-			+ "where t.tuser.cd = ?1 and t.ts >= ?2 and t.lst.cd=?3 ")
-	List<MeterData> findTimestampByUser(String userCd, Date dt, String lstCd);
+			+ "where t.tuser.cd = ?1 and t.lst.cd=?2 and t.ts between ?3 and ?4")
+	List<MeterData> findMeteringDataTsByUser(String userCd, String lstCd, Date dtFrom, Date dtTo);
 }
