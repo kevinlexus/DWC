@@ -198,7 +198,11 @@ public class Eolink implements java.io.Serializable  {
 	@Column(name = "DT_UPD")
 	private Date updDt;
 
-	// примечание по объекту
+	// код ошибки
+	@Column(name = "ERR", updatable = true, nullable = true)
+	private Long err;
+
+	// примечание по объекту (описание ошибки)
 	@Column(name = "COMM", updatable = true, nullable = true)
 	private String comm;
 
