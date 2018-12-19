@@ -19,14 +19,18 @@ import lombok.Setter;
 public class Ko implements java.io.Serializable {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Ko_id")
+	@SequenceGenerator(name="SEQ_Ko_id", sequenceName="scott.k_lsk_id", allocationSize=1)
     @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 
 	// объект Eolink
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ID", referencedColumnName="FK_KLSK_OBJ", updatable = false, insertable = false)
+	@OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY)
 	private Eolink eolink;
+
+	// счетчик
+	@OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
+	private Meter meter;
 
 	public Ko() {
 		super();

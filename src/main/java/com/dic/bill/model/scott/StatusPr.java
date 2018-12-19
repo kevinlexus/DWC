@@ -32,7 +32,7 @@ public class StatusPr implements java.io.Serializable {
 	// тип статуса (временная регистрация, прописка и т.п.)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_TP", referencedColumnName="ID")
-	private Lst lst ;
+	private Lst tp;
 
 	@Override
 	public boolean equals(Object o) {

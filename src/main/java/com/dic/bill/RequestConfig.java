@@ -2,7 +2,7 @@ package com.dic.bill;
 
 import javax.annotation.Generated;
 
-import com.dic.bill.model.scott.SessionDirect;
+//import com.dic.bill.model.scott.SessionDirect;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,48 +17,37 @@ public class RequestConfig {
 
 	// Id запроса
 	int rqn;
-	// сессия Директа
-	SessionDirect sessionDirect;
+	// тип выполнения 0-начисление, 1-задолженность и пеня
+	int tp;
 
+	public static final class RequestConfigBuilder {
+		// Id запроса
+        int rqn;
+		// тип операции 0-начисление, 1-задолженность и пеня
+        int tp;
 
-	@Generated("SparkTools")
-	private RequestConfig(Builder builder) {
-		this.rqn = builder.rqn;
-		this.sessionDirect = builder.sessionDirect;
-	}
-	/**
-	 * Creates builder to build {@link RequestConfig}.
-	 * @return created builder
-	 */
-	@Generated("SparkTools")
-	public static Builder builder() {
-		return new Builder();
-	}
-	/**
-	 * Builder to build {@link RequestConfig}.
-	 */
-	@Generated("SparkTools")
-	public static final class Builder {
-		private int rqn;
-		private SessionDirect sessionDirect;
-
-		private Builder() {
+		private RequestConfigBuilder() {
 		}
 
-		public Builder withRqn(int rqn) {
+		public static RequestConfigBuilder aRequestConfig() {
+			return new RequestConfigBuilder();
+		}
+
+		public RequestConfigBuilder withRqn(int rqn) {
 			this.rqn = rqn;
 			return this;
 		}
 
-		public Builder withSessionDirect(SessionDirect sessionDirect) {
-			this.sessionDirect = sessionDirect;
+		public RequestConfigBuilder withTp(int tp) {
+			this.tp = tp;
 			return this;
 		}
 
 		public RequestConfig build() {
-			return new RequestConfig(this);
+			RequestConfig requestConfig = new RequestConfig();
+			requestConfig.setRqn(rqn);
+			requestConfig.setTp(tp);
+			return requestConfig;
 		}
 	}
-
-
 }

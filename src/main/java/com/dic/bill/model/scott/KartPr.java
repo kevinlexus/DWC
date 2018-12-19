@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Проживающий
@@ -22,12 +24,14 @@ public class KartPr implements java.io.Serializable  {
 	}
 
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KartPr_id")
+	@SequenceGenerator(name="SEQ_KartPr_id", sequenceName="scott.kart_pr_id", allocationSize=1)
+    @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false, nullable = false)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", insertable = true, updatable = false, nullable = false)
 	private Kart kart;
 
 	// статус
@@ -45,7 +49,7 @@ public class KartPr implements java.io.Serializable  {
 	private Date dtBirdth;
 
 	// дата прописки
-	@Column(name = "DAT_REG", unique=true, updatable = false, nullable = true)
+	@Column(name = "DAT_PROP", unique=true, updatable = false, nullable = true)
 	private Date dtReg;
 
 	// дата убытия
@@ -55,6 +59,10 @@ public class KartPr implements java.io.Serializable  {
 	// ф.и.о.
 	@Column(name = "FIO", unique=true, updatable = false, nullable = true)
 	private String fio;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_KART_PR", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<StatePr> statePr = new ArrayList<>(0);
 
 	@Override
 	public boolean equals(Object o) {

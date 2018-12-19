@@ -1,9 +1,6 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +24,9 @@ public class Usl implements java.io.Serializable  {
     @Column(name = "USL", unique=true, updatable = false, nullable = false)
 	private String id;
 
-	// Наименование
+	// наименование
 	@Column(name = "NM")
-	private String nm;
+	private String name;
 
 	// для справочника дат начала обязательств по долгу -  PEN_DT Тип услуги (0-прочие услуги, 1-капремонт)
     @Column(name = "TP_PEN_DT", updatable = false, nullable = true)
@@ -38,6 +35,29 @@ public class Usl implements java.io.Serializable  {
 	// для справочника ставок рефинансирования - PEN_REF Тип услуги (0-прочие услуги, 1-капремонт)
     @Column(name = "TP_PEN_REF", updatable = false, nullable = true)
     private Integer tpPenRef;
+
+	// 0 - коэфф. в справочнике тарифов, 1 - норматив в справочнике тарифов,
+	// 2 - koeff-коэфф и norm-норматив, 3-koeff и norm-оба коэфф
+	@Column(name = "sptarn", updatable = false, nullable = true)
+	private Integer sptarn;
+
+	// родительская услуга (например Х.В. 0 прожив --> Х.В.)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="PARENT_USL", referencedColumnName="USl", updatable = false, nullable = false)
+	private Usl parentUsl;
+
+	// тип услуги 2 -- 0 - услуга коммунальная (х.в.), 1 - услуга жилищная (тек.сод.)
+	@Column(name = "USL_TYPE2", updatable = false, nullable = true)
+	private Integer type2;
+
+	/**
+	 * Является ли услуга основной? (не имеет услуг по parent_usl)
+	 * @return
+	 */
+	@Transient
+	public boolean main() {
+		return getParentUsl() != null? false:true;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -62,7 +82,6 @@ public class Usl implements java.io.Serializable  {
 	        return super.hashCode();
 	    }
 	}
-
 
 }
 

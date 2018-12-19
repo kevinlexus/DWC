@@ -6,20 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Generated;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 //import com.dic.bill.model.scott.Kart; $$$$$
 import com.dic.bill.model.scott.Kart;
@@ -118,8 +105,8 @@ public class Eolink implements java.io.Serializable  {
 	private Lst objTpx;
 
 	// идентификатор объекта связанного с EOLINK, в новой разработке
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = true)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_KLSK_OBJ")
 	private Ko koObj;
 
 	// лицевой счет (если объект Eolink - является лиц.счетом)

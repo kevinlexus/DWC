@@ -41,19 +41,23 @@ public class Meter implements java.io.Serializable {
 	@Column(name = "DT2", updatable = false)
 	private Date dt2;
 
-	// Ko счетчика (здесь OneToOne)
-	@ManyToOne(fetch = FetchType.LAZY)
+	// Ko счетчика
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = false)
 	private Ko ko;
 
 	// Ko объекта, к которому присоединен счетчик
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false, insertable = false)
 	private Ko koObj;
 
 	// последнее показание
 	@Column(name = "N1", updatable = false)
 	private BigDecimal n1;
+
+	// тип обмена с ГИС ЖКХ (null, 0 - нет обмена, 1-принимать показания от ГИС, 2-отправлять показания в ГИС, 3-принимать и отправлять показания в ГИС)
+	@Column(name = "GIS_CONN_TP", updatable = false, nullable = true)
+	private Integer gisConnTp;
 
 	@Override
 	public boolean equals(Object o) {

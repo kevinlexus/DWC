@@ -6,6 +6,7 @@ import java.util.List;
 import com.dic.bill.model.scott.PenDt;
 import com.dic.bill.model.scott.PenRef;
 
+import com.dic.bill.model.scott.StatePr;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +18,10 @@ import lombok.Setter;
 @Getter @Setter
 public class CalcStore {
 	// дата начала периода
-	Date dt1;
-	// дата окончания расчета
+	Date curDt1;
+	// дата окончания периода
+	Date curDt2;
+	// дата расчета
 	Date genDt;
 	// текущий период
 	Integer period;

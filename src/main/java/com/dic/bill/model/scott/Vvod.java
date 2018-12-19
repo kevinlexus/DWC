@@ -1,17 +1,13 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Ввод
  * @author lev
@@ -28,7 +24,8 @@ public class Vvod implements java.io.Serializable {
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Vvod_id")
+	@SequenceGenerator(name="SEQ_Vvod_id", sequenceName="scott.c_vvod_id", allocationSize=1)
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id; //id записи
 
@@ -47,6 +44,11 @@ public class Vvod implements java.io.Serializable {
 	// 6-просто учитывать объем, 7 - информационно отобразить объем в Счете в ОДПУ)
     @Column(name = "dist_tp", updatable = false, nullable = true)
 	private Integer distTp;
+
+	// набор услуг
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<Nabor> nabor = new ArrayList<>(0);
 
 	@Override
 	public boolean equals(Object o) {

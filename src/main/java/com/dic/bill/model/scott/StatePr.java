@@ -15,11 +15,12 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "C_STATES_PR", schema="SCOTT")
-public class StatesPr implements java.io.Serializable {
+public class StatePr implements java.io.Serializable {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_StatesPr_id")
+	@SequenceGenerator(name="SEQ_StatesPr_id", sequenceName="scott.c_states_pr_id", allocationSize=1)
+	@Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 
 	// проживающий
@@ -43,10 +44,10 @@ public class StatesPr implements java.io.Serializable {
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof StatesPr))
+	    if (o == null || !(o instanceof StatePr))
 	        return false;
 
-	    StatesPr other = (StatesPr)o;
+	    StatePr other = (StatePr)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;
