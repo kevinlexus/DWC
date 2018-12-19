@@ -4,19 +4,23 @@ import com.dic.bill.model.scott.Usl;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /** DTO для хранения кол-ва проживающих
  *
  */
 @Getter @Setter
 public class CountPers {
 
-  // услуга
-  Usl usl;
   // кол-во постоянно проживающих
-  int count;
-  // кол-во временно отсутствующих
-  int countTempAbsent;
+  BigDecimal kpr = BigDecimal.ZERO;
   // кол-во временно зарегистрированных
-  int countTempReg;
+  BigDecimal kprWr = BigDecimal.ZERO;
+  // кол-во временно отсутствующих
+  BigDecimal kprOt = BigDecimal.ZERO;
+  // кол-во для расчета объема для нормативного начисления
+  BigDecimal kprNorm = BigDecimal.ZERO;
+  // максимальное кол-во проживающих
+  BigDecimal kprMax = BigDecimal.ZERO;
 
 }

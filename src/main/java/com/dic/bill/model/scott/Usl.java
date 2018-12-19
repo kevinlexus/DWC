@@ -50,12 +50,27 @@ public class Usl implements java.io.Serializable  {
 	@Column(name = "USL_TYPE2", updatable = false, nullable = true)
 	private Integer type2;
 
+
+	/**
+	 * Является ли услуга жилищной?
+	 * @return
+	 */
+	@Transient
+	public boolean isHousing() {
+
+		if (getType2() != null && getType2().equals(1)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Является ли услуга основной? (не имеет услуг по parent_usl)
 	 * @return
 	 */
 	@Transient
-	public boolean main() {
+	public boolean isMain() {
 		return getParentUsl() != null? false:true;
 	}
 
