@@ -24,7 +24,8 @@ public class Meter implements java.io.Serializable {
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Meter_id")
+	@SequenceGenerator(name="SEQ_Meter_id", sequenceName="scott.meter_id", allocationSize=1)
     @Column(name = "id", updatable = false, nullable = false)
 	private Integer id; // id записи
 
@@ -42,13 +43,13 @@ public class Meter implements java.io.Serializable {
 	private Date dt2;
 
 	// Ko счетчика
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false)
 	private Ko ko;
 
 	// Ko объекта, к которому присоединен счетчик
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false, insertable = false)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false)
 	private Ko koObj;
 
 	// последнее показание

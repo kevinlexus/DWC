@@ -29,14 +29,14 @@ public class MeterMngImpl implements MeterMng {
 
 	/**
 	 * Получить первый попавшийся актуальный счетчик по параметрам
-	 * @param koObjId - Ko.id объекта, где установлен счетчик
+	 * @param ko - Ko объекта, где установлен счетчик
 	 * @param usl - код услуги
 	 * @param dt - дата на которую получить
 	 * @return
 	 */
 	@Override
-	public Meter getActualMeterByKoUsl(Integer koObjId, String usl, Date dt) {
-		for (Meter meter : meterDao.findActualByKoUsl(koObjId, usl, dt)) {
+	public Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt) {
+		for (Meter meter : meterDao.findActualByKoUsl(ko.getId(), usl, dt)) {
 			return meter;
 		}
 		// не найдено

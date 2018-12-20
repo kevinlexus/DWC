@@ -60,7 +60,7 @@ public class KartPr implements java.io.Serializable  {
 	@Column(name = "FIO", unique=true, updatable = false, nullable = true)
 	private String fio;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="FK_KART_PR", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<StatePr> statePr = new ArrayList<>(0);
 

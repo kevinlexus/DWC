@@ -18,8 +18,9 @@ public interface StatesPrDAO extends JpaRepository<StatePr, Integer> {
 	 * @return
 	 */
 	@Query(value = "select t from StatePr t where " +
-			"t.kartPr.kart.id=?1 and (?2 between nvl(t.dtFrom, sysdate-100000) and nvl(t.dtTo, sysdate+100000)" +
-			"or ?3 between nvl(t.dtFrom, sysdate-100000) and nvl(t.dtTo, sysdate+100000))")
+			"t.kartPr.kart.id=?1 and ((?2 between nvl(t.dtFrom, sysdate-100000) and nvl(t.dtTo, sysdate+100000)" +
+			"or ?3 between nvl(t.dtFrom, sysdate-100000) and nvl(t.dtTo, sysdate+100000))" +
+			"or (nvl(t.dtFrom, sysdate-100000) between ?2 and ?3 or nvl(t.dtTo, sysdate-100000) between ?2 and ?3) )")
 	List<StatePr> findByDate(String lsk, Date dtFrom, Date dtTo);
 
 /*

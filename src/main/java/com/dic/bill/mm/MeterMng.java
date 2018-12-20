@@ -2,6 +2,7 @@ package com.dic.bill.mm;
 
 import com.dic.bill.dto.MeterData;
 import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface MeterMng {
 
-	Meter getActualMeterByKoUsl(Integer koId, String usl, Date dt);
+	Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
     boolean getIsMeterDataExist(List<MeterData> lst, String guid, XMLGregorianCalendar ts);
 

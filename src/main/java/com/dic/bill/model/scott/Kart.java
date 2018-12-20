@@ -74,10 +74,10 @@ public class Kart implements java.io.Serializable{
 
 	// Ko помешения (здесь OneToOne)
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private Ko koKw;
 
-	// Ko лиц.счета (здесь OneToOne)
+	// Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false, insertable = true)
 	private Ko koLsk;
@@ -100,12 +100,12 @@ public class Kart implements java.io.Serializable{
 	private String mgTo;
 
 	// набор услуг
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<Nabor> nabor = new ArrayList<>(0);
 
 	// проживающие
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<KartPr> kartPr = new ArrayList<>(0);
 

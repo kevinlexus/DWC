@@ -32,6 +32,10 @@ public class Ko implements java.io.Serializable {
 	@OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
 	private Meter meter;
 
+	// лиц.счет (квартира)
+	@OneToOne(mappedBy = "koKw", fetch = FetchType.LAZY)
+	private Kart kart;
+
 	public Ko() {
 		super();
 	}

@@ -9,18 +9,19 @@ import java.math.BigDecimal;
 /** DTO для хранения кол-ва проживающих
  *
  */
-@Getter @Setter
 public class CountPers {
 
   // кол-во постоянно проживающих
-  BigDecimal kpr = BigDecimal.ZERO;
+  public int kpr = 0;
   // кол-во временно зарегистрированных
-  BigDecimal kprWr = BigDecimal.ZERO;
+  public int kprWr = 0;
   // кол-во временно отсутствующих
-  BigDecimal kprOt = BigDecimal.ZERO;
-  // кол-во для расчета объема для нормативного начисления
-  BigDecimal kprNorm = BigDecimal.ZERO;
+  public int kprOt = 0;
+  // кол-во для расчета объема для нормативного начисления FIXME Нужно ли???
+  public int kprNorm = 0;
   // максимальное кол-во проживающих
-  BigDecimal kprMax = BigDecimal.ZERO;
+  public int kprMax = 0;
+  // является ли пустым лиц.счет?
+  public boolean isEmpty = true;
 
 }

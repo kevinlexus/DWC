@@ -15,7 +15,11 @@ public interface KartMng {
 
 	boolean getPersCountByDate(Kart kart, Date dt);
 
-    Kart buildKartForTest(String lsk);
+    Kart buildKartForTest(String lsk, boolean isAddPers, boolean isAddNabor, boolean isAddMeter);
+
+    void buildMeterForTest(Kart kart);
+
+    void addMeterForTest(Ko koObj, String uslId, String dt1, String dt2);
 
     void buildKartPrForTest(Kart kart);
 
@@ -23,8 +27,8 @@ public interface KartMng {
                             String fio, String dtBirdth, String dtReg,
                             String dtUnreg);
 
-    void addStatusPrForTest(KartPr kartPr, int statusId,
-                            String dtFrom, String dtTo);
+    void addStatePrForTest(KartPr kartPr, int statusId,
+                           String dtFrom, String dtTo);
 
     void buildNaborForTest(Kart kart);
 

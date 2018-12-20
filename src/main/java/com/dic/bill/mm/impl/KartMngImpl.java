@@ -76,8 +76,16 @@ public class KartMngImpl implements KartMng {
 	 * @param lsk - № лиц.счета
 	 * @return
 	 */
+	/**
+	 *
+	 * @param lsk - лиц.счет
+	 * @param isAddPers - добавлять спроживающих?
+	 * @param isAddNabor - добавлять наборы услуг?
+	 * @param isAddMeter - добавлять счетчики?
+	 * @return
+	 */
 	@Override
-	public Kart buildKartForTest(String lsk) {
+	public Kart buildKartForTest(String lsk, boolean isAddPers, boolean isAddNabor, boolean isAddMeter) {
 		Ko ko = new Ko();
 		Kart kart = new Kart();
 		Org org = em.find(Org.class, 547);
@@ -96,31 +104,89 @@ public class KartMngImpl implements KartMng {
 		kart.setUk(org);
 		kart.setMgFrom("201401");
 		kart.setMgTo("201412");
+		//em.persist(ko);
 
-		// проживающие
-		buildKartPrForTest(kart);
-		// наборы услуг
-		buildNaborForTest(kart);
+		if (isAddPers) {
+			// проживающие
+			buildKartPrForTest(kart);
+		}
+		if (isAddNabor) {
+			// наборы услуг
+			buildNaborForTest(kart);
+		}
+		if (isAddMeter) {
+			// счетчики
+			buildMeterForTest(kart);
+		}
+
+		em.persist(kart);
 
 		return kart;
 	}
 
 
+	/**
+	 * Построитель счетчиков по лиц.счету (квартире)
+	 * @param kart - лиц.счет
+	 */
+	@Override
+	public void buildMeterForTest(Kart kart) {
+		// х.в.
+		addMeterForTest(kart.getKoKw(), "011", "05.04.2014", "29.04.2014");
+		// г.в.
+		addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "28.04.2014");
+	}
+
+	/**
+	 * Построитель счетчика
+	 * @param koObj - присоединить к объекту
+	 * @param uslId - код услуги
+	 * @param dt1 - начало действия
+	 * @param dt2 - окончание действия
+	 */
+	@Override
+	public void addMeterForTest(Ko koObj, String uslId, String dt1, String dt2) {
+		Ko ko = new Ko();
+		Meter meter = new Meter();
+		meter.setDt1(Utl.getDateFromStr(dt1));
+		meter.setDt2(Utl.getDateFromStr(dt2));
+		meter.setKo(ko);
+		meter.setKoObj(koObj);
+		Usl usl = em.find(Usl.class, uslId);
+		meter.setUsl(usl);
+		em.persist(ko);
+		em.persist(meter);
+	}
+
+
 	@Override
 	public void buildKartPrForTest(Kart kart) {
-		KartPr kartPr = addKartPrForTest(kart, 1,3,"Антонов", "01.01.1973",
-				"01.04.2014", "20.04.2014");
-		addStatusPrForTest(kartPr,1, "01.04.2014", "30.04.2014");
+		KartPr kartPr;
+		// Антонов
+		kartPr = addKartPrForTest(kart, 1,3,"Антонов", "01.01.1973",
+				"02.04.2014", "30.04.2014");
+		addStatePrForTest(kartPr,1, "02.04.2014", "30.04.2014");
 
+		// Сидоров
 		kartPr = addKartPrForTest(kart, 1,3, "Сидоров", "01.01.1971",
-				"01.04.2014", "25.04.2014");
-		addStatusPrForTest(kartPr, 1, "01.04.2014", "30.04.2014");
+				"02.04.2014", "30.04.2014");
+		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
 		// временное отсутствие
-		addStatusPrForTest(kartPr, 2, "05.04.2014", "10.04.2014");
+		addStatePrForTest(kartPr, 2, "05.04.2014", "09.04.2014");
 
+		// Тарасов
 		kartPr = addKartPrForTest(kart, 1,3, "Тарасов", "01.01.1972",
-				"01.04.2014", "30.04.2014");
-		addStatusPrForTest(kartPr, 1, "01.04.2014", "30.04.2014");
+				"02.04.2014", "30.04.2014");
+		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
+
+		// Федоров
+		kartPr = addKartPrForTest(kart, 3,3, "Федоров", "01.01.1962",
+				"03.04.2014", "30.04.2014");
+		// убытие
+		addStatePrForTest(kartPr, 4, null, null);
+		// временная регистрация
+		addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
+		//addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
 	}
 
 
@@ -146,8 +212,8 @@ public class KartMngImpl implements KartMng {
 	}
 
 	@Override
-	public void addStatusPrForTest(KartPr kartPr, int statusId,
-								   String dtFrom, String dtTo) {
+	public void addStatePrForTest(KartPr kartPr, int statusId,
+								  String dtFrom, String dtTo) {
 		StatusPr statusPr = em.find(StatusPr.class, statusId);
 		StatePr statePr = new StatePr();
 		statePr.setKartPr(kartPr);
