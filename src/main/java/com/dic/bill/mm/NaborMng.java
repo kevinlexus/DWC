@@ -1,6 +1,7 @@
 package com.dic.bill.mm;
 
 import com.dic.bill.dto.CountPers;
+import com.dic.bill.dto.PriceRec;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Nabor;
 import com.dic.bill.model.scott.Usl;
@@ -13,4 +14,5 @@ public interface NaborMng {
 
     List<Nabor> getValidNabor(Kart kart, Date curDt);
 
+    PriceRec getPrices(List<Nabor> lst, Usl usl);
 }

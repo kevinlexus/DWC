@@ -1,6 +1,7 @@
 package com.dic.bill.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -45,8 +46,11 @@ public class CalcStore {
 	}
 
 	// доля одного дня в периоде
-	public BigDecimal getDayPartMonth() {
-		return BigDecimal.valueOf(1/Double.valueOf(getCntCurDays()));
+	public BigDecimal getPartDayMonth() {
+		BigDecimal oneDay = new BigDecimal("1");
+		BigDecimal monthDays = BigDecimal.valueOf(getCntCurDays());
+		BigDecimal partDayMonth = oneDay.divide(monthDays, 20, RoundingMode.HALF_UP);
+		return partDayMonth;
 	}
 
 

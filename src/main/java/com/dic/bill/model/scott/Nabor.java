@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Наборов услуг по организациям в лицевом счете
@@ -48,6 +50,11 @@ public class Nabor implements java.io.Serializable  {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false, nullable = false)
 	private Vvod vvod;
+
+	// цены
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<Price> price = new ArrayList<>(0);
 
 	@Column(name = "KOEFF")
 	private BigDecimal koeff;

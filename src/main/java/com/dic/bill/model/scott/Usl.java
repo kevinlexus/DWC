@@ -42,7 +42,7 @@ public class Usl implements java.io.Serializable  {
 
 	// 0 - коэфф. в справочнике тарифов, 1 - норматив в справочнике тарифов,
 	// 2 - koeff-коэфф и norm-норматив, 3-koeff и norm-оба коэфф
-	@Column(name = "sptarn", updatable = false, nullable = true)
+	@Column(name = "SPTARN", updatable = false, nullable = true)
 	private Integer sptarn;
 
 	// родительская услуга (например Х.В. 0 прожив --> Х.В.)
@@ -50,9 +50,23 @@ public class Usl implements java.io.Serializable  {
 	@JoinColumn(name="PARENT_USL", referencedColumnName="USl", updatable = false, nullable = false)
 	private Usl parentUsl;
 
+	// услуга без проживающих
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="USL_EMPT", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private Usl uslEmpt;
+
+	// услуга свыше соцнормы
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="USL_P", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private Usl uslOverNorm;
+
 	// тип услуги 2 -- 0 - услуга коммунальная (х.в.), 1 - услуга жилищная (тек.сод.)
 	@Column(name = "USL_TYPE2", updatable = false, nullable = true)
 	private Integer type2;
+
+	// вариант расчета услуги
+	@Column(name = "FK_CALC_TP", updatable = false, nullable = true)
+	private Integer fkCalcTp;
 
 
 	/**
@@ -70,12 +84,12 @@ public class Usl implements java.io.Serializable  {
 	}
 
 	/**
-	 * Является ли услуга основной? (не имеет услуг по parent_usl)
+	 * Является ли услуга основной? (заполнено fk_calc_tp)
 	 * @return
 	 */
 	@Transient
 	public boolean isMain() {
-		return getParentUsl() != null? false:true;
+		return getFkCalcTp() != null? false:true;
 	}
 
 	@Override
