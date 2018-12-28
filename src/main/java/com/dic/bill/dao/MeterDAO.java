@@ -1,8 +1,10 @@
 package com.dic.bill.dao;
 
 import com.dic.bill.dto.MeterData;
+import com.dic.bill.dto.SumMeterVol;
 import com.dic.bill.model.scott.Apenya;
 import com.dic.bill.model.scott.ApenyaId;
+import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -29,10 +31,28 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * @param uslId - код услуги
 	 * @return
 	 */
+/*
 	@Query(value = "select t from Meter t "
 			+ "where t.koObj.id = ?1 and t.usl.id = ?2 " +
 			"and ?3 between t.dt1 and t.dt2")
 	List<Meter> findActualByKoUsl(Integer koId, String uslId, Date dt);
+*/
+
+	/**
+	 * Получить суммарный объем по счетчикам в объекте Ko за период
+ 	 * @param koId - Klsk объекта, к которому привязан счетчик
+	 * @param uslId - код услуги
+	 * @param dtFrom - начало периода
+	 * @param dtTo - оконачание периода
+	 * @return
+	 */
+	@Query(value = "select t.id as meterId, sum(o.n1) as vol from Meter t left join t.objPar o "
+			+ "where t.koObj.id = ?1 and t.usl.id = ?2 and o.lst.cd='ins_vol_sch' " +
+			"and ((?3 between t.dt1 and t.dt2 or ?4 between t.dt1 and t.dt2) or " +
+			"(t.dt1 between ?3 and ?4 or t.dt2 between ?3 and ?4)) " +
+			"and o.mg = TO_CHAR(?3,'YYYYMM') " +
+			"group by t.id ")
+	List<SumMeterVol> findMeterVolByKlsk(Integer koId, String uslId, Date dtFrom, Date dtTo);
 
 	/**
 	 * Получить Timestamp показаний и GUID счетчиков, по которым они были приняты

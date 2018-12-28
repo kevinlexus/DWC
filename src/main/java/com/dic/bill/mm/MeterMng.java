@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MeterMng {
 
-	Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
+	//Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
     boolean getIsMeterDataExist(List<MeterData> lst, String guid, XMLGregorianCalendar ts);
 

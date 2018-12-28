@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Счетчик
@@ -51,6 +53,11 @@ public class Meter implements java.io.Serializable {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false)
 	private Ko koObj;
+
+	// объемы, показания и другие параметры
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="FK_K_LSK", referencedColumnName="K_LSK_ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<ObjPar> objPar = new ArrayList<>(0);
 
 	// последнее показание
 	@Column(name = "N1", updatable = false)

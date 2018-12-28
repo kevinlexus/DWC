@@ -38,8 +38,8 @@ public class ObjPar implements java.io.Serializable {
 	private String s1;
 
 	// параметр Date
-	@Column(name = "DT1", updatable = false, nullable = true)
-	private Date dt1;
+	@Column(name = "D1", updatable = false, nullable = true)
+	private Date d1;
 
 	// период
 	@Column(name = "mg", updatable = false, nullable = true)

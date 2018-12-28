@@ -41,15 +41,15 @@ public class Price implements java.io.Serializable {
 
 	// цена
 	@Column(name = "SUMMA", updatable = false, nullable = true)
-	private BigDecimal summa;
+	private BigDecimal price;
 
 	// цена дополнительная (например за Гкал.)
 	@Column(name = "SUMMA2", updatable = false, nullable = true)
-	private BigDecimal summa2;
+	private BigDecimal priceAddit;
 
 	// цена без проживающих
 	@Column(name = "SUMMA3", updatable = false, nullable = true)
-	private BigDecimal summa3;
+	private BigDecimal priceEmpt;
 
 	@Override
 	public boolean equals(Object o) {
