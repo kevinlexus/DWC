@@ -14,6 +14,12 @@ public interface SumMeterVol {
 
 	// Id счетчика
 	Integer getMeterId();
+	// код услуги
+	String getUslId();
+	// начало действия счетчика
+	Date getDtFrom();
+	// окончание действия счетчика
+	Date getDtTo();
 	// объем
 	BigDecimal getVol();
 }

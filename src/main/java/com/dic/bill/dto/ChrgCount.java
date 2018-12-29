@@ -13,13 +13,15 @@ import java.util.*;
 public class ChrgCount {
 
   // параметры расчета: организация, кол-во прож. и т.п.
-  List<UslOrgPers> lstUslOrgPers = new ArrayList<>(10);
+  private List<UslOrgPers> lstUslOrgPers = new ArrayList<>(10);
 
   // параметры расчета: Фактическая услуга, цена, тип объема и т.п.
-  List<UslPriceVol> lstUslPriceVol = new ArrayList<>(10);
+  private List<UslPriceVol> lstUslPriceVol = new ArrayList<>(10);
 
+  // все действующие счетчики квартиры и их объемы
+  private List<SumMeterVol> lstMeterVol;
 
-  /**
+    /**
    * добавить новый период UslOrgPers
    * @param u - новый период со значениями
    * u.dtFrom - текущая дата!

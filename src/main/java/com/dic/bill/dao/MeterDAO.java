@@ -39,20 +39,20 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 */
 
 	/**
-	 * Получить суммарный объем по счетчикам в объекте Ko за период
- 	 * @param koId - Klsk объекта, к которому привязан счетчик
-	 * @param uslId - код услуги
+	 * Получить суммарный объем по счетчикам любых услуг, в объекте koObj за период
+ 	 * @param koObjId - Klsk объекта, к которому привязан счетчик
 	 * @param dtFrom - начало периода
 	 * @param dtTo - оконачание периода
 	 * @return
 	 */
-	@Query(value = "select t.id as meterId, sum(o.n1) as vol from Meter t left join t.objPar o "
+	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, sum(o.n1) as vol " +
+			"from Meter t left join t.objPar o "
 			+ "where t.koObj.id = ?1 and t.usl.id = ?2 and o.lst.cd='ins_vol_sch' " +
 			"and ((?3 between t.dt1 and t.dt2 or ?4 between t.dt1 and t.dt2) or " +
 			"(t.dt1 between ?3 and ?4 or t.dt2 between ?3 and ?4)) " +
 			"and o.mg = TO_CHAR(?3,'YYYYMM') " +
-			"group by t.id ")
-	List<SumMeterVol> findMeterVolByKlsk(Integer koId, String uslId, Date dtFrom, Date dtTo);
+			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
+	List<SumMeterVol> findMeterVolByKlsk(Integer koObjId, Date dtFrom, Date dtTo);
 
 	/**
 	 * Получить Timestamp показаний и GUID счетчиков, по которым они были приняты

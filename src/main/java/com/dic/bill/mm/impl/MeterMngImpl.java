@@ -1,7 +1,10 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.MeterDAO;
+import com.dic.bill.dto.CalcStore;
+import com.dic.bill.dto.ChrgCount;
 import com.dic.bill.dto.MeterData;
+import com.dic.bill.dto.SumMeterVol;
 import com.dic.bill.mm.MeterMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Ko;
@@ -10,14 +13,13 @@ import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,6 +46,64 @@ public class MeterMngImpl implements MeterMng {
 		return null;
 	}
 */
+
+	/**
+	 * Получить объем в доле одного дня по счетчикам квартиры
+	 * @param chrgCount -  хранилище параметров для расчета начисления
+ 	 * @param calcStore - хранилище необходимых данных для расчета пени, начисления
+	 * @return - объем в доле 1 дня к периоду наличия рабочего счетчика
+	 */
+	public Map<String, BigDecimal> getPartDayMeterVol(ChrgCount chrgCount, CalcStore calcStore) {
+		Calendar c = Calendar.getInstance();
+		// distinct список кодов услуг найденных счетчиков
+		List<String> lstMeterUslId = chrgCount.getLstMeterVol().stream()
+				.map(t -> t.getUslId()).distinct().collect(Collectors.toList());
+		Map<String, BigDecimal> mapDayMeterVol = new HashMap<String, BigDecimal>();
+
+		// перебрать услуги
+		for (String uslId : lstMeterUslId) {
+			int workDays=0;
+			// перебрать дни текущего месяца
+			for (c.setTime(calcStore.getCurDt1()); !c.getTime().after(calcStore.getCurDt2());
+				 									c.add(Calendar.DATE, 1)) {
+				Date curDt = c.getTime();
+				// найти любой действующий счетчик, прибавить день
+				SumMeterVol meterVol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId) &&
+						Utl.between(curDt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
+				if (meterVol != null) {
+					workDays++;
+				}
+			}
+			// сумма объема по всем счетчикам данной услуги
+			BigDecimal vol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId))
+					.map(t->t.getVol())
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
+			// доля объема на 1 рабочий день наличия счетчика
+			BigDecimal partDayVol;
+			if (workDays != 0) {
+				partDayVol = vol.divide(BigDecimal.valueOf(workDays));
+			} else {
+				// вообще не было активных счетчиков в периоде
+				partDayVol = null;
+			}
+			mapDayMeterVol.put(uslId, partDayVol);
+		}
+
+		return mapDayMeterVol;
+	}
+
+	/**
+	 * Узнать, работал ли хоть один счетчик в данном дне
+	 * @param uslId - код услуги
+	 * @param dt - дата на которую проверить
+	 * @return
+	 */
+	@Override
+	public boolean isExistAnyMeter(ChrgCount chrgCount, String uslId, Date dt) {
+		SumMeterVol meterVol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId) &&
+				Utl.between(dt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
+		return meterVol!=null ? true : false;
+	}
 
 	/**
 	 * Проверить наличие в списке показания по счетчику
@@ -149,6 +209,7 @@ public class MeterMngImpl implements MeterMng {
 		});
 		return lst;
 	}
+
 
 
 }
