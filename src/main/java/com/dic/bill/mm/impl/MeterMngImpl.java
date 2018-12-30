@@ -36,7 +36,7 @@ public class MeterMngImpl implements MeterMng {
 	 * @param dt - дата на которую получить
 	 * @return
 	 */
-/*
+
 	@Override
 	public Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt) {
 		for (Meter meter : meterDao.findActualByKoUsl(ko.getId(), usl, dt)) {
@@ -45,7 +45,7 @@ public class MeterMngImpl implements MeterMng {
 		// не найдено
 		return null;
 	}
-*/
+
 
 	/**
 	 * Получить объем в доле одного дня по счетчикам квартиры

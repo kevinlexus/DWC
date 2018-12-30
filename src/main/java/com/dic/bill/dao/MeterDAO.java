@@ -31,15 +31,13 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * @param uslId - код услуги
 	 * @return
 	 */
-/*
 	@Query(value = "select t from Meter t "
 			+ "where t.koObj.id = ?1 and t.usl.id = ?2 " +
 			"and ?3 between t.dt1 and t.dt2")
 	List<Meter> findActualByKoUsl(Integer koId, String uslId, Date dt);
-*/
 
 	/**
-	 * Получить суммарный объем по счетчикам любых услуг, в объекте koObj за период
+	 * Получить суммарный объем по счетчикам всех услуг, в объекте koObj за период
  	 * @param koObjId - Klsk объекта, к которому привязан счетчик
 	 * @param dtFrom - начало периода
 	 * @param dtTo - оконачание периода
@@ -47,10 +45,10 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 */
 	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, sum(o.n1) as vol " +
 			"from Meter t left join t.objPar o "
-			+ "where t.koObj.id = ?1 and t.usl.id = ?2 and o.lst.cd='ins_vol_sch' " +
-			"and ((?3 between t.dt1 and t.dt2 or ?4 between t.dt1 and t.dt2) or " +
-			"(t.dt1 between ?3 and ?4 or t.dt2 between ?3 and ?4)) " +
-			"and o.mg = TO_CHAR(?3,'YYYYMM') " +
+			+ "where t.koObj.id = ?1 and o.lst.cd='ins_vol_sch' " +
+			"and ((?2 between t.dt1 and t.dt2 or ?3 between t.dt1 and t.dt2) or " +
+			"(t.dt1 between ?2 and ?3 or t.dt2 between ?2 and ?3)) " +
+			"and o.mg = TO_CHAR(?2,'YYYYMM') " +
 			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
 	List<SumMeterVol> findMeterVolByKlsk(Integer koObjId, Date dtFrom, Date dtTo);
 

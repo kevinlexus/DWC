@@ -16,8 +16,6 @@ import java.util.Map;
 
 public interface MeterMng {
 
-	//Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
-
     boolean getIsMeterDataExist(List<MeterData> lst, String guid, XMLGregorianCalendar ts);
 
     boolean getIsMeterActual(Meter meter, Date dt);
@@ -29,6 +27,8 @@ public interface MeterMng {
     boolean getCanSaveDataMeter(Eolink meterEol, Date dt);
 
     List<Meter> findMeter(int i, int i1) throws InterruptedException;
+
+    Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
     Map<String, BigDecimal> getPartDayMeterVol(ChrgCount chrgCount, CalcStore calcStore);
 

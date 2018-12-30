@@ -5,6 +5,9 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Справочник услуг
  * @author lev
@@ -68,6 +71,10 @@ public class Usl implements java.io.Serializable  {
 	@Column(name = "FK_CALC_TP", updatable = false, nullable = true)
 	private Integer fkCalcTp;
 
+	// цены по услуге
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<Price> price = new ArrayList<>(0);
 
 	/**
 	 * Является ли услуга жилищной?
@@ -89,7 +96,7 @@ public class Usl implements java.io.Serializable  {
 	 */
 	@Transient
 	public boolean isMain() {
-		return getFkCalcTp() != null? false:true;
+		return getFkCalcTp() != null? true:false;
 	}
 
 	@Override

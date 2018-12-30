@@ -1,6 +1,7 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
+import com.dic.bill.dao.UlstDAO;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
@@ -22,6 +23,8 @@ public class KartMngImpl implements KartMng {
 
 	@Autowired
 	private KartDAO kartDao;
+	@Autowired
+	private UlstDAO lstDao;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -132,9 +135,29 @@ public class KartMngImpl implements KartMng {
 	@Override
 	public void buildMeterForTest(Kart kart) {
 		// х.в.
-		addMeterForTest(kart.getKoKw(), "011", "05.04.2014", "29.04.2014");
+		Meter meter = addMeterForTest(kart.getKoKw(), "011", "05.04.2014", "29.04.2014");
+		// добавить объем
+		addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
 		// г.в.
-		addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "28.04.2014");
+		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "28.04.2014");
+		// добавить объем
+		addMeterVolForTest(meter, new BigDecimal("7.21"), "201404");
+	}
+
+	/**
+	 * Добавить объем для тестов
+	 * @param meter
+	 * @param vol
+	 * @param mg
+	 */
+	private void addMeterVolForTest(Meter meter, BigDecimal vol, String mg) {
+		ObjPar objPar = new ObjPar();
+		objPar.setKo(meter.getKo());
+		Lst lst = lstDao.getByCd("ins_vol_sch");
+		objPar.setLst(lst);
+		objPar.setN1(vol);
+		objPar.setMg(mg);
+		meter.getObjPar().add(objPar);
 	}
 
 	/**
@@ -145,7 +168,7 @@ public class KartMngImpl implements KartMng {
 	 * @param dt2 - окончание действия
 	 */
 	@Override
-	public void addMeterForTest(Ko koObj, String uslId, String dt1, String dt2) {
+	public Meter addMeterForTest(Ko koObj, String uslId, String dt1, String dt2) {
 		Ko ko = new Ko();
 		Meter meter = new Meter();
 		meter.setDt1(Utl.getDateFromStr(dt1));
@@ -156,6 +179,7 @@ public class KartMngImpl implements KartMng {
 		meter.setUsl(usl);
 		em.persist(ko);
 		em.persist(meter);
+		return meter;
 	}
 
 

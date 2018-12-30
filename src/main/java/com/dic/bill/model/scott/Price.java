@@ -15,7 +15,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "Price", schema="SCOTT")
+@Table(name = "Prices", schema="SCOTT")
 @Getter @Setter
 public class Price implements java.io.Serializable {
 
@@ -36,7 +36,7 @@ public class Price implements java.io.Serializable {
 
 	// организация, по которой действует выделенная расценка
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, insertable = false)
+	@JoinColumn(name="FK_ORG", referencedColumnName="ID", updatable = false, insertable = false)
 	private Org org;
 
 	// цена

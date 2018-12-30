@@ -12,6 +12,10 @@ import com.dic.bill.dao.LstDAO;
 import com.dic.bill.model.bs.Lst;
 
 
+/**
+ * DAO сущности com.dic.bill.model.bs.Lst. Так же существует UlstDAO другой сущности com.dic.bill.model.scott.Lst
+ *
+ */
 @Repository
 public class LstDAOImpl implements LstDAO {
 
@@ -24,7 +28,7 @@ public class LstDAOImpl implements LstDAO {
 	 */
 	//@Cacheable("LstDAOImpl.getByCD")
 	@Override
-	public synchronized Lst getByCD(String cd) {
+	public Lst getByCD(String cd) {
 		Query query =em.createQuery("from com.dic.bill.model.bs.Lst t where t.cd in (:cd)");
 		query.setParameter("cd", cd);
 		return (Lst) query.getSingleResult();

@@ -19,7 +19,7 @@ public interface KartMng {
 
     void buildMeterForTest(Kart kart);
 
-    void addMeterForTest(Ko koObj, String uslId, String dt1, String dt2);
+    public Meter addMeterForTest(Ko koObj, String uslId, String dt1, String dt2);
 
     void buildKartPrForTest(Kart kart);
 

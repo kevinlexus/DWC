@@ -4,6 +4,7 @@ import com.dic.bill.dto.DetailUslPrice;
 import com.dic.bill.mm.NaborMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
+@Slf4j
 @Service
 public class NaborMngImpl implements NaborMng {
 
@@ -62,10 +66,10 @@ public class NaborMngImpl implements NaborMng {
 		}
 
 		if (uslEmpt != null) {
-			// найти услугу свыше соц.нормы, если есть
+			// найти услугу без проживающих, если есть
 			Nabor naborEmpt = lst.stream()
 					.filter(t -> t.getUsl().equals(uslOverNorm)).findFirst().orElse(null);
-			detail.priceEmpt = multiplyPrice(naborEmpt);
+			//detail.priceEmpt = multiplyPrice(naborEmpt);
 			if (naborEmpt != null) {
 				detail.uslEmpt = naborEmpt.getUsl();
 				detail.priceOverNorm = multiplyPrice(naborEmpt);
@@ -105,8 +109,8 @@ public class NaborMngImpl implements NaborMng {
 	 */
 	private Price getBasePrice(Nabor nabor) {
 		Price foundPrice = null;
-		for (Price price : nabor.getPrice()) {
-			if (price.getOrg().equals(nabor.getOrg())) {
+		for (Price price : nabor.getUsl().getPrice()) {
+			if (price.getOrg()!=null && price.getOrg().equals(nabor.getOrg())) {
 				return price;
 			} else {
 				foundPrice=price;
