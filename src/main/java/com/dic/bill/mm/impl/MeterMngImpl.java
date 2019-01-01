@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -81,11 +82,13 @@ public class MeterMngImpl implements MeterMng {
 			// доля объема на 1 рабочий день наличия счетчика
 			BigDecimal partDayVol;
 			if (workDays != 0) {
-				partDayVol = vol.divide(BigDecimal.valueOf(workDays));
+				partDayVol = vol.divide(BigDecimal.valueOf(workDays), 20, RoundingMode.HALF_UP);
 			} else {
 				// вообще не было активных счетчиков в периоде
 				partDayVol = null;
 			}
+			log.info("Расчет объема на 1 день: usl.id={}, дней работы={}, общий объем={}, доля на 1 день={}",
+					uslId, workDays, vol, partDayVol);
 			mapDayMeterVol.put(uslId, partDayVol);
 		}
 

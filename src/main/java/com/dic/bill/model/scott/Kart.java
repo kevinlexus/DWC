@@ -72,9 +72,14 @@ public class Kart implements java.io.Serializable{
 	@JoinColumn(name="FK_TP", referencedColumnName="ID", updatable = false, insertable = true)
 	private Lst tp;
 
-	// Ko помешения (здесь OneToOne)
-	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	// статус лиц.счета
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="STATUS", referencedColumnName="ID", updatable = false, insertable = true)
+	private Status status;
+
+	// Ko помешения
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
 	private Ko koKw;
 
 	// Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
@@ -86,6 +91,11 @@ public class Kart implements java.io.Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true)
 	private House house;
+
+	// родительский лицевой счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="PARENT_LSK", referencedColumnName="LSK", updatable = false, insertable = true)
+	private Kart parentKart;
 
 	// общая площадь
 	@Column(name = "OPL", nullable = true)
@@ -108,6 +118,18 @@ public class Kart implements java.io.Serializable{
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<KartPr> kartPr = new ArrayList<>(0);
+
+	// актуальный ли лицевой счет?
+	@Transient
+	public boolean isActual() {
+		if (psch.equals(8) || psch.equals(9)) {
+			// закрытый
+			return false;
+		} else {
+			// открытый
+			return true;
+		}
+	}
 
 	@Override
 	public boolean equals(Object o) {

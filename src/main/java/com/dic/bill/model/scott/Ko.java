@@ -6,6 +6,9 @@ import com.dic.bill.model.exs.Eolink;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Справочник всех объектов Klsk Objects - KO
  * @author Lev
@@ -32,9 +35,10 @@ public class Ko implements java.io.Serializable {
 	@OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
 	private Meter meter;
 
-	// лиц.счет (квартира)
-	@OneToOne(mappedBy = "koKw", fetch = FetchType.LAZY)
-	private Kart kart;
+	// лицевые счета
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<Kart> kart = new ArrayList<>(0);
 
 	public Ko() {
 		super();

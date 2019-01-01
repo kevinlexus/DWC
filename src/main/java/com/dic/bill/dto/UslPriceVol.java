@@ -1,6 +1,7 @@
 package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Usl;
+import com.ric.cmn.Utl;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -107,7 +108,7 @@ public class UslPriceVol {
             uslPriceVol.price = this.price;
             uslPriceVol.vol = this.vol;
             // получить долю от значения
-            uslPriceVol.area = this.area.multiply(this.partDayMonth);
+            uslPriceVol.area = Utl.nvl(this.area, BigDecimal.ZERO).multiply(this.partDayMonth);
             return uslPriceVol;
         }
     }

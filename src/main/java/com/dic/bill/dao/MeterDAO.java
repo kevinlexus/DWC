@@ -38,7 +38,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 
 	/**
 	 * Получить суммарный объем по счетчикам всех услуг, в объекте koObj за период
- 	 * @param koObjId - Klsk объекта, к которому привязан счетчик
+	 * @param koObjId - Klsk объекта, к которому привязан счетчик
 	 * @param dtFrom - начало периода
 	 * @param dtTo - оконачание периода
 	 * @return
@@ -72,3 +72,4 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	List<Meter> findMeter(int n1, int n2);
 
 }
+
