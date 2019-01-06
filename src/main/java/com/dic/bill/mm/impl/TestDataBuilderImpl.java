@@ -32,27 +32,32 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 */
 	/**
 	 *
-	 * @param lsk - лиц.счет
 	 * @param isAddPers - добавлять спроживающих?
 	 * @param isAddNabor - добавлять наборы услуг?
 	 * @param isAddMeter - добавлять счетчики?
 	 * @return
 	 */
 	@Override
-	public Kart buildKartForTest(String lsk, boolean isAddPers, boolean isAddNabor, boolean isAddMeter) {
+	public Ko buildKartForTest(boolean isAddPers, boolean isAddNabor,
+								 boolean isAddMeter) {
+		// помещение
 		Ko ko = new Ko();
 		Kart kart = new Kart();
-		Org org = em.find(Org.class, 547);
 		House house = em.find(House.class, 6091);
+
+		// УК
+		Org uk = em.find(Org.class, 547);
 		// тип счета
 		Lst tp = lstDao.getByCd("LSK_TP_MAIN");
 		kart.setTp(tp);
+		// муницип статус
+		Status status = em.find(Status.class, 1);
 		// приват статус
-		Status status = em.find(Status.class, 2);
+		//Status status = em.find(Status.class, 2);
 
 		kart.setKoKw(ko);
 		kart.setHouse(house);
-		kart.setLsk(lsk);
+		kart.setLsk("0000_ОСН");
 		kart.setPsch(0);
 		kart.setOpl(BigDecimal.valueOf(63.45));
 		kart.setKul("0001");
@@ -61,11 +66,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setKpr(0);
 		kart.setKprOt(0);
 		kart.setKprWr(0);
-		kart.setUk(org);
+		kart.setUk(uk);
 		kart.setMgFrom("201401");
 		kart.setMgTo("201412");
 		kart.setStatus(status);
-		//em.persist(ko);
+		ko.getKart().add(kart);
 
 		if (isAddPers) {
 			// проживающие
@@ -73,7 +78,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		}
 		if (isAddNabor) {
 			// наборы услуг
-			buildNaborForTest(kart);
+			buildNaborForTest(kart, 0);
 		}
 		if (isAddMeter) {
 			// счетчики
@@ -82,7 +87,77 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		em.persist(kart);
 
-		return kart;
+		// Лиц.счет РСО
+		kart = new Kart();
+
+		// УК
+		uk = em.find(Org.class, 874);
+		// тип счета
+		tp = lstDao.getByCd("LSK_TP_RSO");
+		kart.setTp(tp);
+		// муницип статус (вообще не должен использоваться никакой!)
+		//status = em.find(Status.class, 1);
+
+		kart.setKoKw(ko);
+		kart.setHouse(house);
+		kart.setLsk("0000_РСО");
+		kart.setPsch(0);
+		//kart.setOpl(BigDecimal.valueOf(63.45));
+		kart.setKul("0001");
+		kart.setNd("000001");
+		kart.setNum("0000001");
+		kart.setKpr(0);
+		kart.setKprOt(0);
+		kart.setKprWr(0);
+		kart.setUk(uk);
+		kart.setMgFrom("201401");
+		kart.setMgTo("201412");
+		//kart.setStatus(status);
+		ko.getKart().add(kart);
+
+		if (isAddNabor) {
+			// наборы услуг
+			buildNaborForTest(kart, 1);
+		}
+
+		em.persist(kart);
+
+		// Лиц.счет Капремонта
+		kart = new Kart();
+
+		// УК
+		uk = em.find(Org.class, 12);
+		// тип счета
+		tp = lstDao.getByCd("LSK_TP_ADDIT");
+		kart.setTp(tp);
+		// муницип статус (вообще не должен использоваться никакой!)
+		//status = em.find(Status.class, 1);
+
+		kart.setKoKw(ko);
+		kart.setHouse(house);
+		kart.setLsk("0000_КАП");
+		kart.setPsch(0);
+		//kart.setOpl(BigDecimal.valueOf(63.45));
+		kart.setKul("0001");
+		kart.setNd("000001");
+		kart.setNum("0000001");
+		kart.setKpr(0);
+		kart.setKprOt(0);
+		kart.setKprWr(0);
+		kart.setUk(uk);
+		kart.setMgFrom("201401");
+		kart.setMgTo("201412");
+		//kart.setStatus(status);
+		ko.getKart().add(kart);
+
+		if (isAddNabor) {
+			// наборы услуг
+			buildNaborForTest(kart, 2);
+		}
+
+		em.persist(kart);
+
+		return ko;
 	}
 
 
@@ -93,7 +168,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	@Override
 	public void buildMeterForTest(Kart kart) {
 		// х.в. Счетчик 1
-		Meter meter = addMeterForTest(kart.getKoKw(), "011", "05.04.2014", "06.04.2014");
+		Meter meter = addMeterForTest(kart.getKoKw(), "011", "01.04.2014", "06.04.2014");
 		// добавить объем
 		addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
 
@@ -103,7 +178,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		addMeterVolForTest(meter, new BigDecimal("3.11111"), "201404");
 
 		// г.в. Счетчик 1
-		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "01.04.2014");
+		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "11.04.2014");
 		// добавить объем
 		addMeterVolForTest(meter, new BigDecimal("7.21"), "201404");
 
@@ -111,6 +186,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "11.04.2014");
 		// добавить объем
 		addMeterVolForTest(meter, new BigDecimal("1.10"), "201404");
+
+		// эл.эн.
+		meter = addMeterForTest(kart.getKoKw(), "038", "01.04.2014", "30.04.2014");
+		// добавить объем
+		addMeterVolForTest(meter, new BigDecimal("350.89"), "201404");
 	}
 
 	/**
@@ -155,31 +235,33 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	@Override
 	public void buildKartPrForTest(Kart kart) {
 		KartPr kartPr;
-		// Антонов
-		kartPr = addKartPrForTest(kart, 1,3,"Антонов", "01.01.1973",
+		// Антонов (собственник)
+		kartPr = addKartPrForTest(kart, 1,11,"Антонов", "01.01.1913",
 				"02.04.2014", "30.04.2014");
 		addStatePrForTest(kartPr,1, "02.04.2014", "30.04.2014");
 
 		// Сидоров
+
 		kartPr = addKartPrForTest(kart, 1,3, "Сидоров", "01.01.1971",
-				"02.04.2014", "30.04.2014");
+				"03.04.2014", "30.04.2014");
 		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
 		// временное отсутствие
 		addStatePrForTest(kartPr, 2, "05.04.2014", "09.04.2014");
 
+
 		// Тарасов
-		kartPr = addKartPrForTest(kart, 1,3, "Тарасов", "01.01.1972",
+		kartPr = addKartPrForTest(kart, 1,3, "Тарасов", "01.01.1912",
 				"02.04.2014", "30.04.2014");
 		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
 
 		// Федоров
-		kartPr = addKartPrForTest(kart, 3,3, "Федоров", "01.01.1962",
+		kartPr = addKartPrForTest(kart, 3,3, "Федоров", "01.01.1972",
 				"03.04.2014", "30.04.2014");
 		// убытие
 		addStatePrForTest(kartPr, 4, null, null);
 		// временная регистрация
 		addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
-		//addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
+
 	}
 
 
@@ -216,26 +298,83 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kartPr.getStatePr().add(statePr);
 	}
 
+	/**
+	 * tp 0 - основной счет, 1 - РСО, 2 - капремонт
+	 * @param kart
+	 * @param tp
+	 */
 	@Override
-	public void buildNaborForTest(Kart kart) {
-		addNaborForTest(kart, 1, "003", BigDecimal.valueOf(0), null,
-				BigDecimal.ZERO, BigDecimal.ZERO);
-		addNaborForTest(kart, 2, "011", BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-		BigDecimal.ZERO, BigDecimal.ZERO);
-		addNaborForTest(kart, 3, "063", BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-		BigDecimal.ZERO, BigDecimal.ZERO);
-		addNaborForTest(kart, 4, "015", BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-		BigDecimal.ZERO, BigDecimal.ZERO);
-		addNaborForTest(kart, 5, "060", BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-		BigDecimal.ZERO, BigDecimal.ZERO);
-		addNaborForTest(kart, 6, "013", BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-		BigDecimal.ZERO, BigDecimal.ZERO);
-		// Отопление Гкал
-		addNaborForTest(kart, 6, "053", BigDecimal.valueOf(1), null,
-				BigDecimal.valueOf(2.70547), null);
-		// Отопление Гкал 0 зарег.
-		addNaborForTest(kart, 6, "054", BigDecimal.valueOf(1), null,
-				null, null);
+	public void buildNaborForTest(Kart kart, int tp) {
+		if (tp==0) {
+			// основной лиц.счет
+			addNaborForTest(kart, 1, "003", BigDecimal.valueOf(0.9888), null,
+					null, null, null);
+			// водоотведение
+			addNaborForTest(kart, 6, "013", BigDecimal.valueOf(1), BigDecimal.valueOf(10.25),
+					null, null, null);
+			// антенна
+			addNaborForTest(kart, 1, "042", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+			// кодовый замок
+			addNaborForTest(kart, 2, "043", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+			// Эл.энерг. ОДН, распределенный объем во вводах
+			addNaborForTest(kart, 5, "058", BigDecimal.valueOf(1), null,
+					null, BigDecimal.valueOf(2.395), null);
+
+			// Поверка ОДПУ
+			addNaborForTest(kart, 5, "135", BigDecimal.valueOf(2.56), BigDecimal.valueOf(1.34),
+					null, null, null);
+
+			// Эл.энерг.2
+			addNaborForTest(kart, 1, "038", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+			// Прочие услуги, расчитываемые как расценка * норматив * Общ.площадь, только НЕ по муницип фонду
+			addNaborForTest(kart, 1, "119", BigDecimal.valueOf(1.2), BigDecimal.valueOf(1.3),
+					null, null, null);
+		} else if (tp==1) {
+			// РСО лиц.счет
+			// х.в.
+			addNaborForTest(kart, 2, "011", BigDecimal.valueOf(1), BigDecimal.valueOf(5.74),
+					null, null, null);
+			addNaborForTest(kart, 2, "012", BigDecimal.valueOf(1.4), BigDecimal.valueOf(0),
+					null, null, null);
+			addNaborForTest(kart, 3, "063", BigDecimal.valueOf(1.5), BigDecimal.valueOf(0),
+					null, null, null);
+			// г.в.
+			addNaborForTest(kart, 4, "015", BigDecimal.valueOf(1), BigDecimal.valueOf(3.72),
+					null, null, null);
+			addNaborForTest(kart, 4, "016", BigDecimal.valueOf(1.4), BigDecimal.valueOf(0),
+					null, null, null);
+			addNaborForTest(kart, 5, "060", BigDecimal.valueOf(1.5), BigDecimal.valueOf(0),
+					null, null, null);
+			// найм
+			addNaborForTest(kart, 1, "026", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+			Usl usl = em.find(Usl.class, "053");
+			Vvod vvod = new Vvod();
+			vvod.setUsl(usl);
+			vvod.setHouse(kart.getHouse());
+			vvod.setDistTp(1); // 1 - распределение в nabor.vol
+			vvod.setIsChargeInNotHeatingPeriod(true);
+
+			// Отопление Гкал
+			addNaborForTest(kart, 6, "053", BigDecimal.valueOf(1), null,
+					BigDecimal.valueOf(2.70547), null, vvod);
+			// Отопление Гкал 0 зарег.
+			addNaborForTest(kart, 6, "054", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+		} else if (tp==2) {
+			// капремонт
+			addNaborForTest(kart, 1, "033", BigDecimal.valueOf(1), null,
+					null, null, null);
+		}
+
 
 	}
 
@@ -252,7 +391,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	@Override
 	public void addNaborForTest(Kart kart, int orgId, String uslId,
 								BigDecimal koeff, BigDecimal norm,
-								BigDecimal vol, BigDecimal volAdd) {
+								BigDecimal vol, BigDecimal volAdd, Vvod vvod) {
 		Nabor nabor = new Nabor();
 		nabor.setKart(kart);
 		nabor.setOrg(em.find(Org.class, orgId));
@@ -261,6 +400,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		nabor.setNorm(norm);
 		nabor.setVol(vol);
 		nabor.setVolAdd(volAdd);
+		nabor.setVvod(vvod);
 		kart.getNabor().add(nabor);
 	}
 

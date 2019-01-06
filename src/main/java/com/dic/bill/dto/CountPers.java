@@ -24,4 +24,9 @@ public class CountPers {
   // является ли пустым лиц.счет?
   public boolean isEmpty = true;
 
+  // одиноко проживающий старше 70 лет (для капремонта)
+  public boolean isSingleOwnerOlder70 = false;
+
+
+
 }

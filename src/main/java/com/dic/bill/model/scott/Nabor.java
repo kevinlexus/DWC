@@ -47,7 +47,7 @@ public class Nabor implements java.io.Serializable  {
 	private Org org;
 
 	// ввод
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false, nullable = false)
 	private Vvod vvod;
 

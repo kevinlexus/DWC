@@ -1,10 +1,11 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dto.CountPers;
+import com.dic.bill.dto.SocStandart;
 import com.dic.bill.mm.KartPrMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
-import com.ric.cmn.excp.WrongParam;
+import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -24,30 +24,27 @@ public class KartPrMngImpl implements KartPrMng {
 
 	/**
 	 * Получить кол-во проживающих по лиц.счету и услуге, на дату
-	 * @param kart - лиц.счет
+	 * @param kartMain - основной лиц.счет
+	 * @param nabor - строка набора услуг
 	 * @param parVarCntKpr - параметр, тип расчета, 0 - Кис, 1 - Полыс, 2 - ТСЖ
-	 * @param lstState - история статусов проживающих
-	 * @param usl - услуга
+	 * @param parCapCalcKprTp - параметр учета проживающих для капремонта
 	 * @param dt - дата расчета
 	 */
 	@Override
-	public CountPers getCountPersByDate(Kart kart, Double parVarCntKpr, List<StatePr> lstState,
-										Usl usl, Date dt) {
-		// выполнить подстановку лицевого счета
-		Kart foundKart;
-		if (Utl.in(kart.getTp().getCd(), "LSK_TP_RSO", "LSK_TP_ADDIT") && kart.getParentKart() != null) {
-			foundKart = kart.getParentKart();
-		} else {
-			foundKart = kart;
-		}
-
+	public CountPers getCountPersByDate(Kart kartMain, Nabor nabor, int parVarCntKpr, int parCapCalcKprTp,
+										Date dt) {
+		boolean isOwnerOlder70 = false;
+		boolean isYanger70 = false;
+		// рассчитываемый лиц.счет
+		Kart kart = nabor.getKart();
 		CountPers countPers = new CountPers();
 		// перебрать проживающих
-		for (KartPr p : foundKart.getKartPr()) {
+		for (KartPr p : kartMain.getKartPr()) {
 			// получить статусы
 			int status = 0;
 			int statusTemp = 0;
-			for (StatePr t : lstState) {
+
+			for (StatePr t : p.getStatePr()) {
 				if (t.getKartPr().equals(p) && Utl.between(dt, t.getDtFrom(), t.getDtTo())) {
 					if (t.getStatusPr().getTp().getCd().equals("PROP")) {
 						status=t.getStatusPr().getId();
@@ -57,7 +54,8 @@ public class KartPrMngImpl implements KartPrMng {
 				}
 			}
 
-			if (parVarCntKpr.equals(0D)) {
+
+			if (parVarCntKpr==0) {
 				// Киселёвск
 				if ((status==4 || status==0) && statusTemp==3) {
 					// выписан или пустой основной статус и "врем.зарег." или "для начисления"
@@ -76,7 +74,7 @@ public class KartPrMngImpl implements KartPrMng {
 					countPers.kprMax++;
 				} else if ((status==1 || status==5) && statusTemp==2) {
 					// прописан или статус=для_начисления и временно отсут.
-					if (usl.isHousing()) {
+					if (nabor.getUsl().isHousing()) {
 						// жилищная услуга
 						countPers.kpr++;
 					}
@@ -88,11 +86,11 @@ public class KartPrMngImpl implements KartPrMng {
 					countPers.kpr++;
 					countPers.kprNorm++;
 				}
-			} else if (parVarCntKpr.equals(1D)) {
+			} else if (parVarCntKpr==1) {
 				// Полысаево
 				if ((status==4 || status==0) && statusTemp==3) {
 					// выписан или пустой основной статус и "врем.зарег."
-					if (!usl.isHousing()) {
+					if (!nabor.getUsl().isHousing()) {
 						// коммунальная услуга
 						countPers.kpr++;
 						countPers.kprNorm++;
@@ -112,7 +110,7 @@ public class KartPrMngImpl implements KartPrMng {
 					countPers.kpr++;
 					countPers.kprOt++;
 					countPers.kprMax++;
-					if (usl.isHousing()) {
+					if (nabor.getUsl().isHousing()) {
 						// жилищная услуга
 						countPers.kprNorm++;
 					}
@@ -122,11 +120,11 @@ public class KartPrMngImpl implements KartPrMng {
 					countPers.kprNorm++;
 					countPers.kprMax++;
 				}
-			} else if (parVarCntKpr.equals(2D)) {
+			} else if (parVarCntKpr==2) {
 				// ТСЖ
 				if ((status==4 || status==0) && (statusTemp==3 || statusTemp==6)) {
 					// выписан или пустой основной статус и для_начисления или временно зарег.
-					if (!usl.isHousing()) {
+					if (!nabor.getUsl().isHousing()) {
 						// коммунальная услуга
 						countPers.kprNorm++;
 					}
@@ -151,24 +149,55 @@ public class KartPrMngImpl implements KartPrMng {
 				}
 			}
 
+			if (nabor.getUsl().getFkCalcTp().equals(37)) {
+				// Капремонт
+				// получить возраст на дату расчета, если дата рождения пустая - поставить текущую
+
+				int yearsOld = Utl.getDiffYears(p.getDtBirdth() == null ? dt : p.getDtBirdth(), dt);
+				if (yearsOld >= 70) {
+					if (Utl.in(p.getRelation().getCd(), "Квартиросъемщик", "Собственник")) {
+						if (status==1) { // ПЗ
+							isOwnerOlder70 = true;
+						}
+					}
+				} else {
+					// Код взят из C_KART строка 745
+					log.info("parCapCalcKprTp={}", parCapCalcKprTp);
+					if (status==1) { // ПЗ
+						isYanger70 = true;
+					} else if (parCapCalcKprTp==0 &&
+							(status==4 || status==0) && statusTemp==3){ // ВЗ
+						isYanger70 = true;
+					}
+				}
+			}
+		}
+
+
+		if (nabor.getUsl().getFkCalcTp().equals(37)) {
+			// капремонт, если старше 70 и собственник и нет других проживающих, моложе 70
+			if (isOwnerOlder70 && !isYanger70) {
+				countPers.isSingleOwnerOlder70 = true;
+			}
 		}
 
 		// дополнительно установка кол-во проживающих для объема
 		// алгоритм взят из C_KART, строка 786
+		// Здесь берётся сам лицевой счет, kart!!!
 		if (countPers.kprNorm == 0) {
 			if (Utl.in(kart.getTp().getCd(), "LSK_TP_RSO")) {
 				// в РСО счетах
-				if (parVarCntKpr.equals(0D)
-						&& countPers.kprOt == 0 && !kart.getStatus().getCd().equals("MUN")) {
+				if (parVarCntKpr==0
+						&& countPers.kprOt == 0 && !kartMain.getStatus().getCd().equals("MUN")) {
 					// Киселёвск, нет временно отсутствующих и не муниципальный лиц.счет
 					// поставить хоть одного проживающего, для объема
 					countPers.kprNorm=1;
 				}
 			} else {
 				// в Основных и прочих счетах
-				if (parVarCntKpr.equals(0D)) {
+				if (parVarCntKpr==0) {
 					// Киселёвск
-					if (usl.getFkCalcTp().equals(49) && !kart.getStatus().getCd().equals("MUN")) {
+					if (nabor.getUsl().getFkCalcTp().equals(49) && !kartMain.getStatus().getCd().equals("MUN")) {
 						// услуга по обращению с ТКО
 						// не муницип. квартира
 						countPers.kpr=1;
@@ -176,7 +205,7 @@ public class KartPrMngImpl implements KartPrMng {
 					}
 				}
 
-				if (parVarCntKpr.equals(1D) && countPers.kprOt == 0) {
+				if (parVarCntKpr==1 && countPers.kprOt == 0) {
 					// Полысаево
 					// поставить хоть одного проживающего, для объема
 					countPers.kprNorm=1;
@@ -189,37 +218,44 @@ public class KartPrMngImpl implements KartPrMng {
 	}
 
 	/**
-	 * Получить объем по нормативу
+	 * Получить объем по нормативу на всех проживающих
 	 * @param nabor - строка услуги из набора
 	 * @param countPers - объект, содержащий кол-во проживающих
 	 * @return
 	 */
 	@Override
-	public BigDecimal getSocStdtVol(Nabor nabor, CountPers countPers) {
+	public SocStandart getSocStdtVol(Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
+		SocStandart socStandart = new SocStandart();
 		BigDecimal norm = BigDecimal.ZERO;
-		BigDecimal socNorm = BigDecimal.ZERO;
+		socStandart.vol = BigDecimal.ZERO;
 		switch (nabor.getUsl().getFkCalcTp()) {
 			case 17: // х.в.
 			case 18: // г.в.
 			case 19: {// водоотв.
 				// соцнорма из набора
-				socNorm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
+				norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
+				break;
+			}
+			case 14: // отопление гкал.
+			case 25: {  // тек содерж ТСЖ, TODO отопление гкал (ТСЖ)?
+				norm = getCommonSocStdt(countPers);
 				break;
 			}
 			case 31: { // эл.эн
 				// соцнорма по справочнику
-				socNorm = getElectrSocStdt(countPers);
+				norm = getElectrSocStdt(countPers);
 				break;
 			}
-			case 11111111: {  // TODO отопление гкал (ТСЖ), тек содерж ТСЖ?
-				socNorm = getCommonSocStdt(countPers);
-				break;
+			default: {
+				throw new ErrorWhileChrg("ОШИБКА! По услуге fkCalcTp="+nabor.getUsl().getFkCalcTp()+
+						" не определён блок switch в KartPrMngImpl.getSocStdtVol");
 			}
 		}
 
 		// кол-во прож. * соцнорму
-		norm = socNorm.multiply(BigDecimal.valueOf(countPers.kprNorm));
-		return norm;
+		socStandart.norm = norm;
+		socStandart.vol = norm.multiply(BigDecimal.valueOf(countPers.kprNorm));
+		return socStandart;
 	}
 
 	/**

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,24 +32,29 @@ public class Vvod implements java.io.Serializable {
 
 	// дом
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true)
 	private House house;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, insertable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, insertable = true)
 	private Usl usl;
 
 	// распределение воды по дому (0, null-пропорционально расходу, 2-нет услуги, не считать вообще, 1 - проп. площади,
 	// 4-по дому, без ОДПУ, есть возм.установки, 5-по дому, без ОДПУ, нет возм.установки,
 	// 6-просто учитывать объем, 7 - информационно отобразить объем в Счете в ОДПУ)
-    @Column(name = "dist_tp", updatable = false, nullable = true)
+    @Column(name = "dist_tp", updatable = false, nullable = true, insertable = true)
 	private Integer distTp;
 
 	// набор услуг
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<Nabor> nabor = new ArrayList<>(0);
+
+	// начислять ли отопление в неотопительный период?
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "NON_HEAT_PER", nullable = true, insertable = true)
+	private Boolean isChargeInNotHeatingPeriod;
 
 	@Override
 	public boolean equals(Object o) {

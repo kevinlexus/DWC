@@ -63,6 +63,11 @@ public class Usl implements java.io.Serializable  {
 	@JoinColumn(name="USL_P", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private Usl uslOverNorm;
 
+	// услуга для определения объема (иногда делается подстановка)
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="USL_VOL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private Usl uslVol;
+
 	// тип услуги 2 -- 0 - услуга коммунальная (х.в.), 1 - услуга жилищная (тек.сод.)
 	@Column(name = "USL_TYPE2", updatable = false, nullable = true)
 	private Integer type2;
@@ -75,6 +80,19 @@ public class Usl implements java.io.Serializable  {
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<Price> price = new ArrayList<>(0);
+
+	// порядок расчета услуг
+	@Column(name = "USL_ORDER", updatable = false, nullable = true)
+	private Integer uslOrder;
+
+	/**
+	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)
+	 * @return
+	 */
+	@Transient
+	public Usl getFactUslVol() {
+		return getUslVol()!=null? getUslVol():this;
+	}
 
 	/**
 	 * Является ли услуга жилищной?

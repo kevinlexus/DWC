@@ -78,7 +78,7 @@ public class Kart implements java.io.Serializable{
 	private Status status;
 
 	// Ko помешения
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
 	private Ko koKw;
 
@@ -100,6 +100,14 @@ public class Kart implements java.io.Serializable{
 	// общая площадь
 	@Column(name = "OPL", nullable = true)
 	private BigDecimal opl;
+
+	// расход по счетчику отопления
+	@Column(name = "MOT", nullable = true)
+	private BigDecimal mot;
+
+	// показания по счетчику отопления
+	@Column(name = "POT", nullable = true)
+	private BigDecimal pot;
 
 	// начало действия
 	@Column(name = "MG1", nullable = true)

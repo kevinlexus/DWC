@@ -59,6 +59,7 @@ public class KartMngImpl implements KartMng {
 	 * @param dt - рассчитываемая дата
 	 * @return
 	 */
+/*
 	@Override
 	public boolean getPersCountByDate(Kart kart, Date dt) {
 		log.info("*** kart.lsk={}", kart.getLsk());
@@ -71,28 +72,29 @@ public class KartMngImpl implements KartMng {
 		}
 		return true;
 	}
+*/
+
+/*
+	*/
 
 	/**
 	 * Получить основной лиц.счет (родительский)
 	 * обычно для счетов РСО, капремонта требуется основной лиц.счет,
-	 * для получения информации о кол-ве проживающих, прочих параметрах, приявязанных к основному лиц.счету
-	 * @param kart - текущий лиц.счет
+	 * для получения информации о кол-ве проживающих, прочих параметрах, привязанных к основному лиц.счету
+	 * @param ko - объект помещения
 	 * @return
 	 */
 	@Override
-	public Kart getMainKart(Kart kart) {
-		if (kart.getParentKart() != null) {
-			// родительский указан явно
-			return kart.getParentKart();
-		} else {
-			for (Kart t : kart.getKoKw().getKart()) {
-				if (t.isActual() && t.getTp().getCd().equals("LSK_TP_MAIN")) {
-					return t;
-				}
+	public Kart getKartMain(Ko ko) {
+		Kart kart = null;
+		for (Kart t : ko.getKart()) {
+			kart = t;
+			if (t.isActual() && t.getTp().getCd().equals("LSK_TP_MAIN")) {
+				return t;
 			}
 		}
-		// не найден основной лиц.счет
-		return null;
+		// не найден основной лиц.счет, вернуть любой
+		return kart;
 	}
 
 

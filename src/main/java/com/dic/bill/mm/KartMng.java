@@ -13,7 +13,9 @@ public interface KartMng {
 
 	Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
 
+/*
 	boolean getPersCountByDate(Kart kart, Date dt);
+*/
+	Kart getKartMain(Ko ko);
 
-	Kart getMainKart(Kart kart);
 }

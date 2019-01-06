@@ -15,7 +15,7 @@ public class DetailUslPrice {
     // услуга свыше соцнормы
     public Usl uslOverNorm = null;
     // цена свыше соцнормы
-    public BigDecimal priceOverNorm = BigDecimal.ZERO;
+    public BigDecimal priceOverSoc = BigDecimal.ZERO;
 
     // услуга без проживающих
     public Usl uslEmpt = null;
