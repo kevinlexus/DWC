@@ -5,13 +5,13 @@ import com.dic.bill.model.scott.*;
 import java.math.BigDecimal;
 
 public interface TestDataBuilder {
-    Ko buildKartForTest(boolean isAddPers, boolean isAddNabor, boolean isAddMeter);
+    Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor, boolean isAddMeter);
 
     void buildMeterForTest(Kart kart);
 
     Meter addMeterForTest(Ko koObj, String uslId, String dt1, String dt2);
 
-    void buildKartPrForTest(Kart kart);
+    void buildKartPrForTest(Kart kart, int persCount);
 
     KartPr addKartPrForTest(Kart kart, int statusId, int relatId,
                             String fio, String dtBirdth, String dtReg,

@@ -1,17 +1,13 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Дом
  * @author lev
@@ -29,8 +25,9 @@ public class House implements java.io.Serializable {
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_House_id")
+	@SequenceGenerator(name="SEQ_House_id", sequenceName="scott.c_house_id", allocationSize=1)
+	@Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id записи
 
     @Column(name = "kul", updatable = false, nullable = false)
@@ -39,14 +36,19 @@ public class House implements java.io.Serializable {
     @Column(name = "nd", updatable = false, nullable = false)
 	private String nd;
 
-    // статус дома (0 - открытый, 1 - закрытый)
+    // статус дома (0 - открытый, 1 - закрытый) - Бред!
     @Column(name = "psch", updatable = false, nullable = true)
 	private Integer psch;
 
-	// Ko помешения (здесь OneToOne)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = false)
+	// Ko дома (здесь OneToOne)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true)
 	private Ko ko;
+
+	// лицевые счета
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
+	private List<Kart> kart = new ArrayList<>(0);
 
 	@Override
 	public boolean equals(Object o) {

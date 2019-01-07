@@ -4,36 +4,31 @@ import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-/** DTO для хранения параметров для расчета начисления по квартире
+/** DTO для хранения параметров для расчета начисления по дому
  *
  */
 @Getter @Setter
-public class ChrgCount {
+public class ChrgCountHouse {
 
   // параметры расчета: Фактическая услуга, цена, тип объема и т.п.
   private List<UslPriceVol> lstUslPriceVol = new ArrayList<>(10);
 
-  // все действующие счетчики объекта и их объемы
-  private List<SumMeterVol> lstMeterVol;
-
   /**
    * добавить новый период UslPriceVol
    * @param u - новый период со значениями
-   * u.dtFrom - текущая дата!
-   * u.dtTo - текущая дата!
    * u.vol - объем в доле дня от месяца!
    */
   public void groupUslPriceVol(UslPriceVol u) {
-    Date prevDt = Utl.addDays(u.dtFrom, -1);
-    // искать по предыдущей дате, основному ключу
-    UslPriceVol prev = lstUslPriceVol.stream().filter(t -> t.dtTo.equals(prevDt)
-            && t.usl.equals(u.usl) &&
-            t.org.equals(u.org) && t.isCounter == u.isCounter
-                    && t.isEmpty == u.isEmpty && t.socStdt.equals(u.socStdt)
-                    && t.price.equals(u.price) && t.priceOverSoc.equals(u.priceOverSoc)
-                    && t.priceEmpty.equals(u.priceEmpty)).findFirst().orElse(null);
+    // искать по основному ключу
+    UslPriceVol prev = lstUslPriceVol.stream().filter(t ->
+            t.usl.equals(u.usl) &&
+            t.isCounter == u.isCounter &&
+            t.isEmpty == u.isEmpty
+    ).findFirst().orElse(null);
     if (prev == null) {
       // добавить новый элемент
       lstUslPriceVol.add(u);
@@ -50,11 +45,7 @@ public class ChrgCount {
         prev.kpr=prev.kpr.add(u.kpr);
         prev.kprWr=prev.kprWr.add(u.kprWr);
         prev.kprOt=prev.kprOt.add(u.kprOt);
-
-        // продлить дату окончания
-        prev.dtTo=u.dtTo;
     }
-
   }
 
 }

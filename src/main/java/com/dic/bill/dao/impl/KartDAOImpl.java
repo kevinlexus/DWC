@@ -40,7 +40,7 @@ public class KartDAOImpl implements KartDAO {
      */
     @SuppressWarnings("unchecked")
 	@Override
-    public List<Kart> getRangeLsk(String lskFrom, String lskTo) {
+    public List<Kart> getListLsk(String lskFrom, String lskTo) {
     	Query query =em.createQuery("from Kart t "
     			+ "where t.id between :lskFrom and :lskTo "
     			+ "order by t.id");

@@ -39,6 +39,8 @@ public class CalcStore {
 	List<PenRef> lstPenRef;
 	// уровень отладочной информации
 	Integer debugLvl;
+	// хранилище параметров по дому (для ОДН и прочих нужд)
+	ChrgCountHouse chrgCountHouse;
 
 	// кол-во дней в месяце
 	public int getCntCurDays() {

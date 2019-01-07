@@ -88,7 +88,7 @@ public class Kart implements java.io.Serializable{
 	private Ko koLsk;
 
 	// дом
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true)
 	private House house;
 

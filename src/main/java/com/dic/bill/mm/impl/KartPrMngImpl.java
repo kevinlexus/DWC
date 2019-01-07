@@ -162,7 +162,6 @@ public class KartPrMngImpl implements KartPrMng {
 					}
 				} else {
 					// Код взят из C_KART строка 745
-					log.info("parCapCalcKprTp={}", parCapCalcKprTp);
 					if (status==1) { // ПЗ
 						isYanger70 = true;
 					} else if (parCapCalcKprTp==0 &&

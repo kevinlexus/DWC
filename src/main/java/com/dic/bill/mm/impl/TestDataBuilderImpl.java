@@ -31,19 +31,20 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 * @return
 	 */
 	/**
-	 *
+	 *   @param house - дом
+	 * @param suffix - суффикс лицевого счета
+	 * @param area - площадь квартиры
+	 * @param persCount - кол-во проживающих
 	 * @param isAddPers - добавлять спроживающих?
 	 * @param isAddNabor - добавлять наборы услуг?
-	 * @param isAddMeter - добавлять счетчики?
-	 * @return
-	 */
+	 * @param isAddMeter - добавлять счетчики?    @return     */
 	@Override
-	public Ko buildKartForTest(boolean isAddPers, boolean isAddNabor,
-								 boolean isAddMeter) {
+	public Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
+							   boolean isAddMeter) {
+
 		// помещение
 		Ko ko = new Ko();
 		Kart kart = new Kart();
-		House house = em.find(House.class, 6091);
 
 		// УК
 		Org uk = em.find(Org.class, 547);
@@ -57,9 +58,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		kart.setKoKw(ko);
 		kart.setHouse(house);
-		kart.setLsk("0000_ОСН");
+		kart.setLsk("ОСН_"+suffix);
 		kart.setPsch(0);
-		kart.setOpl(BigDecimal.valueOf(63.45));
+		kart.setOpl(area);
 		kart.setKul("0001");
 		kart.setNd("000001");
 		kart.setNum("0000001");
@@ -74,7 +75,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		if (isAddPers) {
 			// проживающие
-			buildKartPrForTest(kart);
+			buildKartPrForTest(kart, persCount);
 		}
 		if (isAddNabor) {
 			// наборы услуг
@@ -85,6 +86,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			buildMeterForTest(kart);
 		}
 
+		house.getKart().add(kart);
 		em.persist(kart);
 
 		// Лиц.счет РСО
@@ -100,7 +102,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		kart.setKoKw(ko);
 		kart.setHouse(house);
-		kart.setLsk("0000_РСО");
+		kart.setLsk("РСО_"+suffix);
 		kart.setPsch(0);
 		//kart.setOpl(BigDecimal.valueOf(63.45));
 		kart.setKul("0001");
@@ -120,6 +122,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			buildNaborForTest(kart, 1);
 		}
 
+		house.getKart().add(kart);
 		em.persist(kart);
 
 		// Лиц.счет Капремонта
@@ -135,7 +138,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		kart.setKoKw(ko);
 		kart.setHouse(house);
-		kart.setLsk("0000_КАП");
+		kart.setLsk("КАП_"+suffix);
 		kart.setPsch(0);
 		//kart.setOpl(BigDecimal.valueOf(63.45));
 		kart.setKul("0001");
@@ -155,6 +158,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			buildNaborForTest(kart, 2);
 		}
 
+		house.getKart().add(kart);
 		em.persist(kart);
 
 		return ko;
@@ -233,34 +237,40 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 
 	@Override
-	public void buildKartPrForTest(Kart kart) {
+	public void buildKartPrForTest(Kart kart, int persCount) {
 		KartPr kartPr;
-		// Антонов (собственник)
-		kartPr = addKartPrForTest(kart, 1,11,"Антонов", "01.01.1913",
-				"02.04.2014", "30.04.2014");
-		addStatePrForTest(kartPr,1, "02.04.2014", "30.04.2014");
+		if (persCount >= 1) {
+			// Антонов (собственник)
+			kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
+					"02.04.2014", "30.04.2014");
+			addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
+		}
 
-		// Сидоров
+		if (persCount >= 2) {
+			// Сидоров
+			kartPr = addKartPrForTest(kart, 1, 3, "Сидоров", "01.01.1971",
+					"03.04.2014", "30.04.2014");
+			addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
+			// временное отсутствие
+			addStatePrForTest(kartPr, 2, "05.04.2014", "09.04.2014");
+		}
 
-		kartPr = addKartPrForTest(kart, 1,3, "Сидоров", "01.01.1971",
-				"03.04.2014", "30.04.2014");
-		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
-		// временное отсутствие
-		addStatePrForTest(kartPr, 2, "05.04.2014", "09.04.2014");
+		if (persCount >= 3) {
+			// Тарасов
+			kartPr = addKartPrForTest(kart, 1, 3, "Тарасов", "01.01.1912",
+					"02.04.2014", "30.04.2014");
+			addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
+		}
 
-
-		// Тарасов
-		kartPr = addKartPrForTest(kart, 1,3, "Тарасов", "01.01.1912",
-				"02.04.2014", "30.04.2014");
-		addStatePrForTest(kartPr, 1, "02.04.2014", "30.04.2014");
-
-		// Федоров
-		kartPr = addKartPrForTest(kart, 3,3, "Федоров", "01.01.1972",
-				"03.04.2014", "30.04.2014");
-		// убытие
-		addStatePrForTest(kartPr, 4, null, null);
-		// временная регистрация
-		addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
+		if (persCount == 4) {
+			// Федоров
+			kartPr = addKartPrForTest(kart, 3,3, "Федоров", "01.01.1972",
+					"03.04.2014", "30.04.2014");
+			// убытие
+			addStatePrForTest(kartPr, 4, null, null);
+			// временная регистрация
+			addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
+		}
 
 	}
 
@@ -335,6 +345,19 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			// Прочие услуги, расчитываемые как расценка * норматив * Общ.площадь, только НЕ по муницип фонду
 			addNaborForTest(kart, 1, "119", BigDecimal.valueOf(1.2), BigDecimal.valueOf(1.3),
 					null, null, null);
+
+			// Повыш.коэфф к услуге Х.В.
+			addNaborForTest(kart, 2, "092", BigDecimal.valueOf(1), BigDecimal.valueOf(2.5),
+					null, null, null);
+
+			// Вывоз мусора - кол-во прожив * норматив (Кис.)
+			addNaborForTest(kart, 5, "140", BigDecimal.valueOf(1), null,
+					null, null, null);
+
+			// Очистка выгр.ям (Полыс.)
+			addNaborForTest(kart, 5, "141", BigDecimal.valueOf(1), null,
+					null, null, null);
+
 		} else if (tp==1) {
 			// РСО лиц.счет
 			// х.в.
