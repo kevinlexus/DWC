@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Lock {
 	// список блокировок по лицевым счетам
-	public List<String> lstLsk;
+	public List<Integer> lstLsk;
 	// список блокировок по долго продолжающимся процессам
 	public List<String> procLock;
 	// маркеры выполнения долго продолжающихся процессов
@@ -22,7 +22,7 @@ public class Lock {
 
 	// конструктор
 	public Lock() {
-		lstLsk = new ArrayList<String>();
+		lstLsk = new ArrayList<>();
 		procLock = new ArrayList<String>();
 		procExec = new ArrayList<String>();
 	}
@@ -72,14 +72,14 @@ public class Lock {
 	}
 
 	// блокировка по лиц.счету
-	public synchronized Boolean setLockLsk(Integer rqn, String lsk) {
-		if (this.lstLsk.contains(lsk)) {
+	public synchronized Boolean setLockLsk(Integer rqn, int klskId) {
+		if (this.lstLsk.contains(klskId)) {
 			// запрет блокировки
 			//log.info("==LOCK== ERROR RQN={}, запрет блокировки по lsk={}, идёт блокировка другим потоком!", lsk);
 			return false;
 		} else {
 			// выполнить блокировку
-			this.lstLsk.add(lsk);
+			this.lstLsk.add(klskId);
 			//log.info("==LOCK== RQN={}, блокировка выполнена: lsk={}", rqn, lsk);
 			return true;
 		}
@@ -87,9 +87,9 @@ public class Lock {
 	}
 
 	// разблокировать лиц.счет
-	public synchronized void unlockLsk(Integer rqn, String lsk) {
+	public synchronized void unlockLsk(Integer rqn, int klskId) {
 		//log.info("==UNLOCK== RQN={}, блокировка снята: lsk={}", rqn, lsk);
-		this.lstLsk.remove(lsk);
+		this.lstLsk.remove(klskId);
 	}
 
 }

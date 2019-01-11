@@ -4,8 +4,13 @@ import javax.annotation.Generated;
 
 //import com.dic.bill.model.scott.SessionDirect;
 
+import com.dic.bill.model.scott.House;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Vvod;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 /**
  * Конфигуратор запроса
@@ -17,8 +22,22 @@ public class RequestConfig {
 
 	// Id запроса
 	int rqn;
-	// тип выполнения 0-начисление, 1-задолженность и пеня
-	int tp;
+	// тип выполнения 0-начисление, 1-задолженность и пеня, 2 - распределение объемов по вводу
+	int tp=0;
+	// уровень отладки
+	int debugLvl=0;
+	// дата на которую сформировать
+	Date genDt=null;
+	// выполнять многопоточно
+	boolean isMultiThreads=false;
+
+	// объекты формирования:
+	// квартира
+	Ko ko = null;
+	// дом
+	House house = null;
+	// ввод
+	Vvod vvod = null;
 
 	public static final class RequestConfigBuilder {
 		// Id запроса

@@ -1,5 +1,7 @@
 package com.dic.bill.dto;
 
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +19,10 @@ import java.util.List;
 @Setter
 public class ChrgCount {
 
-    // параметры расчета: Фактическая услуга, цена, тип объема и т.п.
+    // квартира
+    private Ko ko;
+
+    // сгруппированные параметры расчета: Фактическая услуга, цена, тип объема и т.п.
     private List<UslPriceVol> lstUslPriceVol = new ArrayList<>(10);
 
     // все действующие счетчики объекта и их объемы
@@ -26,15 +31,16 @@ public class ChrgCount {
     /**
      * добавить новый период UslPriceVol
      *
-     * @param u - новый период со значениями
+     * @param u - новый период с объемами
      *          u.dtFrom - текущая дата!
      *          u.dtTo - текущая дата!
      *          u.vol - объем в доле дня от месяца!
      */
     public void groupUslPriceVol(UslPriceVol u) {
         Date prevDt = Utl.addDays(u.dtFrom, -1);
-        // искать по предыдущей дате, основному ключу
-        UslPriceVol prev = lstUslPriceVol.stream().filter(t -> t.dtTo.equals(prevDt)
+        // искать по лиц.счету, предыдущей дате, основному ключу
+        UslPriceVol prev = lstUslPriceVol.stream().filter(t -> t.kart.equals(u.kart)
+                && t.dtTo.equals(prevDt)
                 && t.usl.equals(u.usl) &&
                 t.org.equals(u.org) && t.isCounter == u.isCounter
                 && t.isEmpty == u.isEmpty && t.socStdt.equals(u.socStdt)

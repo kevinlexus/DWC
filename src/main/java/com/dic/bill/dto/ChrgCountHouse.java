@@ -16,11 +16,11 @@ import java.util.Map;
 @Setter
 public class ChrgCountHouse {
 
-    // список квартир и лиц.счетов внутри ChrgCount.lstUslPriceVol с объемами
+    // список квартир и лиц.счетов, с объемами для начисления
     private List<ChrgCount> lstChrgCount = new ArrayList();
 
     // добавить информацию по квартире
-    public void addUslPriceVol(ChrgCount chrgCount) {
+    public void addChrgCount(ChrgCount chrgCount) {
         lstChrgCount.add(chrgCount);
     }
 }

@@ -1,12 +1,16 @@
 package com.dic.bill.dao.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.dic.bill.model.scott.House;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Vvod;
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.dao.KartDAO;
@@ -47,6 +51,36 @@ public class KartDAOImpl implements KartDAO {
 		query.setParameter("lskFrom", lskFrom);
 		query.setParameter("lskTo", lskTo);
 		return query.getResultList();
+	}
+
+	/**
+	 * Получить все квартиры
+	 * @return
+	 */
+	@Override
+	public List<Ko> getKoAll() {
+		Query query =em.createQuery("select distinct t.ko from Kart t");
+		return query.getResultList();
+	}
+
+	/**
+	 * Получить все квартиры по дому
+	 * @param house - дом
+	 * @return
+	 */
+	@Override
+	public List<Ko> getKoByHouse(House house) {
+		return house.getKart().stream().map(t->t.getKoKw()).distinct().collect(Collectors.toList());
+	}
+
+	/**
+	 * Получить квартиры по вводу
+	 * @param vvod - ввод
+	 * @return
+	 */
+	@Override
+	public List<Ko> getKoByVvod(Vvod vvod) {
+		return vvod.getNabor().stream().map(t -> t.getKart().getKoKw()).distinct().collect(Collectors.toList());
 	}
 
 	/**

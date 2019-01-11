@@ -1,5 +1,6 @@
 package com.dic.bill.dto;
 
+import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Org;
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
@@ -15,6 +16,8 @@ import java.util.Date;
  */
 public class UslPriceVol {
 
+    // лиц.счет
+    public Kart kart;
     // дата начала
     public Date dtFrom;
     // дата окончания
@@ -59,6 +62,8 @@ public class UslPriceVol {
     public BigDecimal kprOt = BigDecimal.ZERO;
 
     public static final class UslPriceVolBuilder {
+        // лиц.счет
+        public Kart kart;
         // дата начала
         public Date dtFrom;
         // дата окончания
@@ -105,6 +110,11 @@ public class UslPriceVol {
 
         public static UslPriceVolBuilder anUslPriceVol() {
             return new UslPriceVolBuilder();
+        }
+
+        public UslPriceVolBuilder withKart(Kart kart) {
+            this.kart = kart;
+            return this;
         }
 
         public UslPriceVolBuilder withDtFrom(Date dtFrom) {
@@ -209,6 +219,7 @@ public class UslPriceVol {
 
         public UslPriceVol build() {
             UslPriceVol uslPriceVol = new UslPriceVol();
+            uslPriceVol.kart = this.kart;
             uslPriceVol.usl = this.usl;
             uslPriceVol.org = this.org;
             uslPriceVol.socStdt = this.socStdt;
