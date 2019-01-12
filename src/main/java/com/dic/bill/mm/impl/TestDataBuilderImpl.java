@@ -166,6 +166,26 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 
 	/**
+	 * Построитель вводов
+	 * @param house
+	 * @param uslId
+	 * @param distTp
+	 * @param isChargeInNotHeatingPeriod
+	 */
+	@Override
+	public void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod) {
+		Usl usl = em.find(Usl.class, uslId);
+		Vvod vvod = new Vvod();
+		vvod.setUsl(usl);
+		vvod.setHouse(house);
+		// тип распределения
+		vvod.setDistTp(distTp);
+		// начислять в неотапливаемый период
+		vvod.setIsChargeInNotHeatingPeriod(isChargeInNotHeatingPeriod);
+		house.getVvod().add(vvod);
+	}
+
+	/**
 	 * Построитель счетчиков по лиц.счету (квартире)
 	 * @param kart - лиц.счет
 	 */
@@ -378,16 +398,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			addNaborForTest(kart, 1, "026", BigDecimal.valueOf(1), null,
 					null, null, null);
 
-			Usl usl = em.find(Usl.class, "053");
-			Vvod vvod = new Vvod();
-			vvod.setUsl(usl);
-			vvod.setHouse(kart.getHouse());
-			vvod.setDistTp(1); // 1 - распределение в nabor.vol
-			vvod.setIsChargeInNotHeatingPeriod(true);
-
-			// Отопление Гкал
-			addNaborForTest(kart, 6, "053", BigDecimal.valueOf(1), null,
-					BigDecimal.valueOf(2.70547), null, vvod);
+			for (Vvod vvod : kart.getHouse().getVvod()) {
+				if (vvod.getUsl().getId().equals("053")) {
+					// Отопление Гкал
+					addNaborForTest(kart, 6, "053", BigDecimal.valueOf(1), null,
+							BigDecimal.valueOf(2.70547), null, vvod);
+				}
+			}
 			// Отопление Гкал 0 зарег.
 			addNaborForTest(kart, 6, "054", BigDecimal.valueOf(1), null,
 					null, null, null);
@@ -425,6 +442,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		nabor.setVolAdd(volAdd);
 		nabor.setVvod(vvod);
 		kart.getNabor().add(nabor);
+		if (vvod!=null) {
+			vvod.getNabor().add(nabor);
+		}
 	}
 
 }

@@ -33,22 +33,22 @@ public class Nabor implements java.io.Serializable  {
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false, nullable = false, insertable = true)
 	private Kart kart;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false, insertable = true)
 	private Usl usl;
 
 	// организация - поставщик услуги
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
+	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false, insertable = true)
 	private Org org;
 
 	// ввод
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false, nullable = false)
+	@JoinColumn(name="FK_VVOD", referencedColumnName="ID", updatable = false, insertable = true)
 	private Vvod vvod;
 
 	@Column(name = "KOEFF")

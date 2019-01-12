@@ -50,6 +50,11 @@ public class House implements java.io.Serializable {
 	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
 	private List<Kart> kart = new ArrayList<>(0);
 
+	// вводы
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
+	private List<Vvod> vvod = new ArrayList<>(0);
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
