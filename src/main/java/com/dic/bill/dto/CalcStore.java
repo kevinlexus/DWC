@@ -8,7 +8,6 @@ import java.util.List;
 import com.dic.bill.model.scott.PenDt;
 import com.dic.bill.model.scott.PenRef;
 
-import com.dic.bill.model.scott.StatePr;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,8 +38,8 @@ public class CalcStore {
 	List<PenRef> lstPenRef;
 	// уровень отладочной информации
 	Integer debugLvl;
-	// хранилище параметров по дому (для ОДН и прочих нужд)
-	ChrgCountHouse chrgCountHouse;
+	// хранилище параметров по вводу (дому) (для ОДН и прочих нужд)
+	ChrgCountAmount chrgCountAmount;
 
 	// кол-во дней в месяце
 	public int getCntCurDays() {

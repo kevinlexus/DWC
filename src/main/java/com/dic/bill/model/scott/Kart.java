@@ -74,7 +74,7 @@ public class Kart implements java.io.Serializable{
 
 	// статус лиц.счета
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="STATUS", referencedColumnName="ID", updatable = false, insertable = true)
+	@JoinColumn(name="STATUS", referencedColumnName="ID", nullable = false, updatable = false, insertable = true)
 	private Status status;
 
 	// Ko помешения
@@ -137,6 +137,12 @@ public class Kart implements java.io.Serializable{
 			// открытый
 			return true;
 		}
+	}
+
+	// жилой счет?
+	@Transient
+	public boolean isResidental() {
+		return status.getId().equals(9)? false : true;
 	}
 
 	@Override

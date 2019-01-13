@@ -1,6 +1,5 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Ko;
 import com.ric.cmn.Utl;
 import lombok.Getter;
@@ -23,50 +22,47 @@ public class ChrgCount {
     private Ko ko;
 
     // сгруппированные параметры расчета: Фактическая услуга, цена, тип объема и т.п.
-    private List<UslPriceVol> lstUslPriceVol = new ArrayList<>(10);
+    private List<UslPriceVolKart> lstUslPriceVolKart = new ArrayList<>(10);
 
     // все действующие счетчики объекта и их объемы
     private List<SumMeterVol> lstMeterVol;
 
     /**
-     * добавить новый период UslPriceVol
+     * добавить новый период UslPriceVolKart
      *
      * @param u - новый период с объемами
      *          u.dtFrom - текущая дата!
      *          u.dtTo - текущая дата!
      *          u.vol - объем в доле дня от месяца!
      */
-    public void groupUslPriceVol(UslPriceVol u) {
+    public void groupUslPriceVolKart(UslPriceVolKart u) {
         Date prevDt = Utl.addDays(u.dtFrom, -1);
         // искать по лиц.счету, предыдущей дате, основному ключу
-        UslPriceVol prev = lstUslPriceVol.stream().filter(t -> t.kart.equals(u.kart)
+        UslPriceVolKart prevUslPriceVolKart = lstUslPriceVolKart.stream().filter(t -> t.kart.equals(u.kart)
                 && t.dtTo.equals(prevDt)
                 && t.usl.equals(u.usl) &&
-                t.org.equals(u.org) && t.isCounter == u.isCounter
+                t.org.equals(u.org) && t.isCounter == u.isCounter && t.isResidental == u.isResidental
                 && t.isEmpty == u.isEmpty && t.socStdt.equals(u.socStdt)
                 && t.price.equals(u.price) && t.priceOverSoc.equals(u.priceOverSoc)
                 && t.priceEmpty.equals(u.priceEmpty)).findFirst().orElse(null);
-        if (prev == null) {
+        if (prevUslPriceVolKart == null) {
             // добавить новый элемент
-            lstUslPriceVol.add(u);
+            lstUslPriceVolKart.add(u);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденный период
-            prev.area = prev.area.add(u.area);
-            prev.areaOverSoc = prev.areaOverSoc.add(u.areaOverSoc);
-            prev.areaEmpty = prev.areaEmpty.add(u.areaEmpty);
+            prevUslPriceVolKart.area = prevUslPriceVolKart.area.add(u.area);
+            prevUslPriceVolKart.areaOverSoc = prevUslPriceVolKart.areaOverSoc.add(u.areaOverSoc);
 
-            prev.vol = prev.vol.add(u.vol);
-            prev.volOverSoc = prev.volOverSoc.add(u.volOverSoc);
-            prev.volEmpty = prev.volEmpty.add(u.volEmpty);
+            prevUslPriceVolKart.vol = prevUslPriceVolKart.vol.add(u.vol);
+            prevUslPriceVolKart.volOverSoc = prevUslPriceVolKart.volOverSoc.add(u.volOverSoc);
 
-            prev.kpr = prev.kpr.add(u.kpr);
-            prev.kprWr = prev.kprWr.add(u.kprWr);
-            prev.kprOt = prev.kprOt.add(u.kprOt);
+            prevUslPriceVolKart.kpr = prevUslPriceVolKart.kpr.add(u.kpr);
+            prevUslPriceVolKart.kprWr = prevUslPriceVolKart.kprWr.add(u.kprWr);
+            prevUslPriceVolKart.kprOt = prevUslPriceVolKart.kprOt.add(u.kprOt);
 
             // продлить дату окончания
-            prev.dtTo = u.dtTo;
+            prevUslPriceVolKart.dtTo = u.dtTo;
         }
-
     }
 
 }

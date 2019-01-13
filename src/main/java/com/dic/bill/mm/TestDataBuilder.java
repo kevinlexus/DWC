@@ -5,7 +5,8 @@ import com.dic.bill.model.scott.*;
 import java.math.BigDecimal;
 
 public interface TestDataBuilder {
-    Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor, boolean isAddMeter);
+    Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers,
+                        boolean isAddNabor, boolean isAddMeter, int statusId);
 
     void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod);
 

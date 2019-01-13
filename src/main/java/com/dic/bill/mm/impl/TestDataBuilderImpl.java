@@ -37,10 +37,12 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 * @param persCount - кол-во проживающих
 	 * @param isAddPers - добавлять спроживающих?
 	 * @param isAddNabor - добавлять наборы услуг?
-	 * @param isAddMeter - добавлять счетчики?    @return     */
+	 * @param isAddMeter - добавлять счетчики?    @return
+	 * @param statusId - Id статуса
+	 * */
 	@Override
 	public Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
-							   boolean isAddMeter) {
+							   boolean isAddMeter, int statusId) {
 
 		// помещение
 		Ko ko = new Ko();
@@ -52,7 +54,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		Lst tp = lstDao.getByCd("LSK_TP_MAIN");
 		kart.setTp(tp);
 		// муницип статус
-		Status status = em.find(Status.class, 1);
+		Status status = em.find(Status.class, statusId);
 		// приват статус
 		//Status status = em.find(Status.class, 2);
 
