@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +44,56 @@ public class Vvod implements java.io.Serializable {
 	// распределение воды по дому (0, null-пропорционально расходу, 2-нет услуги, не считать вообще, 1 - проп. площади,
 	// 4-по дому, без ОДПУ, есть возм.установки, 5-по дому, без ОДПУ, нет возм.установки,
 	// 6-просто учитывать объем, 7 - информационно отобразить объем в Счете в ОДПУ)
-    @Column(name = "dist_tp", updatable = false, nullable = true, insertable = true)
+    @Column(name = "DIST_TP", updatable = false, nullable = true, insertable = true)
 	private Integer distTp;
+
+	// объем для распределения
+	@Column(name = "KUB", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kub;
+
+	// объем по счетчикам
+	@Column(name = "KUB_SCH", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubSch;
+
+	// объем по нормативу
+	@Column(name = "KUB_NORM", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubNorm;
+
+	// объем по нежилым
+	@Column(name = "KUB_AR", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubAr;
+
+	// распределенный объем
+	@Column(name = "KUB_DIST", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubDist;
+
+	// дораспр.факт - на норматив
+	@Column(name = "KUB_NRM_FACT", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubNrmFact;
+
+	// дораспр.факт - на счетчики
+	@Column(name = "KUB_SCH_FACT", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubSchFact;
+
+	// кол-во лиц.счетов со счетчиками
+	@Column(name = "SCH_CNT", updatable = true, nullable = true, insertable = true)
+	private BigDecimal schCnt;
+
+	// кол-во лиц.счетов по нормативу
+	@Column(name = "CNT_LSK", updatable = true, nullable = true, insertable = true)
+	private BigDecimal cntLsk;
+
+	// кол-во людей по счетч.
+	@Column(name = "SCH_KPR", updatable = true, nullable = true, insertable = true)
+	private BigDecimal schKpr;
+
+	// площадь по вводу
+	@Column(name = "OPL_ADD", updatable = true, nullable = true, insertable = true)
+	private BigDecimal oplAdd;
+
+	// площадь по нежилым
+	@Column(name = "OPL_AR", updatable = true, nullable = true, insertable = true)
+	private BigDecimal oplAr;
 
 	// набор услуг
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
@@ -55,6 +104,11 @@ public class Vvod implements java.io.Serializable {
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "NON_HEAT_PER", nullable = true, insertable = true)
 	private Boolean isChargeInNotHeatingPeriod;
+
+	// использовать счетчики для распределения?
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "USE_SCH", nullable = true, insertable = true)
+	private Boolean isUseMeterForDist;
 
 	@Override
 	public boolean equals(Object o) {

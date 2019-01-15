@@ -1,13 +1,6 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Задолженности по периодам
@@ -16,14 +9,14 @@ import javax.persistence.Table;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGEPREP", schema="SCOTT")
+@Table(name = "C_CHARGEPREP", schema="TEST")
 @IdClass(ChargePrepId.class) // суррогантый первичный ключ
 public class ChargePrep implements java.io.Serializable {
 
-	public ChargePrep() {
-	}
-
-    @Id
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ChargePrep_id")
+	@SequenceGenerator(name="SEQ_ChargePrep_id", sequenceName="scott.c_charge_prep_id", allocationSize=1)
+	@Column(name = "ID", updatable = false, nullable = false)
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")

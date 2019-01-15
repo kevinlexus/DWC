@@ -18,8 +18,11 @@ public class ChrgCountAmount {
     // сгруппированные по вводу объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolVvod> lstUslVolVvod = new ArrayList<>(10);
 
-    // сгруппированные по квартире объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
+    // сгруппированные по лиц.счету объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolKart> lstUslVolKart = new ArrayList<>(10);
+
+    // сгруппированные по базовым параметрам, по лиц.счету объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
+    private List<UslVolKartGrp> lstUslVolKartGrp = new ArrayList<>(10);
 
     /**
      * сгруппировать объемы для распределения по вводам
@@ -49,6 +52,26 @@ public class ChrgCountAmount {
             prevUslVolKart.vol = prevUslVolKart.vol.add(u.vol).add(u.volOverSoc);
             prevUslVolKart.area = prevUslVolKart.area.add(u.area).add(u.areaOverSoc);
             prevUslVolKart.kpr = prevUslVolKart.kpr.add(u.kpr);
+        }
+
+        // сгруппировать объемы по базовым параметрам, по лиц.счетам для распределения по вводам
+        UslVolKartGrp prevUslVolKartGrp = lstUslVolKartGrp.stream().filter(t -> t.kart.equals(u.kart)
+                && t.usl.equals(u.usl)
+        ).findFirst().orElse(null);
+        if (prevUslVolKartGrp == null) {
+            // добавить новый элемент
+            UslVolKartGrp uslVolKartGrp = new UslVolKartGrp();
+            uslVolKartGrp.kart = u.kart;
+            uslVolKartGrp.usl = u.usl;
+            uslVolKartGrp.vol = u.vol.add(u.volOverSoc);
+            uslVolKartGrp.area = u.area.add(u.areaOverSoc);
+            uslVolKartGrp.kpr = u.kpr;
+            lstUslVolKartGrp.add(uslVolKartGrp);
+        } else {
+            // такой же по ключевым параметрам, добавить данные в найденный период
+            prevUslVolKartGrp.vol = prevUslVolKartGrp.vol.add(u.vol).add(u.volOverSoc);
+            prevUslVolKartGrp.area = prevUslVolKartGrp.area.add(u.area).add(u.areaOverSoc);
+            prevUslVolKartGrp.kpr = prevUslVolKartGrp.kpr.add(u.kpr);
         }
 
         // сгруппировать по вводу

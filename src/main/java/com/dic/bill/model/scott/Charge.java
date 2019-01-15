@@ -2,13 +2,7 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,15 +15,14 @@ import lombok.Setter;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGE", schema="SCOTT")
+@Table(name = "C_CHARGE", schema="TEST")
 @Getter @Setter
 public class Charge implements java.io.Serializable  {
 
-	public Charge() {
-	}
-
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Charge_id")
+	@SequenceGenerator(name="SEQ_Charge_id", sequenceName="scott.c_charge_id", allocationSize=1)
+	@Column(name = "ID", updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
