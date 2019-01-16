@@ -112,7 +112,7 @@ public class Vvod implements java.io.Serializable {
 	// использовать счетчики для распределения?
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "USE_SCH", nullable = true, insertable = true)
-	private Boolean isUseMeterForDist;
+	private Boolean isUseSch;
 
 	@Override
 	public boolean equals(Object o) {

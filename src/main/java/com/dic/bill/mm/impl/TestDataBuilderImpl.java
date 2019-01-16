@@ -404,13 +404,14 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 					addNaborForTest(kart, 6, "053", BigDecimal.valueOf(1), null,
 							BigDecimal.valueOf(2.70547), null, vvod);
 
-/* проверял очистку объемов ОДН можно удалить! */
+					/* проверял очистку объемов ОДН можно удалить!
 					ChargePrep chargePrep = new ChargePrep();
 					chargePrep.setKart(kart);
 					chargePrep.setUsl(vvod.getUsl());
 					chargePrep.setVol(new BigDecimal("555555.555"));
 					chargePrep.setTp(4);
 					kart.getChargePrep().add(chargePrep);
+					*/
 
 				} else if (vvod.getUsl().getId().equals("011")) {
 					// х.в.
@@ -422,13 +423,14 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 					addNaborForTest(kart, 3, "056", BigDecimal.valueOf(1), null,
 							null, null, null);
 
-					/* проверял очистку объемов ОДН можно удалить! */
+					/* проверял очистку объемов ОДН можно удалить!
 					Charge charge = new Charge();
 					charge.setKart(kart);
 					charge.setUsl(vvod.getUsl().getUslChild());
 					charge.setType(5);
 					charge.setSumma(new BigDecimal("7777777.77"));
 					kart.getCharge().add(charge);
+					*/
 				}
 			}
 			// Отопление Гкал 0 зарег.
