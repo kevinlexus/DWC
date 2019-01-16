@@ -91,6 +91,10 @@ public class Vvod implements java.io.Serializable {
 	@Column(name = "OPL_ADD", updatable = true, nullable = true, insertable = true)
 	private BigDecimal oplAdd;
 
+	// норматив по ОДН, для отчётов, рассчитывается либо по таблице opl_liter, либо в условии
+	@Column(name = "NRM", updatable = true, nullable = true, insertable = true)
+	private BigDecimal nrm;
+
 	// площадь по нежилым
 	@Column(name = "OPL_AR", updatable = true, nullable = true, insertable = true)
 	private BigDecimal oplAr;

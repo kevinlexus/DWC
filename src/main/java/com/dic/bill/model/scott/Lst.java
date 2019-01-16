@@ -37,6 +37,10 @@ public class Lst implements java.io.Serializable {
     @Column(name = "NAME", updatable = false, nullable = false)
 	private String name;
 
+	// тип значения
+	@Column(name = "VAL_TP", updatable = false, nullable = false)
+	private String valTp;
+
     // тип списка
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")

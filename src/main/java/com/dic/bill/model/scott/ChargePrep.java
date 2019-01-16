@@ -1,5 +1,8 @@
 package com.dic.bill.model.scott;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -9,8 +12,9 @@ import javax.persistence.*;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGEPREP", schema="TEST")
+@Table(name = "C_CHARGEPREP", schema="SCOTT")
 @IdClass(ChargePrepId.class) // суррогантый первичный ключ
+@Getter @Setter
 public class ChargePrep implements java.io.Serializable {
 
 	@Id
@@ -37,7 +41,10 @@ public class ChargePrep implements java.io.Serializable {
     @Column(name = "summa", updatable = false, nullable = false)
 	private Double summa; // сумма
 
-
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	private Usl usl;
 
 }
 

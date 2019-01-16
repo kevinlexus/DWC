@@ -127,6 +127,16 @@ public class Kart implements java.io.Serializable{
 	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<KartPr> kartPr = new ArrayList<>(0);
 
+	// текущие начисления
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<Charge> charge = new ArrayList<>(0);
+
+	// подготовительная информация для расчета начисления
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<ChargePrep> chargePrep = new ArrayList<>(0);
+
 	// актуальный ли лицевой счет?
 	@Transient
 	public boolean isActual() {
