@@ -85,6 +85,11 @@ public class Usl implements java.io.Serializable  {
 	@Column(name = "USL_ORDER", updatable = false, nullable = true)
 	private Integer uslOrder;
 
+	// дочерняя услуга (связанная) например х.в.--> х.в.МОП.
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_USL_CHLD", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private Usl uslChild;
+
 	/**
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)
 	 * @return

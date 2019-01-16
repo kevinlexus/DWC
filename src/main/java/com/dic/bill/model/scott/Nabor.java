@@ -65,6 +65,10 @@ public class Nabor implements java.io.Serializable  {
 	@Column(name = "VOL_ADD")
 	private BigDecimal volAdd;
 
+	// лимит объема по услуге (Используется при начислении по ОДН)
+	@Column(name = "LIMIT")
+	private BigDecimal limit;
+
 	/**
 	 * Получить статус действующей услуги
 	 * @return

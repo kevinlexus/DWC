@@ -4,47 +4,47 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
- * Задолженности по периодам
- * @author lev
+ * Подготовительная информация для расчета начисления
  *
+ * @author lev
  */
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGEPREP", schema="SCOTT")
-@IdClass(ChargePrepId.class) // суррогантый первичный ключ
-@Getter @Setter
-public class ChargePrep implements java.io.Serializable {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ChargePrep_id")
-	@SequenceGenerator(name="SEQ_ChargePrep_id", sequenceName="scott.c_charge_prep_id", allocationSize=1)
-	@Column(name = "ID", updatable = false, nullable = false)
-	// лиц.счет
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK")
-	private Kart kart;
+@Table(name = "C_CHARGE_PREP", schema = "SCOTT")
+@Getter
+@Setter
+public class ChargePrep {
 
     @Id
-	@Column(name = "type", updatable = false, nullable = false)
-	private Integer type; // Тип записи, 0 - начисление, 1 - оплата
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ChargePrep_id")
+    @SequenceGenerator(name = "SEQ_ChargePrep_id", sequenceName = "scott.c_charge_prep_id", allocationSize = 1)
+    @Column(name = "ID", updatable = false, nullable = false)
+    private Integer id;
 
-    @Id
-    @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период
+    // лиц.счет
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false, insertable = true)
+    private Kart kart;
 
-    @Id
-    @Column(name = "period", updatable = false, nullable = false)
-	private String period; // период бухгалтерский
+    // Тип записи (0-предварительный подсчет,1 - сгруппированный до ключевых структур,
+    // 2 - кол-во прож.для опред.соцнормы 3 - итог объёма, проживающих,
+    // 4 - корректировки ОДН, 5 - детально, но без корректировок ОДН, 6 - итог объёма, проживающих без коррект. ОДН)
+    // 7 - просто, наличие счетчика 8-детализация льготы, 9 - наличие льготы (используется совместно с dt1,dt2)
+    // NOTE ИСПОЛЬЗОВАТЬ В JAVA только 4! Решил использовать только данный тип, так как остальные - не нужны в
+    // NOTE Java - начислении ред.16.01.2019
+    @Column(name = "tp", updatable = false, nullable = false, insertable = true)
+    private Integer tp;
 
-    @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма
+    // услуга
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false, insertable = true)
+    private Usl usl;
 
-	// услуга
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
-	private Usl usl;
+    // объем
+    @Column(name = "vol", updatable = false, nullable = false, insertable = true)
+    private BigDecimal vol;
 
 }
 
