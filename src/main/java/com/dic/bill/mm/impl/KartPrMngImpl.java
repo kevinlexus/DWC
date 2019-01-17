@@ -54,7 +54,6 @@ public class KartPrMngImpl implements KartPrMng {
 				}
 			}
 
-
 			if (parVarCntKpr==0) {
 				// Киселёвск
 				if ((status==4 || status==0) && statusTemp==3) {
@@ -74,7 +73,12 @@ public class KartPrMngImpl implements KartPrMng {
 					countPers.kprMax++;
 				} else if ((status==1 || status==5) && statusTemp==2) {
 					// прописан или статус=для_начисления и временно отсут.
-					if (nabor.getUsl().isHousing()) {
+					if (nabor.getUsl().getId().equals("140")
+							&& dt.getTime() >= Utl.getDateFromStr("01.01.2019").getTime()) {
+						// вывоз ТКО, note редакция работает по просьбе КИС с 01.01.2019! потом убрать временное ограничение!
+						countPers.kpr++;
+						countPers.kprNorm++;
+					} else if (nabor.getUsl().isHousing()) {
 						// жилищная услуга
 						countPers.kpr++;
 					}

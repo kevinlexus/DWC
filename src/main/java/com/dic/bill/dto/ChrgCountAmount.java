@@ -18,10 +18,10 @@ public class ChrgCountAmount {
     // сгруппированные по вводу объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolVvod> lstUslVolVvod = new ArrayList<>(10);
 
-    // сгруппированные по лиц.счету объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
+    // сгруппированные до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolKart> lstUslVolKart = new ArrayList<>(10);
 
-    // сгруппированные по базовым параметрам, по лиц.счету объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
+    // сгруппированные по базовым параметрам, до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolKartGrp> lstUslVolKartGrp = new ArrayList<>(10);
 
     /**
@@ -66,6 +66,14 @@ public class ChrgCountAmount {
             uslVolKartGrp.vol = u.vol.add(u.volOverSoc);
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
             uslVolKartGrp.kpr = u.kpr;
+            if (u.isCounter) {
+                // если хоть один раз был в периоде счетчик - поставить отметку
+                uslVolKartGrp.isExistMeterCurrPeriod = true;
+            }
+            if (!u.isEmpty) {
+                // если хоть один раз были в периоде зарегистрированы проживающие - поставить отметку
+                uslVolKartGrp.isExistPersCurrPeriod = true;
+            }
             lstUslVolKartGrp.add(uslVolKartGrp);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденный период

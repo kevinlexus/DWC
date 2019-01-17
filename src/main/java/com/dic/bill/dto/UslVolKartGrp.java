@@ -9,4 +9,8 @@ public class UslVolKartGrp extends UslVol {
 
     // лиц.счет
     public Kart kart;
+    // наличие в текущем периоде счетчика по услуге (даже если один день был)
+    public boolean isExistMeterCurrPeriod = false;
+    // наличие в текущем периоде проживающих по услуге (даже если один день был)
+    public boolean isExistPersCurrPeriod = false;
 }
