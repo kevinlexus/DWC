@@ -174,9 +174,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 * @param distTp
 	 * @param isChargeInNotHeatingPeriod
 	 * @param kub
+	 * @param isUseSch
 	 */
 	@Override
-	public void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod, BigDecimal kub) {
+	public void addVvodForTest(House house, String uslId, int distTp,
+							   Boolean isChargeInNotHeatingPeriod, BigDecimal kub, Boolean isUseSch) {
 		Usl usl = em.find(Usl.class, uslId);
 		Vvod vvod = new Vvod();
 		vvod.setUsl(usl);
@@ -187,6 +189,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		vvod.setIsChargeInNotHeatingPeriod(isChargeInNotHeatingPeriod);
 		// объем для распределения
 		vvod.setKub(kub);
+		// использовать ли счетчики?
+		vvod.setIsUseSch(isUseSch);
 		house.getVvod().add(vvod);
 	}
 

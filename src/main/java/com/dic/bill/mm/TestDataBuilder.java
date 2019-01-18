@@ -8,7 +8,7 @@ public interface TestDataBuilder {
     Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers,
                         boolean isAddNabor, boolean isAddMeter, int statusId);
 
-    void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod, BigDecimal kub);
+    void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod, BigDecimal kub, Boolean isUseSch);
 
     void buildMeterForTest(Kart kart);
 
