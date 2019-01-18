@@ -201,7 +201,7 @@ public class UslPriceVolKart extends UslVolKart {
             uslPriceVolKart.priceOverSoc = this.priceOverSoc;
             uslPriceVolKart.priceEmpty = this.priceEmpty;
             uslPriceVolKart.isEmpty = this.isEmpty;
-            uslPriceVolKart.isCounter = this.isCounter;
+            uslPriceVolKart.isMeter = this.isCounter;
             uslPriceVolKart.isResidental = this.isResidental;
             uslPriceVolKart.dtTo = this.dtTo;
             uslPriceVolKart.dtFrom = this.dtFrom;

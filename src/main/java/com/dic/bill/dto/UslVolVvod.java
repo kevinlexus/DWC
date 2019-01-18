@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class UslVolVvod extends UslVol {
 
     // наличие счетчика
-    public boolean isCounter;
+    public boolean isMeter;
     // пустая квартира?
     public boolean isEmpty;
     // жилое помещение?

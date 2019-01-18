@@ -41,7 +41,7 @@ public class ChrgCount {
         UslPriceVolKart prevUslPriceVolKart = lstUslPriceVolKart.stream().filter(t -> t.kart.equals(u.kart)
                 && t.dtTo.equals(prevDt)
                 && t.usl.equals(u.usl) &&
-                t.org.equals(u.org) && t.isCounter == u.isCounter && t.isResidental == u.isResidental
+                t.org.equals(u.org) && t.isMeter == u.isMeter && t.isResidental == u.isResidental
                 && t.isEmpty == u.isEmpty && t.socStdt.equals(u.socStdt)
                 && t.price.equals(u.price) && t.priceOverSoc.equals(u.priceOverSoc)
                 && t.priceEmpty.equals(u.priceEmpty)).findFirst().orElse(null);

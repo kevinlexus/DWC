@@ -27,20 +27,24 @@ public class Charge implements java.io.Serializable  {
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK")
+	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = true, nullable = false, insertable = true)
 	private Kart kart;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = true, nullable = false, insertable = true)
 	private Usl usl;
 
-	// Сумма
-	@Column(name = "SUMMA", updatable = false)
+	// сумма
+	@Column(name = "SUMMA", updatable = true, nullable = true, insertable = true)
 	private BigDecimal summa;
 
-	// Тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
-	@Column(name = "TYPE", updatable = false)
+	// объем
+	@Column(name = "TEST_OPL", updatable = true, nullable = true, insertable = true)
+	private BigDecimal testOpl;
+
+	// тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
+	@Column(name = "TYPE", updatable = true, nullable = false, insertable = true)
 	private Integer type;
 
 	@Override

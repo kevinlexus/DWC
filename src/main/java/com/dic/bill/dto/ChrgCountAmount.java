@@ -32,7 +32,7 @@ public class ChrgCountAmount {
 
     // сгруппировать объемы по лиц.счетам для распределения по вводам
     UslVolKart prevUslVolKart = lstUslVolKart.stream().filter(t -> t.kart.equals(u.kart)
-            && t.usl.equals(u.usl) && t.isCounter == u.isCounter
+            && t.usl.equals(u.usl) && t.isMeter == u.isMeter
             && t.isEmpty == u.isEmpty && t.isResidental == u.isResidental
             ).findFirst().orElse(null);
         if (prevUslVolKart == null) {
@@ -41,7 +41,7 @@ public class ChrgCountAmount {
             uslVolKart.kart = u.kart;
             uslVolKart.usl = u.usl;
             uslVolKart.isResidental = u.isResidental;
-            uslVolKart.isCounter = u.isCounter;
+            uslVolKart.isMeter = u.isMeter;
             uslVolKart.isEmpty = u.isEmpty;
             uslVolKart.vol = u.vol.add(u.volOverSoc);
             uslVolKart.area = u.area.add(u.areaOverSoc);
@@ -66,7 +66,7 @@ public class ChrgCountAmount {
             uslVolKartGrp.vol = u.vol.add(u.volOverSoc);
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
             uslVolKartGrp.kpr = u.kpr;
-            if (u.isCounter) {
+            if (u.isMeter) {
                 // если хоть один раз был в периоде счетчик - поставить отметку
                 uslVolKartGrp.isExistMeterCurrPeriod = true;
             }
@@ -84,14 +84,14 @@ public class ChrgCountAmount {
 
         // сгруппировать по вводу
         UslVolVvod prevUslVolVvod = lstUslVolVvod.stream().filter(t->
-                t.usl.equals(u.usl) && t.isCounter == u.isCounter
+                t.usl.equals(u.usl) && t.isMeter == u.isMeter
                 && t.isEmpty == u.isEmpty && t.isResidental == u.isResidental
                 ).findFirst().orElse(null);
         if (prevUslVolVvod == null) {
             // добавить новый элемент
             UslVolVvod uslVolVvod = new UslVolVvod();
             uslVolVvod.isResidental = u.isResidental;
-            uslVolVvod.isCounter = u.isCounter;
+            uslVolVvod.isMeter = u.isMeter;
             uslVolVvod.isEmpty = u.isEmpty;
             uslVolVvod.usl = u.usl;
             uslVolVvod.vol = u.vol;

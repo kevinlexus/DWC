@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -34,7 +35,7 @@ public class ChargePrep {
     // 7 - просто, наличие счетчика 8-детализация льготы, 9 - наличие льготы (используется совместно с dt1,dt2)
     // NOTE ИСПОЛЬЗОВАТЬ В JAVA только 4! Решил использовать только данный тип, так как остальные - не нужны в
     // NOTE Java - начислении ред.16.01.2019
-    @Column(name = "tp", updatable = false, nullable = false, insertable = true)
+    @Column(name = "TP", updatable = false, nullable = false, insertable = true)
     private Integer tp;
 
     // услуга
@@ -43,8 +44,12 @@ public class ChargePrep {
     private Usl usl;
 
     // объем
-    @Column(name = "vol", updatable = false, nullable = false, insertable = true)
+    @Column(name = "VOL", updatable = false, nullable = false, insertable = true)
     private BigDecimal vol;
 
+    // наличие счетчика
+    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Column(name = "SCH", updatable = false, nullable = false, insertable = true)
+    private boolean isExistMeter;
 }
 
