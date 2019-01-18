@@ -203,12 +203,14 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		// х.в. Счетчик 1
 		Meter meter = addMeterForTest(kart.getKoKw(), "011", "01.04.2014", "06.04.2014");
 		// добавить объем
-		addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
+		//addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
+		addMeterVolForTest(meter, new BigDecimal("5.00"), "201404");
 
 		// х.в. Счетчик 2
 		meter = addMeterForTest(kart.getKoKw(), "011", "17.04.2014", "20.04.2014");
 		// добавить объем
-		addMeterVolForTest(meter, new BigDecimal("3.11111"), "201404");
+		//addMeterVolForTest(meter, new BigDecimal("3.11111"), "201404");
+		addMeterVolForTest(meter, new BigDecimal("8.00"), "201404");
 
 		// г.в. Счетчик 1
 		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "11.04.2014");
