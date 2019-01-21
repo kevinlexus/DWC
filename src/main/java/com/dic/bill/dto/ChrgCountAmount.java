@@ -26,7 +26,7 @@ public class ChrgCountAmount {
 
     /**
      * сгруппировать объемы для распределения по вводам
-     * @param u
+     * @param u - объект объема
      */
     public void groupUslVol(UslPriceVolKart u) {
 
