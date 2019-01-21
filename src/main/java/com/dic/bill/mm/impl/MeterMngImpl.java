@@ -87,8 +87,10 @@ public class MeterMngImpl implements MeterMng {
 				// вообще не было активных счетчиков в периоде
 				partDayVol = null;
 			}
+/*
 			log.info("Расчет объема на 1 день: usl.id={}, дней работы={}, общий объем={}, доля на 1 день={}",
 					uslId, workDays, vol, partDayVol);
+*/
 			mapDayMeterVol.put(uslId, partDayVol);
 		}
 
