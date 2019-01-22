@@ -27,6 +27,10 @@ public class Usl implements java.io.Serializable  {
     @Column(name = "USL", unique=true, updatable = false, nullable = false)
 	private String id;
 
+	// CD
+	@Column(name = "CD")
+	private String cd;
+
 	// наименование
 	@Column(name = "NM")
 	private String name;
