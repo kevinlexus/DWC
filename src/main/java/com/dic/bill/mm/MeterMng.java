@@ -30,7 +30,7 @@ public interface MeterMng {
 
     Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
-    Map<String, BigDecimal> getPartDayMeterVol(ChrgCount chrgCount, CalcStore calcStore);
+    Map<String, BigDecimal> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore);
 
-    boolean isExistAnyMeter(ChrgCount chrgCount, String uslId, Date dt);
+    boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt);
 }

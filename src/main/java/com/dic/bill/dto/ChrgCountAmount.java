@@ -3,8 +3,7 @@ package com.dic.bill.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * DTO для хранения параметров для расчета начисления по дому
@@ -21,6 +20,9 @@ public class ChrgCountAmount {
     // сгруппированные до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolKart> lstUslVolKart = new ArrayList<>(10);
 
+    // сгруппированные до дат, лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
+    private List<UslPriceVolKart> lstUslPriceVolKart = new ArrayList<>(10);
+
     // сгруппированные по базовым параметрам, до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolKartGrp> lstUslVolKartGrp = new ArrayList<>(10);
 
@@ -29,7 +31,8 @@ public class ChrgCountAmount {
      * @param u - объект объема
      */
     public void groupUslVol(UslPriceVolKart u) {
-
+    // сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
+    lstUslPriceVolKart.add(u);
     // сгруппировать объемы по лиц.счетам для распределения по вводам
     UslVolKart prevUslVolKart = lstUslVolKart.stream().filter(t -> t.kart.equals(u.kart)
             && t.usl.equals(u.usl) && t.isMeter == u.isMeter

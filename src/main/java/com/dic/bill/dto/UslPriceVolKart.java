@@ -3,6 +3,7 @@ package com.dic.bill.dto;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Org;
 import com.dic.bill.model.scott.Usl;
+import com.ric.cmn.DistributableBigDecimal;
 import com.ric.cmn.Utl;
 
 import java.math.BigDecimal;
@@ -14,10 +15,9 @@ import java.util.Date;
  */
 public class UslPriceVolKart extends UslVolKart {
 
-    // дата начала
-    public Date dtFrom;
-    // дата окончания
-    public Date dtTo;
+    // дата расчета
+    public Date dt;
+
     // организация
     public Org org;
 
@@ -45,10 +45,8 @@ public class UslPriceVolKart extends UslVolKart {
     public static final class UslPriceVolBuilder {
         // лиц.счет
         public Kart kart;
-        // дата начала
-        public Date dtFrom;
-        // дата окончания
-        public Date dtTo;
+        // дата расчета
+        public Date dt;
         // услуга основная (например х.в.)
         public Usl usl;
         // организация
@@ -96,13 +94,8 @@ public class UslPriceVolKart extends UslVolKart {
             return this;
         }
 
-        public UslPriceVolBuilder withDtFrom(Date dtFrom) {
-            this.dtFrom = dtFrom;
-            return this;
-        }
-
-        public UslPriceVolBuilder withDtTo(Date dtTo) {
-            this.dtTo = dtTo;
+        public UslPriceVolBuilder withDt(Date dt) {
+            this.dt = dt;
             return this;
         }
 
@@ -203,8 +196,7 @@ public class UslPriceVolKart extends UslVolKart {
             uslPriceVolKart.isEmpty = this.isEmpty;
             uslPriceVolKart.isMeter = this.isCounter;
             uslPriceVolKart.isResidental = this.isResidental;
-            uslPriceVolKart.dtTo = this.dtTo;
-            uslPriceVolKart.dtFrom = this.dtFrom;
+            uslPriceVolKart.dt = this.dt;
 
             // объемы (передаются уже в долях на 1 день)
             uslPriceVolKart.vol = this.vol;

@@ -1,15 +1,14 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Usl;
-import com.ric.cmn.BigDecimalDistributable;
+import com.ric.cmn.DistributableBigDecimal;
 
 import java.math.BigDecimal;
 
 /**
  * DTO для хранения объемов для расчета начисления
  */
-public class UslVol implements BigDecimalDistributable {
+public class UslVol implements DistributableBigDecimal {
 
     // услуга основная (например х.в.)
     public Usl usl;

@@ -50,14 +50,14 @@ public class MeterMngImpl implements MeterMng {
 
 	/**
 	 * Получить объем в доле одного дня по счетчикам квартиры
-	 * @param chrgCount -  хранилище параметров для расчета начисления
+	 * @param lstMeterVol -  объемы по счетчикам
  	 * @param calcStore - хранилище необходимых данных для расчета пени, начисления
 	 * @return - объем в доле 1 дня к периоду наличия рабочего счетчика
 	 */
-	public Map<String, BigDecimal> getPartDayMeterVol(ChrgCount chrgCount, CalcStore calcStore) {
+	public Map<String, BigDecimal> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore) {
 		Calendar c = Calendar.getInstance();
 		// distinct список кодов услуг найденных счетчиков
-		List<String> lstMeterUslId = chrgCount.getLstMeterVol().stream()
+		List<String> lstMeterUslId = lstMeterVol.stream()
 				.map(t -> t.getUslId()).distinct().collect(Collectors.toList());
 		Map<String, BigDecimal> mapDayMeterVol = new HashMap<String, BigDecimal>();
 
@@ -69,14 +69,14 @@ public class MeterMngImpl implements MeterMng {
 				 									c.add(Calendar.DATE, 1)) {
 				Date curDt = c.getTime();
 				// найти любой действующий счетчик, прибавить день
-				SumMeterVol meterVol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId) &&
+				SumMeterVol meterVol = lstMeterVol.stream().filter(t -> t.getUslId().equals(uslId) &&
 						Utl.between(curDt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
 				if (meterVol != null) {
 					workDays++;
 				}
 			}
 			// сумма объема по всем счетчикам данной услуги
-			BigDecimal vol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId))
+			BigDecimal vol = lstMeterVol.stream().filter(t -> t.getUslId().equals(uslId))
 					.map(t->t.getVol())
 					.reduce(BigDecimal.ZERO, BigDecimal::add);
 			// доля объема на 1 рабочий день наличия счетчика
@@ -104,8 +104,8 @@ public class MeterMngImpl implements MeterMng {
 	 * @return
 	 */
 	@Override
-	public boolean isExistAnyMeter(ChrgCount chrgCount, String uslId, Date dt) {
-		SumMeterVol meterVol = chrgCount.getLstMeterVol().stream().filter(t -> t.getUslId().equals(uslId) &&
+	public boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt) {
+		SumMeterVol meterVol = lstMeterVol.stream().filter(t -> t.getUslId().equals(uslId) &&
 				Utl.between(dt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
 		return meterVol!=null ? true : false;
 	}
