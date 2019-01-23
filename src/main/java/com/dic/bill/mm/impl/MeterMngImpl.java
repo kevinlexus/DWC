@@ -2,13 +2,14 @@ package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.MeterDAO;
 import com.dic.bill.dto.CalcStore;
-import com.dic.bill.dto.ChrgCount;
 import com.dic.bill.dto.MeterData;
 import com.dic.bill.dto.SumMeterVol;
+import com.dic.bill.dto.UslMeterDateVol;
 import com.dic.bill.mm.MeterMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
+import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +31,8 @@ public class MeterMngImpl implements MeterMng {
 
 	@Autowired
 	private MeterDAO meterDao;
+	@PersistenceContext
+	private EntityManager em;
 
 
 	/**
@@ -54,47 +59,57 @@ public class MeterMngImpl implements MeterMng {
  	 * @param calcStore - хранилище необходимых данных для расчета пени, начисления
 	 * @return - объем в доле 1 дня к периоду наличия рабочего счетчика
 	 */
-	public Map<String, BigDecimal> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore) {
+	public List<UslMeterDateVol> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore) {
 		Calendar c = Calendar.getInstance();
 		// distinct список кодов услуг найденных счетчиков
-		List<String> lstMeterUslId = lstMeterVol.stream()
-				.map(t -> t.getUslId()).distinct().collect(Collectors.toList());
-		Map<String, BigDecimal> mapDayMeterVol = new HashMap<String, BigDecimal>();
+		List<Usl> lstMeterUsl = lstMeterVol.stream()
+				.map(t -> em.find(Usl.class, t.getUslId())).distinct().collect(Collectors.toList());
+		List<UslMeterDateVol> lstMeterDateVol = new ArrayList<>();
 
 		// перебрать услуги
-		for (String uslId : lstMeterUslId) {
+		for (Usl usl : lstMeterUsl) {
 			int workDays=0;
+			// сумма объема по всем счетчикам данной услуги
+			BigDecimal vol = lstMeterVol.stream().filter(t -> t.getUslId().equals(usl.getId()))
+					.map(SumMeterVol::getVol)
+					.reduce(BigDecimal.ZERO, BigDecimal::add);
 			// перебрать дни текущего месяца
+			BigDecimal diff = vol;
+			UslMeterDateVol lastUslMeterDateVol = null;
+			// подсчитать кол-во дней работы счетчика
+			for (c.setTime(calcStore.getCurDt1()); !c.getTime().after(calcStore.getCurDt2());
+				 c.add(Calendar.DATE, 1)) {
+				Date curDt = c.getTime();
+				// найти любой действующий счетчик, прибавить день
+				SumMeterVol meterVol = lstMeterVol.stream().filter(t -> t.getUslId().equals(usl.getId()) &&
+						Utl.between(curDt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
+				if (meterVol != null) {
+					// прибавить день
+					workDays++;
+				}
+			}
+
 			for (c.setTime(calcStore.getCurDt1()); !c.getTime().after(calcStore.getCurDt2());
 				 									c.add(Calendar.DATE, 1)) {
 				Date curDt = c.getTime();
 				// найти любой действующий счетчик, прибавить день
-				SumMeterVol meterVol = lstMeterVol.stream().filter(t -> t.getUslId().equals(uslId) &&
+				SumMeterVol meterVol = lstMeterVol.stream().filter(t -> t.getUslId().equals(usl.getId()) &&
 						Utl.between(curDt, t.getDtFrom(), t.getDtTo())).findFirst().orElse(null);
 				if (meterVol != null) {
-					workDays++;
+					// доля объема на 1 рабочий день наличия счетчика
+					BigDecimal partDayVol = vol.divide(BigDecimal.valueOf(workDays), 5, RoundingMode.HALF_UP);
+					UslMeterDateVol uslMeterDateVol =new UslMeterDateVol(usl, curDt, partDayVol);
+					lastUslMeterDateVol = uslMeterDateVol;
+					lstMeterDateVol.add(uslMeterDateVol);
+					diff = diff.subtract(partDayVol);
 				}
 			}
-			// сумма объема по всем счетчикам данной услуги
-			BigDecimal vol = lstMeterVol.stream().filter(t -> t.getUslId().equals(uslId))
-					.map(t->t.getVol())
-					.reduce(BigDecimal.ZERO, BigDecimal::add);
-			// доля объема на 1 рабочий день наличия счетчика
-			BigDecimal partDayVol;
-			if (workDays != 0) {
-				partDayVol = vol.divide(BigDecimal.valueOf(workDays), 20, RoundingMode.HALF_UP);
-			} else {
-				// вообще не было активных счетчиков в периоде
-				partDayVol = null;
+			// округление
+			if (lastUslMeterDateVol != null && !diff.equals(BigDecimal.ZERO)) {
+				lastUslMeterDateVol.vol = lastUslMeterDateVol.vol.add(diff);
 			}
-/*
-			log.info("Расчет объема на 1 день: usl.id={}, дней работы={}, общий объем={}, доля на 1 день={}",
-					uslId, workDays, vol, partDayVol);
-*/
-			mapDayMeterVol.put(uslId, partDayVol);
 		}
-
-		return mapDayMeterVol;
+		return lstMeterDateVol;
 	}
 
 	/**
