@@ -118,6 +118,11 @@ public class Vvod implements java.io.Serializable {
 	@Column(name = "USE_SCH", nullable = true, insertable = true)
 	private Boolean isUseSch;
 
+	// не ограничивать лимитом потребления ОДН? (долько для определённых dist_tp)
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "WO_LIMIT", nullable = true, insertable = true)
+	private Boolean isWithoutLimit;
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;

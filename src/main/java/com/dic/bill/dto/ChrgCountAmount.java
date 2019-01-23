@@ -108,4 +108,7 @@ public class ChrgCountAmount {
         }
     }
 
+    public void roundVol() {
+
+    }
 }

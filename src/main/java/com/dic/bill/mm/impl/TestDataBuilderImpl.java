@@ -389,6 +389,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			addNaborForTest(kart, 5, "141", new BigDecimal("1"), null,
 					null, null, null);
 
+			for (Vvod vvod : kart.getHouse().getVvod()) {
+				if (vvod.getUsl().getId().equals("123")) {
+					// Эл.эн. ОДН (вариант с простым распределением по площади)
+					addNaborForTest(kart, 5, "123", new BigDecimal("1"), new BigDecimal("1"),
+							null, null, vvod);
+				}
+			}
 		} else if (tp==1) {
 			// РСО лиц.счет
 			addNaborForTest(kart, 3, "063", new BigDecimal("1.5"), new BigDecimal("0"),
