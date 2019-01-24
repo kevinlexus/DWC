@@ -105,7 +105,7 @@ public class MeterMngImpl implements MeterMng {
 				}
 			}
 			// округление
-			if (lastUslMeterDateVol != null && !diff.equals(BigDecimal.ZERO)) {
+			if (lastUslMeterDateVol != null && diff.compareTo(BigDecimal.ZERO)!=0) {
 				lastUslMeterDateVol.vol = lastUslMeterDateVol.vol.add(diff);
 			}
 		}

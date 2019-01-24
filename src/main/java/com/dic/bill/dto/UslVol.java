@@ -13,7 +13,7 @@ public class UslVol implements DistributableBigDecimal {
     // услуга основная (например х.в.)
     public Usl usl;
 
-    // объем
+    // объем, округленный до 5 знаков
     public BigDecimal vol = BigDecimal.ZERO;
 
     // общая площадь

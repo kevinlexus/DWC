@@ -80,14 +80,14 @@ public class Nabor implements java.io.Serializable  {
 		switch (usl.getSptarn()) {
 			case 0 : {
 				// контроль только по коэфф.
-				if (!bdKoeff.equals(BigDecimal.ZERO)) {
+				if (bdKoeff.compareTo(BigDecimal.ZERO)!=0) {
 					return true;
 				}
 				break;
 			}
 			case 1 : {
 				// контроль только по нормативу
-				if (!bdNorm.equals(BigDecimal.ZERO)) {
+				if (bdNorm.compareTo(BigDecimal.ZERO)!=0) {
 					return true;
 				}
 				break;
@@ -97,7 +97,7 @@ public class Nabor implements java.io.Serializable  {
 			case 3 : {
 				// когда koeff-является коэфф. и когда norm-тоже является коэфф.
 				// контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME
-				if (!bdKoeff.multiply(bdNorm).equals(BigDecimal.ZERO)) {
+				if (bdKoeff.multiply(bdNorm).compareTo(BigDecimal.ZERO)!=0) {
 					return true;
 				}
 				break;
