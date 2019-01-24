@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,6 +53,8 @@ public class ChrgCountAmount {
             // добавить новый элемент
             UslVolKartGrp uslVolKartGrp = new UslVolKartGrp();
             uslVolKartGrp.kart = u.kart;
+            // жилое помещение (берётся по Основному лиц.счету)
+            uslVolKartGrp.isResidental = u.isResidental;
             uslVolKartGrp.usl = u.usl;
             uslVolKartGrp.vol = vol;
             uslVolKartGrp.volDet = volDet;
@@ -138,18 +141,94 @@ public class ChrgCountAmount {
                         .subtract(d.vol);
                 d.vol = d.vol.add(diff);
                 if (diff.compareTo(BigDecimal.ZERO)!=0) {
-                    log.info("**************** !!!!!!!!! lsk={}, usl={}, diff={}",
-                            d.kart.getLsk(), d.usl.getId(), diff);
                     lstUslVolKart.stream()
                             .filter(t -> t.kart.equals(d.kart) && t.usl.equals(d.usl))
-                            .findFirst().map(t -> t.vol.add(diff));
+                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
                     lstUslPriceVolKart.stream()
                             .filter(t -> t.kart.equals(d.kart) && t.usl.equals(d.usl))
-                            .findFirst().map(t -> t.vol.add(diff));
+                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
+                    lstUslVolVvod.stream()
+                            .filter(t -> t.usl.equals(d.usl))
+                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
                 }
             }
         }
+    }
 
+    /**
+     * Распечатать объемы по лиц.счетам
+     * @param lsk - лиц.счет, если не заполнено, то все
+     * @param uslId - код услуги, если не заполнено, то все
+     */
+    public void printVolAmnt(String lsk, String uslId) {
+        log.info("");
+        getLstUslVolKart().stream()
+                .map(d->d.usl)
+                .filter(d-> uslId==null || d.getId().equals(uslId))
+                .distinct()
+                .forEach(d-> {
+                    log.info("");
+                    log.info("****** ПРОВЕРКА объема по lsk={}, usl={} *******", lsk, d.getId());
+                    for (UslVolKart t : getLstUslVolKart()) {
+                        if ((lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d)) {
+                            log.info("lsk={}, area={}, kpr={}, empt={}, met={}, vol={}", t.kart.getLsk(),
+                                    t.area.setScale(4, BigDecimal.ROUND_HALF_UP),
+                                    t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP),
+                                    t.isEmpty, t.isMeter,
+                                    t.vol.setScale(8, BigDecimal.ROUND_HALF_UP)
+                            );
+                        }
+                    }
+                    log.info("****** общий объем по lstUslVolKart={} ******",
+                            new DecimalFormat("#0.########").format(getLstUslVolKart()
+                                    .stream()
+                                    .filter(t -> (lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d))
+                                    .map(t -> t.vol
+                                    ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                                    .setScale(8, BigDecimal.ROUND_HALF_UP))
+                    );
+
+                    log.info("****** общий объем по lstUslVolKartGrp={} ******",
+                            new DecimalFormat("#0.########").format(getLstUslVolKartGrp()
+                                    .stream()
+                                    .filter(t -> (lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d))
+                                    .map(t -> t.vol
+                                    ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                                    .setScale(8, BigDecimal.ROUND_HALF_UP))
+                    );
+
+                    log.info("****** общий объем по lstUslVolVvod={} ******",
+                            new DecimalFormat("#0.########").format(getLstUslVolVvod()
+                                    .stream()
+                                    .filter(t -> t.usl.equals(d))
+                                    .map(t -> t.vol
+                                    ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                                    .setScale(8, BigDecimal.ROUND_HALF_UP))
+                    );
+                });
+/*
+			for (Nabor nabor : vvod.getNabor()) {
+				if (nabor.getUsl().getId().equals("011")) {
+					for (Charge t : nabor.getKart().getCharge()) {
+						log.info("ОДН:Charge lsk={}, usl={}, type={}, testOpl={}", t.getKart().getLsk(), t.getUsl().getId(),
+								t.getType(), t.getTestOpl());
+						amntVolChrg = amntVolChrg.add(t.getTestOpl());
+					}
+				}
+			}
+			for (Nabor nabor : vvod.getNabor()) {
+				if (nabor.getUsl().getId().equals("011")) {
+					for (ChargePrep t : nabor.getKart().getChargePrep()) {
+						log.info("ОДН:ChargePrep lsk={}, usl={}, sch={}, tp={}, vol={}",
+								t.getKart().getLsk(), t.getUsl().getId(), t.isExistMeter(),
+								t.getTp(), t.getVol());
+						amntVolChrgPrep = amntVolChrgPrep.add(t.getVol());
+					}
+				}
+			}
+			log.info("Итоговое распределение ОДН charge={}, chargePrep={}", amntVolChrg, amntVolChrgPrep);
+*/
 
     }
+
 }

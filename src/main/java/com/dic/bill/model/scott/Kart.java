@@ -152,6 +152,9 @@ public class Kart implements java.io.Serializable{
 	// жилой счет?
 	@Transient
 	public boolean isResidental() {
+		if (status == null) {
+			System.out.println("Kart.lsk="+this.lsk);
+		}
 		return status.getId().equals(9)? false : true;
 	}
 

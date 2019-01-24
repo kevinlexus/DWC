@@ -17,5 +17,7 @@ public class UslVolKartGrp extends UslVol {
     public boolean isExistPersCurrPeriod = false;
     // детализированный объем, до 20 знаков после запятой, для округления
     public BigDecimal volDet = BigDecimal.ZERO;
+    // жилое помещение?
+    public boolean isResidental;
 
 }
