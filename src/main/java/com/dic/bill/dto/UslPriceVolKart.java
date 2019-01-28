@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * DTO для хранения параметров для расчета начисления по лицюсчету:
+ * DTO для хранения параметров для расчета начисления по лиц.счету:
  * Фактическая услуга, цена, тип объема и т.п.
  */
 public class UslPriceVolKart extends UslVolKart {
