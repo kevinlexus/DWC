@@ -13,74 +13,50 @@ import java.util.Date;
  * DTO для хранения параметров для расчета начисления по лиц.счету:
  * Фактическая услуга, цена, тип объема и т.п.
  */
-public class UslPriceVolKart extends UslVolKart {
+public class UslPriceVolKart extends UslPriceVolKartBase {
 
     // дата расчета
     public Date dt;
 
-    // организация
-    public Org org;
-
-    // соц.норма
-    public BigDecimal socStdt = BigDecimal.ZERO;
-
-    // цена
-    public BigDecimal price = BigDecimal.ZERO;
-    // цена свыше соц.нормы
-    public BigDecimal priceOverSoc = BigDecimal.ZERO;
-    // цена без проживающих
-    public BigDecimal priceEmpty = BigDecimal.ZERO;
-
-    // объем свыше соц.нормы
-    public BigDecimal volOverSoc = BigDecimal.ZERO;
-
-    // общая площадь свыше соц.нормы
-    public BigDecimal areaOverSoc = BigDecimal.ZERO;
-
-    // кол-во временно зарегистрированных
-    public BigDecimal kprWr = BigDecimal.ZERO;
-    // кол-во временно отсутствующих
-    public BigDecimal kprOt = BigDecimal.ZERO;
-
     public static final class UslPriceVolBuilder {
         // лиц.счет
-        public Kart kart;
+        private Kart kart;
         // дата расчета
-        public Date dt;
+        private Date dt;
         // услуга основная (например х.в.)
-        public Usl usl;
+        private Usl usl;
         // организация
-        public Org org;
+        private Org org;
         // наличие счетчика
-        public boolean isCounter;
+        private boolean isCounter;
         // пустая квартира?
-        public boolean isEmpty;
+        private boolean isEmpty;
         // жилая квартира?
-        public boolean isResidental;
+        private boolean isResidental;
         // соц.норма
-        public BigDecimal socStdt = BigDecimal.ZERO;
+        private BigDecimal socStdt = BigDecimal.ZERO;
         // цена
-        public BigDecimal price = BigDecimal.ZERO;
+        private BigDecimal price = BigDecimal.ZERO;
         // цена свыше соц.нормы
-        public BigDecimal priceOverSoc = BigDecimal.ZERO;
+        private BigDecimal priceOverSoc = BigDecimal.ZERO;
         // цена без проживающих
-        public BigDecimal priceEmpty = BigDecimal.ZERO;
+        private BigDecimal priceEmpty = BigDecimal.ZERO;
         // объем
-        public BigDecimal vol = BigDecimal.ZERO;
+        private BigDecimal vol = BigDecimal.ZERO;
         // объем свыше соц.нормы
-        public BigDecimal volOverSoc = BigDecimal.ZERO;
+        private BigDecimal volOverSoc = BigDecimal.ZERO;
         // общая площадь
-        public BigDecimal area = BigDecimal.ZERO;
+        private BigDecimal area = BigDecimal.ZERO;
         // общая площадь свыше соц.нормы
-        public BigDecimal areaOverSoc = BigDecimal.ZERO;
+        private BigDecimal areaOverSoc = BigDecimal.ZERO;
         // кол-во проживающих
-        public int kpr = 0;
+        private int kpr = 0;
         // кол-во временно зарегистрированных
-        public int kprWr = 0;
+        private int kprWr = 0;
         // кол-во временно отсутствующих
-        public int kprOt = 0;
+        private int kprOt = 0;
         // доля дня в месяце
-        public BigDecimal partDayMonth = BigDecimal.ZERO;
+        private BigDecimal partDayMonth = BigDecimal.ZERO;
 
         private UslPriceVolBuilder() {
         }
