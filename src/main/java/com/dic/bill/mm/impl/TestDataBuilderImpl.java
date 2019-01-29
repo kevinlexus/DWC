@@ -37,12 +37,12 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 * @param persCount - кол-во проживающих
 	 * @param isAddPers - добавлять спроживающих?
 	 * @param isAddNabor - добавлять наборы услуг?
-	 * @param isAddMeter - добавлять счетчики?    @return
 	 * @param statusId - Id статуса
+	 * @param psch - тип счетчика
 	 * */
 	@Override
 	public Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
-							   boolean isAddMeter, int statusId) {
+							   int statusId, int psch) {
 
 		// помещение
 		Ko ko = new Ko();
@@ -61,7 +61,10 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setKoKw(ko);
 		kart.setHouse(house);
 		kart.setLsk("ОСН_"+suffix);
-		kart.setPsch(0);
+
+		kart.setPsch(psch);
+		kart.setSchEl(1);
+
 		kart.setOpl(area);
 		kart.setKul("0001");
 		kart.setNd("000001");
@@ -83,10 +86,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			// наборы услуг
 			buildNaborForTest(kart, 0);
 		}
-		if (isAddMeter) {
-			// счетчики
-			buildMeterForTest(kart);
-		}
+
+		// счетчики
+		buildMeterForTest(kart);
 
 		house.getKart().add(kart);
 		em.persist(kart);
@@ -105,7 +107,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setKoKw(ko);
 		kart.setHouse(house);
 		kart.setLsk("РСО_"+suffix);
-		kart.setPsch(0);
+		kart.setPsch(psch);
 		//kart.setOpl(BigDecimal.valueOf(63.45));
 		kart.setKul("0001");
 		kart.setNd("000001");
@@ -200,32 +202,38 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	 */
 	@Override
 	public void buildMeterForTest(Kart kart) {
-		// х.в. Счетчик 1
-		Meter meter = addMeterForTest(kart.getKoKw(), "011", "01.04.2014", "06.04.2014");
-		// добавить объем
-		//addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
-		addMeterVolForTest(meter, new BigDecimal("5.00"), "201404");
+		Meter meter;
+		if (Utl.in(kart.getPsch(), 1,2 )){
+			// х.в. Счетчик 1
+			meter = addMeterForTest(kart.getKoKw(), "011", "01.04.2014", "06.04.2014");
+			// добавить объем
+			//addMeterVolForTest(meter, new BigDecimal("10.567"), "201404");
+			addMeterVolForTest(meter, new BigDecimal("5.00"), "201404");
 
-		// х.в. Счетчик 2
-		meter = addMeterForTest(kart.getKoKw(), "011", "17.04.2014", "20.04.2014");
-		// добавить объем
-		//addMeterVolForTest(meter, new BigDecimal("3.11111"), "201404");
-		addMeterVolForTest(meter, new BigDecimal("8.00"), "201404");
+			// х.в. Счетчик 2
+			meter = addMeterForTest(kart.getKoKw(), "011", "17.04.2014", "20.04.2014");
+			// добавить объем
+			//addMeterVolForTest(meter, new BigDecimal("3.11111"), "201404");
+			addMeterVolForTest(meter, new BigDecimal("8.00"), "201404");
+		}
 
-		// г.в. Счетчик 1
-		meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "11.04.2014");
-		// добавить объем
-		addMeterVolForTest(meter, new BigDecimal("7.21"), "201404");
+		if (Utl.in(kart.getPsch(), 1,3 )) {
+			// г.в. Счетчик 1
+			meter = addMeterForTest(kart.getKoKw(), "015", "01.04.2014", "11.04.2014");
+			// добавить объем
+			addMeterVolForTest(meter, new BigDecimal("7.21"), "201404");
 
-		// г.в. Счетчик 2
-		meter = addMeterForTest(kart.getKoKw(), "015", "05.04.2014", "11.04.2014");
-		// добавить объем
-		addMeterVolForTest(meter, new BigDecimal("1.10"), "201404");
-
-		// эл.эн.
-		meter = addMeterForTest(kart.getKoKw(), "038", "01.04.2014", "30.04.2014");
-		// добавить объем
-		addMeterVolForTest(meter, new BigDecimal("350.89"), "201404");
+			// г.в. Счетчик 2
+			meter = addMeterForTest(kart.getKoKw(), "015", "05.04.2014", "11.04.2014");
+			// добавить объем
+			addMeterVolForTest(meter, new BigDecimal("1.10"), "201404");
+		}
+		if (kart.getSchEl().equals(1)) {
+			// эл.эн.
+			meter = addMeterForTest(kart.getKoKw(), "038", "01.04.2014", "30.04.2014");
+			// добавить объем
+			addMeterVolForTest(meter, new BigDecimal("350.89"), "201404");
+		}
 	}
 
 	/**

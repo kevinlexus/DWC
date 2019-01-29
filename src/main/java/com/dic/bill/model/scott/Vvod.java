@@ -75,6 +75,10 @@ public class Vvod implements java.io.Serializable {
 	@Column(name = "KUB_SCH_FACT", updatable = true, nullable = true, insertable = true)
 	private BigDecimal kubSchFact;
 
+	// дораспр.факт - итого
+	@Column(name = "KUB_FACT", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubFact;
+
 	// кол-во лиц.счетов со счетчиками
 	@Column(name = "SCH_CNT", updatable = true, nullable = true, insertable = true)
 	private BigDecimal schCnt;

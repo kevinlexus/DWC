@@ -4,183 +4,205 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
+import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
+
 /**
  * Лицевой счет (он же - помещение)
- * @author lev
  *
+ * @author lev
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema="SCOTT")
-@Getter @Setter
-public class Kart implements java.io.Serializable{
+@Table(name = "KART", schema = "SCOTT")
+@Getter
+@Setter
+public class Kart implements java.io.Serializable {
 
-	public Kart() {
-	}
+    public Kart() {
+    }
 
-	@Id
+    @Id
     //@GeneratedValue(strategy = GenerationType.AUTO) // ID задается при создании Entity
     @Column(name = "LSK", updatable = false, nullable = false)
-	private String lsk; //id записи
+    private String lsk; //id записи
 
-	// УК
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="REU", referencedColumnName="REU")
-	private Org uk;
+    // УК
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REU", referencedColumnName = "REU")
+    private Org uk;
 
     @Column(name = "KUL", updatable = false, nullable = false)
-	private String kul;
+    private String kul;
 
     @Column(name = "ND", updatable = false, nullable = false)
-	private String nd;
+    private String nd;
 
-	// номер квартиры
-	@Column(name = "KW", updatable = false, nullable = false)
-	private String num;
+    // номер квартиры
+    @Column(name = "KW", updatable = false, nullable = false)
+    private String num;
 
-	// дата ограничения пени
-	@Column(name = "PN_DT", updatable = false, nullable = false)
-	private Date pnDt;
+    // дата ограничения пени
+    @Column(name = "PN_DT", updatable = false, nullable = false)
+    private Date pnDt;
 
-	// номер подъезда
-	@Column(name = "ENTR", nullable = true)
-	private Integer entry;
+    // номер подъезда
+    @Column(name = "ENTR")
+    private Integer entry;
 
-	// признак счета
-	@Column(name = "PSCH", nullable = false)
-	private Integer psch;
+    // признак счета
+    @Column(name = "PSCH", nullable = false)
+    private Integer psch;
 
-	// кол-во проживающих
-	@Column(name = "KPR", nullable = false)
-	private Integer kpr;
+    // наличие эл.эн счетчика (0, null - нет, 1 - есть)
+    @Column(name = "SCH_EL")
+    private Integer schEl;
 
-	// Кол-во вр.зарег.
-	@Column(name = "KPR_WR", nullable = false)
-	private Integer kprWr;
+    // кол-во проживающих
+    @Column(name = "KPR", nullable = false)
+    private Integer kpr;
 
-	// Кол-во вр.отсут.
-	@Column(name = "KPR_OT", nullable = false)
-	private Integer kprOt;
+    // Кол-во вр.зарег.
+    @Column(name = "KPR_WR", nullable = false)
+    private Integer kprWr;
 
-	// тип лиц.счета
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_TP", referencedColumnName="ID", updatable = false, insertable = true)
-	private Lst tp;
+    // Кол-во вр.отсут.
+    @Column(name = "KPR_OT", nullable = false)
+    private Integer kprOt;
 
-	// статус лиц.счета
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="STATUS", referencedColumnName="ID", nullable = false, updatable = false, insertable = true)
-	private Status status;
+    // тип лиц.счета
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_TP", referencedColumnName = "ID", updatable = false)
+    private Lst tp;
 
-	// Ko помешения
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true) // updatable = false - чтобы не было Update Foreign key
-	private Ko koKw;
+    // статус лиц.счета
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
+    private Status status;
 
-	// Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false, insertable = true)
-	private Ko koLsk;
+    // Ko помешения
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
+    // updatable = false - чтобы не было Update Foreign key
+    private Ko koKw;
 
-	// дом
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="HOUSE_ID", referencedColumnName="ID", updatable = false, insertable = true)
-	private House house;
+    // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
+    private Ko koLsk;
 
-	// родительский лицевой счет
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="PARENT_LSK", referencedColumnName="LSK", updatable = false, insertable = true)
-	private Kart parentKart;
+    // дом
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "HOUSE_ID", referencedColumnName = "ID", updatable = false)
+    private House house;
 
-	// общая площадь
-	@Column(name = "OPL", nullable = true)
-	private BigDecimal opl;
+    // родительский лицевой счет
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_LSK", referencedColumnName = "LSK", updatable = false)
+    private Kart parentKart;
 
-	// расход по счетчику отопления
-	@Column(name = "MOT", nullable = true)
-	private BigDecimal mot;
+    // общая площадь
+    @Column(name = "OPL")
+    private BigDecimal opl;
 
-	// показания по счетчику отопления
-	@Column(name = "POT", nullable = true)
-	private BigDecimal pot;
+    // расход по счетчику отопления
+    @Column(name = "MOT")
+    private BigDecimal mot;
 
-	// начало действия
-	@Column(name = "MG1", nullable = true)
-	private String mgFrom;
+    // показания по счетчику отопления
+    @Column(name = "POT")
+    private BigDecimal pot;
 
-	// окончание действия
-	@Column(name = "MG2", nullable = true)
-	private String mgTo;
+    // начало действия
+    @Column(name = "MG1")
+    private String mgFrom;
 
-	// набор услуг
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<Nabor> nabor = new ArrayList<>(0);
+    // окончание действия
+    @Column(name = "MG2")
+    private String mgTo;
 
-	// проживающие
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<KartPr> kartPr = new ArrayList<>(0);
+    // набор услуг
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    // updatable = false - чтобы не было Update Foreign key
+    private List<Nabor> nabor = new ArrayList<>(0);
 
-	// текущие начисления
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<Charge> charge = new ArrayList<>(0);
+    // проживающие
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    // updatable = false - чтобы не было Update Foreign key
+    private List<KartPr> kartPr = new ArrayList<>(0);
 
-	// подготовительная информация для расчета начисления
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<ChargePrep> chargePrep = new ArrayList<>(0);
+    // текущие начисления
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    // updatable = false - чтобы не было Update Foreign key
+    private List<Charge> charge = new ArrayList<>(0);
 
-	// актуальный ли лицевой счет?
-	@Transient
-	public boolean isActual() {
-		if (psch.equals(8) || psch.equals(9)) {
-			// закрытый
-			return false;
-		} else {
-			// открытый
-			return true;
-		}
-	}
+    // подготовительная информация для расчета начисления
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    // updatable = false - чтобы не было Update Foreign key
+    private List<ChargePrep> chargePrep = new ArrayList<>(0);
 
-	// жилой счет?
-	@Transient
-	public boolean isResidental() {
-		if (status == null) {
-			System.out.println("Kart.lsk="+this.lsk);
-		}
-		return status.getId().equals(9)? false : true;
-	}
+    // актуальный ли лицевой счет?
+    @Transient
+    public boolean isActual() {
+        return !psch.equals(8) && !psch.equals(9);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof Kart))
-	        return false;
+    // жилой счет?
+    @Transient
+    public boolean isResidental() {
+        return !status.getId().equals(9);
+    }
 
-	    Kart other = (Kart)o;
+    // наличие счетчика х.в. (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
+    @Transient
+    public boolean isExistColdWaterMeter() {
+        return psch != null && Utl.in(psch, 1, 2);
+    }
 
-	    if (lsk == other.getLsk()) return true;
-	    if (lsk == null) return false;
+    // наличие счетчика г.в. (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
+    @Transient
+    public boolean isExistHotWaterMeter() {
+        return psch != null && Utl.in(psch, 1, 3);
+    }
 
-	    // equivalence by id
-	    return lsk.equals(other.getLsk());
-	}
+    // наличие счетчика эл.эн (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
+    @Transient
+    public boolean isExistElMeter() {
+        return schEl != null && schEl.equals(1);
+    }
 
-	@Override
-	public int hashCode() {
-	    if (lsk != null) {
-	        return lsk.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof Kart))
+            return false;
+
+        Kart other = (Kart) o;
+
+        if (Objects.equals(lsk, other.getLsk())) return true;
+        if (lsk == null) return false;
+
+        // equivalence by id
+        return lsk.equals(other.getLsk());
+    }
+
+    @Override
+    public int hashCode() {
+        if (lsk != null) {
+            return lsk.hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
 
 
 }

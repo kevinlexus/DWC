@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public interface TestDataBuilder {
     Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers,
-                        boolean isAddNabor, boolean isAddMeter, int statusId);
+                        boolean isAddNabor, int statusId, int psch);
 
     void addVvodForTest(House house, String uslId, int distTp, Boolean isChargeInNotHeatingPeriod, BigDecimal kub, Boolean isUseSch);
 
