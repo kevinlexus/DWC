@@ -1,8 +1,9 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Usl;
-import com.ric.cmn.Utl;
+import com.dic.bill.dto.UslVolKart;
+import com.dic.bill.dto.UslVolKartGrp;
+import com.dic.bill.dto.UslVolVvod;
+import com.dic.bill.dto.ChrgCountAmountLocal;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,39 +11,28 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static junit.framework.TestCase.assertTrue;
 
 /**
- * DTO для хранения объемов по Квартире(локальное использование) или по Вводу (при распределении объемов)
+ * DTO для хранения объемов по Вводу (при распределении объемов)
  */
 @Getter
 @Setter
 @Slf4j
-public class ChrgCountAmount {
-
-    // сгруппированные до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
-    private List<UslVolKart> lstUslVolKart = new ArrayList<>(10);
-
-    // сгруппированные по базовым параметрам, до лиц.счетов, объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
-    private List<UslVolKartGrp> lstUslVolKartGrp = new ArrayList<>(10);
-
-    // сгруппированные по вводу объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
-    private List<UslVolVvod> lstUslVolVvod = new ArrayList<>(10);
+public class ChrgCountAmount extends ChrgCountAmountBase {
 
     /**
      * Добавить локальные объемы по квартире в объем по вводу
-     * @param chrgCountAmountLocal
+     * @param chrgCountAmountLocal - хранилище локальных объемов по квартире
      */
     public void append(ChrgCountAmountLocal chrgCountAmountLocal) {
-        this.lstUslVolKart.addAll(chrgCountAmountLocal.getLstUslVolKart());
-        this.lstUslVolKartGrp.addAll(chrgCountAmountLocal.getLstUslVolKartGrp());
+        this.getLstUslVolKart().addAll(chrgCountAmountLocal.getLstUslVolKart());
+        this.getLstUslVolKartGrp().addAll(chrgCountAmountLocal.getLstUslVolKartGrp());
 
         for (UslVolVvod u : chrgCountAmountLocal.getLstUslVolVvod()) {
 
-            UslVolVvod prevUslVolVvod = this.lstUslVolVvod.stream().filter(
+            UslVolVvod prevUslVolVvod = this.getLstUslVolVvod().stream().filter(
                     t->t.usl.equals(u.usl) && t.isMeter == u.isMeter
                     && t.isEmpty == u.isEmpty && t.isResidental == u.isResidental
             ).findFirst().orElse(null);
@@ -56,7 +46,7 @@ public class ChrgCountAmount {
                 uslVolVvod.usl = u.usl;
                 uslVolVvod.vol = u.vol;
                 uslVolVvod.area = u.area;
-                lstUslVolVvod.add(uslVolVvod);
+                getLstUslVolVvod().add(uslVolVvod);
             } else {
                 // такой же по ключевым параметрам, добавить данные в найденную строку
                 prevUslVolVvod.vol = prevUslVolVvod.vol.add(u.vol);
@@ -161,5 +151,6 @@ public class ChrgCountAmount {
                     );
                 });
     }
+
 
 }
