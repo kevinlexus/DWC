@@ -1,9 +1,6 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Charge;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Usl;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -356,8 +353,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             charge.setIsSch(u.isMeter);
             BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);
-            log.info("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={} summa={}",
+            u.kart.getCharge().add(charge);
+            log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={} summa={}",
                     u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+
         }
 
         // округлить для ГИС ЖКХ
@@ -365,8 +364,6 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // по услугам:
             // цена
             Map<Usl, BigDecimal> mapPrice = new HashMap<>();
-            // объем
-            Map<Usl, BigDecimal> mapVol = new HashMap<>();
             // сумма
             Map<Usl, BigDecimal> mapSumm = new HashMap<>();
 
@@ -378,6 +375,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             BigDecimal volAmnt = BigDecimal.ZERO;
 
             Charge firstCharge = null;
+
             // сохранить все цены, суммы и объемы по услугам
             // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
             // соответствующего REU
@@ -390,18 +388,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                     // цена
                     if (mapPrice.get(charge.getUsl()) == null) {
                         mapPrice.put(charge.getUsl(), charge.getTestCena());
+                        log.trace("lsk={}, usl={}, price={}", kart.getLsk(), charge.getUsl().getId(), charge.getTestCena());
                         priceAmnt = priceAmnt.add(charge.getTestCena());
                     }
-
-                    // объем
-                    if (mapVol.get(charge.getUsl()) == null) {
-                        // новое значение
-                        mapVol.put(charge.getUsl(), charge.getTestOpl());
-                    } else {
-                        // добавить значение в имеющееся
-                        mapVol.put(charge.getUsl(), mapVol.get(charge.getUsl()).add(charge.getTestOpl()));
-                    }
-                    volAmnt = volAmnt.add(charge.getTestOpl());
 
                     // сумма
                     if (mapSumm.get(charge.getUsl()) == null) {
@@ -411,6 +400,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         // добавить значение в имеющееся
                         mapSumm.put(charge.getUsl(), mapSumm.get(charge.getUsl()).add(charge.getSumma()));
                     }
+                    log.trace("lsk={}, summa={}", kart.getLsk(), charge.getSumma());
                     summAmnt = summAmnt.add(charge.getSumma());
                 }
                 if (firstCharge == null)
@@ -418,11 +408,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             }
             // округлить на первую услугу по порядку кода USL
             if (firstCharge !=null) {
-                BigDecimal summCheck = volAmnt.multiply(priceAmnt);
+                BigDecimal summCheck = kart.getOpl().multiply(priceAmnt);
                 BigDecimal diff = summCheck.subtract(summAmnt);
                 if (diff.abs().compareTo(new BigDecimal("0.05")) < 0) {
-                    log.info("Применено округление по lsk={}, usl={}, diff={}",
-                            kart.getLsk(), firstCharge.getUsl(), diff);
+                    log.trace("Итого сумма ={} рассчит={}", summAmnt, summCheck);
+                    log.info("Применено округление для ГИС ЖКХ, по lsk={}, usl={}, diff={}",
+                            kart.getLsk(), firstCharge.getUsl().getId(), diff);
                     firstCharge.setSumma(firstCharge.getSumma().add(diff));
                 } else {
                     throw new ErrorWhileChrg("ОШИБКА! Округление для ГИС ЖКХ превысило 0.05 по lsk="+kart.getLsk());

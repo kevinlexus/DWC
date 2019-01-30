@@ -96,7 +96,7 @@ public class NaborMngImpl implements NaborMng {
 		return detail;
 	}
 
-	// умножить расценку на коэффициент
+	// умножить расценку на коэффициент, округлить
 	private BigDecimal multiplyPrice(Nabor nabor) throws ErrorWhileChrg {
 		BigDecimal coeff = Utl.nvl(nabor.getKoeff(), BigDecimal.ZERO);
 		BigDecimal norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
@@ -112,7 +112,8 @@ public class NaborMngImpl implements NaborMng {
 			throw new ErrorWhileChrg("ОШИБКА! Не найдена цена по услуге usl.id="+nabor.getUsl().getId());
 		}
 		// рассчитать цену
-		return Utl.nvl(basePrice.getPrice(), BigDecimal.ZERO).multiply(coeff);
+		return Utl.nvl(basePrice.getPrice(), BigDecimal.ZERO).multiply(coeff)
+				.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	/**

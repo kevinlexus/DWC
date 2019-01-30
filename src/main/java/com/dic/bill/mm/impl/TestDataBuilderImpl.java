@@ -355,9 +355,19 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	@Override
 	public void buildNaborForTest(Kart kart, int tp) {
 		if (tp==0) {
-			// основной лиц.счет
+			// тек.содерж.
 			addNaborForTest(kart, 1, "003", new BigDecimal("0.9888"), null,
 					null, null, null);
+			// лифт
+			addNaborForTest(kart, 1, "005", new BigDecimal("0.6332"), null,
+					null, null, null);
+			// дератизация
+			addNaborForTest(kart, 1, "029", new BigDecimal("0.481"), null,
+					null, null, null);
+			// вывоз мусора
+			addNaborForTest(kart, 1, "031", new BigDecimal("0.782"), null,
+					null, null, null);
+
 			// водоотведение
 			addNaborForTest(kart, 6, "013", new BigDecimal("1"), new BigDecimal("10.25"),
 					null, null, null);

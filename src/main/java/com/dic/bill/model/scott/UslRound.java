@@ -25,7 +25,8 @@ public class UslRound implements java.io.Serializable  {
 
 	// услуга
 	@Id
-    @Column(name = "USL")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
 	private Usl usl;
 
 	// код REU
