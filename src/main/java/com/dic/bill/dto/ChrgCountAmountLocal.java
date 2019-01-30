@@ -340,7 +340,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         for (Kart kart : ko.getKart()) {
             kart.getCharge().clear();
         }
-        log.info("Сохранено в C_CHARGE:");
+        log.trace("Сохранено в C_CHARGE:");
         for (UslVolCharge u : getLstUslVolCharge()) {
             Charge charge = new Charge();
             charge.setType(1);
@@ -412,7 +412,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 BigDecimal diff = summCheck.subtract(summAmnt);
                 if (diff.abs().compareTo(new BigDecimal("0.05")) < 0) {
                     log.trace("Итого сумма ={} рассчит={}", summAmnt, summCheck);
-                    log.info("Применено округление для ГИС ЖКХ, по lsk={}, usl={}, diff={}",
+                    log.trace("Применено округление для ГИС ЖКХ, по lsk={}, usl={}, diff={}",
                             kart.getLsk(), firstCharge.getUsl().getId(), diff);
                     firstCharge.setSumma(firstCharge.getSumma().add(diff));
                 } else {

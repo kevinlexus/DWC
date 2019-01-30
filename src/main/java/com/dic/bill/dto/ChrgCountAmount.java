@@ -108,7 +108,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolKart ={} ******",
+                    log.info("****** общий объем по lstUslVolKart ={}",
                             new DecimalFormat("#0.########").format(vol1)
                     );
 
@@ -131,7 +131,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolKartGrp ={} ******",
+                    log.info("****** общий объем по lstUslVolKartGrp ={}",
                             new DecimalFormat("#0.########").format(vol3)
                     );
 
@@ -142,7 +142,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolVvod={} ******",
+                    log.info("****** общий объем по lstUslVolVvod={}",
                             new DecimalFormat("#0.########").format(vol4)
                     );
 
