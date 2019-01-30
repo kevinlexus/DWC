@@ -1,6 +1,8 @@
 package com.dic.bill.dto;
 
+import com.dic.bill.model.scott.Charge;
 import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import lombok.Getter;
@@ -273,53 +275,57 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      */
     public void groupUslVolChrg() {
         for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
-            Usl uslFact = null;
+            Usl uslFact;
+            BigDecimal priceFact;
             if (u.vol.compareTo(BigDecimal.ZERO) != 0) {
                 if (!u.isEmpty) {
                     // есть проживающие
                     uslFact = u.usl;
+                    priceFact = u.price;
                 } else {
                     // нет проживающих
                     uslFact = u.usl.getFactUslEmpt();
+                    priceFact = u.priceEmpty;
                 }
-                addUslVolChrg(u, uslFact, u.vol, u.area);
+                addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
             }
 
             // свыше соц.нормы
             if (u.volOverSoc.compareTo(BigDecimal.ZERO) != 0) {
-                uslFact = u.usl.getUslOverNorm();
-                addUslVolChrg(u, uslFact, u.volOverSoc, u.areaOverSoc);
+                addUslVolChrg(u, u.usl.getUslOverNorm(),
+                        u.volOverSoc, u.areaOverSoc, u.priceOverSoc);
             }
-
         }
     }
 
     /**
      * добавить строку для записи в C_CHARGE, с группировкой
-     * @param u
-     * @param uslFact
-     * @param vol
-     * @param area
+     * @param u - запись начисления
+     * @param uslFact - фактическая услуга
+     * @param vol - объем
+     * @param area - площадь
      */
     private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
-                               BigDecimal vol, BigDecimal area) {
+                               BigDecimal vol, BigDecimal area, BigDecimal price) {
         UslVolCharge prev = getLstUslVolCharge().stream()
-                .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact))
+                .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
+                && t.isMeter==u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
                 .findFirst().orElse(null);
         if (prev != null) {
             // найдена запись с данным ключом
-            prev.vol.add(vol);
-            prev.area.add(area);
-            prev.kpr.add(u.kpr);
-            prev.kprOt.add(u.kprOt);
-            prev.kprWr.add(u.kprWr);
+            prev.vol = prev.vol.add(vol);
+            prev.area = prev.area.add(area);
+            prev.kpr = prev.kpr.add(u.kpr);
+            prev.kprWr = prev.kprWr.add(u.kprWr);
+            prev.kprOt = prev.kprOt.add(u.kprOt);
         } else {
             // не найдена запись, создать новую
             UslVolCharge uslVolCharge = new UslVolCharge();
             uslVolCharge.kart = u.kart;
             uslVolCharge.usl = uslFact;
+            uslVolCharge.isMeter = u.isMeter;
             uslVolCharge.vol = vol;
-            uslVolCharge.price = u.price;
+            uslVolCharge.price = price;
             uslVolCharge.area = area;
             uslVolCharge.kpr = u.kpr;
             uslVolCharge.kprWr = u.kprWr;
@@ -327,4 +333,31 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             getLstUslVolCharge().add(uslVolCharge);
         }
     }
-}
+
+    /**
+     * Сохранить начисление в C_CHARGE
+     * @param ko - квартира
+     */
+    public void saveCharge(Ko ko) {
+        // удалить информацию по текущему начислению, по квартире
+        for (Kart kart : ko.getKart()) {
+            kart.getCharge().clear();
+        }
+        log.info("Сохранено в C_CHARGE:");
+        for (UslVolCharge u : getLstUslVolCharge()) {
+            Charge charge = new Charge();
+            charge.setType(1);
+            charge.setUsl(u.usl);
+            charge.setKart(u.kart);
+            charge.setTestOpl(u.vol);
+            BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
+            charge.setOpl(area);
+            charge.setTestCena(u.price);
+            charge.setIsSch(u.isMeter);
+            BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
+            charge.setSumma(summa);
+            log.info("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={} summa={}",
+                        u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+        }
+    }
+    }

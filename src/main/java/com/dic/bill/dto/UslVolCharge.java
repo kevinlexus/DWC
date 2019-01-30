@@ -15,6 +15,8 @@ public class UslVolCharge {
     public Kart kart;
     // услуга детализированная (например х.в., х.в.свыше.с.н., х.в. 0 зарег.)
     public Usl usl;
+    // наличие счетчика
+    public boolean isMeter;
     // объем, округленный до 5 знаков
     public BigDecimal vol = BigDecimal.ZERO;
     // цена

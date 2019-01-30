@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 /**
  * Начисление
@@ -43,6 +44,10 @@ public class Charge implements java.io.Serializable  {
 	@Column(name = "TEST_OPL", updatable = true, nullable = true, insertable = true)
 	private BigDecimal testOpl;
 
+	// площадь
+	@Column(name = "OPL", updatable = true, nullable = true, insertable = true)
+	private BigDecimal opl;
+
 	// цена
 	@Column(name = "TEST_CENA", updatable = true, nullable = true, insertable = true)
 	private BigDecimal testCena;
@@ -50,6 +55,11 @@ public class Charge implements java.io.Serializable  {
 	// тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
 	@Column(name = "TYPE", updatable = true, nullable = false, insertable = true)
 	private Integer type;
+
+	// наличие счетчика
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "SCH", nullable = true)
+	private Boolean isSch;
 
 	@Override
 	public boolean equals(Object o) {
