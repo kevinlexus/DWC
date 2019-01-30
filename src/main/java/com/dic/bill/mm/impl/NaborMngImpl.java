@@ -56,13 +56,15 @@ public class NaborMngImpl implements NaborMng {
 			Nabor naborOverNorm = kart.getNabor().stream()
 					.filter(t -> t.getUsl().equals(uslOverNorm)).findFirst().orElse(null);
 			if (naborOverNorm != null) {
-				detail.uslOverNorm = naborOverNorm.getUsl();
+				//detail.uslOverNorm = naborOverNorm.getUsl();
 				detail.priceOverSoc = multiplyPrice(naborOverNorm);
 			} else {
 				// не найдено - принять цену такую же как основная
-				detail.uslOverNorm = usl;
 				detail.priceOverSoc = detail.price;
 			}
+		} else {
+			// принять цену такую же как основная
+			detail.priceOverSoc = detail.price;
 		}
 
 		if (uslEmpt != null) {
@@ -74,23 +76,22 @@ public class NaborMngImpl implements NaborMng {
 				if (nabor.getUsl().getFkCalcTp().equals(31) && kartMain.getStatus().getId().equals(1)) {
 					// электроэнергия, - если муниципальная квартира - принять цену по соцнорме
 					// взято из C_CHARGE, строка 2024
-					detail.uslEmpt = naborEmpt.getUsl();
 					detail.priceEmpt = detail.price;
 				} else {
-					detail.uslEmpt = naborEmpt.getUsl();
 					detail.priceEmpt = multiplyPrice(naborEmpt);
 				}
 			} else {
 				// не найдено - принять цену такую же как свыше соц.норма
-				if (detail.uslOverNorm != null) {
-					detail.uslEmpt = uslOverNorm;
+				if (uslOverNorm != null) {
 					detail.priceEmpt = detail.priceOverSoc;
 				} else {
 					// пустая услуга свыше соцнормы, принять как по соцнорме
-					detail.uslEmpt = usl;
 					detail.priceEmpt = detail.price;
 				}
 			}
+		} else {
+			// принять цену такую же как основная
+			detail.priceEmpt = detail.price;
 		}
 		return detail;
 	}

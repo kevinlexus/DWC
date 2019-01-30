@@ -19,4 +19,10 @@ public class UslPriceVolKartDt extends UslPriceVolKartBase {
     // окончание периода
     public Date dtTo;
 
+    public Kart getKart() {
+        return this.kart;
+    }
+    public Usl getUsl() {
+        return this.usl;
+    }
 }
