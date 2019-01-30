@@ -43,6 +43,10 @@ public class Charge implements java.io.Serializable  {
 	@Column(name = "TEST_OPL", updatable = true, nullable = true, insertable = true)
 	private BigDecimal testOpl;
 
+	// цена
+	@Column(name = "TEST_CENA", updatable = true, nullable = true, insertable = true)
+	private BigDecimal testCena;
+
 	// тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
 	@Column(name = "TYPE", updatable = true, nullable = false, insertable = true)
 	private Integer type;

@@ -30,8 +30,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     // с полной детализацией по услуге usl.cd="х.в. для гвс", используется только услугой fk_calc_tp = 47
     private List<UslPriceVolKart> lstUslPriceVolKartLinked = new ArrayList<>(10);
 
-    // сгруппированное до дат, для записи реультата начисления в C_CHARGE
+    // сгруппированное до дат, для подготовки записи реультата начисления в C_CHARGE
+    // (возможно в будущем, прям отсюда записывать в C_CHARGE - детально)
     private List<UslPriceVolKartDt> lstUslPriceVolKartDt = new ArrayList<>(10);
+
+    // сгруппированное до фактических услуг, для записи в C_CHARGE
+    private List<UslVolCharge> lstUslVolCharge = new ArrayList<>(10);
 
     /**
      * сгруппировать объемы для распределения по вводам
@@ -263,4 +267,64 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
     }
 
+    /**
+     *  сгруппировать и сохранить начисление
+     *  примечание: так как пока не реализовано хранение организации в C_CHARGE, не группировать по org. ред. 30.01.19
+     */
+    public void groupUslVolChrg() {
+        for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
+            Usl uslFact = null;
+            if (u.vol.compareTo(BigDecimal.ZERO) != 0) {
+                if (!u.isEmpty) {
+                    // есть проживающие
+                    uslFact = u.usl;
+                } else {
+                    // нет проживающих
+                    uslFact = u.usl.getFactUslEmpt();
+                }
+                addUslVolChrg(u, uslFact, u.vol, u.area);
+            }
+
+            // свыше соц.нормы
+            if (u.volOverSoc.compareTo(BigDecimal.ZERO) != 0) {
+                uslFact = u.usl.getUslOverNorm();
+                addUslVolChrg(u, uslFact, u.volOverSoc, u.areaOverSoc);
+            }
+
+        }
+    }
+
+    /**
+     * добавить строку для записи в C_CHARGE, с группировкой
+     * @param u
+     * @param uslFact
+     * @param vol
+     * @param area
+     */
+    private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
+                               BigDecimal vol, BigDecimal area) {
+        UslVolCharge prev = getLstUslVolCharge().stream()
+                .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact))
+                .findFirst().orElse(null);
+        if (prev != null) {
+            // найдена запись с данным ключом
+            prev.vol.add(vol);
+            prev.area.add(area);
+            prev.kpr.add(u.kpr);
+            prev.kprOt.add(u.kprOt);
+            prev.kprWr.add(u.kprWr);
+        } else {
+            // не найдена запись, создать новую
+            UslVolCharge uslVolCharge = new UslVolCharge();
+            uslVolCharge.kart = u.kart;
+            uslVolCharge.usl = uslFact;
+            uslVolCharge.vol = vol;
+            uslVolCharge.price = u.price;
+            uslVolCharge.area = area;
+            uslVolCharge.kpr = u.kpr;
+            uslVolCharge.kprWr = u.kprWr;
+            uslVolCharge.kprOt = u.kprOt;
+            getLstUslVolCharge().add(uslVolCharge);
+        }
+    }
 }

@@ -118,6 +118,39 @@ public class Usl implements java.io.Serializable  {
 	}
 
 	/**
+	 * Получить фактическую услугу свыше соц.нормы
+	 * @return
+	 */
+	@Transient
+	public Usl getFactUslOverSoc() {
+		if (getUslOverNorm() != null) {
+			return getUslOverNorm();
+		} else {
+			// пустая услуга свыше соц.нормы, вернуть основную
+			return this;
+		}
+	}
+
+	/**
+	 * Получить фактическую услугу 0 зарег
+	 * @return
+	 */
+	@Transient
+	public Usl getFactUslEmpt() {
+		if (getUslEmpt() != null) {
+			return getUslEmpt();
+		} else {
+			// пустая услуга 0 зарег, вернуть свыше соц.нормы
+			if (getUslOverNorm() != null) {
+				return getUslOverNorm();
+			} else {
+				// пустая услуга свыше соц.нормы, вернуть основную
+				return this;
+			}
+		}
+	}
+
+	/**
 	 * Является ли услуга основной? (заполнено fk_calc_tp)
 	 * @return
 	 */
