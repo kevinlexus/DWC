@@ -94,6 +94,11 @@ public class Usl implements java.io.Serializable  {
 	@JoinColumn(name="FK_USL_CHLD", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private Usl uslChild;
 
+	// коды REU, для округления, для ГИС ЖКХ
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<UslRound> uslRound = new ArrayList<>(0);
+
 	/**
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)
 	 * @return

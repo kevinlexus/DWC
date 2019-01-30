@@ -5,6 +5,7 @@ import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
+import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -241,9 +239,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         // отсортировать по lsk, usl, dtFrom
         List<UslPriceVolKartDt> lst =
                 getLstUslPriceVolKartDt().stream()
-                        .sorted(Comparator.comparing((UslPriceVolKartDt o1)->o1.getKart().getLsk())
-                                .thenComparing((UslPriceVolKartDt o1)->o1.getUsl().getId())
-                                .thenComparing((UslPriceVolKartDt o1)->o1.dtFrom)
+                        .sorted(Comparator.comparing((UslPriceVolKartDt o1) -> o1.getKart().getLsk())
+                                .thenComparing((UslPriceVolKartDt o1) -> o1.getUsl().getId())
+                                .thenComparing((UslPriceVolKartDt o1) -> o1.dtFrom)
                         )
                         .collect(Collectors.toList());
         for (UslPriceVolKartDt t : lst) {
@@ -255,9 +253,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         t.kart.getLsk(), t.usl.getId(),
                         t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                         t.areaOverSoc.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.isEmpty?"T":"F",
-                        t.isMeter?"T":"F",
-                        t.isResidental?"T":"F",
+                        t.isEmpty ? "T" : "F",
+                        t.isMeter ? "T" : "F",
+                        t.isResidental ? "T" : "F",
                         t.org.getId(), t.price, t.priceEmpty, t.priceOverSoc, t.socStdt,
                         t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                         t.kprOt.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
@@ -270,8 +268,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     }
 
     /**
-     *  сгруппировать и сохранить начисление
-     *  примечание: так как пока не реализовано хранение организации в C_CHARGE, не группировать по org. ред. 30.01.19
+     * сгруппировать и сохранить начисление
+     * примечание: так как пока не реализовано хранение организации в C_CHARGE, не группировать по org. ред. 30.01.19
      */
     public void groupUslVolChrg() {
         for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
@@ -300,16 +298,17 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
     /**
      * добавить строку для записи в C_CHARGE, с группировкой
-     * @param u - запись начисления
+     *
+     * @param u       - запись начисления
      * @param uslFact - фактическая услуга
-     * @param vol - объем
-     * @param area - площадь
+     * @param vol     - объем
+     * @param area    - площадь
      */
     private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
                                BigDecimal vol, BigDecimal area, BigDecimal price) {
         UslVolCharge prev = getLstUslVolCharge().stream()
                 .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
-                && t.isMeter==u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
+                        && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
                 .findFirst().orElse(null);
         if (prev != null) {
             // найдена запись с данным ключом
@@ -335,10 +334,11 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     }
 
     /**
-     * Сохранить начисление в C_CHARGE
+     * Сохранить и округлить начисление в C_CHARGE
+     *
      * @param ko - квартира
      */
-    public void saveCharge(Ko ko) {
+    public void saveChargeAndRound(Ko ko) throws ErrorWhileChrg {
         // удалить информацию по текущему начислению, по квартире
         for (Kart kart : ko.getKart()) {
             kart.getCharge().clear();
@@ -357,7 +357,80 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);
             log.info("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={} summa={}",
-                        u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+                    u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
         }
+
+        // округлить для ГИС ЖКХ
+        for (Kart kart : ko.getKart()) {
+            // по услугам:
+            // цена
+            Map<Usl, BigDecimal> mapPrice = new HashMap<>();
+            // объем
+            Map<Usl, BigDecimal> mapVol = new HashMap<>();
+            // сумма
+            Map<Usl, BigDecimal> mapSumm = new HashMap<>();
+
+            // итоговая сумма
+            BigDecimal summAmnt = BigDecimal.ZERO;
+            // итоговая цена
+            BigDecimal priceAmnt = BigDecimal.ZERO;
+            // итоговый объем
+            BigDecimal volAmnt = BigDecimal.ZERO;
+
+            Charge firstCharge = null;
+            // сохранить все цены, суммы и объемы по услугам
+            // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
+            // соответствующего REU
+            for (Charge charge : kart.getCharge().stream().filter(t -> t.getUsl().getUslRound().stream()
+                    .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))
+                    .sorted(Comparator.comparing(d->d.getUsl().getId())) // сортировать по коду услуги
+                    .collect(Collectors.toList())
+                    ) {
+                if (charge.getUsl().getUslRound().size() > 0) {
+                    // цена
+                    if (mapPrice.get(charge.getUsl()) == null) {
+                        mapPrice.put(charge.getUsl(), charge.getTestCena());
+                        priceAmnt = priceAmnt.add(charge.getTestCena());
+                    }
+
+                    // объем
+                    if (mapVol.get(charge.getUsl()) == null) {
+                        // новое значение
+                        mapVol.put(charge.getUsl(), charge.getTestOpl());
+                    } else {
+                        // добавить значение в имеющееся
+                        mapVol.put(charge.getUsl(), mapVol.get(charge.getUsl()).add(charge.getTestOpl()));
+                    }
+                    volAmnt = volAmnt.add(charge.getTestOpl());
+
+                    // сумма
+                    if (mapSumm.get(charge.getUsl()) == null) {
+                        // новое значение
+                        mapSumm.put(charge.getUsl(), charge.getSumma());
+                    } else {
+                        // добавить значение в имеющееся
+                        mapSumm.put(charge.getUsl(), mapSumm.get(charge.getUsl()).add(charge.getSumma()));
+                    }
+                    summAmnt = summAmnt.add(charge.getSumma());
+                }
+                if (firstCharge == null)
+                    firstCharge = charge;
+            }
+            // округлить на первую услугу по порядку кода USL
+            if (firstCharge !=null) {
+                BigDecimal summCheck = volAmnt.multiply(priceAmnt);
+                BigDecimal diff = summCheck.subtract(summAmnt);
+                if (diff.abs().compareTo(new BigDecimal("0.05")) < 0) {
+                    log.info("Применено округление по lsk={}, usl={}, diff={}",
+                            kart.getLsk(), firstCharge.getUsl(), diff);
+                    firstCharge.setSumma(firstCharge.getSumma().add(diff));
+                } else {
+                    throw new ErrorWhileChrg("ОШИБКА! Округление для ГИС ЖКХ превысило 0.05 по lsk="+kart.getLsk());
+                }
+            }
+
+        }
+
+
     }
-    }
+}
