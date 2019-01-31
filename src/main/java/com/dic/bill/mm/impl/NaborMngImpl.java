@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -49,15 +48,14 @@ public class NaborMngImpl implements NaborMng {
 		Usl uslOverNorm = usl.getUslOverNorm();
 		Usl uslEmpt = usl.getUslEmpt();
 		// услуга но норме (обычная)
-		detail.price = multiplyPrice(nabor);
+		detail.price = multiplyPrice(nabor, 0);
 
 		if (uslOverNorm != null) {
 			// найти услугу свыше соц.нормы, если есть
 			Nabor naborOverNorm = kart.getNabor().stream()
 					.filter(t -> t.getUsl().equals(uslOverNorm)).findFirst().orElse(null);
 			if (naborOverNorm != null) {
-				//detail.uslOverNorm = naborOverNorm.getUsl();
-				detail.priceOverSoc = multiplyPrice(naborOverNorm);
+				detail.priceOverSoc = multiplyPrice(naborOverNorm, 0);
 			} else {
 				// не найдено - принять цену такую же как основная
 				detail.priceOverSoc = detail.price;
@@ -78,26 +76,29 @@ public class NaborMngImpl implements NaborMng {
 					// взято из C_CHARGE, строка 2024
 					detail.priceEmpt = detail.price;
 				} else {
-					detail.priceEmpt = multiplyPrice(naborEmpt);
+					detail.priceEmpt = multiplyPrice(naborEmpt, 0);
 				}
 			} else {
-				// не найдено - принять цену такую же как свыше соц.норма
-				if (uslOverNorm != null) {
-					detail.priceEmpt = detail.priceOverSoc;
-				} else {
-					// пустая услуга свыше соцнормы, принять как по соцнорме
-					detail.priceEmpt = detail.price;
-				}
+				// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
+				detail.priceEmpt = multiplyPrice(nabor, 3);
 			}
 		} else {
-			// принять цену такую же как основная
-			detail.priceEmpt = detail.price;
+			// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
+			detail.priceEmpt = multiplyPrice(nabor, 3);
 		}
 		return detail;
 	}
 
 	// умножить расценку на коэффициент, округлить
-	private BigDecimal multiplyPrice(Nabor nabor) throws ErrorWhileChrg {
+
+	/**
+	 *
+	 * @param nabor - строка набора
+	 * @param priceColumn - колонку цены, которую использовать
+	 * @return - итогововая цена со всеми коэффициентами
+	 * @throws ErrorWhileChrg
+	 */
+	private BigDecimal multiplyPrice(Nabor nabor, int priceColumn) throws ErrorWhileChrg {
 		BigDecimal coeff = Utl.nvl(nabor.getKoeff(), BigDecimal.ZERO);
 		BigDecimal norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
 		if (nabor.getUsl().getSptarn().equals(3) ||
@@ -112,7 +113,15 @@ public class NaborMngImpl implements NaborMng {
 			throw new ErrorWhileChrg("ОШИБКА! Не найдена цена по услуге usl.id="+nabor.getUsl().getId());
 		}
 		// рассчитать цену
-		return Utl.nvl(basePrice.getPrice(), BigDecimal.ZERO).multiply(coeff)
+		BigDecimal price = BigDecimal.ZERO;
+		if (priceColumn == 0) {
+			price = basePrice.getPrice();
+		} else if (priceColumn == 1) {
+			price = basePrice.getPriceAddit();
+		} else if (priceColumn == 2) {
+			price = basePrice.getPriceEmpt();
+		}
+		return Utl.nvl(price, BigDecimal.ZERO).multiply(coeff)
 				.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 

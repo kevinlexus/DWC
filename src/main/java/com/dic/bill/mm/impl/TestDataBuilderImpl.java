@@ -33,7 +33,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	/**
 	 *   @param house - дом
 	 * @param suffix - суффикс лицевого счета
-	 * @param area - площадь квартиры
+	 * @param area - площадь помещения
 	 * @param persCount - кол-во проживающих
 	 * @param isAddPers - добавлять спроживающих?
 	 * @param isAddNabor - добавлять наборы услуг?

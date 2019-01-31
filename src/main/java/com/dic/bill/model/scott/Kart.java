@@ -43,7 +43,7 @@ public class Kart implements java.io.Serializable {
     @Column(name = "ND", updatable = false, nullable = false)
     private String nd;
 
-    // номер квартиры
+    // номер помещения
     @Column(name = "KW", updatable = false, nullable = false)
     private String num;
 

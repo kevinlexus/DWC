@@ -54,7 +54,7 @@ public class KartDAOImpl implements KartDAO {
 	}
 
 	/**
-	 * Получить все квартиры
+	 * Получить все помещения
 	 * @return
 	 */
 	@Override
@@ -64,7 +64,7 @@ public class KartDAOImpl implements KartDAO {
 	}
 
 	/**
-	 * Получить все квартиры по дому
+	 * Получить все помещения по дому
 	 * @param house - дом
 	 * @return
 	 */
@@ -74,7 +74,7 @@ public class KartDAOImpl implements KartDAO {
 	}
 
 	/**
-	 * Получить квартиры по вводу
+	 * Получить помещения по вводу
 	 * @param vvod - ввод
 	 * @return
 	 */
@@ -87,7 +87,7 @@ public class KartDAOImpl implements KartDAO {
 	 * Получить все элементы Kart, по параметрам
 	 * @param kul - код улицы
 	 * @param nd - № дома
-	 * @param kw - № квартиры
+	 * @param kw - № помещения
 	 * @return
 	 */
 	@Override

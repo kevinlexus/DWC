@@ -52,7 +52,6 @@ public class RequestConfig {
     }
 
     public static final class RequestConfigBuilder {
-
         // Id запроса
         int rqn;
         // тип выполнения 0-начисление, 1-задолженность и пеня, 2 - распределение объемов по вводу
@@ -64,13 +63,12 @@ public class RequestConfig {
         // выполнять многопоточно
         boolean isMultiThreads = false;
         // объекты формирования:
-        // квартира
-        Ko ko = null;
         // дом
         House house = null;
         // ввод
-
         Vvod vvod = null;
+        // квартира
+        Ko ko = null;
 
         private RequestConfigBuilder() {
         }
@@ -104,11 +102,6 @@ public class RequestConfig {
             return this;
         }
 
-        public RequestConfigBuilder withKo(Ko ko) {
-            this.ko = ko;
-            return this;
-        }
-
         public RequestConfigBuilder withHouse(House house) {
             this.house = house;
             return this;
@@ -119,15 +112,20 @@ public class RequestConfig {
             return this;
         }
 
+        public RequestConfigBuilder withKo(Ko ko) {
+            this.ko = ko;
+            return this;
+        }
+
         public RequestConfig build() {
             RequestConfig requestConfig = new RequestConfig();
             requestConfig.setRqn(rqn);
             requestConfig.setTp(tp);
             requestConfig.setDebugLvl(debugLvl);
             requestConfig.setGenDt(genDt);
-            requestConfig.setKo(ko);
             requestConfig.setHouse(house);
             requestConfig.setVvod(vvod);
+            requestConfig.setKo(ko);
             requestConfig.isMultiThreads = this.isMultiThreads;
             return requestConfig;
         }

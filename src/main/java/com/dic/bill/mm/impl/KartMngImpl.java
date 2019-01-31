@@ -30,10 +30,10 @@ public class KartMngImpl implements KartMng {
 	private EntityManager em;
 
 	/**
-	 * Получить Ko квартиры по параметрам
+	 * Получить Ko помещения по параметрам
 	 * @param kul - код улицы
 	 * @param nd - № дома
-	 * @param kw - № квартиры
+	 * @param kw - № помещения
 	 * @return
 	 */
 	@Override
