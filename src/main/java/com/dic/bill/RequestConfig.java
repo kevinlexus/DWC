@@ -3,6 +3,7 @@ package com.dic.bill;
 import com.dic.bill.model.scott.House;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Vvod;
+import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,9 @@ public class RequestConfig {
     int debugLvl = 0;
     // дата на которую сформировать
     Date genDt = null;
+
+    Date curDt1;
+    Date curDt2;
     // выполнять многопоточно
     boolean isMultiThreads = false;
 
@@ -51,6 +55,27 @@ public class RequestConfig {
         return null;
     }
 
+    /**
+     * Проверить параметры запроса
+     *
+     * @return - null -  нет ошибок, !null - описание ошибки
+     */
+    public String checkArguments() {
+        if (this.tp == 1) {
+            // задолженность и пеня, - проверить текущую дату
+            if (genDt == null) {
+                return "ERROR! некорректная дата расчета!";
+            } else {
+                // проверить, что дата в диапазоне текущего периода
+                if (!Utl.between(genDt, curDt1, curDt2)) {
+                    return "ERROR! дата не находится в текущем периоде genDt=" + genDt;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public static final class RequestConfigBuilder {
         // Id запроса
         int rqn;
@@ -60,6 +85,8 @@ public class RequestConfig {
         int debugLvl = 0;
         // дата на которую сформировать
         Date genDt = null;
+        Date curDt1;
+        Date curDt2;
         // выполнять многопоточно
         boolean isMultiThreads = false;
         // объекты формирования:
@@ -97,6 +124,16 @@ public class RequestConfig {
             return this;
         }
 
+        public RequestConfigBuilder withCurDt1(Date curDt1) {
+            this.curDt1 = curDt1;
+            return this;
+        }
+
+        public RequestConfigBuilder withCurDt2(Date curDt2) {
+            this.curDt2 = curDt2;
+            return this;
+        }
+
         public RequestConfigBuilder withIsMultiThreads(boolean isMultiThreads) {
             this.isMultiThreads = isMultiThreads;
             return this;
@@ -123,6 +160,8 @@ public class RequestConfig {
             requestConfig.setTp(tp);
             requestConfig.setDebugLvl(debugLvl);
             requestConfig.setGenDt(genDt);
+            requestConfig.setCurDt1(curDt1);
+            requestConfig.setCurDt2(curDt2);
             requestConfig.setHouse(house);
             requestConfig.setVvod(vvod);
             requestConfig.setKo(ko);
