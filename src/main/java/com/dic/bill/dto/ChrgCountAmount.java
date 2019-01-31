@@ -108,8 +108,16 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolKart ={}",
-                            new DecimalFormat("#0.########").format(vol1)
+                    BigDecimal area1 = getLstUslVolKart()
+                            .stream()
+                            .filter(t -> (lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d))
+                            .map(t -> t.area
+                            ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                            .setScale(8, BigDecimal.ROUND_HALF_UP);
+
+                    log.info("****** итого по lstUslVolKart vol={}, area={}",
+                            new DecimalFormat("#0.########").format(vol1),
+                            new DecimalFormat("#0.########").format(area1)
                     );
 
 /*
@@ -130,9 +138,16 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             .map(t -> t.vol
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal area3 = getLstUslVolKartGrp()
+                            .stream()
+                            .filter(t -> (lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d))
+                            .map(t -> t.vol
+                            ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                            .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolKartGrp ={}",
-                            new DecimalFormat("#0.########").format(vol3)
+                    log.info("****** итого по lstUslVolKartGrp vol={}, area={}",
+                            new DecimalFormat("#0.########").format(vol3),
+                            new DecimalFormat("#0.########").format(area3)
                     );
 
                     BigDecimal vol4 = getLstUslVolVvod()
@@ -141,9 +156,16 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             .map(t -> t.vol
                             ).reduce(BigDecimal.ZERO, BigDecimal::add)
                             .setScale(8, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal area4 = getLstUslVolVvod()
+                            .stream()
+                            .filter(t -> t.usl.equals(d))
+                            .map(t -> t.area
+                            ).reduce(BigDecimal.ZERO, BigDecimal::add)
+                            .setScale(8, BigDecimal.ROUND_HALF_UP);
 
-                    log.info("****** общий объем по lstUslVolVvod={}",
-                            new DecimalFormat("#0.########").format(vol4)
+                    log.info("****** итого по lstUslVolKartVvod vol={}, area={}",
+                            new DecimalFormat("#0.########").format(vol4),
+                            new DecimalFormat("#0.########").format(area4)
                     );
 
                     assertTrue(vol1.compareTo(vol4) == 0 &&
