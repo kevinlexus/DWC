@@ -29,8 +29,10 @@ public class RequestConfig {
     // дата на которую сформировать
     Date genDt = null;
 
+    // текущий период
     Date curDt1;
     Date curDt2;
+
     // выполнять многопоточно
     boolean isMultiThreads = false;
 
@@ -39,7 +41,7 @@ public class RequestConfig {
     House house = null;
     // ввод
     Vvod vvod = null;
-    // квартира
+    // помещение
     Ko ko = null;
 
     // получить наименование типа выполнения
@@ -75,7 +77,6 @@ public class RequestConfig {
         return null;
     }
 
-
     public static final class RequestConfigBuilder {
         // Id запроса
         int rqn;
@@ -85,6 +86,7 @@ public class RequestConfig {
         int debugLvl = 0;
         // дата на которую сформировать
         Date genDt = null;
+        // текущий период
         Date curDt1;
         Date curDt2;
         // выполнять многопоточно
@@ -94,7 +96,7 @@ public class RequestConfig {
         House house = null;
         // ввод
         Vvod vvod = null;
-        // квартира
+        // помещение
         Ko ko = null;
 
         private RequestConfigBuilder() {
