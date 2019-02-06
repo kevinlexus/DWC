@@ -50,6 +50,6 @@ public class ChargePrep {
     // наличие счетчика
     @Type(type= "org.hibernate.type.NumericBooleanType")
     @Column(name = "SCH", updatable = false, nullable = false, insertable = true)
-    private boolean isExistMeter;
+    private Boolean isExistMeter;
 }
 

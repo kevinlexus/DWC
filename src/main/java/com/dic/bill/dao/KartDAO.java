@@ -16,7 +16,7 @@ public interface KartDAO {
     public Kart getKwByNum(Integer klskId, String num);
 	List<Kart> getListLsk(String lskFrom, String lskTo);
 
-    List<Ko> getKoAll();
+    List<Ko> getKoKwAll();
 
     List<Ko> getKoByHouse(House house);
     List<Ko> getKoByVvod(Vvod vvod);

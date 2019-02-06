@@ -58,8 +58,8 @@ public class KartDAOImpl implements KartDAO {
 	 * @return
 	 */
 	@Override
-	public List<Ko> getKoAll() {
-		Query query =em.createQuery("select distinct t.ko from Kart t");
+	public List<Ko> getKoKwAll() {
+		Query query =em.createQuery("select distinct t.koKw from Kart t");
 		return query.getResultList();
 	}
 
