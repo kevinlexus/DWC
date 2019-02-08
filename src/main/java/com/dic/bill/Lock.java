@@ -5,6 +5,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 /**
  * Блокировщик объектов
  * @author Lev
@@ -58,7 +60,7 @@ public class Lock {
 
 	// разблокировать процесс
 	public synchronized void unlockProc(Integer rqn, String procName) {
-		//log.info("==UNLOCK== RQN={}, блокировка процесса={} снята", rqn, procName);
+		log.info("==UNLOCK== RQN={}, блокировка процесса={} снята", rqn, procName);
 		// снять блокировку
 		this.procLock.remove(procName);
 		// снять маркер работающего процесса
@@ -72,24 +74,24 @@ public class Lock {
 	}
 
 	// блокировка по лиц.счету
-	public synchronized Boolean setLockLsk(Integer rqn, int klskId) {
+	public synchronized Boolean setLockLsk(Integer rqn, Integer klskId) {
 		if (this.lstLsk.contains(klskId)) {
 			// запрет блокировки
-			//log.info("==LOCK== ERROR RQN={}, запрет блокировки по lsk={}, идёт блокировка другим потоком!", lsk);
+			log.info("==LOCK== ERROR RQN={}, запрет блокировки по klskId={}, идёт блокировка другим потоком!", klskId);
 			return false;
 		} else {
 			// выполнить блокировку
 			this.lstLsk.add(klskId);
-			//log.info("==LOCK== RQN={}, блокировка выполнена: lsk={}", rqn, lsk);
+			log.info("==LOCK== RQN={}, блокировка выполнена: klskId={}", rqn, klskId);
 			return true;
 		}
 
 	}
 
 	// разблокировать лиц.счет
-	public synchronized void unlockLsk(Integer rqn, int klskId) {
-		//log.info("==UNLOCK== RQN={}, блокировка снята: lsk={}", rqn, lsk);
+	public synchronized void unlockLsk(Integer rqn, Integer klskId) {
 		this.lstLsk.remove(klskId);
+		log.info("==UNLOCK== RQN={}, блокировка снята: klskId={}", rqn, klskId);
 	}
 
 }
