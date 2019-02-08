@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_STATES_PR", schema="SCOTT")
+@Table(name = "C_STATES_PR", schema="TEST")
 public class StatePr implements java.io.Serializable {
 
 	@Id

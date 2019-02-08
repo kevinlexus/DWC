@@ -408,7 +408,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             }
             // округлить на первую услугу по порядку кода USL
             if (firstCharge !=null) {
-                BigDecimal summCheck = kart.getOpl().multiply(priceAmnt);
+                BigDecimal summCheck = kart.getOpl().multiply(priceAmnt).setScale(2, BigDecimal.ROUND_HALF_UP);
                 BigDecimal diff = summCheck.subtract(summAmnt);
                 if (diff.abs().compareTo(new BigDecimal("0.05")) < 0) {
                     log.trace("Итого сумма ={} рассчит={}", summAmnt, summCheck);

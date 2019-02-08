@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema="SCOTT")
+@Table(name = "NABOR", schema="TEST")
 @Getter @Setter
 public class Nabor implements java.io.Serializable  {
 

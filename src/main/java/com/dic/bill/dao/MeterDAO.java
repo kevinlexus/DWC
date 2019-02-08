@@ -43,12 +43,11 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * @param dtTo - оконачание периода
 	 * @return
 	 */
-	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, sum(o.n1) as vol " +
-			"from Meter t left join t.objPar o "
-			+ "where t.koObj.id = ?1 and o.lst.cd='ins_vol_sch' " +
+	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, nvl(sum(o.n1),0) as vol " +
+			"from Meter t left join t.objPar o with o.lst.cd='ins_vol_sch' and o.mg = TO_CHAR(?2,'YYYYMM') "
+			+ "where t.koObj.id = ?1 " +
 			"and ((?2 between t.dt1 and t.dt2 or ?3 between t.dt1 and t.dt2) or " +
 			"(t.dt1 between ?2 and ?3 or t.dt2 between ?2 and ?3)) " +
-			"and o.mg = TO_CHAR(?2,'YYYYMM') " +
 			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
 	List<SumMeterVol> findMeterVolByKlsk(Integer koObjId, Date dtFrom, Date dtTo);
 
