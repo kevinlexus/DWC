@@ -278,7 +278,20 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	@Override
 	public void buildKartPrForTest(Kart kart, int persCount) {
 		KartPr kartPr;
-		if (persCount >= 1) {
+
+		// Антонов (собственник)
+		kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
+				"01.04.2014", "30.05.2014");
+		addStatePrForTest(kartPr, 1, "01.04.2014", "30.05.2014");
+		kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
+				"01.04.2014", "30.05.2014");
+		addStatePrForTest(kartPr, 1, "01.04.2014", "30.05.2014");
+		kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
+				"01.04.2014", "30.05.2014");
+		addStatePrForTest(kartPr, 1, "01.04.2014", "30.05.2014");
+
+
+/*		if (persCount >= 1) {
 			// Антонов (собственник)
 			kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
 					"02.04.2014", "30.04.2014");
@@ -310,7 +323,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			// временная регистрация
 			addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
 		}
-
+*/
 	}
 
 

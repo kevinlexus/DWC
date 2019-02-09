@@ -26,7 +26,7 @@ public class Param implements java.io.Serializable {
 	@Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; // ID
 
-	@Column(name = "PERIOD", updatable = false, nullable = false)
+	@Column(name = "PERIOD", updatable = true, nullable = false)
 	private String period; // период
 
 }
