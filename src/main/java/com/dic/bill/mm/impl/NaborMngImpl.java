@@ -27,18 +27,17 @@ public class NaborMngImpl implements NaborMng {
 	@Override
 	public List<Nabor> getValidNabor(Ko ko, Date curDt) {
 		// перебрать все открытые лиц счета по квартире, получить все наборы услуг, отсортировать по порядку расчета начисления
-		List<Nabor> lst = ko.getKart().stream().filter(k->k.isActual())
+		return ko.getKart().stream().filter(Kart::isActual)
 				.flatMap(k -> k.getNabor().stream())
+				.filter(Nabor::isValid)
 				.sorted((Comparator.comparing(o -> o.getUsl().getUslOrder())))
 				.collect(Collectors.toList());
-		return lst;
 	}
 
 	/**
 	 * Получить детализированные услуги и расценки
 	 * @param kartMain - основной лицевой счет
 	 * @param nabor - строка по услуге
-	 * @return
 	 */
 	@Override
 	public DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg {
@@ -96,7 +95,6 @@ public class NaborMngImpl implements NaborMng {
 	 * @param nabor - строка набора
 	 * @param priceColumn - колонку цены, которую использовать
 	 * @return - итогововая цена со всеми коэффициентами
-	 * @throws ErrorWhileChrg
 	 */
 	private BigDecimal multiplyPrice(Nabor nabor, int priceColumn) throws ErrorWhileChrg {
 		BigDecimal coeff = Utl.nvl(nabor.getKoeff(), BigDecimal.ZERO);
@@ -128,7 +126,6 @@ public class NaborMngImpl implements NaborMng {
 	/**
 	 * Получить базовую запись расценки, зависящей от организации
 	 * @param nabor - строка набора услуги
-	 * @return
 	 */
 	private Price getBasePrice(Nabor nabor) {
 		Price foundPrice = null;
@@ -148,8 +145,6 @@ public class NaborMngImpl implements NaborMng {
 	 * @param lst - список услуг в лиц.счете
 	 * @param usl - выбранная главная услуга
 	 * @return
-	 */
-/*
 	@Override
 	public Nabor getNabor(List<Nabor> lst, Usl usl) {
 		for (Nabor nabor : lst) {

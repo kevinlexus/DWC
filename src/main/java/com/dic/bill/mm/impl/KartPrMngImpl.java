@@ -159,7 +159,7 @@ public class KartPrMngImpl implements KartPrMng {
 
 				int yearsOld = Utl.getDiffYears(p.getDtBirdth() == null ? dt : p.getDtBirdth(), dt);
 				if (yearsOld >= 70) {
-					if (Utl.in(p.getRelation().getCd(), "Квартиросъемщик", "Собственник")) {
+					if (p.getRelation()!= null && Utl.in(p.getRelation().getCd(), "Квартиросъемщик", "Собственник")) {
 						if (status==1) { // ПЗ
 							isOwnerOlder70 = true;
 						}

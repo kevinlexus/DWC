@@ -41,7 +41,7 @@ public class Lock {
 			this.procLock.add(procName);
 			// установить маркер работающего процесса
 			this.procExec.add(procName);
-			//log.info("==EXEC== RQN={}, блокировка выполнена: процесс={}", rqn, procName);
+			log.info("==EXEC== RQN={}, блокировка выполнена: процесс={}", rqn, procName);
 			return true;
 		}
 
