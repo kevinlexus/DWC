@@ -47,14 +47,14 @@ public class NaborMngImpl implements NaborMng {
 		Usl uslOverNorm = usl.getUslOverNorm();
 		Usl uslEmpt = usl.getUslEmpt();
 		// услуга но норме (обычная)
-		detail.price = multiplyPrice(nabor, 0);
+		detail.price = multiplyPrice(nabor, 1);
 
 		if (uslOverNorm != null) {
 			// найти услугу свыше соц.нормы, если есть
 			Nabor naborOverNorm = kart.getNabor().stream()
 					.filter(t -> t.getUsl().equals(uslOverNorm)).findFirst().orElse(null);
 			if (naborOverNorm != null) {
-				detail.priceOverSoc = multiplyPrice(naborOverNorm, 0);
+				detail.priceOverSoc = multiplyPrice(naborOverNorm, 1);
 			} else {
 				// не найдено - принять цену такую же как основная
 				detail.priceOverSoc = detail.price;
@@ -75,7 +75,7 @@ public class NaborMngImpl implements NaborMng {
 					// взято из C_CHARGE, строка 2024
 					detail.priceEmpt = detail.price;
 				} else {
-					detail.priceEmpt = multiplyPrice(naborEmpt, 0);
+					detail.priceEmpt = multiplyPrice(naborEmpt, 1);
 				}
 			} else {
 				// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
@@ -112,11 +112,11 @@ public class NaborMngImpl implements NaborMng {
 		}
 		// рассчитать цену
 		BigDecimal price = BigDecimal.ZERO;
-		if (priceColumn == 0) {
+		if (priceColumn == 1) {
 			price = basePrice.getPrice();
-		} else if (priceColumn == 1) {
-			price = basePrice.getPriceAddit();
 		} else if (priceColumn == 2) {
+			price = basePrice.getPriceAddit();
+		} else if (priceColumn == 3) {
 			price = basePrice.getPriceEmpt();
 		}
 		return Utl.nvl(price, BigDecimal.ZERO).multiply(coeff)

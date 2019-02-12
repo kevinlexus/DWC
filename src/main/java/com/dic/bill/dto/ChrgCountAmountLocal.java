@@ -47,6 +47,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         // округленный объем
         BigDecimal vol = u.vol.add(u.volOverSoc);
 
+        if (u.usl.getId().equals("053")) {
+            log.info("ДОБАВЛЕНО: dt={}, empt={}, voldet={}, vol={}", u.dt, u.isEmpty, volDet, vol);
+        }
+
         // Сгруппировать объемы по базовым параметрам, по лиц.счетам для распределения по вводам
         UslVolKartGrp prevUslVolKartGrp = getLstUslVolKartGrp().stream().filter(t -> t.kart.equals(u.kart)
                 && t.usl.equals(u.usl)
@@ -229,11 +233,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     /**
      * Распечатать объемы по лиц.счетам
      *
-     * @param usl - код услуги, если не заполнено, то все
+     * @param uslId - код услуги, если не заполнено, то все
+     * @param msg - сообщение
      */
-    public void printVolAmnt(Usl usl) {
+    public void printVolAmnt(String uslId, String msg) {
         log.info("");
-        log.info("****** ПРОВЕРКА объемов UslPriceVolKartDt:");
+        log.info("****** ПРОВЕРКА объемов {}, по UslPriceVolKartDt:", msg);
         // отсортировать по lsk, usl, dtFrom
         List<UslPriceVolKartDt> lst =
                 getLstUslPriceVolKartDt().stream()
@@ -243,7 +248,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         )
                         .collect(Collectors.toList());
         for (UslPriceVolKartDt t : lst) {
-            if (usl == null || t.usl.equals(usl)) {
+            if (uslId == null || t.usl.getId().equals(uslId)) {
                 log.info("dt={}-{}, lsk={}, usl={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                 "org={}, prc={}, prcE={}, prcO={}, std={} " +
                                 "kpr={}, kprO={}, kprW={}, vol={}, volO={}",
