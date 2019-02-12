@@ -16,7 +16,7 @@ public class UslVolKartGrp extends UslVol {
     // наличие в текущем периоде проживающих по услуге (даже если один день был)
     public boolean isExistPersCurrPeriod = false;
     // детализированный объем, до 20 знаков после запятой, для округления
-    public BigDecimal volDet = BigDecimal.ZERO;
+    //public BigDecimal volDet = BigDecimal.ZERO;
     // жилое помещение?
     public boolean isResidental;
 

@@ -279,7 +279,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 	public void buildKartPrForTest(Kart kart, int persCount) {
 		KartPr kartPr;
 
-		// Антонов (собственник)
+/*		// Антонов (собственник)
 		kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
 				"01.04.2014", "30.05.2014");
 		addStatePrForTest(kartPr, 1, "01.04.2014", "30.05.2014");
@@ -289,9 +289,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
 				"01.04.2014", "30.05.2014");
 		addStatePrForTest(kartPr, 1, "01.04.2014", "30.05.2014");
+*/
 
-
-/*		if (persCount >= 1) {
+		if (persCount >= 1) {
 			// Антонов (собственник)
 			kartPr = addKartPrForTest(kart, 1, 11, "Антонов", "01.01.1913",
 					"02.04.2014", "30.04.2014");
@@ -323,7 +323,6 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			// временная регистрация
 			addStatePrForTest(kartPr, 3, "03.04.2014", "30.04.2014");
 		}
-*/
 	}
 
 
@@ -438,7 +437,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 			for (Vvod vvod : kart.getHouse().getVvod()) {
 				if (vvod.getUsl().getId().equals("053")) {
 					// Отопление Гкал
-					addNaborForTest(kart, 6, "053", new BigDecimal("1"), null,
+					addNaborForTest(kart, 6, "053", new BigDecimal("1"), new BigDecimal("1"),
 							new BigDecimal("2.70547"), null, vvod);
 
 				} else if (vvod.getUsl().getId().equals("011")) {

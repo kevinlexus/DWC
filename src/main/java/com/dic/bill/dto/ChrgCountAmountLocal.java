@@ -41,15 +41,15 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      */
     public void groupUslVol(UslPriceVolKart u) {
         // детализированный объем
-        BigDecimal volDet = u.vol.add(u.volOverSoc);
+        //BigDecimal volDet = u.vol.add(u.volOverSoc);
         //u.vol = u.vol.setScale(5, BigDecimal.ROUND_HALF_UP);
         //u.volOverSoc = u.volOverSoc.setScale(5, BigDecimal.ROUND_HALF_UP);
         // округленный объем
         BigDecimal vol = u.vol.add(u.volOverSoc);
 
-        if (u.usl.getId().equals("053")) {
-            log.info("ДОБАВЛЕНО: dt={}, empt={}, voldet={}, vol={}", u.dt, u.isEmpty, volDet, vol);
-        }
+/*        if (u.usl.getId().equals("053")) {
+            log.info("ДОБАВЛЕНО: dt={}, empt={}, vol={}", u.dt, u.isEmpty, vol);
+        }*/
 
         // Сгруппировать объемы по базовым параметрам, по лиц.счетам для распределения по вводам
         UslVolKartGrp prevUslVolKartGrp = getLstUslVolKartGrp().stream().filter(t -> t.kart.equals(u.kart)
@@ -63,7 +63,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolKartGrp.isResidental = u.isResidental;
             uslVolKartGrp.usl = u.usl;
             uslVolKartGrp.vol = vol;
-            uslVolKartGrp.volDet = volDet;
+            //uslVolKartGrp.volDet = volDet;
 
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
             uslVolKartGrp.kpr = u.kpr;
@@ -79,7 +79,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolKartGrp.vol = prevUslVolKartGrp.vol.add(vol);
-            prevUslVolKartGrp.volDet = prevUslVolKartGrp.volDet.add(volDet);
+            //prevUslVolKartGrp.volDet = prevUslVolKartGrp.volDet.add(volDet);
             prevUslVolKartGrp.area = prevUslVolKartGrp.area.add(u.area).add(u.areaOverSoc);
             prevUslVolKartGrp.kpr = prevUslVolKartGrp.kpr.add(u.kpr);
         }
@@ -197,37 +197,50 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     public void roundVol() {
         List<Usl> lstUsl = getLstUslVolKartGrp().stream().map(t -> t.usl).distinct().collect(Collectors.toList());
         for (Usl usl : lstUsl) {
-            List<UslVolKartGrp> lst = getLstUslVolKartGrp().stream()
-                    .filter(t -> t.usl.equals(usl))
-                    .collect(Collectors.toList());
-            for (UslVolKartGrp d : lst) {
-                BigDecimal diff;
-                if (d.usl.isCalcByArea()) {
-                    // до 2 знаков - услуги, рассчитываемые по площади
-                    diff = d.volDet.setScale(2, BigDecimal.ROUND_HALF_UP)
-                            .subtract(d.vol);
-                } else {
-                    // остальные услуги до 5 знаков
-                    diff = d.volDet.setScale(5, BigDecimal.ROUND_HALF_UP)
-                            .subtract(d.vol);
-                }
-                d.vol = d.vol.add(diff);
-                if (diff.compareTo(BigDecimal.ZERO) != 0) {
-                    getLstUslVolKart().stream()
-                            .filter(t -> t.kart.equals(d.kart) && t.usl.equals(d.usl))
-                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
-                    getLstUslVolVvod().stream()
-                            .filter(t -> t.usl.equals(d.usl))
-                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
-                    getLstUslPriceVolKartLinked().stream()
-                            .filter(t -> t.kart.equals(d.kart) && t.usl.equals(d.usl))
-                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
-                    getLstUslPriceVolKartDt().stream() // note спорно...а где volOverSoc? правильно ли выполнится округление?
-                            .filter(t -> t.kart.equals(d.kart) && t.usl.equals(d.usl))
-                            .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
-                }
-            }
+            BigDecimal summSample = roundByLst(getLstUslVolKartGrp(), usl, null);
+            roundByLst(getLstUslVolVvod(), usl, summSample);
+            //roundByLst(getLstUslPriceVolKartLinked(), usl, summSample);
+            roundByLst(getLstUslPriceVolKartDt(), usl, summSample);
         }
+    }
+
+    /**
+     * Округлить по коллекциям
+     * @param lstSrc - коллекция
+     * @param usl - услуга
+     * @param summSample - сумма для сравнения
+     * @return - сумма для сравнения в будущих округлениях
+     */
+    private BigDecimal roundByLst(List<? extends UslVol> lstSrc, Usl usl, BigDecimal summSample) {
+
+        List<UslVol> lst = lstSrc.stream()
+                .filter(t -> t.usl.equals(usl))
+                .collect(Collectors.toList());
+
+        int round;
+        if (usl.isCalcByArea()) {
+            // до 2 знаков - услуги, рассчитываемые по площади
+            round = 2;
+        } else {
+            // остальные услуги до 5 знаков
+            round = 5;
+        }
+        if (summSample == null) {
+            summSample = lst.stream().map(t -> t.vol).reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .setScale(round, BigDecimal.ROUND_HALF_UP);
+        }
+        //log.info("$$$$$$$ summSample={}", summSample);
+        lst.forEach(t->t.vol = t.vol.setScale(round, BigDecimal.ROUND_HALF_UP));
+        BigDecimal sumVol2 = lst.stream().map(t -> t.vol).reduce(BigDecimal.ZERO, BigDecimal::add);
+        //log.info("$$$$$$$ sumVol2={}", sumVol2);
+        BigDecimal diff = summSample.subtract(sumVol2);
+        //log.info("$$$$$$$ diff={}", diff);
+        if (diff.compareTo(BigDecimal.ZERO) != 0) {
+            lstSrc.stream()
+                    .filter(t -> t.usl.equals(usl))
+                    .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
+        }
+        return summSample;
     }
 
     /**
