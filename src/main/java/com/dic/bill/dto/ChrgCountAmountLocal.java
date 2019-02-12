@@ -42,8 +42,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     public void groupUslVol(UslPriceVolKart u) {
         // детализированный объем
         BigDecimal volDet = u.vol.add(u.volOverSoc);
-        u.vol = u.vol.setScale(5, BigDecimal.ROUND_HALF_UP);
-        u.volOverSoc = u.volOverSoc.setScale(5, BigDecimal.ROUND_HALF_UP);
+        //u.vol = u.vol.setScale(5, BigDecimal.ROUND_HALF_UP);
+        //u.volOverSoc = u.volOverSoc.setScale(5, BigDecimal.ROUND_HALF_UP);
         // округленный объем
         BigDecimal vol = u.vol.add(u.volOverSoc);
 
