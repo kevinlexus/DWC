@@ -238,7 +238,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         if (diff.compareTo(BigDecimal.ZERO) != 0) {
             lstSrc.stream()
                     .filter(t -> t.usl.equals(usl))
-                    .findFirst().ifPresent(t -> t.vol = t.vol.add(diff));
+                    .reduce((first, second) -> second) // найти последний элемент
+                    //.findFirst()
+                    .ifPresent(t -> t.vol = t.vol.add(diff));
         }
         return summSample;
     }
@@ -288,16 +290,15 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      *
      * @param uslId - код услуги, если не заполнено, то все
      */
-/*
+
     public void printVolAmntChrg(String uslId) {
         log.info("");
-        log.info("****** ПРОВЕРКА объема UslPriceVolKartDt, для C_CHARGE:");
+        log.info("****** ПРОВЕРКА объема UslPriceVolKartDt, для сохранения в C_CHARGE:");
         for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
             log.info("lsk={}, usl={}, vol={}, volOverSoc={} *******",
                     u.kart.getLsk(), u.usl.getId(), u.vol, u.volOverSoc);
         }
     }
-*/
 
     /**
      * сгруппировать и сохранить начисление
@@ -379,9 +380,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * @param ko - квартира
      */
     public void saveChargeAndRound(Ko ko) throws ErrorWhileChrg {
-        // удалить информацию по текущему начислению, по квартире
+        // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
-            kart.getCharge().clear();
+            kart.getCharge().removeIf(t->t.getType().equals(0) || t.getType().equals(1));
         }
         log.trace("Сохранено в C_CHARGE:");
         for (UslVolCharge u : getLstUslVolCharge()) {

@@ -29,7 +29,7 @@ public class NaborMngImpl implements NaborMng {
 		// перебрать все открытые лиц счета по квартире, получить все наборы услуг, отсортировать по порядку расчета начисления
 		return ko.getKart().stream().filter(Kart::isActual)
 				.flatMap(k -> k.getNabor().stream())
-				.filter(Nabor::isValid)
+				.filter(t->t.isValid() && t.getUsl().isMain())
 				.sorted((Comparator.comparing(o -> o.getUsl().getUslOrder())))
 				.collect(Collectors.toList());
 	}

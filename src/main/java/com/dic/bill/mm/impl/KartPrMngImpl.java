@@ -184,20 +184,35 @@ public class KartPrMngImpl implements KartPrMng {
 			}
 		}
 
+/*
+		if (nabor.getUsl().getFkCalcTp().equals(49)) {
+			log.info("$$$$$$$$$$ status={}, parVarCntKpr={}, countPers.kprNorm={}",
+					kartMain.getStatus().getCd().equals("MUN"), parVarCntKpr,
+					countPers.kprNorm);
+		}
+*/
 		// дополнительно установка кол-во проживающих для объема
 		// алгоритм взят из C_KART, строка 786
 		// Здесь берётся сам лицевой счет, kart!!!
 		if (countPers.kprNorm == 0) {
 			if (Utl.in(kart.getTp().getCd(), "LSK_TP_RSO")) {
 				// в РСО счетах
-				if (parVarCntKpr==0
-						&& countPers.kprOt == 0 && !kartMain.getStatus().getCd().equals("MUN")) {
-					// Киселёвск, нет временно отсутствующих и не муниципальный лиц.счет
-					// поставить хоть одного проживающего, для объема
-					countPers.kprNorm=1;
+				if (parVarCntKpr==0) {
+					// Киселёвск
+					if (nabor.getUsl().getFkCalcTp().equals(49) && !kartMain.getStatus().getCd().equals("MUN")) {
+						// услуга по обращению с ТКО
+						// не муницип. квартира
+						countPers.kpr = 1;
+						countPers.kprNorm = 1;
+					} else if (countPers.kprOt == 0 && !kartMain.getStatus().getCd().equals("MUN")) {
+						// Киселёвск, нет временно отсутствующих и не муниципальный лиц.счет
+						// поставить хоть одного проживающего, для объема
+						countPers.kprNorm = 1;
+					}
 				}
 			} else {
 				// в Основных и прочих счетах
+/*
 				if (parVarCntKpr==0) {
 					// Киселёвск
 					if (nabor.getUsl().getFkCalcTp().equals(49) && !kartMain.getStatus().getCd().equals("MUN")) {
@@ -207,7 +222,7 @@ public class KartPrMngImpl implements KartPrMng {
 						countPers.kprNorm=1;
 					}
 				}
-
+*/
 				if (parVarCntKpr==1 && countPers.kprOt == 0) {
 					// Полысаево
 					// поставить хоть одного проживающего, для объема

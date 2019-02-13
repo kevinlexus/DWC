@@ -4,6 +4,8 @@ import com.dic.bill.dto.UslVolKart;
 import com.dic.bill.dto.UslVolKartGrp;
 import com.dic.bill.dto.UslVolVvod;
 import com.dic.bill.dto.ChrgCountAmountLocal;
+import com.dic.bill.model.scott.Charge;
+import com.dic.bill.model.scott.Kart;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -172,6 +174,21 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                             vol3.compareTo(vol4) == 0
                     );
                 });
+    }
+
+    /**
+     * Распечатать строки C_CHARGE
+     *
+     * @param kart - лиц.счет
+     */
+
+    public void printChrg(Kart kart) {
+        log.info("");
+        log.info("****** ПРОВЕРКА Chrg():");
+        for (Charge t : kart.getCharge()) {
+            log.info("lsk={}, usl={}, type={}, summa={}, testOpl={} *******",
+                    kart.getLsk(), t.getUsl().getId(), t.getType(), t.getSumma(), t.getTestOpl());
+        }
     }
 
 
