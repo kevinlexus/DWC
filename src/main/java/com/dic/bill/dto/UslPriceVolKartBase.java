@@ -19,6 +19,11 @@ abstract class UslPriceVolKartBase extends UslVolKart {
     // организация
     public Org org;
 
+    // услуга свыше соц.нормы
+    public Usl uslOverSoc;
+    // услуга по 0 зарег.
+    public Usl uslEmpt;
+
     // соц.норма
     public BigDecimal socStdt = BigDecimal.ZERO;
 

@@ -28,7 +28,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
      * Добавить локальные объемы по квартире в объем по вводу
      * @param chrgCountAmountLocal - хранилище локальных объемов по квартире
      */
-    public void append(ChrgCountAmountLocal chrgCountAmountLocal) {
+    public synchronized void append(ChrgCountAmountLocal chrgCountAmountLocal) {
         this.getLstUslVolKart().addAll(chrgCountAmountLocal.getLstUslVolKart());
         this.getLstUslVolKartGrp().addAll(chrgCountAmountLocal.getLstUslVolKartGrp());
 

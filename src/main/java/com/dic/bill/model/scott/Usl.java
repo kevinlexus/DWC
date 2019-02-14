@@ -66,7 +66,7 @@ public class Usl implements java.io.Serializable  {
 	// услуга свыше соцнормы
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="USL_P", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private Usl uslOverNorm;
+	private Usl uslOverSoc;
 
 	// услуга для определения объема (иногда делается подстановка)
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
@@ -122,8 +122,8 @@ public class Usl implements java.io.Serializable  {
 	 */
 	@Transient
 	public Usl getFactUslOverSoc() {
-		if (getUslOverNorm() != null) {
-			return getUslOverNorm();
+		if (getUslOverSoc() != null) {
+			return getUslOverSoc();
 		} else {
 			// пустая услуга свыше соц.нормы, вернуть основную
 			return this;
@@ -139,8 +139,8 @@ public class Usl implements java.io.Serializable  {
 			return getUslEmpt();
 		} else {
 			// пустая услуга 0 зарег, вернуть свыше соц.нормы
-			if (getUslOverNorm() != null) {
-				return getUslOverNorm();
+			if (getUslOverSoc() != null) {
+				return getUslOverSoc();
 			} else {
 				// пустая услуга свыше соц.нормы, вернуть основную
 				return this;

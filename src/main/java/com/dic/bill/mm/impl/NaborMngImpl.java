@@ -44,23 +44,26 @@ public class NaborMngImpl implements NaborMng {
 		Kart kart = nabor.getKart();
 		DetailUslPrice detail = new DetailUslPrice();
 		Usl usl = nabor.getUsl();
-		Usl uslOverNorm = usl.getUslOverNorm();
+		Usl uslOverSoc = usl.getUslOverSoc();
 		Usl uslEmpt = usl.getUslEmpt();
 		// услуга но норме (обычная)
 		detail.price = multiplyPrice(nabor, 1);
 
-		if (uslOverNorm != null) {
+		if (uslOverSoc != null) {
 			// найти услугу свыше соц.нормы, если есть
-			Nabor naborOverNorm = kart.getNabor().stream()
-					.filter(t -> t.getUsl().equals(uslOverNorm)).findFirst().orElse(null);
-			if (naborOverNorm != null) {
-				detail.priceOverSoc = multiplyPrice(naborOverNorm, 1);
+			Nabor naborOverSoc = kart.getNabor().stream()
+					.filter(t -> t.getUsl().equals(uslOverSoc)).findFirst().orElse(null);
+			if (naborOverSoc != null) {
+				detail.uslOverSoc = naborOverSoc.getUsl();
+				detail.priceOverSoc = multiplyPrice(naborOverSoc, 1);
 			} else {
 				// не найдено - принять цену такую же как основная
+				detail.uslOverSoc = nabor.getUsl();
 				detail.priceOverSoc = detail.price;
 			}
 		} else {
 			// принять цену такую же как основная
+			detail.uslOverSoc = nabor.getUsl();
 			detail.priceOverSoc = detail.price;
 		}
 
@@ -73,17 +76,26 @@ public class NaborMngImpl implements NaborMng {
 				if (nabor.getUsl().getFkCalcTp().equals(31) && kartMain.getStatus().getId().equals(1)) {
 					// электроэнергия, - если муниципальная квартира - принять цену по соцнорме
 					// взято из C_CHARGE, строка 2024
+					detail.uslEmpt = naborEmpt.getUsl();
 					detail.priceEmpt = detail.price;
 				} else {
+					detail.uslEmpt = naborEmpt.getUsl();
 					detail.priceEmpt = multiplyPrice(naborEmpt, 1);
 				}
 			} else {
 				// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
+				detail.uslEmpt = nabor.getUsl();
 				detail.priceEmpt = multiplyPrice(nabor, 3);
 			}
 		} else {
 			// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
-			detail.priceEmpt = multiplyPrice(nabor, 3);
+			if (detail.uslOverSoc != null) {
+				detail.uslEmpt = detail.uslOverSoc;
+				detail.priceEmpt = detail.priceOverSoc;
+			} else {
+				detail.uslEmpt = nabor.getUsl();
+				detail.priceEmpt = multiplyPrice(nabor, 3);
+			}
 		}
 		return detail;
 	}

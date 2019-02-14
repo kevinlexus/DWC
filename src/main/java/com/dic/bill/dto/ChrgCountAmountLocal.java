@@ -1,6 +1,9 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.*;
+import com.dic.bill.model.scott.Charge;
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -138,18 +141,20 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
         Date prevDt = Utl.addDays(u.dt, -1);
         // искать по лиц.счету, предыдущей дате, основному ключу
-        UslPriceVolKartDt prevUslPriceVolKart = lstUslPriceVolKartDt.stream().filter(t -> t.kart.equals(u.kart)
+        UslPriceVolKartDt prevUslPriceVolKartDt = lstUslPriceVolKartDt.stream().filter(t -> t.kart.equals(u.kart)
                 && t.dtTo.equals(prevDt)
                 && t.usl.equals(u.usl) &&
                 t.org.equals(u.org) && t.isMeter == u.isMeter && t.isResidental == u.isResidental
                 && t.isEmpty == u.isEmpty && t.socStdt.equals(u.socStdt)
                 && t.price.equals(u.price) && t.priceOverSoc.equals(u.priceOverSoc)
                 && t.priceEmpty.equals(u.priceEmpty)).findFirst().orElse(null);
-        if (prevUslPriceVolKart == null) {
+        if (prevUslPriceVolKartDt == null) {
             // добавить новый элемент
             UslPriceVolKartDt uslPriceVolKartDt = new UslPriceVolKartDt();
             uslPriceVolKartDt.kart = u.kart;
             uslPriceVolKartDt.usl = u.usl;
+            uslPriceVolKartDt.uslOverSoc = u.uslOverSoc;
+            uslPriceVolKartDt.uslEmpt = u.uslEmpt;
             uslPriceVolKartDt.dtFrom = u.dt;
             uslPriceVolKartDt.dtTo = u.dt;
             uslPriceVolKartDt.isEmpty = u.isEmpty;
@@ -176,18 +181,18 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             lstUslPriceVolKartDt.add(uslPriceVolKartDt);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденный период
-            prevUslPriceVolKart.area = prevUslPriceVolKart.area.add(u.area);
-            prevUslPriceVolKart.areaOverSoc = prevUslPriceVolKart.areaOverSoc.add(u.areaOverSoc);
+            prevUslPriceVolKartDt.area = prevUslPriceVolKartDt.area.add(u.area);
+            prevUslPriceVolKartDt.areaOverSoc = prevUslPriceVolKartDt.areaOverSoc.add(u.areaOverSoc);
 
-            prevUslPriceVolKart.vol = prevUslPriceVolKart.vol.add(u.vol);
-            prevUslPriceVolKart.volOverSoc = prevUslPriceVolKart.volOverSoc.add(u.volOverSoc);
+            prevUslPriceVolKartDt.vol = prevUslPriceVolKartDt.vol.add(u.vol);
+            prevUslPriceVolKartDt.volOverSoc = prevUslPriceVolKartDt.volOverSoc.add(u.volOverSoc);
 
-            prevUslPriceVolKart.kpr = prevUslPriceVolKart.kpr.add(u.kpr);
-            prevUslPriceVolKart.kprWr = prevUslPriceVolKart.kprWr.add(u.kprWr);
-            prevUslPriceVolKart.kprOt = prevUslPriceVolKart.kprOt.add(u.kprOt);
+            prevUslPriceVolKartDt.kpr = prevUslPriceVolKartDt.kpr.add(u.kpr);
+            prevUslPriceVolKartDt.kprWr = prevUslPriceVolKartDt.kprWr.add(u.kprWr);
+            prevUslPriceVolKartDt.kprOt = prevUslPriceVolKartDt.kprOt.add(u.kprOt);
 
             // продлить дату окончания
-            prevUslPriceVolKart.dtTo = u.dt;
+            prevUslPriceVolKartDt.dtTo = u.dt;
         }
     }
 
@@ -206,8 +211,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
     /**
      * Округлить по коллекциям
-     * @param lstSrc - коллекция
-     * @param usl - услуга
+     *
+     * @param lstSrc     - коллекция
+     * @param usl        - услуга
      * @param summSample - сумма для сравнения
      * @return - сумма для сравнения в будущих округлениях
      */
@@ -230,7 +236,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                     .setScale(round, BigDecimal.ROUND_HALF_UP);
         }
         //log.info("$$$$$$$ summSample={}", summSample);
-        lst.forEach(t->t.vol = t.vol.setScale(round, BigDecimal.ROUND_HALF_UP));
+        lst.forEach(t -> t.vol = t.vol.setScale(round, BigDecimal.ROUND_HALF_UP));
         BigDecimal sumVol2 = lst.stream().map(t -> t.vol).reduce(BigDecimal.ZERO, BigDecimal::add);
         //log.info("$$$$$$$ sumVol2={}", sumVol2);
         BigDecimal diff = summSample.subtract(sumVol2);
@@ -249,7 +255,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * Распечатать объемы по лиц.счетам
      *
      * @param uslId - код услуги, если не заполнено, то все
-     * @param msg - сообщение
+     * @param msg   - сообщение
      */
     public void printVolAmnt(String uslId, String msg) {
         log.info("");
@@ -264,11 +270,11 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         .collect(Collectors.toList());
         for (UslPriceVolKartDt t : lst) {
             if (uslId == null || t.usl.getId().equals(uslId)) {
-                log.info("dt={}-{}, lsk={}, usl={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
+                log.info("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                 "org={}, prc={}, prcE={}, prcO={}, std={} " +
                                 "kpr={}, kprO={}, kprW={}, vol={}, volO={}",
                         Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),
-                        t.kart.getLsk(), t.usl.getId(),
+                        t.kart.getLsk(), t.usl.getId(), t.uslOverSoc.getId(), t.uslEmpt.getId(),
                         t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                         t.areaOverSoc.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                         t.isEmpty ? "T" : "F",
@@ -321,7 +327,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         priceFact = u.price;
                     } else {
                         // нет проживающих
-                        uslFact = u.usl.getFactUslEmpt();
+                        uslFact = u.uslEmpt;
                         priceFact = u.priceEmpty;
                     }
                 }
@@ -331,7 +337,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // свыше соц.нормы
             // у услуг типа Текущее содержание - не должно быть объема в u.volOverSoc
             if (u.volOverSoc.compareTo(BigDecimal.ZERO) != 0) {
-                addUslVolChrg(u, u.usl.getUslOverNorm(),
+                addUslVolChrg(u, u.uslOverSoc,
                         u.volOverSoc, u.areaOverSoc, u.priceOverSoc);
             }
         }
@@ -372,6 +378,11 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolCharge.kprOt = u.kprOt;
             getLstUslVolCharge().add(uslVolCharge);
         }
+/*
+        log.trace("Добавлено в lstUslVolCharge: lsk={}, usl={}, met={}, vol={}, prc={}, " +
+                        "ar={}, kpr={}, kprWr={}, kprOt={}", u.kart.getLsk(), uslFact.getId(),
+                u.isMeter, vol, price, area, u.kpr, u.kprWr, u.kprOt);
+*/
     }
 
     /**
@@ -382,7 +393,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     public void saveChargeAndRound(Ko ko) throws ErrorWhileChrg {
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
-            kart.getCharge().removeIf(t->t.getType().equals(0) || t.getType().equals(1));
+            kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
         }
         log.trace("Сохранено в C_CHARGE:");
         for (UslVolCharge u : getLstUslVolCharge()) {

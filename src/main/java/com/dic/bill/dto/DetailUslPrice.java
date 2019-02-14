@@ -9,6 +9,12 @@ import java.math.BigDecimal;
  */
 public class DetailUslPrice {
 
+
+    // услуга свыше соц.нормы
+    public Usl uslOverSoc;
+    // услуга по 0 зарег.
+    public Usl uslEmpt;
+
     // обычная цена (по соцнорме)
     public BigDecimal price = BigDecimal.ZERO;
     // цена свыше соцнормы

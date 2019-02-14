@@ -25,6 +25,10 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
         private Date dt;
         // услуга основная (например х.в.)
         private Usl usl;
+        // услуга свыше соц.норм.
+        private Usl uslOverSoc;
+        // услуга по 0 зарег.
+        private Usl uslEmpt;
         // организация
         private Org org;
         // наличие счетчика
@@ -77,6 +81,15 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
 
         public UslPriceVolBuilder withUsl(Usl usl) {
             this.usl = usl;
+            return this;
+        }
+
+        public UslPriceVolBuilder withUslOverSoc(Usl uslOverSoc) {
+            this.uslOverSoc = uslOverSoc;
+            return this;
+        }
+        public UslPriceVolBuilder withUslEmpt(Usl uslEmpt) {
+            this.uslEmpt = uslEmpt;
             return this;
         }
 
@@ -164,6 +177,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             UslPriceVolKart uslPriceVolKart = new UslPriceVolKart();
             uslPriceVolKart.kart = this.kart;
             uslPriceVolKart.usl = this.usl;
+            uslPriceVolKart.uslOverSoc = this.uslOverSoc;
+            uslPriceVolKart.uslEmpt = this.uslEmpt;
             uslPriceVolKart.org = this.org;
             uslPriceVolKart.socStdt = this.socStdt;
             uslPriceVolKart.price = this.price;
