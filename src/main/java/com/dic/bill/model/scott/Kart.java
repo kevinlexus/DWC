@@ -1,16 +1,15 @@
 package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import javax.persistence.*;
 
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * Лицевой счет (он же - помещение)
@@ -128,15 +127,17 @@ public class Kart implements java.io.Serializable {
 
     // набор услуг
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
-    private List<Nabor> nabor = new ArrayList<>(0);
+    private Set<Nabor> nabor = new HashSet<>(0);
 
     // проживающие
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @Fetch(FetchMode.JOIN)
     // updatable = false - чтобы не было Update Foreign key
-    private List<KartPr> kartPr = new ArrayList<>(0);
+    private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

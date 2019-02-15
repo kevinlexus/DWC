@@ -5,9 +5,13 @@ import javax.persistence.*;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Справочник услуг
@@ -84,7 +88,8 @@ public class Usl implements java.io.Serializable  {
 	// цены по услуге
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<Price> price = new ArrayList<>(0);
+	private Set<Price> price = new HashSet<>(0);
+	@Fetch(FetchMode.JOIN)
 
 	// порядок расчета услуг
 	@Column(name = "USL_ORDER", updatable = false)

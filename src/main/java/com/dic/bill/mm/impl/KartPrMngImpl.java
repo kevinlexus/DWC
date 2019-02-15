@@ -212,17 +212,21 @@ public class KartPrMngImpl implements KartPrMng {
 				}
 			} else {
 				// в Основных и прочих счетах
-/*
+
 				if (parVarCntKpr==0) {
 					// Киселёвск
-					if (nabor.getUsl().getFkCalcTp().equals(49) && !kartMain.getStatus().getCd().equals("MUN")) {
-						// услуга по обращению с ТКО
-						// не муницип. квартира
-						countPers.kpr=1;
-						countPers.kprNorm=1;
+					if (!kartMain.getStatus().getCd().equals("MUN")) {
+						// не муницип. помещение
+						if (nabor.getUsl().getFkCalcTp().equals(49)) {
+							// услуга по обращению с ТКО
+							countPers.kpr = 1;
+							countPers.kprNorm = 1;
+						} else {
+							countPers.kprNorm = 1;
+						}
 					}
 				}
-*/
+
 				if (parVarCntKpr==1 && countPers.kprOt == 0) {
 					// Полысаево
 					// поставить хоть одного проживающего, для объема
