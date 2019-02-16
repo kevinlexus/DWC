@@ -7,6 +7,7 @@ import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //import com.dic.bill.model.scott.SessionDirect;
@@ -18,7 +19,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class RequestConfig {
+public class RequestConfig implements Cloneable {
 
     // Id запроса
     int rqn;
@@ -44,6 +45,9 @@ public class RequestConfig {
     // помещение
     Ko ko = null;
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
     // получить наименование типа выполнения
     public String getTpName() {
         switch (this.tp) {

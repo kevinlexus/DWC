@@ -6,6 +6,7 @@ import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -34,13 +35,27 @@ public class NaborMngImpl implements NaborMng {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	@Cacheable(cacheNames="NaborMng.getCached", key="{#str1, #int2, #dt3}" )
+	public Integer getCached(String str1, Integer int2, Date dt3) {
+		log.info("Зашел в кэш str1={}, int2={}, dt3={}",
+				str1, int2, dt3);
+		return 5;
+	}
+
 	/**
 	 * Получить детализированные услуги и расценки
 	 * @param kartMain - основной лицевой счет
 	 * @param nabor - строка по услуге
 	 */
 	@Override
+	@Cacheable(cacheNames="NaborMng.getDetailUslPrice", key="{#kartMain.getStatus(), #nabor.getUsl(), " +
+			"#nabor.getOrg(), #nabor.getKoeff(), #nabor.getNorm()}" )
 	public DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg {
+		log.info("ЗАШЕЛ В КЭШ kartMain.getStatus()={}, #nabor.getUsl()={}, " +
+				"#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}",
+				kartMain.getStatus(), nabor.getUsl(),
+				nabor.getOrg(), nabor.getKoeff(), nabor.getNorm());
 		Kart kart = nabor.getKart();
 		DetailUslPrice detail = new DetailUslPrice();
 		Usl usl = nabor.getUsl();
