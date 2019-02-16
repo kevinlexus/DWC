@@ -118,7 +118,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setUk(uk);
 		kart.setMgFrom("201401");
 		kart.setMgTo("201412");
-		//kart.setStatus(status);
+		kart.setStatus(status);
 		ko.getKart().add(kart);
 
 		if (isAddNabor) {
