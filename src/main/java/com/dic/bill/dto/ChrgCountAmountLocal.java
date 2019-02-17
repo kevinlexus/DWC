@@ -415,6 +415,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
 
         // округлить для ГИС ЖКХ
+        log.trace("Округление для ГИС ЖКХ:");
         for (Kart kart : ko.getKart()) {
             // по услугам:
             // цена
@@ -430,17 +431,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // сохранить все цены, суммы и объемы по услугам
             // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
             // соответствующего REU
-            log.trace("Округление для ГИС ЖКХ: lsk={}", kart.getLsk());
-
-            List<Charge> lll = kart.getCharge().stream()
-                    .filter(t -> t.getUsl().getUslRound().stream()
-                            .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))
-                    .sorted(Comparator.comparing(d -> d.getUsl().getId())) // сортировать по коду услуги
-                    .collect(Collectors.toList());
-            for (Charge t : lll) {
-                log.info("charge: usl={}, summa={}", t.getUsl().getId(), t.getSumma());
-            }
-
+            log.trace("Округление для ГИС ЖКХ: klskId={}, lsk={}", ko.getId(), kart.getLsk());
             for (Charge charge : kart.getCharge().stream()
                     .filter(t -> t.getUsl().getUslRound().stream()
                             .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))

@@ -35,6 +35,13 @@ public class NaborMngImpl implements NaborMng {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Тестирование кэша
+	 * @param str1
+	 * @param int2
+	 * @param dt3
+	 * @return
+	 */
 	@Override
 	@Cacheable(cacheNames="NaborMng.getCached", key="{#str1, #int2, #dt3}" )
 	public Integer getCached(String str1, Integer int2, Date dt3) {
@@ -54,8 +61,8 @@ public class NaborMngImpl implements NaborMng {
 	public DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg {
 		log.info("ЗАШЕЛ В КЭШ kartMain.getStatus()={}, #nabor.getUsl()={}, " +
 				"#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}",
-				kartMain.getStatus(), nabor.getUsl(),
-				nabor.getOrg(), nabor.getKoeff(), nabor.getNorm());
+				kartMain.getStatus().getId(), nabor.getUsl().getId(),
+				nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm());
 		Kart kart = nabor.getKart();
 		DetailUslPrice detail = new DetailUslPrice();
 		Usl usl = nabor.getUsl();

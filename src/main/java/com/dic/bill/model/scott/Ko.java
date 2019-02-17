@@ -9,7 +9,9 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Справочник всех объектов Klsk Objects - KO
@@ -43,7 +45,7 @@ public class Ko implements java.io.Serializable {
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
-    private List<Kart> kart = new ArrayList<>(0);
+    private Set<Kart> kart = new HashSet<>(0);
 
     public Ko() {
         super();
