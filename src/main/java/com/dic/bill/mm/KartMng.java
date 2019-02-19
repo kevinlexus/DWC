@@ -13,9 +13,15 @@ public interface KartMng {
 
 	Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
 
-/*
-	boolean getPersCountByDate(Kart kart, Date dt);
-*/
+    List<Ko> getKoByHouse(House house);
+
+    List<Ko> getKoByVvod(Vvod vvod);
+
+    boolean getPersCountByDate(Kart kart, Date dt);
+
+    /*
+                boolean getPersCountByDate(Kart kart, Date dt);
+            */
 	Kart getKartMain(Ko ko);
 
 }

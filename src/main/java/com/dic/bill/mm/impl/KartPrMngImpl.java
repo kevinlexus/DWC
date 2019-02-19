@@ -38,6 +38,7 @@ public class KartPrMngImpl implements KartPrMng {
 		// рассчитываемый лиц.счет
 		Kart kart = nabor.getKart();
 		CountPers countPers = new CountPers();
+
 		// перебрать проживающих
 		for (KartPr p : kartMain.getKartPr()) {
 			// получить статусы
@@ -184,13 +185,6 @@ public class KartPrMngImpl implements KartPrMng {
 			}
 		}
 
-/*
-		if (nabor.getUsl().getFkCalcTp().equals(49)) {
-			log.info("$$$$$$$$$$ status={}, parVarCntKpr={}, countPers.kprNorm={}",
-					kartMain.getStatus().getCd().equals("MUN"), parVarCntKpr,
-					countPers.kprNorm);
-		}
-*/
 		// дополнительно установка кол-во проживающих для объема
 		// алгоритм взят из C_KART, строка 786
 		// Здесь берётся сам лицевой счет, kart!!!

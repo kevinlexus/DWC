@@ -5,8 +5,6 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 /**
  * Блокировщик объектов
  * @author Lev
@@ -16,7 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Slf4j
 public class Lock {
 	// список блокировок по лицевым счетам
-	public List<Integer> lstLsk;
+	public List<Long> lstLsk;
 	// список блокировок по долго продолжающимся процессам
 	public List<String> procLock;
 	// маркеры выполнения долго продолжающихся процессов
@@ -74,7 +72,7 @@ public class Lock {
 	}
 
 	// блокировка по лиц.счету
-	public synchronized Boolean setLockLsk(Integer rqn, Integer klskId) {
+	public synchronized Boolean setLockLsk(Integer rqn, Long klskId) {
 		if (this.lstLsk.contains(klskId)) {
 			// запрет блокировки
 			log.info("==LOCK== ERROR RQN={}, запрет блокировки по klskId={}, идёт блокировка другим потоком!", klskId);
@@ -89,7 +87,7 @@ public class Lock {
 	}
 
 	// разблокировать лиц.счет
-	public synchronized void unlockLsk(Integer rqn, Integer klskId) {
+	public synchronized void unlockLsk(Integer rqn, Long klskId) {
 		this.lstLsk.remove(klskId);
 		log.info("==UNLOCK== RQN={}, блокировка снята: klskId={}", rqn, klskId);
 	}

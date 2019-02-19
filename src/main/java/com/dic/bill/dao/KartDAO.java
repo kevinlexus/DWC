@@ -1,24 +1,19 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.dto.SumRecMg;
+import com.dic.bill.model.scott.Kart;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.math.BigDecimal;
 import java.util.List;
 
-import com.dic.bill.model.scott.House;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Vvod;
+public interface KartDAO extends JpaRepository<Kart, String> {
 
+    @Query("select t from Kart t where t.kul = :kul and t.nd=:nd and t.num=:kw")
+    List<Kart> findByKulNdKw(@Param("kul") String kul, @Param("nd") String nd, @Param("kw") String kw);
 
-public interface KartDAO {
-
-
-	public List<Kart> getAll();
-    public Kart getByLsk(String lsk);
-    public Kart getKwByNum(Integer klskId, String num);
-	List<Kart> getListLsk(String lskFrom, String lskTo);
-
-    List<Ko> getKoKwAll();
-
-    List<Ko> getKoByHouse(House house);
-    List<Ko> getKoByVvod(Vvod vvod);
-    List<Kart> findByKulNdKw(String s, String s1, String s2);
+    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t order by t.k_lsk_id", nativeQuery = true)
+    List<BigDecimal> findAllKlskId();
 }

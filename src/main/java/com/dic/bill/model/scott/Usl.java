@@ -88,8 +88,8 @@ public class Usl implements java.io.Serializable  {
 	// цены по услуге
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private Set<Price> price = new HashSet<>(0);
 	@Fetch(FetchMode.JOIN)
+	private Set<Price> price = new HashSet<>(0);
 
 	// порядок расчета услуг
 	@Column(name = "USL_ORDER", updatable = false)
@@ -103,7 +103,8 @@ public class Usl implements java.io.Serializable  {
 	// коды REU, для округления, для ГИС ЖКХ
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	private List<UslRound> uslRound = new ArrayList<>(0);
+	@Fetch(FetchMode.JOIN)
+	private Set<UslRound> uslRound = new HashSet<>(0);
 
 	/**
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)

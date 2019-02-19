@@ -1,9 +1,6 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Charge;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Usl;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -390,7 +387,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      *
      * @param ko - квартира
      */
-    public void saveChargeAndRound(Ko ko) throws ErrorWhileChrg {
+    public synchronized void saveChargeAndRound(Ko ko) throws ErrorWhileChrg { //note synchronized????
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
@@ -415,7 +412,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
 
         // округлить для ГИС ЖКХ
-        log.trace("Округление для ГИС ЖКХ:");
+        //log.trace("Округление для ГИС ЖКХ:");
         for (Kart kart : ko.getKart()) {
             // по услугам:
             // цена
@@ -432,7 +429,20 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
             // соответствующего REU
             log.trace("Округление для ГИС ЖКХ: klskId={}, lsk={}", ko.getId(), kart.getLsk());
+/*
+            for (Charge charge : kart.getCharge()) {
+                log.trace("$$$$ lsk={}, uk={}, usl={}",  kart.getLsk(), kart.getUk(),charge.getUsl().getId());
+                log.trace("$$$$ lsk={}, getUslRound()",  kart.getLsk(), charge.getUsl().getUslRound());
+                for (UslRound uslRound : charge.getUsl().getUslRound()) {
+                    log.trace("$$$$ lsk={}, uslRound={}", kart.getLsk(), uslRound.getUsl());
+                    log.trace("$$$$ lsk={}, uslRound.id={}", kart.getLsk(), uslRound.getUsl().getId());
+                    log.trace("$$$$ lsk={}, uslRound.reu={}", kart.getLsk(), uslRound.getReu());
+                }
+            }
+*/
+
             for (Charge charge : kart.getCharge().stream()
+                    .filter(t -> t.getType().equals(1))
                     .filter(t -> t.getUsl().getUslRound().stream()
                             .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))
                     .sorted(Comparator.comparing(d -> d.getUsl().getId())) // сортировать по коду услуги

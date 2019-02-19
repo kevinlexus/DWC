@@ -30,7 +30,7 @@ public class Ko implements java.io.Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Ko_id")
     @SequenceGenerator(name = "SEQ_Ko_id", sequenceName = "scott.k_lsk_id", allocationSize = 1)
     @Column(name = "ID", updatable = false, nullable = false)
-    private Integer id; //id
+    private Long id; //id
 
     // объект Eolink
     @OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY)

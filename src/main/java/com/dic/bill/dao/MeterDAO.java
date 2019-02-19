@@ -34,7 +34,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	@Query(value = "select t from Meter t "
 			+ "where t.koObj.id = ?1 and t.usl.id = ?2 " +
 			"and ?3 between t.dt1 and t.dt2")
-	List<Meter> findActualByKoUsl(Integer koId, String uslId, Date dt);
+	List<Meter> findActualByKoUsl(Long koId, String uslId, Date dt);
 
 	/**
 	 * Получить суммарный объем по счетчикам всех услуг, в объекте koObj за период
@@ -49,7 +49,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 			"and ((?2 between t.dt1 and t.dt2 or ?3 between t.dt1 and t.dt2) or " +
 			"(t.dt1 between ?2 and ?3 or t.dt2 between ?2 and ?3)) " +
 			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
-	List<SumMeterVol> findMeterVolByKlsk(Integer koObjId, Date dtFrom, Date dtTo);
+	List<SumMeterVol> findMeterVolByKlsk(Long koObjId, Date dtFrom, Date dtTo);
 
 	/**
 	 * Получить Timestamp показаний и GUID счетчиков, по которым они были приняты
