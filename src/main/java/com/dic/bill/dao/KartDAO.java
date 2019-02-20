@@ -14,6 +14,6 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     @Query("select t from Kart t where t.kul = :kul and t.nd=:nd and t.num=:kw")
     List<Kart> findByKulNdKw(@Param("kul") String kul, @Param("nd") String nd, @Param("kw") String kw);
 
-    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t order by t.k_lsk_id", nativeQuery = true)
+    @Query(value = "select distinct t.k_lsk_id from TEST.KART t order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskId();
 }

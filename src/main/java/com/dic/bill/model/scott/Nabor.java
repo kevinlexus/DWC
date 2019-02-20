@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema="SCOTT")
+@Table(name = "NABOR", schema="TEST")
 @Getter @Setter
 public class Nabor implements java.io.Serializable  {
 
@@ -78,7 +78,8 @@ public class Nabor implements java.io.Serializable  {
 		BigDecimal bdKoeff = Utl.nvl(getKoeff(), BigDecimal.ZERO);
 		BigDecimal bdNorm = Utl.nvl(getNorm(), BigDecimal.ZERO);
 		switch (usl.getSptarn()) {
-			case 0 : {
+			case 0 :
+			case 2 : {
 				// контроль только по коэфф.
 				if (bdKoeff.compareTo(BigDecimal.ZERO)!=0) {
 					return true;
@@ -92,8 +93,6 @@ public class Nabor implements java.io.Serializable  {
 				}
 				break;
 			}
-			case 2 :
-				// когда koeff-является коэфф. а norm-является нормативом
 			case 3 : {
 				// когда koeff-является коэфф. и когда norm-тоже является коэфф.
 				// контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME

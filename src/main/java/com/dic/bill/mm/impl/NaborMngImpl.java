@@ -28,7 +28,7 @@ public class NaborMngImpl implements NaborMng {
 	@Override
 	public List<Nabor> getValidNabor(Ko ko, Date curDt) {
 		// перебрать все открытые лиц счета по квартире, получить все наборы услуг, отсортировать по порядку расчета начисления
-		return ko.getKart().stream().filter(Kart::isActual)
+		return ko.getKart().stream().filter(t->t.isActual()) // только действующие
 				.flatMap(k -> k.getNabor().stream())
 				.filter(t->t.isValid() && t.getUsl().isMain())
 				.sorted((Comparator.comparing(o -> o.getUsl().getUslOrder())))
@@ -65,58 +65,61 @@ public class NaborMngImpl implements NaborMng {
 				nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm());
 		Kart kart = nabor.getKart();
 		DetailUslPrice detail = new DetailUslPrice();
-		Usl usl = nabor.getUsl();
-		Usl uslOverSoc = usl.getUslOverSoc();
-		Usl uslEmpt = usl.getUslEmpt();
-		// услуга но норме (обычная)
-		detail.price = multiplyPrice(nabor, 1);
+			Usl usl = nabor.getUsl();
+			Usl uslOverSoc = usl.getUslOverSoc();
+			Usl uslEmpt = usl.getUslEmpt();
+		if (kartMain.isResidental()) {
+			// только по жилым, по нежилым - вернуть 0 расценки
+			// услуга но норме (обычная)
+			detail.price = multiplyPrice(nabor, 1);
 
-		if (uslOverSoc != null) {
-			// найти услугу свыше соц.нормы, если есть
-			Nabor naborOverSoc = kart.getNabor().stream()
-					.filter(t -> t.getUsl().equals(uslOverSoc)).findFirst().orElse(null);
-			if (naborOverSoc != null) {
-				detail.uslOverSoc = naborOverSoc.getUsl();
-				detail.priceOverSoc = multiplyPrice(naborOverSoc, 1);
+			if (uslOverSoc != null) {
+				// найти услугу свыше соц.нормы, если есть
+				Nabor naborOverSoc = kart.getNabor().stream()
+						.filter(t -> t.getUsl().equals(uslOverSoc)).findFirst().orElse(null);
+				if (naborOverSoc != null) {
+					detail.uslOverSoc = naborOverSoc.getUsl();
+					detail.priceOverSoc = multiplyPrice(naborOverSoc, 1);
+				} else {
+					// не найдено - принять цену такую же как основная
+					detail.uslOverSoc = nabor.getUsl();
+					detail.priceOverSoc = detail.price;
+				}
 			} else {
-				// не найдено - принять цену такую же как основная
+				// принять цену такую же как основная
 				detail.uslOverSoc = nabor.getUsl();
 				detail.priceOverSoc = detail.price;
 			}
-		} else {
-			// принять цену такую же как основная
-			detail.uslOverSoc = nabor.getUsl();
-			detail.priceOverSoc = detail.price;
-		}
 
-		if (uslEmpt != null) {
-			// найти услугу без проживающих, если есть
-			Nabor naborEmpt = kart.getNabor().stream()
-					.filter(t -> t.getUsl().equals(uslEmpt)).findFirst().orElse(null);
-			if (naborEmpt != null) {
-				// найдена услуга без проживающих
-				if (nabor.getUsl().getFkCalcTp().equals(31) && kartMain.getStatus().getId().equals(1)) {
-					// электроэнергия, - если муниципальная квартира - принять цену по соцнорме
-					// взято из C_CHARGE, строка 2024
-					detail.uslEmpt = naborEmpt.getUsl();
-					detail.priceEmpt = detail.price;
+			if (uslEmpt != null) {
+				// найти услугу без проживающих, если есть
+				Nabor naborEmpt = kart.getNabor().stream()
+						.filter(t -> t.getUsl().equals(uslEmpt)).findFirst().orElse(null);
+				if (naborEmpt != null) {
+					// найдена услуга без проживающих
+					if (nabor.getUsl().getFkCalcTp().equals(31) && kartMain.getStatus().getId().equals(1)) {
+						// электроэнергия, - если муниципальная квартира - принять цену по соцнорме
+						// взято из C_CHARGE, строка 2024
+						detail.uslEmpt = naborEmpt.getUsl();
+						detail.priceEmpt = detail.price;
+					} else {
+						detail.uslEmpt = naborEmpt.getUsl();
+						detail.priceEmpt = multiplyPrice(naborEmpt, 1);
+					}
 				} else {
-					detail.uslEmpt = naborEmpt.getUsl();
-					detail.priceEmpt = multiplyPrice(naborEmpt, 1);
+					// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
+					detail.uslEmpt = nabor.getUsl();
+					detail.priceEmpt = multiplyPrice(nabor, 3);
 				}
 			} else {
 				// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
-				detail.uslEmpt = nabor.getUsl();
-				detail.priceEmpt = multiplyPrice(nabor, 3);
-			}
-		} else {
-			// не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
-			if (detail.uslOverSoc != null) {
-				detail.uslEmpt = detail.uslOverSoc;
-				detail.priceEmpt = detail.priceOverSoc;
-			} else {
-				detail.uslEmpt = nabor.getUsl();
-				detail.priceEmpt = multiplyPrice(nabor, 3);
+				if (detail.uslOverSoc != null) {
+					detail.uslEmpt = detail.uslOverSoc;
+					detail.priceEmpt = detail.priceOverSoc;
+				} else {
+					detail.uslEmpt = nabor.getUsl();
+					detail.priceEmpt = multiplyPrice(nabor, 3);
+				}
 			}
 		}
 		return detail;
