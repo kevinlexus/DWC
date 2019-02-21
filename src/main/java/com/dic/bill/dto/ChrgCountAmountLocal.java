@@ -267,6 +267,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         .collect(Collectors.toList());
         for (UslPriceVolKartDt t : lst) {
             if (uslId == null || t.usl.getId().equals(uslId)) {
+/*
+                log.info("убрать эту запись! t.kart.getLsk()={}, t.usl.getId()={}, " +
+                                "t.uslOverSoc.getId()={}, t.uslEmpt.getId()={}",
+                        t.kart, t.usl, t.uslOverSoc, t.uslEmpt
+                        );
+*/
                 log.info("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                 "org={}, prc={}, prcE={}, prcO={}, std={} " +
                                 "kpr={}, kprO={}, kprW={}, vol={}, volO={}",
@@ -385,9 +391,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     /**
      * Сохранить и округлить начисление в C_CHARGE
      *
-     * @param ko - квартира
+     * @param ko        - квартира
+     * @param lstSelUsl - список выбранных услуг
      */
-    public synchronized void saveChargeAndRound(Ko ko) throws ErrorWhileChrg { //note synchronized????
+    public synchronized void saveChargeAndRound(Ko ko, List<Usl> lstSelUsl) throws ErrorWhileChrg { //note synchronized????
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));

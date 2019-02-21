@@ -1,8 +1,6 @@
 package com.dic.bill;
 
-import com.dic.bill.model.scott.House;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Vvod;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,12 +36,16 @@ public class RequestConfig implements Cloneable {
     boolean isMultiThreads = false;
 
     // объекты формирования:
+    // УК
+    Org uk = null;
     // дом
     House house = null;
     // ввод
     Vvod vvod = null;
     // помещение
     Ko ko = null;
+    // услуга
+    Usl usl = null;
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -81,6 +83,7 @@ public class RequestConfig implements Cloneable {
         return null;
     }
 
+
     public static final class RequestConfigBuilder {
         // Id запроса
         int rqn;
@@ -96,12 +99,16 @@ public class RequestConfig implements Cloneable {
         // выполнять многопоточно
         boolean isMultiThreads = false;
         // объекты формирования:
+        // УК
+        Org uk = null;
         // дом
         House house = null;
         // ввод
         Vvod vvod = null;
         // помещение
         Ko ko = null;
+        // услуга
+        Usl usl = null;
 
         private RequestConfigBuilder() {
         }
@@ -145,6 +152,11 @@ public class RequestConfig implements Cloneable {
             return this;
         }
 
+        public RequestConfigBuilder withUk(Org uk) {
+            this.uk = uk;
+            return this;
+        }
+
         public RequestConfigBuilder withHouse(House house) {
             this.house = house;
             return this;
@@ -160,6 +172,11 @@ public class RequestConfig implements Cloneable {
             return this;
         }
 
+        public RequestConfigBuilder withUsl(Usl usl) {
+            this.usl = usl;
+            return this;
+        }
+
         public RequestConfig build() {
             RequestConfig requestConfig = new RequestConfig();
             requestConfig.setRqn(rqn);
@@ -168,9 +185,11 @@ public class RequestConfig implements Cloneable {
             requestConfig.setGenDt(genDt);
             requestConfig.setCurDt1(curDt1);
             requestConfig.setCurDt2(curDt2);
+            requestConfig.setUk(uk);
             requestConfig.setHouse(house);
             requestConfig.setVvod(vvod);
             requestConfig.setKo(ko);
+            requestConfig.setUsl(usl);
             requestConfig.isMultiThreads = this.isMultiThreads;
             return requestConfig;
         }

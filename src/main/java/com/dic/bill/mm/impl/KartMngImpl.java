@@ -1,7 +1,6 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
-import com.dic.bill.dao.UlstDAO;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
@@ -105,12 +104,14 @@ public class KartMngImpl implements KartMng {
     public Kart getKartMain(Ko ko) {
         Kart kart = null;
         for (Kart t : ko.getKart()) {
-            kart = t;
-            if (t.isActual() && t.getTp().getCd().equals("LSK_TP_MAIN")) {
-                return t;
+            if (t.isActual()) {
+                kart = t;
+                if (t.getTp().getCd().equals("LSK_TP_MAIN")) {
+                    return t;
+                }
             }
         }
-        // не найден основной лиц.счет, вернуть любой
+        // не найден основной лиц.счет, вернуть любой актуальный
         return kart;
     }
 

@@ -121,6 +121,10 @@ public class NaborMngImpl implements NaborMng {
 					detail.priceEmpt = multiplyPrice(nabor, 3);
 				}
 			}
+		} else {
+			// нежилые помещения
+			detail.uslOverSoc = nabor.getUsl();
+			detail.uslEmpt = nabor.getUsl();
 		}
 		return detail;
 	}
