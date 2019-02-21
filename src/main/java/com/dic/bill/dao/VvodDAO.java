@@ -27,8 +27,8 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 	/**
 	 * Найти все вводы, по УК
 	 */
-	@Query(value = "select distinct d.id from TEST.C_VVOD d " +
-			"join TEST.KART k on d.HOUSE_ID=k.HOUSE_ID where k.reu=:reuId and k.PSCH not in (8,9)",
+	@Query(value = "select distinct d.id from SCOTT.C_VVOD d " +
+			"join SCOTT.KART k on d.HOUSE_ID=k.HOUSE_ID where k.reu=:reuId and k.PSCH not in (8,9)",
 			nativeQuery = true)
 	List<BigDecimal> findVvodByUk(@Param("reuId") String reuId);
 

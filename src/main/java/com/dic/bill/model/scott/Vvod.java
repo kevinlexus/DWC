@@ -17,7 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_VVOD", schema="TEST")
+@Table(name = "C_VVOD", schema="SCOTT")
 @Getter @Setter
 public class Vvod implements java.io.Serializable {
 
