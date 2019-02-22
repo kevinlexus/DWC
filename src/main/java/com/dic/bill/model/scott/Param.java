@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "PARAMS", schema="TEST")
+@Table(name = "PARAMS", schema="SCOTT")
 @Getter @Setter
 public class Param implements java.io.Serializable {
 
