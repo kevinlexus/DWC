@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema="SCOTT")
+@Table(name = "NABOR", schema="TEST")
 @Getter @Setter
 public class Nabor implements java.io.Serializable  {
 
@@ -77,29 +77,37 @@ public class Nabor implements java.io.Serializable  {
 	public boolean isValid() {
 		BigDecimal bdKoeff = Utl.nvl(getKoeff(), BigDecimal.ZERO);
 		BigDecimal bdNorm = Utl.nvl(getNorm(), BigDecimal.ZERO);
-		switch (usl.getSptarn()) {
-			case 0 :
-			case 2 : {
-				// контроль только по коэфф.
-				if (bdKoeff.compareTo(BigDecimal.ZERO)!=0) {
-					return true;
-				}
-				break;
+		if (usl.getFkCalcTp() != null && usl.getFkCalcTp().equals(14)) {
+			// отопление Гкал - отдельная проверка
+			// контроль только по коэфф.
+			if (bdKoeff.compareTo(BigDecimal.ZERO) != 0) {
+				return true;
 			}
-			case 1 : {
-				// контроль только по нормативу
-				if (bdNorm.compareTo(BigDecimal.ZERO)!=0) {
-					return true;
+		} else {
+			switch (usl.getSptarn()) {
+				case 0: {
+					// контроль только по коэфф.
+					if (bdKoeff.compareTo(BigDecimal.ZERO) != 0) {
+						return true;
+					}
+					break;
 				}
-				break;
-			}
-			case 3 : {
-				// когда koeff-является коэфф. и когда norm-тоже является коэфф.
-				// контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME
-				if (bdKoeff.multiply(bdNorm).compareTo(BigDecimal.ZERO)!=0) {
-					return true;
+				case 1: {
+					// контроль только по нормативу
+					if (bdNorm.compareTo(BigDecimal.ZERO) != 0) {
+						return true;
+					}
+					break;
 				}
-				break;
+				case 2:
+				case 3: {
+					// когда koeff-является коэфф. и когда norm-тоже является коэфф.
+					// контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME
+					if (bdKoeff.multiply(bdNorm).compareTo(BigDecimal.ZERO) != 0) {
+						return true;
+					}
+					break;
+				}
 			}
 		}
 		return false;

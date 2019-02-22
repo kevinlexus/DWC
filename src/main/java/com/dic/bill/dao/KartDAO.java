@@ -14,10 +14,10 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     @Query("select t from Kart t where t.kul = :kul and t.nd=:nd and t.num=:kw")
     List<Kart> findByKulNdKw(@Param("kul") String kul, @Param("nd") String nd, @Param("kw") String kw);
 
-    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t where t.reu=:reuId and t.psch not in (8,9) order by t.k_lsk_id",
+    @Query(value = "select distinct t.k_lsk_id from TEST.KART t where t.reu=:reuId and t.psch not in (8,9) order by t.k_lsk_id",
             nativeQuery = true)
     List<BigDecimal> findAllByUk(@Param("reuId") String reuId);
 
-    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t where t.psch not in (8,9) order by t.k_lsk_id", nativeQuery = true)
+    @Query(value = "select distinct t.k_lsk_id from TEST.KART t where t.psch not in (8,9) order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskId();
 }

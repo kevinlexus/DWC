@@ -59,7 +59,7 @@ public class NaborMngImpl implements NaborMng {
 	@Cacheable(cacheNames="NaborMng.getDetailUslPrice", key="{#kartMain.getStatus(), #nabor.getUsl(), " +
 			"#nabor.getOrg(), #nabor.getKoeff(), #nabor.getNorm()}" )
 	public DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg {
-		log.info("ЗАШЕЛ В КЭШ kartMain.getStatus()={}, #nabor.getUsl()={}, " +
+		log.info("ЗАШЕЛ В МЕТОД, НО НЕ В КЭШ kartMain.getStatus()={}, #nabor.getUsl()={}, " +
 				"#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}",
 				kartMain.getStatus().getId(), nabor.getUsl().getId(),
 				nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm());
