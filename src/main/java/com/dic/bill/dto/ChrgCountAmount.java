@@ -123,7 +123,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                     );
 
 /*
-                    BigDecimal vol2 = getLstUslPriceVolKartLinked()
+                    BigDecimal vol2 = getLstUslPriceVolKartDetailed()
                             .stream()
                             .filter(t -> (lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d))
                             .map(t -> t.vol

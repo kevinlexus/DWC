@@ -25,7 +25,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     private EntityManager em;
 
     // с полной детализацией по услуге usl.cd="х.в. для гвс", используется только услугой fk_calc_tp = 47
-    private List<UslPriceVolKart> lstUslPriceVolKartLinked = new ArrayList<>(10);
+    private List<UslPriceVolKart> lstUslPriceVolKartDetailed = new ArrayList<>(10);
 
     // сгруппированное до дат, для подготовки записи результата начисления в C_CHARGE
     // (возможно в будущем, прям отсюда записывать в C_CHARGE - детально)
@@ -85,8 +85,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
 
         // если услуга usl.cd="х.в. для гвс", то сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
-        if (u.usl.getCd() != null && u.usl.getCd().equals("х.в. для гвс")) {
-            lstUslPriceVolKartLinked.add(u);
+        // или х.в., г.в. для водоотведения
+        if (u.usl.getCd() != null && Utl.in(u.usl.getFkCalcTp(), 17, 18)
+                || u.usl.getCd().equals("х.в. для гвс")) {
+            lstUslPriceVolKartDetailed.add(u);
         }
 
         // Сгруппировать объемы по лиц.счетам для распределения по вводам
@@ -201,7 +203,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         for (Usl usl : lstUsl) {
             BigDecimal summSample = roundByLst(getLstUslVolKartGrp(), usl, null);
             roundByLst(getLstUslVolVvod(), usl, summSample);
-            //roundByLst(getLstUslPriceVolKartLinked(), usl, summSample);
+            //roundByLst(getLstUslPriceVolKartDetailed(), usl, summSample);
             roundByLst(getLstUslPriceVolKartDt(), usl, summSample);
         }
     }
