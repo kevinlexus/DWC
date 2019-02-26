@@ -8,6 +8,8 @@ import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -47,7 +49,6 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		// помещение
 		Ko ko = new Ko();
 		Kart kart = new Kart();
-
 		// УК
 		Org uk = em.find(Org.class, 547);
 		// тип счета
@@ -89,7 +90,6 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		// счетчики
 		buildMeterForTest(kart);
-
 		house.getKart().add(kart);
 		em.persist(kart);
 
@@ -108,7 +108,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setHouse(house);
 		kart.setLsk("РСО_"+suffix);
 		kart.setPsch(psch);
-		//kart.setOpl(BigDecimal.valueOf(63.45));
+		kart.setOpl(area);
 		kart.setKul("0001");
 		kart.setNd("000001");
 		kart.setNum("0000001");
@@ -144,7 +144,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 		kart.setHouse(house);
 		kart.setLsk("КАП_"+suffix);
 		kart.setPsch(0);
-		//kart.setOpl(BigDecimal.valueOf(63.45));
+		kart.setOpl(area);
 		kart.setKul("0001");
 		kart.setNd("000001");
 		kart.setNum("0000001");
@@ -164,7 +164,6 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
 		house.getKart().add(kart);
 		em.persist(kart);
-
 		return ko;
 	}
 
