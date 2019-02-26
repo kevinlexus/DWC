@@ -2,7 +2,9 @@ package com.dic.bill.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.dic.bill.model.scott.PenDt;
@@ -38,21 +40,13 @@ public class CalcStore {
 	List<PenRef> lstPenRef;
 	// уровень отладочной информации
 	Integer debugLvl;
-	// хранилище параметров по вводу (дому) (для ОДН и прочих нужд)
-	ChrgCountAmount chrgCountAmount;
-
-	// кол-во дней в месяце
-	public int getCntCurDays() {
-		return Utl.getCntDaysByDate(getCurDt1());
-	}
+	// список Id рассчитываемых элементов
+	List<Long> lstItems = new ArrayList<>();
 
 	// доля одного дня в периоде
 	public BigDecimal getPartDayMonth() {
 		BigDecimal oneDay = new BigDecimal("1");
-		BigDecimal monthDays = BigDecimal.valueOf(getCntCurDays());
-		BigDecimal partDayMonth = oneDay.divide(monthDays, 20, RoundingMode.HALF_UP);
-		return partDayMonth;
+		BigDecimal monthDays = BigDecimal.valueOf(Utl.getCntDaysByDate(getCurDt1()));
+		return oneDay.divide(monthDays, 20, RoundingMode.HALF_UP);
 	}
-
-
 }
