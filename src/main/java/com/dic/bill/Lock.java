@@ -31,7 +31,7 @@ public class Lock {
 	public synchronized Boolean setLockProc(Integer rqn, String procName) {
 		if (this.procLock.contains(procName)) {
 			// запрет блокировки
-			log.info("==LOCK== ERROR RQN={}, запрет блокировки процесса={}, "
+			log.trace("==LOCK== ERROR RQN={}, запрет блокировки процесса={}, "
 					+ "идёт блокировка другим потоком!", rqn, procName);
 			return false;
 		} else {
@@ -39,7 +39,7 @@ public class Lock {
 			this.procLock.add(procName);
 			// установить маркер работающего процесса
 			//this.procExec.add(procName);
-			log.info("==EXEC== RQN={}, блокировка выполнена: процесс={}", rqn, procName);
+			log.trace("==EXEC== RQN={}, блокировка выполнена: процесс={}", rqn, procName);
 			return true;
 		}
 
@@ -52,14 +52,14 @@ public class Lock {
 
 	// разблокировать процесс
 	public synchronized void unlockProc(Integer rqn, String procName) {
-		log.info("==UNLOCK== RQN={}, блокировка процесса={} снята", rqn, procName);
+		log.trace("==UNLOCK== RQN={}, блокировка процесса={} снята", rqn, procName);
 		// снять блокировку
 		this.procLock.remove(procName);
 	}
 
 	// остановить все процессы
 	public synchronized void stopAllProc(Integer rqn) {
-		log.info("==STOP== RQN={} Все процессы остановлены ПРИНУДИТЕЛЬНО!", rqn);
+		log.trace("==STOP== RQN={} Все процессы остановлены ПРИНУДИТЕЛЬНО!", rqn);
 		this.procLock.clear();
 	}
 
@@ -75,17 +75,17 @@ public class Lock {
 		if (rowTpSel!= null) {
 			if (rowTpSel.contains(id)) {
 				// запрет блокировки
-				log.info("==LOCK== ERROR RQN={}, запрет блокировки по tpSel={}, id={}, " +
+				log.trace("==LOCK== ERROR RQN={}, запрет блокировки по tpSel={}, id={}, " +
 						"идёт блокировка другим потоком!", rqn, tpSel, id);
 				return false;
 			} else {
-				log.info("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
+				log.trace("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
 				rowTpSel.add(id);
 				return true;
 			}
 		} else {
-			this.mapLock.put(tpSel, Collections.singletonList(id));
-			log.info("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
+			this.mapLock.put(tpSel, new ArrayList<Long>(){{add(id);}});
+			log.trace("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
 			return true;
 		}
 	}
@@ -123,7 +123,7 @@ public class Lock {
 	public synchronized void unlockId(Integer rqn, Integer tpSel, Long id) {
 		List<Long> rowTpSel = this.mapLock.get(tpSel);
 		rowTpSel.remove(id);
-		log.info("==UNLOCK== RQN={}, блокировка снята: tpSel={}, id={}", rqn, tpSel, id);
+		log.trace("==UNLOCK== RQN={}, блокировка снята: tpSel={}, id={}", rqn, tpSel, id);
 	}
 
 }
