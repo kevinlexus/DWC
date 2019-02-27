@@ -29,7 +29,7 @@ public class Vvod implements java.io.Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_Vvod_id")
 	@SequenceGenerator(name="SEQ_Vvod_id", sequenceName="scott.c_vvod_id", allocationSize=1)
     @Column(name = "id", updatable = false, nullable = false)
-	private Integer id; //id записи
+	private Long id; //id записи
 
 	// дом
 	@ManyToOne(fetch = FetchType.LAZY)

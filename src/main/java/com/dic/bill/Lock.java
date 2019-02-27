@@ -1,8 +1,8 @@
 package com.dic.bill;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,18 +13,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Lock {
-	// список блокировок по лицевым счетам
-	public List<Long> lstLsk;
+	// список блокировок по объекту (тип запроса RequestDirect.tpSel, Id объекта)
+	private Map<Integer, List<Long>> mapLock;
 	// список блокировок по долго продолжающимся процессам
-	public List<String> procLock;
+	private List<String> procLock;
 	// маркеры выполнения долго продолжающихся процессов
-	public List<String> procExec;
+	//public List<String> procExec;
 
 	// конструктор
 	public Lock() {
-		lstLsk = new ArrayList<>();
-		procLock = new ArrayList<String>();
-		procExec = new ArrayList<String>();
+		mapLock = new HashMap<>();
+		procLock = new ArrayList<>();
+		//procExec = new ArrayList<String>();
 	}
 
 	// блокировка процесса
@@ -38,7 +38,7 @@ public class Lock {
 			// выполнить блокировку
 			this.procLock.add(procName);
 			// установить маркер работающего процесса
-			this.procExec.add(procName);
+			//this.procExec.add(procName);
 			log.info("==EXEC== RQN={}, блокировка выполнена: процесс={}", rqn, procName);
 			return true;
 		}
@@ -47,13 +47,7 @@ public class Lock {
 
 	// проверить что вызвана остановка процесса
 	public boolean isStopped(String procName) {
-		if (this.procExec.contains(procName)) {
-			// не вызвана
-			return false;
-		} else {
-			// вызвана
-			return true;
-		}
+		return !this.procLock.contains(procName);
 	}
 
 	// разблокировать процесс
@@ -61,35 +55,75 @@ public class Lock {
 		log.info("==UNLOCK== RQN={}, блокировка процесса={} снята", rqn, procName);
 		// снять блокировку
 		this.procLock.remove(procName);
-		// снять маркер работающего процесса
-		this.procExec.remove(procName);
 	}
 
-	// остановить процесс
-	public synchronized void stopProc(Integer rqn, String procName) {
-		log.info("==STOP== RQN={} Процесс {} остановлен ПРИНУДИТЕЛЬНО!", rqn, procName);
-		this.procExec.remove(procName);
+	// остановить все процессы
+	public synchronized void stopAllProc(Integer rqn) {
+		log.info("==STOP== RQN={} Все процессы остановлены ПРИНУДИТЕЛЬНО!", rqn);
+		this.procLock.clear();
 	}
 
-	// блокировка по лиц.счету
-	public synchronized Boolean setLockLsk(Integer rqn, Long klskId) {
-		if (this.lstLsk.contains(klskId)) {
-			// запрет блокировки
-			log.info("==LOCK== ERROR RQN={}, запрет блокировки по klskId={}, идёт блокировка другим потоком!", klskId);
-			return false;
+	/**
+	 * Блокировка по ID объекта
+	 * @param rqn - номер запроса
+	 * @param tpSel - тип объекта блокировки (2-по вводу, 1-по помещению), ориентироваться на RequestConfigDirect.tpSel
+	 * @param id - ID объекта
+	 * @return
+	 */
+	private synchronized Boolean setLockId(Integer rqn, Integer tpSel, Long id) {
+		List<Long> rowTpSel = this.mapLock.get(tpSel);
+		if (rowTpSel!= null) {
+			if (rowTpSel.contains(id)) {
+				// запрет блокировки
+				log.info("==LOCK== ERROR RQN={}, запрет блокировки по tpSel={}, id={}, " +
+						"идёт блокировка другим потоком!", rqn, tpSel, id);
+				return false;
+			} else {
+				log.info("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
+				rowTpSel.add(id);
+				return true;
+			}
 		} else {
-			// выполнить блокировку
-			this.lstLsk.add(klskId);
-			log.info("==LOCK== RQN={}, блокировка выполнена: klskId={}", rqn, klskId);
+			this.mapLock.put(tpSel, Collections.singletonList(id));
+			log.info("==LOCK== RQN={}, блокировка выполнена: tpSel={}, id={}", rqn, tpSel, id);
 			return true;
 		}
-
 	}
 
-	// разблокировать лиц.счет
-	public synchronized void unlockLsk(Integer rqn, Long klskId) {
-		this.lstLsk.remove(klskId);
-		log.info("==UNLOCK== RQN={}, блокировка снята: klskId={}", rqn, klskId);
+	/**
+	 * Блокировка по ID объекта с тайм-аутом
+	 * @param rqn - номер запроса
+	 * @param tpSel - тип объекта блокировки (2-по вводу, 1-по помещению), ориентироваться на RequestConfigDirect.tpSel
+	 * @param id - ID объекта
+	 * @param timeout - время в секундах на блокировку
+	 * @return
+	 */
+	public boolean aquireLockId(Integer rqn, Integer tpSel, Long id, Integer timeout) {
+		int waitTick = 0;
+		while (!this.setLockId(rqn, tpSel, id)) {
+			waitTick++;
+			if (waitTick > timeout) { // ожидать блокировку
+				log.error(
+						"********ВНИМАНИЕ!ВНИМАНИЕ!ВНИМАНИЕ!ВНИМАНИЕ!ВНИМАНИЕ!ВНИМАНИЕ!ВНИМАНИЕ!");
+				log.error(
+						"********НЕВОЗМОЖНО РАЗБЛОКИРОВАТЬ id={} В ТЕЧЕНИИ 60 сек!{}", id);
+				return false;
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				log.error(Utl.getStackTraceString(e));
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// разблокировать объект
+	public synchronized void unlockId(Integer rqn, Integer tpSel, Long id) {
+		List<Long> rowTpSel = this.mapLock.get(tpSel);
+		rowTpSel.remove(id);
+		log.info("==UNLOCK== RQN={}, блокировка снята: tpSel={}, id={}", rqn, tpSel, id);
 	}
 
 }
