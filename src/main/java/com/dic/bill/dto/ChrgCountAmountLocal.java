@@ -257,8 +257,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * @param msg   - сообщение
      */
     public void printVolAmnt(String uslId, String msg) {
-        log.info("");
-        log.info("****** ПРОВЕРКА объемов {}, по UslPriceVolKartDt:", msg);
+        log.trace("");
+        log.trace("****** ПРОВЕРКА объемов {}, по UslPriceVolKartDt:", msg);
         // отсортировать по lsk, usl, dtFrom
         List<UslPriceVolKartDt> lst =
                 getLstUslPriceVolKartDt().stream()
@@ -275,7 +275,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         t.kart, t.usl, t.uslOverSoc, t.uslEmpt
                         );
 */
-                log.info("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
+                log.trace("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                 "org={}, prc={}, prcE={}, prcO={}, std={} " +
                                 "kpr={}, kprO={}, kprW={}, vol={}, volO={}",
                         Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),

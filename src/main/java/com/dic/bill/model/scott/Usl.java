@@ -110,7 +110,7 @@ public class Usl implements java.io.Serializable  {
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)
 	 */
 	@Transient
-	public Usl getFactUslVol() {
+	public Usl getMeterUslVol() {
 		return getUslVol()!=null? getUslVol():this;
 	}
 

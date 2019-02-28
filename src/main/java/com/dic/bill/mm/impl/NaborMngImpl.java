@@ -28,7 +28,7 @@ public class NaborMngImpl implements NaborMng {
 	@Override
 	public List<Nabor> getValidNabor(Ko ko, Date curDt) {
 		// перебрать все открытые лиц счета по квартире, получить все наборы услуг, отсортировать по порядку расчета начисления
-		return ko.getKart().stream().filter(t->t.isActual()) // только действующие
+		return ko.getKart().stream().filter(Kart::isActual) // только действующие
 				.flatMap(k -> k.getNabor().stream())
 				.filter(t->t.isValid() && t.getUsl().isMain())
 				.sorted((Comparator.comparing(o -> o.getUsl().getUslOrder())))
