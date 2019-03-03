@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_KART_PR", schema="SCOTT")
+@Table(name = "C_KART_PR", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter @Setter
 public class KartPr implements java.io.Serializable  {
 

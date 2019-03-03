@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -12,7 +13,9 @@ import javax.persistence.*;
  */
 @Getter @Setter
 @Entity
-@Table(name = "STATUS", schema="SCOTT")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "STATUS", schema="TEST")
 public class Status {
 
 	@Id

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
@@ -17,7 +18,9 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_VVOD", schema="SCOTT")
+@Table(name = "C_VVOD", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter @Setter
 public class Vvod implements java.io.Serializable {
 

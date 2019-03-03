@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,9 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_HOUSES", schema="SCOTT")
+@Table(name = "C_HOUSES", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter @Setter
 public class House implements java.io.Serializable {
 

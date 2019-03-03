@@ -91,7 +91,7 @@ public class Ulist implements java.io.Serializable  {
 	private Boolean actual;
 
 	// тип справочника
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID", updatable = false, nullable = false)
 	private UlistTp ulistTp;
 

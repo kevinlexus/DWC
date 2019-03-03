@@ -1,14 +1,10 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Тип элемента списка
@@ -18,7 +14,9 @@ import lombok.Setter;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "U_LISTTP", schema="SCOTT")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "U_LISTTP", schema="TEST")
 public class LstTp implements java.io.Serializable {
 
 	@Id

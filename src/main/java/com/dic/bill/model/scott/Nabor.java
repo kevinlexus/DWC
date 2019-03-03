@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema="SCOTT")
+@Table(name = "NABOR", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter @Setter
 public class Nabor implements java.io.Serializable  {
 

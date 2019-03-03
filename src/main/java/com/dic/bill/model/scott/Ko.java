@@ -4,6 +4,7 @@ import com.dic.bill.model.exs.Eolink;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -21,7 +22,9 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "K_LSK", schema = "SCOTT")
+@Table(name = "K_LSK", schema = "TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 public class Ko implements java.io.Serializable {

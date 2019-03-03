@@ -1,15 +1,10 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Организация
@@ -18,7 +13,9 @@ import lombok.Setter;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_ORG", schema="SCOTT")
+@Table(name = "T_ORG", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Org implements java.io.Serializable {
 

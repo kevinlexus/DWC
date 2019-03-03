@@ -1,12 +1,10 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Таблица параметров
@@ -15,7 +13,9 @@ import lombok.Setter;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "PARAMS", schema="SCOTT")
+@Table(name = "PARAMS", schema="TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Param implements java.io.Serializable {
 

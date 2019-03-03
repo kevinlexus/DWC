@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,7 +19,9 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "SCOTT")
+@Table(name = "KART", schema = "TEST")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {

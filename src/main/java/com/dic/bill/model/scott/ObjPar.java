@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +17,9 @@ import java.util.Date;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_OBJXPAR", schema="SCOTT")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "T_OBJXPAR", schema="TEST")
 public class ObjPar implements java.io.Serializable {
 
 	@Id
