@@ -438,6 +438,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
             // соответствующего REU
             log.trace("Округление для ГИС ЖКХ: klskId={}, lsk={}", ko.getId(), kart.getLsk());
+
 /*
             for (Charge charge : kart.getCharge()) {
                 log.trace("$$$$ lsk={}, uk={}, usl={}",  kart.getLsk(), kart.getUk(),charge.getUsl().getId());
@@ -448,8 +449,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                     log.trace("$$$$ lsk={}, uslRound.reu={}", kart.getLsk(), uslRound.getReu());
                 }
             }
-*/
 
+
+*/
             for (Charge charge : kart.getCharge().stream()
                     .filter(t -> t.getType().equals(1))
                     .filter(t -> t.getUsl().getUslRound().stream()
