@@ -25,17 +25,33 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 	List<Vvod> getWithODPU();
 
 	/**
-	 * Найти все вводы, по УК
+	 * Найти все вводы, по УК, упорядочить
 	 */
 	@Query(value = "select distinct d.id from TEST.C_VVOD d " +
-			"join TEST.KART k on d.HOUSE_ID=k.HOUSE_ID where k.reu=:reuId and k.PSCH not in (8,9)",
+			"join TEST.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TEST.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+			"where k.reu=:reuId and k.PSCH not in (8,9) order by d.id",
 			nativeQuery = true)
 	List<BigDecimal> findVvodByUk(@Param("reuId") String reuId);
 
 	/**
-	 * Найти все вводы, по дому
+	 * Найти все вводы, по дому, упорядочить
 	 */
-	@Query(value = "select t from Vvod t join t.house h where h.id=:houseId")
-	List<Vvod> findVvodByHouse(@Param("houseId") int houseId);
+	@Query(value = "select distinct d.id from TEST.C_VVOD d " +
+			"join TEST.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TEST.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+			"where k.house_id=:houseId and k.PSCH not in (8,9) order by d.id",
+			nativeQuery = true)
+	List<BigDecimal> findVvodByHouse(@Param("houseId") int houseId);
+
+	/**
+	 * Найти все вводы, упорядочить
+	 */
+	@Query(value = "select distinct d.id from TEST.C_VVOD d " +
+			"join TEST.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TEST.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+			"where k.PSCH not in (8,9) order by d.id",
+			nativeQuery = true)
+	List<BigDecimal> findVvodAll();
 
 }

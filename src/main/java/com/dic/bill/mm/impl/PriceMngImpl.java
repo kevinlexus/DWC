@@ -31,12 +31,12 @@ public class PriceMngImpl implements PriceMng {
      */
     @Override
     @Cacheable(cacheNames="PriceMng.multiplyPrice", key="{#nabor.getUsl(), " +
-            "#nabor.getOrg(), #nabor.getKoeff(), #nabor.getNorm()}" )
+            "#nabor.getOrg(), #nabor.getKoeff(), #nabor.getNorm(), #priceColumn}" )
     public BigDecimal multiplyPrice(Nabor nabor, int priceColumn) throws ErrorWhileChrg {
         log.info("ИСПОЛЬЗОВАН МЕТОД, НО НЕ КЭШ #nabor.getUsl()={}, " +
-                        "#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}",
+                        "#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}, #priceColumn={}",
                 nabor.getUsl().getId(),
-                nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm());
+                nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm(), priceColumn);
         BigDecimal coeff = Utl.nvl(nabor.getKoeff(), BigDecimal.ZERO);
         BigDecimal norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
         if (nabor.getUsl().getSptarn().equals(3) ||

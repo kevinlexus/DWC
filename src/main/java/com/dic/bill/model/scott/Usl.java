@@ -166,7 +166,7 @@ public class Usl implements java.io.Serializable  {
 	}
 
 	/**
-	 * Рассчитвывается ли услуга по площади? (для округления площади в рассчете)
+	 * Рассчитывается ли услуга по площади? (для округления площади в рассчете)
 	 */
 	@Transient
 	public boolean isCalcByArea()
@@ -174,6 +174,19 @@ public class Usl implements java.io.Serializable  {
 		return Utl.in(fkCalcTp, 25) // текущее содержание и подобные услуги (без свыше соц.нормы и без 0 проживающих)
 				|| fkCalcTp.equals(7) // найм (только по муниципальным помещениям) расчет на м2
 				|| fkCalcTp.equals(24) || fkCalcTp.equals(32) // прочие услуги, расчитываемые как расценка * норматив * общ.площадь
+				|| fkCalcTp.equals(36)// вывоз жидких нечистот и т.п. услуги
+				|| fkCalcTp.equals(37); // капремонт
+	}
+
+	/**
+	 * Особый расчет цены
+	 */
+	@Transient
+	public boolean isCalcPriceSpecial()
+	{
+		return fkCalcTp.equals(7) // найм (только по муниципальным помещениям) расчет на м2
+				|| fkCalcTp.equals(25) // текущее содержание и подобные услуги (без свыше соц.нормы и без 0 проживающих)
+				|| fkCalcTp.equals(32) // прочие услуги, расчитываемые как расценка * норматив * общ.площадь
 				|| fkCalcTp.equals(36)// вывоз жидких нечистот и т.п. услуги
 				|| fkCalcTp.equals(37); // капремонт
 	}

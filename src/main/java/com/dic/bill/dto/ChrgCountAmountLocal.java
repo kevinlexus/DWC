@@ -320,22 +320,28 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             Usl uslFact;
             BigDecimal priceFact;
             if (u.vol.compareTo(BigDecimal.ZERO) != 0) {
-                if (u.usl.isCalcByArea()) {
+                /*if (u.usl.isCalcByArea()) {
                     // услуги типа Текущее содержание - не контролировать 0 зарег и свыше соц нормы
                     uslFact = u.usl;
-                    priceFact = u.price;
-                } else {
-                    // прочие услуги
                     if (!u.isEmpty) {
                         // есть проживающие
-                        uslFact = u.usl;
                         priceFact = u.price;
                     } else {
                         // нет проживающих
-                        uslFact = u.uslEmpt;
                         priceFact = u.priceEmpty;
                     }
+                } else {*/
+                // прочие услуги
+                if (!u.isEmpty) {
+                    // есть проживающие
+                    uslFact = u.usl;
+                    priceFact = u.price;
+                } else {
+                    // нет проживающих
+                    uslFact = u.uslEmpt;
+                    priceFact = u.priceEmpty;
                 }
+                //}
                 addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
             }
 
@@ -358,30 +364,32 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      */
     private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
                                BigDecimal vol, BigDecimal area, BigDecimal price) {
-        UslVolCharge prev = getLstUslVolCharge().stream()
-                .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
-                        && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
-                .findFirst().orElse(null);
-        if (prev != null) {
-            // найдена запись с данным ключом
-            prev.vol = prev.vol.add(vol);
-            prev.area = prev.area.add(area);
-            prev.kpr = prev.kpr.add(u.kpr);
-            prev.kprWr = prev.kprWr.add(u.kprWr);
-            prev.kprOt = prev.kprOt.add(u.kprOt);
-        } else {
-            // не найдена запись, создать новую
-            UslVolCharge uslVolCharge = new UslVolCharge();
-            uslVolCharge.kart = u.kart;
-            uslVolCharge.usl = uslFact;
-            uslVolCharge.isMeter = u.isMeter;
-            uslVolCharge.vol = vol;
-            uslVolCharge.price = price;
-            uslVolCharge.area = area;
-            uslVolCharge.kpr = u.kpr;
-            uslVolCharge.kprWr = u.kprWr;
-            uslVolCharge.kprOt = u.kprOt;
-            getLstUslVolCharge().add(uslVolCharge);
+        if (vol.compareTo(BigDecimal.ZERO) != 0 && price.compareTo(BigDecimal.ZERO) != 0) {
+            UslVolCharge prev = getLstUslVolCharge().stream()
+                    .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
+                            && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
+                    .findFirst().orElse(null);
+            if (prev != null) {
+                // найдена запись с данным ключом
+                prev.vol = prev.vol.add(vol);
+                prev.area = prev.area.add(area);
+                prev.kpr = prev.kpr.add(u.kpr);
+                prev.kprWr = prev.kprWr.add(u.kprWr);
+                prev.kprOt = prev.kprOt.add(u.kprOt);
+            } else {
+                // не найдена запись, создать новую
+                UslVolCharge uslVolCharge = new UslVolCharge();
+                uslVolCharge.kart = u.kart;
+                uslVolCharge.usl = uslFact;
+                uslVolCharge.isMeter = u.isMeter;
+                uslVolCharge.vol = vol;
+                uslVolCharge.price = price;
+                uslVolCharge.area = area;
+                uslVolCharge.kpr = u.kpr;
+                uslVolCharge.kprWr = u.kprWr;
+                uslVolCharge.kprOt = u.kprOt;
+                getLstUslVolCharge().add(uslVolCharge);
+            }
         }
 /*
         log.trace("Добавлено в lstUslVolCharge: lsk={}, usl={}, met={}, vol={}, prc={}, " +
@@ -415,7 +423,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);
             u.kart.getCharge().add(charge);
-            log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={} summa={}",
+            log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
                     u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
 
         }
