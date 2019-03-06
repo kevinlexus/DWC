@@ -24,7 +24,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     @PersistenceContext
     private EntityManager em;
 
-    // с полной детализацией по услуге usl.cd="х.в. для гвс", используется только услугой fk_calc_tp = 47
+    // с полной детализацией по услуге используется выборочными услугами
     private List<UslPriceVolKart> lstUslPriceVolKartDetailed = new ArrayList<>(10);
 
     // сгруппированное до дат, для подготовки записи результата начисления в C_CHARGE

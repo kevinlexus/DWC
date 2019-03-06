@@ -23,8 +23,8 @@ import java.util.Set;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "USL", schema="TEST")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+//@Cacheable
+//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Usl implements java.io.Serializable  {
 
@@ -91,7 +91,7 @@ public class Usl implements java.io.Serializable  {
 	// цены по услуге
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	@Fetch(FetchMode.JOIN)
+	//@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
 	private Set<Price> price = new HashSet<>(0);
 
 	// порядок расчета услуг
@@ -106,7 +106,7 @@ public class Usl implements java.io.Serializable  {
 	// коды REU, для округления, для ГИС ЖКХ
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	@Fetch(FetchMode.JOIN)
+	//@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
 	private Set<UslRound> uslRound = new HashSet<>(0);
 
 	/**

@@ -130,7 +130,7 @@ public class Kart implements java.io.Serializable {
 
     // набор услуг
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
     private Set<Nabor> nabor = new HashSet<>(0);
