@@ -7,6 +7,7 @@ import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -97,21 +98,20 @@ public class KartMngImpl implements KartMng {
      * обычно для счетов РСО, капремонта требуется основной лиц.счет,
      * для получения информации о кол-ве проживающих, прочих параметрах, привязанных к основному лиц.счету
      *
-     * @param ko - объект помещения
+     * @param kart - текущий лиц.счет
      * @return
      */
     @Override
-    public Kart getKartMain(Ko ko) {
-        Kart kart = null;
-        for (Kart t : ko.getKart()) {
+    @Cacheable(cacheNames="KartMng.getKartMain", key="{#kart.getLsk()}")
+    public Kart getKartMain(Kart kart) {
+        for (Kart t : kart.getKoKw().getKart()) {
             if (t.isActual()) {
-                kart = t;
                 if (t.getTp().getCd().equals("LSK_TP_MAIN")) {
                     return t;
                 }
             }
         }
-        // не найден основной лиц.счет, вернуть любой актуальный
+        // не найден основной лиц.счет, вернуть текущий
         return kart;
     }
 

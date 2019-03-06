@@ -4,7 +4,6 @@ import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +21,6 @@ public interface KartMng {
     /*
                 boolean getPersCountByDate(Kart kart, Date dt);
             */
-	Kart getKartMain(Ko ko);
+	Kart getKartMain(Kart kart);
 
 }

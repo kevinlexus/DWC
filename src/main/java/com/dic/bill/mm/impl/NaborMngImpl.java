@@ -198,7 +198,8 @@ public class NaborMngImpl implements NaborMng {
                 if (usl.getId().equals("132")) {
                     detail.uslEmpt = usl;
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);
-                } else if (usl.getFkCalcTp().equals(24) || usl.getFkCalcTp().equals(25)) {
+                } else if (usl.getFkCalcTp().equals(24) || usl.getFkCalcTp().equals(25) ||
+                        usl.getFkCalcTp().equals(32) || usl.getFkCalcTp().equals(36)) {
                     // особый расчет цены
                     detail.uslEmpt = usl;
                     detail.priceEmpt = detail.price;
