@@ -36,6 +36,10 @@ public class Charge implements java.io.Serializable  {
 	@JoinColumn(name="USL", referencedColumnName="USl", updatable = true, nullable = false, insertable = true)
 	private Usl usl;
 
+	// № п.п.
+	@Column(name = "NPP", updatable = true, nullable = true, insertable = true)
+	private Integer npp;
+
 	// сумма
 	@Column(name = "SUMMA", updatable = true, nullable = true, insertable = true)
 	private BigDecimal summa;
@@ -43,6 +47,22 @@ public class Charge implements java.io.Serializable  {
 	// объем
 	@Column(name = "TEST_OPL", updatable = true, nullable = true, insertable = true)
 	private BigDecimal testOpl;
+
+	// кол-во проживающих
+	@Column(name = "KPR", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kpr;
+
+	// кол-во временно зарег
+	@Column(name = "KPRZ", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kprz;
+
+	// кол-во временно отсут
+	@Column(name = "KPRO", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kpro;
+
+	// кол-во проживающих, в т.ч. все, В.О. В.З. В.П.
+	@Column(name = "KPR2", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kpr2;
 
 	// площадь
 	@Column(name = "OPL", updatable = true, nullable = true, insertable = true)

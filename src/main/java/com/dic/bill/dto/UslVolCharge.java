@@ -30,5 +30,7 @@ public class UslVolCharge {
     public BigDecimal kprWr = BigDecimal.ZERO;
     // кол-во временно отсутствующих
     public BigDecimal kprOt = BigDecimal.ZERO;
+    // макс.кол-во проживающих
+    public BigDecimal kprMax = BigDecimal.ZERO;
 
 }

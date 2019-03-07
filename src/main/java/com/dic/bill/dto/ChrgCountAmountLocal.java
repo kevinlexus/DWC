@@ -410,8 +410,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
         }
         log.trace("Сохранено в C_CHARGE:");
+        int i=0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
             Charge charge = new Charge();
+            charge.setNpp(i++);
             charge.setType(1);
             charge.setUsl(u.usl);
             charge.setKart(u.kart);
@@ -419,6 +421,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setOpl(area);
             charge.setTestCena(u.price);
+            charge.setKpr(u.kpr);
+            charge.setKprz(u.kprWr);
+            charge.setKpro(u.kprOt);
+            charge.setKpr2(u.kprMax);
             charge.setIsSch(u.isMeter);
             BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);
