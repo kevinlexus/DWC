@@ -3,7 +3,6 @@ package com.dic.bill.dto;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Org;
 import com.dic.bill.model.scott.Usl;
-import com.ric.cmn.DistributableBigDecimal;
 import com.ric.cmn.Utl;
 
 import java.math.BigDecimal;
@@ -32,7 +31,7 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
         // организация
         private Org org;
         // наличие счетчика
-        private boolean isCounter;
+        private boolean isMeter;
         // пустая квартира?
         private boolean isEmpty;
         // жилая квартира?
@@ -100,8 +99,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             return this;
         }
 
-        public UslPriceVolBuilder withIsCounter(boolean isCounter) {
-            this.isCounter = isCounter;
+        public UslPriceVolBuilder withIsMeter(boolean isMeter) {
+            this.isMeter = isMeter;
             return this;
         }
 
@@ -196,7 +195,7 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             uslPriceVolKart.priceOverSoc = this.priceOverSoc;
             uslPriceVolKart.priceEmpty = this.priceEmpty;
             uslPriceVolKart.isEmpty = this.isEmpty;
-            uslPriceVolKart.isMeter = this.isCounter;
+            uslPriceVolKart.isMeter = this.isMeter;
             uslPriceVolKart.isResidental = this.isResidental;
             uslPriceVolKart.dt = this.dt;
 
