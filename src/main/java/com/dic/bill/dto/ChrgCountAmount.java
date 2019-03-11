@@ -33,7 +33,6 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
         this.getLstUslVolKartGrp().addAll(chrgCountAmountLocal.getLstUslVolKartGrp());
 
         for (UslVolVvod u : chrgCountAmountLocal.getLstUslVolVvod()) {
-
             UslVolVvod prevUslVolVvod = this.getLstUslVolVvod().stream().filter(
                     t->t.usl.equals(u.usl) && t.isMeter == u.isMeter
                     && t.isEmpty == u.isEmpty && t.isResidental == u.isResidental
@@ -48,6 +47,7 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                 uslVolVvod.usl = u.usl;
                 uslVolVvod.vol = u.vol;
                 uslVolVvod.area = u.area;
+                uslVolVvod.kpr = u.kpr;
                 getLstUslVolVvod().add(uslVolVvod);
             } else {
                 // такой же по ключевым параметрам, добавить данные в найденную строку

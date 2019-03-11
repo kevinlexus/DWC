@@ -1,11 +1,16 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.*;
+import ch.qos.logback.classic.Logger;
+import com.dic.bill.model.scott.Charge;
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -66,7 +71,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             //uslVolKartGrp.volDet = volDet;
 
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
-            uslVolKartGrp.kpr = u.kpr;
+            uslVolKartGrp.kpr = u.kprNorm; // note kprMax!
             if (u.isMeter) {
                 // если хоть один раз был в периоде счетчик - поставить отметку
                 uslVolKartGrp.isExistMeterCurrPeriod = true;
@@ -81,7 +86,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             prevUslVolKartGrp.vol = prevUslVolKartGrp.vol.add(vol);
             //prevUslVolKartGrp.volDet = prevUslVolKartGrp.volDet.add(volDet);
             prevUslVolKartGrp.area = prevUslVolKartGrp.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolKartGrp.kpr = prevUslVolKartGrp.kpr.add(u.kpr);
+            prevUslVolKartGrp.kpr = prevUslVolKartGrp.kpr.add(u.kprNorm); // note kprMax!
         }
 
         // если услуга usl.cd="х.в. для гвс", то сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
@@ -129,12 +134,13 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolVvod.usl = u.usl;
             uslVolVvod.vol = vol;
             uslVolVvod.area = u.area;
+            uslVolVvod.kpr = u.kprNorm; // note kprMax!
             getLstUslVolVvod().add(uslVolVvod);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolVvod.vol = prevUslVolVvod.vol.add(vol);
             prevUslVolVvod.area = prevUslVolVvod.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolVvod.kpr = prevUslVolVvod.kpr.add(u.kpr);
+            prevUslVolVvod.kpr = prevUslVolVvod.kpr.add(u.kprNorm);  // note kprMax!
         }
 
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
@@ -257,42 +263,61 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * @param msg   - сообщение
      */
     public void printVolAmnt(String uslId, String msg) {
-        log.trace("");
-        log.trace("****** ПРОВЕРКА объемов {}, по UslPriceVolKartDt:", msg);
-        // отсортировать по lsk, usl, dtFrom
-        List<UslPriceVolKartDt> lst =
-                getLstUslPriceVolKartDt().stream()
-                        .sorted(Comparator.comparing((UslPriceVolKartDt o1) -> o1.getKart().getLsk())
-                                .thenComparing((UslPriceVolKartDt o1) -> o1.getUsl().getId())
-                                .thenComparing((UslPriceVolKartDt o1) -> o1.dtFrom)
-                        )
-                        .collect(Collectors.toList());
-        for (UslPriceVolKartDt t : lst) {
-            if (uslId == null || t.usl.getId().equals(uslId)) {
-/*
-                log.info("убрать эту запись! t.kart.getLsk()={}, t.usl.getId()={}, " +
-                                "t.uslOverSoc.getId()={}, t.uslEmpt.getId()={}",
-                        t.kart, t.usl, t.uslOverSoc, t.uslEmpt
-                        );
-*/
-                log.trace("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
-                                "org={}, prc={}, prcE={}, prcO={}, std={} " +
-                                "kpr={}, kprO={}, kprW={}, vol={}, volO={}",
-                        Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),
-                        t.kart.getLsk(), t.usl.getId(), t.uslOverSoc.getId(), t.uslEmpt.getId(),
-                        t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.areaOverSoc.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.isEmpty ? "T" : "F",
-                        t.isMeter ? "T" : "F",
-                        t.isResidental ? "T" : "F",
-                        t.org.getId(), t.price, t.priceEmpty, t.priceOverSoc, t.socStdt,
-                        t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.kprOt.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.kprWr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.vol.setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
-                        t.volOverSoc.setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
-                );
+        Logger root = (Logger) LoggerFactory.getLogger("com.ric");
+        if (root.isTraceEnabled()) {
+            log.trace("");
+            log.trace("****** ПРОВЕРКА объемов {}, по UslPriceVolKartDt:", msg);
+            // отсортировать по lsk, usl, dtFrom
+            List<UslPriceVolKartDt> lst =
+                    getLstUslPriceVolKartDt().stream()
+                            .sorted(Comparator.comparing((UslPriceVolKartDt o1) -> o1.getKart().getLsk())
+                                    .thenComparing((UslPriceVolKartDt o1) -> o1.getUsl().getId())
+                                    .thenComparing((UslPriceVolKartDt o1) -> o1.dtFrom)
+                            )
+                            .collect(Collectors.toList());
+            for (UslPriceVolKartDt t : lst) {
+                if (uslId == null || t.usl.getId().equals(uslId)) {
+                    log.trace("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
+                                    "org={}, prc={}, prcE={}, prcO={}, std={} " +
+                                    "kpr={}, kprO={}, kprW={}, kprM={}, vol={}, volO={}",
+                            Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),
+                            t.kart.getLsk(), t.usl.getId(), t.uslOverSoc.getId(), t.uslEmpt.getId(),
+                            t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.areaOverSoc.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.isEmpty ? "T" : "F",
+                            t.isMeter ? "T" : "F",
+                            t.isResidental ? "T" : "F",
+                            t.org.getId(), t.price, t.priceEmpty, t.priceOverSoc, t.socStdt,
+                            t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.kprOt.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.kprWr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.kprNorm.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.vol.setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.volOverSoc.setScale(8, BigDecimal.ROUND_HALF_UP).stripTrailingZeros()
+                    );
+                }
             }
+            log.trace("");
+            log.trace("****** ПРОВЕРКА объемов {}, по UslPriceVolKartGrp:", msg);
+            // отсортировать по lsk, usl, dtFrom
+            for (UslVolKartGrp t : getLstUslVolKartGrp()) {
+                if (uslId == null || t.usl.getId().equals(uslId)) {
+                    log.trace("lsk={}, usl={}, isResid={}, isMeter={}, isPers={}, ar={}, vol={}, kpr={}",
+                            t.kart.getLsk(), t.usl.getId(), t.isResidental,
+                            t.isExistMeterCurrPeriod, t.isExistPersCurrPeriod, t.area, t.vol, t.kpr);
+                }
+            }
+            log.trace("");
+            log.trace("****** ПРОВЕРКА объемов {}, по UslPriceVolVvod:", msg);
+            // отсортировать по lsk, usl, dtFrom
+            for (UslVolVvod t : getLstUslVolVvod()) {
+                if (uslId == null || t.usl.getId().equals(uslId)) {
+                    log.trace("usl={}, isResid={}, isMeter={}, isEmpt={}, ar={}, vol={}, kpr={}",
+                            t.usl.getId(), t.isResidental,
+                            t.isMeter, t.isEmpty, t.area, t.vol, t.kpr);
+                }
+            }
+
         }
     }
 
@@ -410,7 +435,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
         }
         log.trace("Сохранено в C_CHARGE:");
-        int i=0; // № п.п.
+        int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
             Charge charge = new Charge();
             charge.setNpp(i++);

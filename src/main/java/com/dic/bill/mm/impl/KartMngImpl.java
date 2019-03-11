@@ -102,7 +102,7 @@ public class KartMngImpl implements KartMng {
      * @return
      */
     @Override
-    @Cacheable(cacheNames="KartMng.getKartMain", key="{#kart.getLsk()}")
+    //@Cacheable(cacheNames="KartMng.getKartMain", key="{#kart.getLsk()}") временно отключил
     public Kart getKartMain(Kart kart) {
         for (Kart t : kart.getKoKw().getKart()) {
             if (t.isActual()) {

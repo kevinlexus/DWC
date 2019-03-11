@@ -58,8 +58,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
         private int kprWr = 0;
         // кол-во временно отсутствующих
         private int kprOt = 0;
-        // макс.кол-во проживающих (для сохранения в C_CHARGE)
-        private int kprMax = 0;
+        // макс.кол-во проживающих (кол-во прож. для определения соц.нормы) (для сохранения в C_CHARGE)
+        private int kprNorm = 0;
         // доля дня в месяце
         private BigDecimal partDayMonth = BigDecimal.ZERO;
 
@@ -169,8 +169,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             return this;
         }
 
-        public UslPriceVolBuilder withKprMax(int kprMax) {
-            this.kprMax = kprMax;
+        public UslPriceVolBuilder withKprNorm(int kprNorm) {
+            this.kprNorm = kprNorm;
             return this;
         }
 
@@ -210,7 +210,7 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             uslPriceVolKart.kpr = BigDecimal.valueOf(this.kpr).multiply(this.partDayMonth);
             uslPriceVolKart.kprOt = BigDecimal.valueOf(this.kprOt).multiply(this.partDayMonth);
             uslPriceVolKart.kprWr = BigDecimal.valueOf(this.kprWr).multiply(this.partDayMonth);
-            uslPriceVolKart.kprMax = BigDecimal.valueOf(this.kprMax).multiply(this.partDayMonth);
+            uslPriceVolKart.kprNorm = BigDecimal.valueOf(this.kprNorm).multiply(this.partDayMonth);
 
             return uslPriceVolKart;
         }

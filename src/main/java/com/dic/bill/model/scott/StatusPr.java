@@ -33,7 +33,7 @@ public class StatusPr implements java.io.Serializable {
 	private String name2;
 
 	// тип статуса (временная регистрация, прописка и т.п.)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY) // сделал EAGER - иногда приводит к LazyInitialisationException ред. 06.03.2019
 	@JoinColumn(name="FK_TP", referencedColumnName="ID")
 	private Lst tp;
 

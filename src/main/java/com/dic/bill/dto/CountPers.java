@@ -20,7 +20,7 @@ public class CountPers {
   // кол-во для расчета объема для нормативного начисления
   public int kprNorm = 0;
   // максимальное кол-во проживающих
-  public int kprMax = 0;
+  //public int kprMax = 0;
   // является ли пустым лиц.счет?
   public boolean isEmpty = true;
 

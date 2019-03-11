@@ -44,7 +44,7 @@ abstract class UslPriceVolKartBase extends UslVolKart {
     public BigDecimal kprWr = BigDecimal.ZERO;
     // кол-во временно отсутствующих
     public BigDecimal kprOt = BigDecimal.ZERO;
-    // макс.кол-во проживающих (для сохранения в C_CHARGE)
-    public BigDecimal kprMax = BigDecimal.ZERO;
+    // макс.кол-во проживающих (кол-во прож. для определения соц.нормы)(для сохранения в C_CHARGE)
+    public BigDecimal kprNorm = BigDecimal.ZERO;
 
 }

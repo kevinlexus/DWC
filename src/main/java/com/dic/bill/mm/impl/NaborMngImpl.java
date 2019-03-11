@@ -174,7 +174,7 @@ public class NaborMngImpl implements NaborMng {
             }
 
             if (uslEmpt != null) {
-                // найти услугу без проживающих, если есть
+                // найти услугу в наборе без проживающих, если есть
                 Nabor naborEmpt = kart.getNabor().stream()
                         .filter(t -> t.getUsl().equals(uslEmpt)).findFirst().orElse(null);
                 if (naborEmpt != null) {
@@ -188,13 +188,17 @@ public class NaborMngImpl implements NaborMng {
                         detail.uslEmpt = naborEmpt.getUsl();
                         detail.priceEmpt = priceMng.multiplyPrice(naborEmpt, 1);
                     }
+                } else if (usl.getFkCalcTp().equals(18)) {
+                    // г.в. - не найдено в наборе услуги без прожив.- занулить цену
+                    detail.uslEmpt = usl;
+                    detail.priceEmpt = BigDecimal.ZERO;
                 } else {
-                    // не найдено - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
+                    // не найдено в наборе - получить цену из 3 колонки (для 0 зарег. без дополнительной услуги для 0 зарег.)
                     detail.uslEmpt = usl;
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);
                 }
             } else {
-                // не найдено
+                // не найдено в справочнике
                 if (usl.getId().equals("132")) {
                     detail.uslEmpt = usl;
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);

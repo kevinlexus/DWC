@@ -43,7 +43,7 @@ public class KartPr implements java.io.Serializable  {
 	private StatusPr statusPr;
 
 	// родственная связь
-	@ManyToOne(fetch = FetchType.EAGER) // сделал EAGER - иногда приводит к LazyInitialisationException ред. 06.03.2019
+	@ManyToOne(fetch = FetchType.LAZY) // сделал EAGER - иногда приводит к LazyInitialisationException ред. 06.03.2019
 	@JoinColumn(name="RELAT_ID", referencedColumnName="ID", updatable = false, nullable = true)
 	private Relation relation;
 
@@ -63,7 +63,7 @@ public class KartPr implements java.io.Serializable  {
 	@Column(name = "FIO", unique=true, updatable = false, nullable = true)
 	private String fio;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true) // поставил EAGER - отваливается LazyInitExcpt
 	@JoinColumn(name="FK_KART_PR", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<StatePr> statePr = new ArrayList<>(0);
 
