@@ -154,6 +154,7 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             return this;
         }
 
+
         public UslPriceVolBuilder withKpr(int kpr) {
             this.kpr = kpr;
             return this;

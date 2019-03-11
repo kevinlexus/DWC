@@ -16,5 +16,7 @@ public class UslVolVvod extends UslVol {
     public boolean isEmpty;
     // жилое помещение?
     public boolean isResidental;
+    // кол-во проживающих - ограничил переменную от доступа
+    private BigDecimal kpr = BigDecimal.ZERO;
 
 }

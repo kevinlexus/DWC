@@ -47,13 +47,13 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                 uslVolVvod.usl = u.usl;
                 uslVolVvod.vol = u.vol;
                 uslVolVvod.area = u.area;
-                uslVolVvod.kpr = u.kpr;
+                uslVolVvod.kprNorm = u.kprNorm;
                 getLstUslVolVvod().add(uslVolVvod);
             } else {
                 // такой же по ключевым параметрам, добавить данные в найденную строку
                 prevUslVolVvod.vol = prevUslVolVvod.vol.add(u.vol);
                 prevUslVolVvod.area = prevUslVolVvod.area.add(u.area);
-                prevUslVolVvod.kpr = prevUslVolVvod.kpr.add(u.kpr);
+                prevUslVolVvod.kprNorm = prevUslVolVvod.kprNorm.add(u.kprNorm);
             }
 
         }
@@ -93,9 +93,9 @@ public class ChrgCountAmount extends ChrgCountAmountBase {
                     log.info("****** ПРОВЕРКА объема по lsk={}, usl={} *******", lsk, d.getId());
                     for (UslVolKart t : getLstUslVolKart()) {
                         if ((lsk == null || t.kart.getLsk().equals(lsk)) && t.usl.equals(d)) {
-                            log.info("lsk={}, area={}, kpr={}, empt={}, met={}, vol={}", t.kart.getLsk(),
+                            log.info("lsk={}, area={}, kprNorm={}, empt={}, met={}, vol={}", t.kart.getLsk(),
                                     t.area.setScale(4, BigDecimal.ROUND_HALF_UP),
-                                    t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP),
+                                    t.kprNorm.setScale(4, BigDecimal.ROUND_HALF_UP),
                                     t.isEmpty, t.isMeter,
                                     t.vol.setScale(8, BigDecimal.ROUND_HALF_UP)
                             );

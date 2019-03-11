@@ -22,6 +22,9 @@ public class UslVol implements DistributableBigDecimal {
     // кол-во проживающих
     public BigDecimal kpr = BigDecimal.ZERO;
 
+    // кол-во проживающих (для определения соц.нормы) (максимальное)
+    public BigDecimal kprNorm = BigDecimal.ZERO;
+
 
     @Override
     public BigDecimal getBdForDist() {

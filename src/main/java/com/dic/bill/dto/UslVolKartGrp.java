@@ -1,6 +1,8 @@
 package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Usl;
+import com.ric.cmn.DistributableBigDecimal;
 
 import java.math.BigDecimal;
 
@@ -11,6 +13,10 @@ public class UslVolKartGrp extends UslVol {
 
     // лиц.счет
     public Kart kart;
+
+    // кол-во проживающих - ограничил переменную от доступа
+    private BigDecimal kpr = BigDecimal.ZERO;
+
     // наличие в текущем периоде счетчика по услуге (даже если один день был)
     public boolean isExistMeterCurrPeriod = false;
     // наличие в текущем периоде проживающих по услуге (даже если один день был)

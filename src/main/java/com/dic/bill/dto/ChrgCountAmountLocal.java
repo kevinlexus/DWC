@@ -71,7 +71,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             //uslVolKartGrp.volDet = volDet;
 
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
-            uslVolKartGrp.kpr = u.kprNorm; // note kprMax!
+            uslVolKartGrp.kprNorm = u.kprNorm; // note kprMax!
             if (u.isMeter) {
                 // если хоть один раз был в периоде счетчик - поставить отметку
                 uslVolKartGrp.isExistMeterCurrPeriod = true;
@@ -86,7 +86,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             prevUslVolKartGrp.vol = prevUslVolKartGrp.vol.add(vol);
             //prevUslVolKartGrp.volDet = prevUslVolKartGrp.volDet.add(volDet);
             prevUslVolKartGrp.area = prevUslVolKartGrp.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolKartGrp.kpr = prevUslVolKartGrp.kpr.add(u.kprNorm); // note kprMax!
+            prevUslVolKartGrp.kprNorm = prevUslVolKartGrp.kprNorm.add(u.kprNorm); // note kprMax!
         }
 
         // если услуга usl.cd="х.в. для гвс", то сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
@@ -111,13 +111,13 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolKart.isEmpty = u.isEmpty;
             uslVolKart.vol = vol;
             uslVolKart.area = u.area.add(u.areaOverSoc);
-            uslVolKart.kpr = u.kpr;
+            uslVolKart.kprNorm = u.kprNorm;
             getLstUslVolKart().add(uslVolKart);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolKart.vol = prevUslVolKart.vol.add(vol);
             prevUslVolKart.area = prevUslVolKart.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolKart.kpr = prevUslVolKart.kpr.add(u.kpr);
+            prevUslVolKart.kprNorm = prevUslVolKart.kprNorm.add(u.kprNorm);
         }
 
         // Сгруппировать по вводу
@@ -134,13 +134,13 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolVvod.usl = u.usl;
             uslVolVvod.vol = vol;
             uslVolVvod.area = u.area;
-            uslVolVvod.kpr = u.kprNorm; // note kprMax!
+            uslVolVvod.kprNorm = u.kprNorm; // note kprMax!
             getLstUslVolVvod().add(uslVolVvod);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolVvod.vol = prevUslVolVvod.vol.add(vol);
             prevUslVolVvod.area = prevUslVolVvod.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolVvod.kpr = prevUslVolVvod.kpr.add(u.kprNorm);  // note kprMax!
+            prevUslVolVvod.kprNorm = prevUslVolVvod.kprNorm.add(u.kprNorm);  // note kprMax!
         }
 
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
@@ -172,7 +172,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslPriceVolKartDt.area = u.area;
             uslPriceVolKartDt.areaOverSoc = u.areaOverSoc;
 
-            uslPriceVolKartDt.kpr = u.kpr;
+            uslPriceVolKartDt.kprNorm = u.kprNorm;
             uslPriceVolKartDt.kprOt = u.kprOt;
             uslPriceVolKartDt.kprWr = u.kprWr;
 
@@ -192,7 +192,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             prevUslPriceVolKartDt.vol = prevUslPriceVolKartDt.vol.add(u.vol);
             prevUslPriceVolKartDt.volOverSoc = prevUslPriceVolKartDt.volOverSoc.add(u.volOverSoc);
 
-            prevUslPriceVolKartDt.kpr = prevUslPriceVolKartDt.kpr.add(u.kpr);
+            prevUslPriceVolKartDt.kprNorm = prevUslPriceVolKartDt.kprNorm.add(u.kprNorm);
             prevUslPriceVolKartDt.kprWr = prevUslPriceVolKartDt.kprWr.add(u.kprWr);
             prevUslPriceVolKartDt.kprOt = prevUslPriceVolKartDt.kprOt.add(u.kprOt);
 
@@ -223,7 +223,6 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * @return - сумма для сравнения в будущих округлениях
      */
     private BigDecimal roundByLst(List<? extends UslVol> lstSrc, Usl usl, BigDecimal summSample) {
-
         List<UslVol> lst = lstSrc.stream()
                 .filter(t -> t.usl.equals(usl))
                 .collect(Collectors.toList());
@@ -279,7 +278,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 if (uslId == null || t.usl.getId().equals(uslId)) {
                     log.trace("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                     "org={}, prc={}, prcE={}, prcO={}, std={} " +
-                                    "kpr={}, kprO={}, kprW={}, kprM={}, vol={}, volO={}",
+                                    "kprNorm={}, kprO={}, kprW={}, kprM={}, vol={}, volO={}",
                             Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),
                             t.kart.getLsk(), t.usl.getId(), t.uslOverSoc.getId(), t.uslEmpt.getId(),
                             t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
@@ -288,7 +287,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                             t.isMeter ? "T" : "F",
                             t.isResidental ? "T" : "F",
                             t.org.getId(), t.price, t.priceEmpty, t.priceOverSoc, t.socStdt,
-                            t.kpr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
+                            t.kprNorm.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                             t.kprOt.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                             t.kprWr.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
                             t.kprNorm.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
@@ -302,9 +301,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // отсортировать по lsk, usl, dtFrom
             for (UslVolKartGrp t : getLstUslVolKartGrp()) {
                 if (uslId == null || t.usl.getId().equals(uslId)) {
-                    log.trace("lsk={}, usl={}, isResid={}, isMeter={}, isPers={}, ar={}, vol={}, kpr={}",
+                    log.trace("lsk={}, usl={}, isResid={}, isMeter={}, isPers={}, ar={}, vol={}, kprNorm={}",
                             t.kart.getLsk(), t.usl.getId(), t.isResidental,
-                            t.isExistMeterCurrPeriod, t.isExistPersCurrPeriod, t.area, t.vol, t.kpr);
+                            t.isExistMeterCurrPeriod, t.isExistPersCurrPeriod, t.area, t.vol, t.kprNorm);
                 }
             }
             log.trace("");
@@ -312,9 +311,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // отсортировать по lsk, usl, dtFrom
             for (UslVolVvod t : getLstUslVolVvod()) {
                 if (uslId == null || t.usl.getId().equals(uslId)) {
-                    log.trace("usl={}, isResid={}, isMeter={}, isEmpt={}, ar={}, vol={}, kpr={}",
+                    log.trace("usl={}, isResid={}, isMeter={}, isEmpt={}, ar={}, vol={}, kprNorm={}",
                             t.usl.getId(), t.isResidental,
-                            t.isMeter, t.isEmpty, t.area, t.vol, t.kpr);
+                            t.isMeter, t.isEmpty, t.area, t.vol, t.kprNorm);
                 }
             }
 
@@ -398,7 +397,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 // найдена запись с данным ключом
                 prev.vol = prev.vol.add(vol);
                 prev.area = prev.area.add(area);
-                prev.kpr = prev.kpr.add(u.kpr);
+                prev.kpr = prev.kpr.add(u.kprNorm); // note Здесь еще решить что использовать u.kprNorm или u.kpr - тогда её надо будет восстановить!
                 prev.kprWr = prev.kprWr.add(u.kprWr);
                 prev.kprOt = prev.kprOt.add(u.kprOt);
             } else {
@@ -410,7 +409,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 uslVolCharge.vol = vol;
                 uslVolCharge.price = price;
                 uslVolCharge.area = area;
-                uslVolCharge.kpr = u.kpr;
+                uslVolCharge.kpr = u.kprNorm; // note Здесь еще решить что использовать u.kprNorm или u.kpr - тогда её надо будет восстановить!
                 uslVolCharge.kprWr = u.kprWr;
                 uslVolCharge.kprOt = u.kprOt;
                 getLstUslVolCharge().add(uslVolCharge);
