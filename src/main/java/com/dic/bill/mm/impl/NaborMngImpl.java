@@ -4,7 +4,6 @@ import com.dic.bill.dto.DetailUslPrice;
 import com.dic.bill.mm.NaborMng;
 import com.dic.bill.mm.PriceMng;
 import com.dic.bill.model.scott.*;
-import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +53,39 @@ public class NaborMngImpl implements NaborMng {
         log.info("Зашел в кэш str1={}, int2={}, dt3={}",
                 str1, int2, dt3);
         return 5;
+    }
+
+
+    /**
+     * Вернуть ввод по списку действующих лицевых-услуг
+     * @param lstNabor - список услуг
+     * @param usl - услуга
+     */
+    @Override
+    public Vvod getVvod(List<Nabor> lstNabor, Usl usl) {
+        return lstNabor.stream()
+                .filter(t -> t.getVvod() != null
+                        && t.getVvod().getUsl() != null
+                        && t.getVvod().getUsl().equals(usl))
+                .map(Nabor::getVvod)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Вернуть тип распределения по вводу
+     * @param lstNabor - список услуг
+     * @param usl - услуга
+     */
+    @Override
+    public Integer getVvodDistTp(List<Nabor> lstNabor, Usl usl) {
+        Vvod vvod = getVvod(lstNabor, usl);
+        if (vvod != null && vvod.getDistTp() != null) {
+            return vvod.getDistTp();
+        } else {
+            // не найден ввод
+            return -1;
+        }
     }
 
     /**

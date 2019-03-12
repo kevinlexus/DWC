@@ -1,9 +1,7 @@
 package com.dic.bill.mm;
 
 import com.dic.bill.dto.DetailUslPrice;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Nabor;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.ErrorWhileChrg;
 
 import java.util.Date;
@@ -14,6 +12,10 @@ public interface NaborMng {
     List<Nabor> getValidNabor(Ko ko, Date curDt);
 
     Integer getCached(String str1, Integer int2, Date dt3);
+
+    Vvod getVvod(List<Nabor> lstNabor, Usl usl);
+
+    Integer getVvodDistTp(List<Nabor> lstNabor, Usl usl);
 
     DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg;
 }
