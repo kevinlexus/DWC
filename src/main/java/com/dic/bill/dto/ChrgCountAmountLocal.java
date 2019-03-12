@@ -170,6 +170,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslPriceVolKartDt.area = u.area;
             uslPriceVolKartDt.areaOverSoc = u.areaOverSoc;
 
+            uslPriceVolKartDt.kpr = u.kpr;
             uslPriceVolKartDt.kprNorm = u.kprNorm;
             uslPriceVolKartDt.kprOt = u.kprOt;
             uslPriceVolKartDt.kprWr = u.kprWr;
@@ -190,6 +191,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             prevUslPriceVolKartDt.vol = prevUslPriceVolKartDt.vol.add(u.vol);
             prevUslPriceVolKartDt.volOverSoc = prevUslPriceVolKartDt.volOverSoc.add(u.volOverSoc);
 
+            prevUslPriceVolKartDt.kpr = prevUslPriceVolKartDt.kpr.add(u.kpr);
             prevUslPriceVolKartDt.kprNorm = prevUslPriceVolKartDt.kprNorm.add(u.kprNorm);
             prevUslPriceVolKartDt.kprWr = prevUslPriceVolKartDt.kprWr.add(u.kprWr);
             prevUslPriceVolKartDt.kprOt = prevUslPriceVolKartDt.kprOt.add(u.kprOt);
@@ -341,17 +343,6 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             Usl uslFact;
             BigDecimal priceFact;
             if (u.vol.compareTo(BigDecimal.ZERO) != 0) {
-                /*if (u.usl.isCalcByArea()) {
-                    // услуги типа Текущее содержание - не контролировать 0 зарег и свыше соц нормы
-                    uslFact = u.usl;
-                    if (!u.isEmpty) {
-                        // есть проживающие
-                        priceFact = u.price;
-                    } else {
-                        // нет проживающих
-                        priceFact = u.priceEmpty;
-                    }
-                } else {*/
                 // прочие услуги
                 if (!u.isEmpty) {
                     // есть проживающие
@@ -394,7 +385,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 // найдена запись с данным ключом
                 prev.vol = prev.vol.add(vol);
                 prev.area = prev.area.add(area);
-                prev.kpr = prev.kpr.add(u.kprNorm); // note Здесь еще решить что использовать u.kprNorm или u.kpr - тогда её надо будет восстановить!
+                prev.setKpr(prev.getKpr().add(u.getKpr()));
+                prev.setKprNorm(prev.getKprNorm().add(u.kprNorm));
                 prev.kprWr = prev.kprWr.add(u.kprWr);
                 prev.kprOt = prev.kprOt.add(u.kprOt);
             } else {
@@ -406,7 +398,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 uslVolCharge.vol = vol;
                 uslVolCharge.price = price;
                 uslVolCharge.area = area;
-                uslVolCharge.kpr = u.kprNorm; // note Здесь еще решить что использовать u.kprNorm или u.kpr - тогда её надо будет восстановить!
+                uslVolCharge.setKpr(u.getKpr());
+                uslVolCharge.setKprNorm(u.kprNorm);
                 uslVolCharge.kprWr = u.kprWr;
                 uslVolCharge.kprOt = u.kprOt;
                 getLstUslVolCharge().add(uslVolCharge);
@@ -442,10 +435,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setOpl(area);
             charge.setTestCena(u.price);
-            charge.setKpr(u.kpr);
-            charge.setKprz(u.kprWr);
-            charge.setKpro(u.kprOt);
-            charge.setKpr2(u.kprMax);
+            charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKprz(u.kprWr.setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
             charge.setIsSch(u.isMeter);
             BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);

@@ -2,34 +2,24 @@ package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Usl;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 /**
  * DTO для хранения объемов для записи начисления в C_CHARGE
  */
-public class UslVolCharge {
+@Getter @Setter
+class UslVolCharge extends UslVolKart {
 
-    // лиц.счет
-    public Kart kart;
-    // услуга детализированная (например х.в., х.в.свыше.с.н., х.в. 0 зарег.)
-    public Usl usl;
-    // наличие счетчика
-    public boolean isMeter;
-    // объем, округленный до 5 знаков
-    public BigDecimal vol = BigDecimal.ZERO;
     // цена
-    public BigDecimal price = BigDecimal.ZERO;
-    // общая площадь
-    public BigDecimal area = BigDecimal.ZERO;
-
+    BigDecimal price = BigDecimal.ZERO;
     // кол-во проживающих
-    public BigDecimal kpr = BigDecimal.ZERO;
+    BigDecimal kpr = BigDecimal.ZERO;
     // кол-во временно зарегистрированных
-    public BigDecimal kprWr = BigDecimal.ZERO;
+    BigDecimal kprWr = BigDecimal.ZERO;
     // кол-во временно отсутствующих
-    public BigDecimal kprOt = BigDecimal.ZERO;
-    // макс.кол-во проживающих
-    public BigDecimal kprMax = BigDecimal.ZERO;
+    BigDecimal kprOt = BigDecimal.ZERO;
 
 }

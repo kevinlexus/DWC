@@ -1,27 +1,23 @@
 package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Kart;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 /**
  * DTO для хранения сгруппированных объемов по лиц.счету
  */
+@Getter
+@Setter
 public class UslVolKartGrp extends UslVol {
 
     // лиц.счет
-    public Kart kart;
-
-    // кол-во проживающих - ограничил переменную от доступа
-    private BigDecimal kpr = BigDecimal.ZERO;
-
+    Kart kart;
     // наличие в текущем периоде счетчика по услуге (даже если один день был)
-    public boolean isExistMeterCurrPeriod = false;
+    boolean isExistMeterCurrPeriod = false;
     // наличие в текущем периоде проживающих по услуге (даже если один день был)
-    public boolean isExistPersCurrPeriod = false;
-    // детализированный объем, до 20 знаков после запятой, для округления
-    //public BigDecimal volDet = BigDecimal.ZERO;
-    // жилое помещение?
-    public boolean isResidental;
+    boolean isExistPersCurrPeriod = false;
 
 }

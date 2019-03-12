@@ -2,29 +2,31 @@ package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.DistributableBigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 /**
  * DTO для хранения объемов для расчета начисления
  */
+@Getter @Setter
 public class UslVol implements DistributableBigDecimal {
 
     // услуга основная (например х.в.)
-    public Usl usl;
+    Usl usl;
 
     // объем, округленный до 5 знаков
-    public BigDecimal vol = BigDecimal.ZERO;
+    BigDecimal vol = BigDecimal.ZERO;
 
     // общая площадь
-    public BigDecimal area = BigDecimal.ZERO;
-
-    // кол-во проживающих
-    public BigDecimal kpr = BigDecimal.ZERO;
+    BigDecimal area = BigDecimal.ZERO;
 
     // кол-во проживающих (для определения соц.нормы) (максимальное)
-    public BigDecimal kprNorm = BigDecimal.ZERO;
+    BigDecimal kprNorm = BigDecimal.ZERO;
 
+    // жилое помещение?
+    boolean isResidental;
 
     @Override
     public BigDecimal getBdForDist() {

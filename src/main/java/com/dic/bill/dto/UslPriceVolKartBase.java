@@ -14,35 +14,38 @@ import java.util.Date;
  * Базовый класс DTO для хранения параметров для расчета начисления по лиц.счету:
  * Фактическая услуга, цена, тип объема и т.п.
  */
+@Getter @Setter
 abstract class UslPriceVolKartBase extends UslVolKart {
 
     // организация
-    public Org org;
+    Org org;
 
     // услуга свыше соц.нормы
-    public Usl uslOverSoc;
+    Usl uslOverSoc;
     // услуга по 0 зарег.
-    public Usl uslEmpt;
+    Usl uslEmpt;
 
     // соц.норма
-    public BigDecimal socStdt = BigDecimal.ZERO;
+    BigDecimal socStdt = BigDecimal.ZERO;
 
     // цена
-    public BigDecimal price = BigDecimal.ZERO;
+    BigDecimal price = BigDecimal.ZERO;
     // цена свыше соц.нормы
-    public BigDecimal priceOverSoc = BigDecimal.ZERO;
+    BigDecimal priceOverSoc = BigDecimal.ZERO;
     // цена без проживающих
-    public BigDecimal priceEmpty = BigDecimal.ZERO;
+    BigDecimal priceEmpty = BigDecimal.ZERO;
 
     // объем свыше соц.нормы
-    public BigDecimal volOverSoc = BigDecimal.ZERO;
+    BigDecimal volOverSoc = BigDecimal.ZERO;
 
     // общая площадь свыше соц.нормы
-    public BigDecimal areaOverSoc = BigDecimal.ZERO;
+    BigDecimal areaOverSoc = BigDecimal.ZERO;
 
+    // кол-во проживающих
+    BigDecimal kpr = BigDecimal.ZERO;
     // кол-во временно зарегистрированных
-    public BigDecimal kprWr = BigDecimal.ZERO;
+    BigDecimal kprWr = BigDecimal.ZERO;
     // кол-во временно отсутствующих
-    public BigDecimal kprOt = BigDecimal.ZERO;
+    BigDecimal kprOt = BigDecimal.ZERO;
 
 }

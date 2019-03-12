@@ -2,21 +2,21 @@ package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Usl;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 /**
  * DTO для хранения объемов для расчета начисления по вводу
  */
+@Getter
+@Setter
 public class UslVolVvod extends UslVol {
 
     // наличие счетчика
-    public boolean isMeter;
+    boolean isMeter;
     // пустая квартира?
-    public boolean isEmpty;
-    // жилое помещение?
-    public boolean isResidental;
-    // кол-во проживающих - ограничил переменную от доступа
-    private BigDecimal kpr = BigDecimal.ZERO;
+    boolean isEmpty;
 
 }
