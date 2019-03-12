@@ -68,10 +68,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolKartGrp.isResidental = u.isResidental;
             uslVolKartGrp.usl = u.usl;
             uslVolKartGrp.vol = vol;
-            //uslVolKartGrp.volDet = volDet;
 
             uslVolKartGrp.area = u.area.add(u.areaOverSoc);
-            uslVolKartGrp.kprNorm = u.kprNorm; // note kprMax!
+            uslVolKartGrp.kprNorm = u.kprNorm;
             if (u.isMeter) {
                 // если хоть один раз был в периоде счетчик - поставить отметку
                 uslVolKartGrp.isExistMeterCurrPeriod = true;
@@ -84,9 +83,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolKartGrp.vol = prevUslVolKartGrp.vol.add(vol);
-            //prevUslVolKartGrp.volDet = prevUslVolKartGrp.volDet.add(volDet);
             prevUslVolKartGrp.area = prevUslVolKartGrp.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolKartGrp.kprNorm = prevUslVolKartGrp.kprNorm.add(u.kprNorm); // note kprMax!
+            prevUslVolKartGrp.kprNorm = prevUslVolKartGrp.kprNorm.add(u.kprNorm);
         }
 
         // если услуга usl.cd="х.в. для гвс", то сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
@@ -134,13 +132,13 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolVvod.usl = u.usl;
             uslVolVvod.vol = vol;
             uslVolVvod.area = u.area;
-            uslVolVvod.kprNorm = u.kprNorm; // note kprMax!
+            uslVolVvod.kprNorm = u.kprNorm;
             getLstUslVolVvod().add(uslVolVvod);
         } else {
             // такой же по ключевым параметрам, добавить данные в найденную строку
             prevUslVolVvod.vol = prevUslVolVvod.vol.add(vol);
             prevUslVolVvod.area = prevUslVolVvod.area.add(u.area).add(u.areaOverSoc);
-            prevUslVolVvod.kprNorm = prevUslVolVvod.kprNorm.add(u.kprNorm);  // note kprMax!
+            prevUslVolVvod.kprNorm = prevUslVolVvod.kprNorm.add(u.kprNorm);
         }
 
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
@@ -209,7 +207,6 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         for (Usl usl : lstUsl) {
             BigDecimal summSample = roundByLst(getLstUslVolKartGrp(), usl, null);
             roundByLst(getLstUslVolVvod(), usl, summSample);
-            //roundByLst(getLstUslPriceVolKartDetailed(), usl, summSample);
             roundByLst(getLstUslPriceVolKartDt(), usl, summSample);
         }
     }

@@ -18,9 +18,5 @@ public interface KartMng {
 
     boolean getPersCountByDate(Kart kart, Date dt);
 
-    /*
-                boolean getPersCountByDate(Kart kart, Date dt);
-            */
-	Kart getKartMain(Kart kart);
-
+    String getKartMainLsk(Kart kart);
 }

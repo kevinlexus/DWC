@@ -99,20 +99,20 @@ public class KartMngImpl implements KartMng {
      * для получения информации о кол-ве проживающих, прочих параметрах, привязанных к основному лиц.счету
      *
      * @param kart - текущий лиц.счет
-     * @return
+     * @return - возвращает String lsk, потому что нельзя кэшировать в потоке managed entity
      */
     @Override
-    //@Cacheable(cacheNames="KartMng.getKartMain", key="{#kart.getLsk()}") временно отключил
-    public Kart getKartMain(Kart kart) {
+    @Cacheable(cacheNames="KartMng.getKartMainLsk", key="{#kart.getLsk()}")
+    public String getKartMainLsk(Kart kart) {
         for (Kart t : kart.getKoKw().getKart()) {
             if (t.isActual()) {
                 if (t.getTp().getCd().equals("LSK_TP_MAIN")) {
-                    return t;
+                    return t.getLsk();
                 }
             }
         }
         // не найден основной лиц.счет, вернуть текущий
-        return kart;
+        return kart.getLsk();
     }
 
 

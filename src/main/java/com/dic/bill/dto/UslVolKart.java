@@ -18,7 +18,7 @@ public class UslVolKart extends UslVol {
     // лиц.счет
     public Kart kart;
 
-    // кол-во проживающих - закрыт доступ
+    // кол-во проживающих
     public BigDecimal kpr = BigDecimal.ZERO;
 
 }

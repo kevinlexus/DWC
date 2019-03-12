@@ -1,7 +1,6 @@
 package com.dic.bill.dto;
 
 import com.dic.bill.model.scott.Usl;
-import com.ric.cmn.DistributableBigDecimal;
 
 import java.math.BigDecimal;
 import java.util.Date;
