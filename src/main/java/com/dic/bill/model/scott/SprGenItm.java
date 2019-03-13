@@ -49,9 +49,15 @@ public class SprGenItm {
 	@Column(name = "PROC", nullable = true)
 	private Double proc;
 
+	// Выбрано пользователем?
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "SEL", nullable = true)
 	private Boolean sel;
+
+	// Отображать пользователю?
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "V", nullable = true)
+	private Boolean v;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Krasnoyarsk")
 	@Column(name = "DT1", nullable = true)

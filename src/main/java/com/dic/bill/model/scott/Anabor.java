@@ -40,10 +40,10 @@ public class Anabor implements java.io.Serializable, Compress {
 	@Column(name = "usl", updatable = false, nullable = false)
 	private String usl; // код услуги
 
-	@Column(name = "mgFrom", updatable = true, nullable = false)
+	@Column(name = "mgfrom", updatable = true, nullable = false)
 	private Integer mgFrom; // Начало действия записи
 
-	@Column(name = "mgTo", updatable = true, nullable = false)
+	@Column(name = "mgto", updatable = true, nullable = false)
 	private Integer mgTo; // Окончание действия записи
 
 	@Column(name = "org", updatable = false, nullable = false)

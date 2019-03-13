@@ -12,10 +12,10 @@ import com.dic.bill.model.scott.SprGenItm;
 public interface SprGenItmDAO extends JpaRepository<SprGenItm, Integer> {
 
 
-	@Query("select t from SprGenItm t order by t.npp2")
+	@Query("select t from SprGenItm t where t.v = true order by t.npp2")
 	List<SprGenItm> getAllOrdered();
 
-	@Query("select t from SprGenItm t where t.sel = true order by t.npp2")
+	@Query("select t from SprGenItm t where t.v = true and t.sel = true order by t.npp2")
 	List<SprGenItm> getAllCheckedOrdered();
 
 	@Query("select t from SprGenItm t where t.cd=:cd ")

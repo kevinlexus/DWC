@@ -95,11 +95,11 @@ public class Acharge implements java.io.Serializable, Compress {
 	private Double opl;
 
 	// начало действия записи
-	@Column(name = "mgFrom", updatable = true, nullable = false)
+	@Column(name = "mgfrom", updatable = true, nullable = false)
 	private Integer mgFrom;
 
 	// окончание действия записи
-	@Column(name = "mgTo", updatable = true, nullable = false)
+	@Column(name = "mgto", updatable = true, nullable = false)
 	private Integer mgTo;
 
 	// ключ, по которому фильтровать сравниваемые кортежи

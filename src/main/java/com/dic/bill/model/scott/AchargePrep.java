@@ -74,10 +74,10 @@ public class AchargePrep implements java.io.Serializable, Compress {
 	@Column(name = "fk_spk", updatable = false, nullable = true)
 	private Integer fkSpk;
 
-	@Column(name = "mgFrom", updatable = true, nullable = false)
+	@Column(name = "mgfrom", updatable = true, nullable = false)
 	private Integer mgFrom; // Начало действия записи
 
-	@Column(name = "mgTo", updatable = true, nullable = false)
+	@Column(name = "mgto", updatable = true, nullable = false)
 	private Integer mgTo; // Окончание действия записи
 
 	// ключ, по которому фильтровать сравниваемые кортежи
