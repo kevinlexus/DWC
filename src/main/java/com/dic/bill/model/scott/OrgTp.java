@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_ORG_TP", schema="TEST")
+@Table(name = "T_ORG_TP", schema="SCOTT")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter

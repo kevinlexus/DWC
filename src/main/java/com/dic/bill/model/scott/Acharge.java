@@ -22,7 +22,7 @@ import lombok.Setter;;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "A_CHARGE2", schema="TEST")
+@Table(name = "A_CHARGE2", schema="SCOTT")
 @Getter @Setter
 public class Acharge implements java.io.Serializable, Compress {
 

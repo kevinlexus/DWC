@@ -19,7 +19,7 @@ import java.util.Date;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "T_OBJXPAR", schema="TEST")
+@Table(name = "T_OBJXPAR", schema="SCOTT")
 public class ObjPar implements java.io.Serializable {
 
 	@Id

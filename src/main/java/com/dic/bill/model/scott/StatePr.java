@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "C_STATES_PR", schema="TEST")
+@Table(name = "C_STATES_PR", schema="SCOTT")
 public class StatePr implements java.io.Serializable {
 
 	@Id
