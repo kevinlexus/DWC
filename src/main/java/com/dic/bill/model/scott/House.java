@@ -17,7 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_HOUSES", schema="SCOTT")
+@Table(name = "C_HOUSES", schema="TESTPOLIS")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter @Setter

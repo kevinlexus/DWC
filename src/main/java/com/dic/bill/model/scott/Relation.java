@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "RELATIONS", schema="SCOTT")
+@Table(name = "RELATIONS", schema="TESTPOLIS")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Relation implements java.io.Serializable {

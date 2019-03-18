@@ -7,6 +7,7 @@ import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
+import com.ric.cmn.excp.ErrorWhileDist;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -426,13 +427,16 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         log.trace("Сохранено в C_CHARGE:");
         int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
+            BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            // тип 1
             Charge charge = new Charge();
-            charge.setNpp(i++);
+            charge.setNpp(i);
             charge.setType(1);
             charge.setUsl(u.usl);
             charge.setKart(u.kart);
             charge.setTestOpl(u.vol);
-            BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setOpl(area);
             charge.setTestCena(u.price);
             charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
@@ -440,11 +444,30 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
             charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
             charge.setIsSch(u.isMeter);
-            BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
             charge.setSumma(summa);
             u.kart.getCharge().add(charge);
+
+            // тип 0
+            charge = new Charge();
+            charge.setNpp(i);
+            charge.setType(0);
+            charge.setUsl(u.usl);
+            charge.setKart(u.kart);
+            charge.setTestOpl(u.vol);
+            charge.setOpl(area);
+            charge.setTestCena(u.price);
+            charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKprz(u.kprWr.setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
+            charge.setIsSch(u.isMeter);
+            charge.setSumma(summa);
+            u.kart.getCharge().add(charge);
+
+            i++;
             log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
                     u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+
 
         }
 

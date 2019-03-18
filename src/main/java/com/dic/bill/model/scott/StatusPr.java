@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "C_STATUS_PR", schema="SCOTT")
+@Table(name = "C_STATUS_PR", schema="TESTPOLIS")
 public class StatusPr implements java.io.Serializable {
 
 	@Id

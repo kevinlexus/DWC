@@ -15,7 +15,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL_ROUND", schema="SCOTT")
+@Table(name = "USL_ROUND", schema="TESTPOLIS")
 @IdClass(UslRoundId.class) // суррогатный первичный ключ
 @Getter @Setter
 public class UslRound implements java.io.Serializable  {

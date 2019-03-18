@@ -33,7 +33,7 @@ public class PriceMngImpl implements PriceMng {
     @Cacheable(cacheNames="PriceMng.multiplyPrice", key="{#nabor.getUsl(), " +
             "#nabor.getOrg(), #nabor.getKoeff(), #nabor.getNorm(), #priceColumn}" )
     public BigDecimal multiplyPrice(Nabor nabor, int priceColumn) throws ErrorWhileChrg {
-        log.info("ИСПОЛЬЗОВАН МЕТОД, НО НЕ КЭШ #nabor.getUsl()={}, " +
+        log.trace("ИСПОЛЬЗОВАН МЕТОД, НО НЕ КЭШ #nabor.getUsl()={}, " +
                         "#nabor.getOrg()={}, #nabor.getKoeff()={}, #nabor.getNorm()={}, #priceColumn={}",
                 nabor.getUsl().getId(),
                 nabor.getOrg().getId(), nabor.getKoeff(), nabor.getNorm(), priceColumn);
@@ -64,7 +64,8 @@ public class PriceMngImpl implements PriceMng {
     }
 
     /**
-     * Получить базовую запись расценки, зависящей от организации
+     * Получить базовую запись расценки, зависящей от организации -
+     * найти или расценку с указанным кодом организации (приоритет), или без указанного кода организации
      * @param nabor - строка набора услуги
      */
     private Price getBasePrice(Nabor nabor) {
@@ -72,7 +73,7 @@ public class PriceMngImpl implements PriceMng {
         for (Price price : nabor.getUsl().getPrice()) {
             if (price.getOrg()!=null && price.getOrg().equals(nabor.getOrg())) {
                 return price;
-            } else {
+            } else if (price.getOrg()==null) {
                 foundPrice=price;
             }
         }

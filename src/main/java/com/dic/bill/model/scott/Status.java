@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "STATUS", schema="SCOTT")
+@Table(name = "STATUS", schema="TESTPOLIS")
 public class Status {
 
 	@Id

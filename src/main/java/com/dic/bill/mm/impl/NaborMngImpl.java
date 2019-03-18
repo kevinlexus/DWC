@@ -4,6 +4,7 @@ import com.dic.bill.dto.DetailUslPrice;
 import com.dic.bill.mm.NaborMng;
 import com.dic.bill.mm.PriceMng;
 import com.dic.bill.model.scott.*;
+import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,7 +207,7 @@ public class NaborMngImpl implements NaborMng {
             }
 
             if (uslEmpt != null) {
-                // найти услугу в наборе без проживающих, если есть
+                // найти услугу без проживающих в наборе, если есть
                 Nabor naborEmpt = kart.getNabor().stream()
                         .filter(t -> t.getUsl().equals(uslEmpt)).findFirst().orElse(null);
                 if (naborEmpt != null) {
@@ -230,12 +231,12 @@ public class NaborMngImpl implements NaborMng {
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);
                 }
             } else {
-                // не найдено в справочнике
-                if (usl.getId().equals("132")) {
+                // не найдено в наборе
+                if (usl.getId().equals("132") || usl.getFkCalcTp().equals(34)) {
+                    // особый расчет цены
                     detail.uslEmpt = usl;
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);
-                } else if (usl.getFkCalcTp().equals(24) || usl.getFkCalcTp().equals(25) ||
-                        usl.getFkCalcTp().equals(32) || usl.getFkCalcTp().equals(36) || usl.getFkCalcTp().equals(12)) {
+                } else if (Utl.in(usl.getFkCalcTp(), 12, 24, 25, 32, 36)) {
                     // особый расчет цены
                     detail.uslEmpt = usl;
                     detail.priceEmpt = detail.price;

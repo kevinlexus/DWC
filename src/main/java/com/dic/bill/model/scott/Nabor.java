@@ -20,7 +20,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema="SCOTT")
+@Table(name = "NABOR", schema="TESTPOLIS")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @DynamicUpdate

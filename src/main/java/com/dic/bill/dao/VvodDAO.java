@@ -27,9 +27,9 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 	/**
 	 * Найти все вводы, по УК, упорядочить
 	 */
-	@Query(value = "select distinct d.id from SCOTT.C_VVOD d " +
-			"join SCOTT.KART k on d.HOUSE_ID=k.HOUSE_ID " +
-			"join SCOTT.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+	@Query(value = "select distinct d.id from TESTPOLIS.C_VVOD d " +
+			"join TESTPOLIS.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TESTPOLIS.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
 			"where k.reu=:reuId and k.PSCH not in (8,9) order by d.id",
 			nativeQuery = true)
 	List<BigDecimal> findVvodByUk(@Param("reuId") String reuId);
@@ -37,9 +37,9 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 	/**
 	 * Найти все вводы, по дому, упорядочить
 	 */
-	@Query(value = "select distinct d.id from SCOTT.C_VVOD d " +
-			"join SCOTT.KART k on d.HOUSE_ID=k.HOUSE_ID " +
-			"join SCOTT.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+	@Query(value = "select distinct d.id from TESTPOLIS.C_VVOD d " +
+			"join TESTPOLIS.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TESTPOLIS.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
 			"where k.house_id=:houseId and k.PSCH not in (8,9) order by d.id",
 			nativeQuery = true)
 	List<BigDecimal> findVvodByHouse(@Param("houseId") int houseId);
@@ -47,9 +47,9 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 	/**
 	 * Найти все вводы, упорядочить
 	 */
-	@Query(value = "select distinct d.id from SCOTT.C_VVOD d " +
-			"join SCOTT.KART k on d.HOUSE_ID=k.HOUSE_ID " +
-			"join SCOTT.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
+	@Query(value = "select distinct d.id from TESTPOLIS.C_VVOD d " +
+			"join TESTPOLIS.KART k on d.HOUSE_ID=k.HOUSE_ID " +
+			"join TESTPOLIS.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
 			"where k.PSCH not in (8,9) order by d.id",
 			nativeQuery = true)
 	List<BigDecimal> findVvodAll();
