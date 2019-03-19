@@ -182,8 +182,8 @@ public class NaborMngImpl implements NaborMng {
         Usl usl = nabor.getUsl();
         Usl uslOverSoc = usl.getUslOverSoc();
         Usl uslEmpt = usl.getUslEmpt();
-        if (kartMain.isResidental()) {
-            // только по жилым, по нежилым - вернуть 0 расценки
+        if (kartMain.isResidental() && !usl.getFkCalcTp().equals(34)) {
+            // только по жилым, по нежилым и повыш.коэфф для Полыс. - вернуть 0 расценки
             // услуга но норме (обычная)
             detail.price = priceMng.multiplyPrice(nabor, 1);
 
@@ -232,7 +232,7 @@ public class NaborMngImpl implements NaborMng {
                 }
             } else {
                 // не найдено в наборе
-                if (usl.getId().equals("132") || usl.getFkCalcTp().equals(34)) {
+                if (usl.getId().equals("132")/* || usl.getFkCalcTp().equals(34)*/) {
                     // особый расчет цены
                     detail.uslEmpt = usl;
                     detail.priceEmpt = priceMng.multiplyPrice(nabor, 3);

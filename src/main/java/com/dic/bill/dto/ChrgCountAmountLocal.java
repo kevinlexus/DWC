@@ -7,7 +7,6 @@ import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
-import com.ric.cmn.excp.ErrorWhileDist;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -377,10 +376,11 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      */
     private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
                                BigDecimal vol, BigDecimal area, BigDecimal price) {
-        if (vol.compareTo(BigDecimal.ZERO) != 0 && price.compareTo(BigDecimal.ZERO) != 0) {
+        if (vol.compareTo(BigDecimal.ZERO) != 0 && (price.compareTo(BigDecimal.ZERO) != 0
+                || u.getUsl().getFkCalcTp().equals(34))) { // объем не нулевой и цена не нулевая или услуга Повыш коэфф для Полыс.
             UslVolCharge prev = getLstUslVolCharge().stream()
                     .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
-                            && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протыжении месяца
+                            && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протяжении месяца
                     .findFirst().orElse(null);
             if (prev != null) {
                 // найдена запись с данным ключом
@@ -427,48 +427,44 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         log.trace("Сохранено в C_CHARGE:");
         int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
-            BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
-            BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
+            if (u.getUsl().getFkCalcTp()==null || u.getUsl().getFkCalcTp()!=null && !u.getUsl().getFkCalcTp().equals(34)) {
+                BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-            // тип 1
-            Charge charge = new Charge();
-            charge.setNpp(i);
-            charge.setType(1);
-            charge.setUsl(u.usl);
-            charge.setKart(u.kart);
-            charge.setTestOpl(u.vol);
-            charge.setOpl(area);
-            charge.setTestCena(u.price);
-            charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKprz(u.kprWr.setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setIsSch(u.isMeter);
-            charge.setSumma(summa);
-            u.kart.getCharge().add(charge);
+                // тип 1
+                addCharge(i,1, u, area, summa);
+                // тип 0
+                addCharge(i,0, u, area, summa);
 
-            // тип 0
-            charge = new Charge();
-            charge.setNpp(i);
-            charge.setType(0);
-            charge.setUsl(u.usl);
-            charge.setKart(u.kart);
-            charge.setTestOpl(u.vol);
-            charge.setOpl(area);
-            charge.setTestCena(u.price);
-            charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKprz(u.kprWr.setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
-            charge.setIsSch(u.isMeter);
-            charge.setSumma(summa);
-            u.kart.getCharge().add(charge);
+                i++;
+                log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
+                        u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+            }
+        }
 
-            i++;
-            log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
-                    u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
-
-
+        // по услугам, базирующимся на сумме родительской услуги (Повыш. коэфф для Полыс.)
+        for (UslVolCharge u : getLstUslVolCharge()) {
+            if (u.getUsl().getFkCalcTp()!=null && u.getUsl().getFkCalcTp().equals(34)) {
+                BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal parentUslSumma = ko.getKart().stream()
+                        .flatMap(t -> t.getCharge().stream())
+                        .filter(t -> t.getType().equals(1) && !t.getIsSch() &&
+                                (t.getUsl().equals(u.getUsl().getParentUsl()) ||
+                                t.getUsl().equals(u.getUsl().getParentUsl().getUslEmpt()))
+                        )
+                        .map(Charge::getSumma)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                BigDecimal summa = parentUslSumma.multiply(u.vol).setScale(2, BigDecimal.ROUND_HALF_UP);
+                // тип 1
+                addCharge(i,1, u, area,
+                        summa);
+                // тип 0
+                addCharge(i,0, u, area,
+                        summa);
+                i++;
+                log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
+                        u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+            }
         }
 
         // округлить для ГИС ЖКХ
@@ -540,5 +536,31 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
 
 
+    }
+
+    /**
+     * Добавить строку начисления
+     * @param npp - № п.п.
+     * @param tp - тип записи
+     * @param u - объем
+     * @param area - площадь
+     * @param summa - сумма
+     */
+    private void addCharge(int npp, int tp, UslVolCharge u, BigDecimal area, BigDecimal summa) {
+        Charge charge = new Charge();
+        charge.setNpp(npp);
+        charge.setType(tp);
+        charge.setUsl(u.usl);
+        charge.setKart(u.kart);
+        charge.setTestOpl(u.vol);
+        charge.setOpl(area);
+        charge.setTestCena(u.price);
+        charge.setKpr(u.getKpr().setScale(5, BigDecimal.ROUND_HALF_UP));
+        charge.setKprz(u.kprWr.setScale(5, BigDecimal.ROUND_HALF_UP));
+        charge.setKpro(u.kprOt.setScale(5, BigDecimal.ROUND_HALF_UP));
+        charge.setKpr2(u.getKprNorm().setScale(5, BigDecimal.ROUND_HALF_UP));
+        charge.setIsSch(u.isMeter);
+        charge.setSumma(summa);
+        u.kart.getCharge().add(charge);
     }
 }
