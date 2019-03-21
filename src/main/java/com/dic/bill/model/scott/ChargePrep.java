@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @author lev
  */
 @Entity
-@Table(name = "C_CHARGE_PREP", schema = "TESTPOLIS")
+@Table(name = "C_CHARGE_PREP", schema = "SCOTT")
 @Getter
 @Setter
 public class ChargePrep {

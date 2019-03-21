@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "SPR_PARAMS", schema="TESTPOLIS")
+@Table(name = "SPR_PARAMS", schema="SCOTT")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter

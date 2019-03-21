@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "U_LIST", schema="TESTPOLIS")
+@Table(name = "U_LIST", schema="SCOTT")
 public class Lst implements java.io.Serializable {
 
 	@Id
