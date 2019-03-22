@@ -1,10 +1,7 @@
 package com.dic.bill.dto;
 
 import ch.qos.logback.classic.Logger;
-import com.dic.bill.model.scott.Charge;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Usl;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -211,6 +208,16 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             roundByLst(getLstUslVolVvod(), usl, summSample);
             roundByLst(getLstUslPriceVolKartDt(), usl, summSample);
         }
+    }
+
+    /**
+     * Получить начисленный объем по помещению, услуге
+     */
+    public BigDecimal getAmntVolByUsl(Usl usl) {
+        return getLstUslVolKartGrp().stream()
+                .filter(t -> t.getUsl().equals(usl))
+                .map(UslVol::getVol)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     /**
@@ -484,10 +491,14 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // сохранить все цены, суммы и объемы по услугам
             // по услугам, подлежащим округлению (находящимся в справочнике SCOTT.USL_ROUND)
             // соответствующего REU
-            log.trace("Округление для ГИС ЖКХ: klskId={}, lsk={}", ko.getId(), kart.getLsk());
+            //log.trace("Округление для ГИС ЖКХ: klskId={}, lsk={}", ko.getId(), kart.getLsk());
 
-/*
-            for (Charge charge : kart.getCharge()) {
+/*            for (Charge charge : kart.getCharge().stream()
+                    .filter(t -> t.getType().equals(1))
+                    .filter(t -> t.getUsl().getUslRound().stream()
+                            .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))
+                    .sorted(Comparator.comparing(d -> d.getUsl().getId())) // сортировать по коду услуги
+                    .collect(Collectors.toList())) {
                 log.trace("$$$$ lsk={}, uk={}, usl={}",  kart.getLsk(), kart.getUk(),charge.getUsl().getId());
                 log.trace("$$$$ lsk={}, getUslRound()",  kart.getLsk(), charge.getUsl().getUslRound());
                 for (UslRound uslRound : charge.getUsl().getUslRound()) {
@@ -496,9 +507,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                     log.trace("$$$$ lsk={}, uslRound.reu={}", kart.getLsk(), uslRound.getReu());
                 }
             }
-
-
 */
+
             for (Charge charge : kart.getCharge().stream()
                     .filter(t -> t.getType().equals(1))
                     .filter(t -> t.getUsl().getUslRound().stream()

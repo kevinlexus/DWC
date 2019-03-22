@@ -28,6 +28,9 @@ abstract class ChrgCountAmountBase {
     // сгруппированные по вводу объемы для расчета услуг типа ОДН, Отопление Гкал по вводу
     private List<UslVolVvod> lstUslVolVvod = new ArrayList<>(10);
 
+    // результирующий объем по операции tp=4
+    private BigDecimal resultVol = BigDecimal.ZERO;
+
     // очистить коллекции
     public void clear() {
         lstUslVolKart.clear();
