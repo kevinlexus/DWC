@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "K_LSK", schema = "SCOTT")
+@Table(name = "K_LSK", schema = "TEST")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter

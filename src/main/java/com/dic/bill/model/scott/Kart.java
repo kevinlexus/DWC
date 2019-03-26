@@ -19,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "SCOTT")
+@Table(name = "KART", schema = "TEST")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
