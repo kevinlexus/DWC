@@ -20,6 +20,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
 
     // дата расчета
     Date dt;
+    // сохранять в начислении(C_CHARGE)?
+    private boolean isForChrg = false;
 
     public static final class UslPriceVolBuilder {
         // лиц.счет
@@ -66,6 +68,8 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
         private int kprNorm = 0;
         // доля дня в месяце
         private BigDecimal partDayMonth = BigDecimal.ZERO;
+        // сохранять в начислении(C_CHARGE)?
+        private boolean isForChrg = false;
 
         private UslPriceVolBuilder() {
         }
@@ -115,6 +119,11 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
 
         public UslPriceVolBuilder withIsResidental(boolean isResidental) {
             this.isResidental = isResidental;
+            return this;
+        }
+
+        public UslPriceVolBuilder withIsForChrg(boolean isForChrg) {
+            this.isForChrg = isForChrg;
             return this;
         }
 
@@ -202,6 +211,7 @@ public class UslPriceVolKart extends UslPriceVolKartBase {
             uslPriceVolKart.isEmpty = this.isEmpty;
             uslPriceVolKart.isMeter = this.isMeter;
             uslPriceVolKart.isResidental = this.isResidental;
+            uslPriceVolKart.isForChrg = this.isForChrg;
             uslPriceVolKart.dt = this.dt;
 
             // объемы (передаются уже в долях на 1 день)

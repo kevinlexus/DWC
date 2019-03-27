@@ -57,6 +57,7 @@ public class Usl implements java.io.Serializable  {
 
 	// 0 - коэфф. в справочнике тарифов, 1 - норматив в справочнике тарифов,
 	// 2 - koeff-коэфф и norm-норматив, 3-koeff и norm-оба коэфф
+	// 4 - koeff-коэфф и norm-норматив, только если koeff == 0, то берётся в объемы, и не берётся в c_charge (для х.в., г.в. и водоотведения)
 	@Column(name = "SPTARN", updatable = false)
 	private Integer sptarn;
 

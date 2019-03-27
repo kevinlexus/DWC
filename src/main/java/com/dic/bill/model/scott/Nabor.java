@@ -21,7 +21,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "NABOR", schema="TEST")
-@Cacheable
+@Cacheable()
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @DynamicUpdate
 @Getter @Setter
@@ -76,10 +76,10 @@ public class Nabor implements java.io.Serializable  {
 
 	/**
 	 * Получить статус действующей услуги
-	 * @return
+	 * @param isForVol - true - для расчета объемов, false - для записи в c_charge начисления
 	 */
 	@Transient
-	public boolean isValid() {
+	public boolean isValid(boolean isForVol) {
 		BigDecimal bdKoeff = Utl.nvl(getKoeff(), BigDecimal.ZERO);
 		BigDecimal bdNorm = Utl.nvl(getNorm(), BigDecimal.ZERO);
 		if (usl.getFkCalcTp() != null && usl.getFkCalcTp().equals(14)) {
@@ -110,6 +110,21 @@ public class Nabor implements java.io.Serializable  {
 					// контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME
 					if (bdKoeff.multiply(bdNorm).compareTo(BigDecimal.ZERO) != 0) {
 						return true;
+					}
+					break;
+				}
+				case 4: {
+					// для г.в. и х.в., чтобы объемы учлись для водоотведения, но не сохранились суммы в c_charge
+					if (isForVol) {
+						// расчет объемов
+						if (bdNorm.compareTo(BigDecimal.ZERO) != 0) {
+							return true;
+						}
+					} else {
+						// сохранение в c_charge
+						if (bdKoeff.multiply(bdNorm).compareTo(BigDecimal.ZERO) != 0) {
+							return true;
+						}
 					}
 					break;
 				}
