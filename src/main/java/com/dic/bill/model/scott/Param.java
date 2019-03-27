@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 /**
  * Таблица параметров
@@ -13,9 +14,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "PARAMS", schema="TEST")
+@Table(name = "PARAMS", schema="SCOTT")
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Param implements java.io.Serializable {
 

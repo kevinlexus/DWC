@@ -18,9 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_VVOD", schema="TEST")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "C_VVOD", schema="SCOTT")
 @Getter @Setter
 public class Vvod implements java.io.Serializable {
 

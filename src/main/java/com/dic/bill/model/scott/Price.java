@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,9 +17,10 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "Prices", schema="TEST")
-//@Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "PRICES", schema="SCOTT")
+@Immutable
+@Cacheable
+@org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Price implements java.io.Serializable {
 

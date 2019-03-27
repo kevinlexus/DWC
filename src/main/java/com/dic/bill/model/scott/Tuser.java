@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import com.dic.bill.Simple;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "T_USER", schema="SCOTT")
+@Cacheable
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Tuser implements java.io.Serializable, Simple {
 

@@ -18,9 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "METER", schema="TEST")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "METER", schema="SCOTT")
 @Getter @Setter
 public class Meter implements java.io.Serializable {
 

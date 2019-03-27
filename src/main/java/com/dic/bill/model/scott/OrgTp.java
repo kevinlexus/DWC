@@ -6,6 +6,7 @@ import com.dic.bill.model.scott.Charge;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 /**
  * Тип организации
@@ -14,9 +15,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_ORG_TP", schema="TEST")
+@Table(name = "T_ORG_TP", schema="SCOTT")
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class OrgTp implements java.io.Serializable {
 

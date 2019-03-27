@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 
@@ -12,9 +13,10 @@ import javax.persistence.*;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "RELATIONS", schema="TEST")
+@Table(name = "RELATIONS", schema="SCOTT")
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Relation implements java.io.Serializable {
 
 	@Id

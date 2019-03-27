@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Immutable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,9 +23,10 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL", schema="TEST")
-//@Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "USL", schema="SCOTT")
+@Immutable
+@Cacheable
+@org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Usl implements java.io.Serializable  {
 

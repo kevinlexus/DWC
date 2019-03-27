@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 /**
  * Организация
@@ -13,7 +14,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_ORG", schema="TEST")
+@Table(name = "T_ORG", schema="SCOTT")
+@Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter

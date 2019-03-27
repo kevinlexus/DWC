@@ -19,9 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "TEST")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "KART", schema = "SCOTT")
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {

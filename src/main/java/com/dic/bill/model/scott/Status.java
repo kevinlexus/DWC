@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 
@@ -13,9 +14,10 @@ import javax.persistence.*;
  */
 @Getter @Setter
 @Entity
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "STATUS", schema="TEST")
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "STATUS", schema="SCOTT")
 public class Status {
 
 	@Id

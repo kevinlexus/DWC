@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 /**
  * Тип элемента списка
@@ -14,9 +15,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(name = "U_LISTTP", schema="TEST")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "U_LISTTP", schema="SCOTT")
 public class LstTp implements java.io.Serializable {
 
 	@Id

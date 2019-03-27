@@ -26,7 +26,6 @@ public class LstDAOImpl implements LstDAO {
 	/**
 	 * Найти элемент списка по CD
 	 */
-	//@Cacheable("LstDAOImpl.getByCD")
 	@Override
 	public Lst getByCD(String cd) {
 		Query query =em.createQuery("from com.dic.bill.model.bs.Lst t where t.cd in (:cd)");

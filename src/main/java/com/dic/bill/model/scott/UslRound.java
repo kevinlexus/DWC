@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL_ROUND", schema="TEST")
+@Table(name = "USL_ROUND", schema="SCOTT")
 @IdClass(UslRoundId.class) // суррогатный первичный ключ
 @Getter @Setter
+@org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 public class UslRound implements java.io.Serializable  {
 
 	public UslRound() {

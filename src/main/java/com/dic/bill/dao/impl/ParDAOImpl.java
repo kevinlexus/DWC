@@ -32,7 +32,6 @@ public class ParDAOImpl implements ParDAO {
 	}
 
 	//работает это медленнее чем была итерация по всем параметрам объекта!
-	//@Cacheable(cacheNames="ParDAOImpl.checkPar", key="{#rqn, #id, #cd, #dataTp }")
 	public/* synchronized */boolean checkPar(int rqn, int id, String cd, String dataTp) {
 		Query query =em.createQuery("from Par t where t.id = :id and t.cd=:cd and t.dataTp=:dataTp");
 		query.setParameter("id", id);

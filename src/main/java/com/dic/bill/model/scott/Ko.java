@@ -3,12 +3,12 @@ package com.dic.bill.model.scott;
 import com.dic.bill.model.exs.Eolink;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,9 +22,11 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "K_LSK", schema = "TEST")
+@Table(name = "K_LSK", schema = "SCOTT")
+@Immutable
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", // никогда не обновляется извне данная таблица
+        usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter
 @Setter
 public class Ko implements java.io.Serializable {

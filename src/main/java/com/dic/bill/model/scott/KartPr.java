@@ -17,9 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_KART_PR", schema="TEST")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "C_KART_PR", schema="SCOTT")
 @Getter @Setter
 public class KartPr implements java.io.Serializable  {
 
