@@ -327,11 +327,14 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      */
 
     public void printVolAmntChrg(String uslId) {
-        log.info("");
-        log.info("****** ПРОВЕРКА объема UslPriceVolKartDt, для сохранения в C_CHARGE:");
-        for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
-            log.info("lsk={}, usl={}, vol={}, volOverSoc={} *******",
-                    u.kart.getLsk(), u.usl.getId(), u.vol, u.volOverSoc);
+        Logger root = (Logger) LoggerFactory.getLogger("com.ric");
+        if (root.isTraceEnabled()) {
+            log.trace("");
+            log.trace("****** ПРОВЕРКА объема UslPriceVolKartDt, для сохранения в C_CHARGE:");
+            for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
+                log.info("lsk={}, usl={}, vol={}, volOverSoc={} *******",
+                        u.kart.getLsk(), u.usl.getId(), u.vol, u.volOverSoc);
+            }
         }
     }
 
