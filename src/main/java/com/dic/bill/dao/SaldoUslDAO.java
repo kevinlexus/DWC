@@ -18,7 +18,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить записи задолженностей из V_CHARGEPAY
 	 * @param lsk - лицевой счет
 	 * @param period - необходимый период
-	 * @return
 	 */
 	@Query(value = "select t.mg, t.summa "
 			+ "from SCOTT.V_CHARGEPAY t "
@@ -31,7 +30,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить записи начислений из ARCH_CHARGES + A_NABOR2
 	 * @param lsk - лицевой счет
 	 * @param period - необходимый период
-	 * @return
 	 */
 	@Query(value = "select n.org as orgId, t.summa_it as summa, t.usl_id as uslId from SCOTT.ARCH_CHARGES t "
 			+ "left join SCOTT.A_NABOR2 n on t.lsk = n.lsk and t.usl_id=n.usl "
@@ -46,7 +44,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить записи начислений из XITOG3
 	 * @param lsk - лицевой счет
 	 * @param period - необходимый период
-	 * @return
 	 */
 	@Query(value = "select t.org as b1, t.charges as c1, t.usl as a1 from SCOTT.XITOG3_LSK t "
 			+ "where t.mg=:period "
@@ -59,7 +56,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить записи сальдо
 	 * @param lsk - лицевой счет
 	 * @param period - необходимый период
-	 * @return
 	 */
 	@Query(value = "select t.org as orgId, t.summa, t.usl as uslId "
 			+ "from SCOTT.SALDO_USL t "
@@ -71,7 +67,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить записи всех лиц счетов, где есть долги или переплаты
 	 * @param lskFrom - начальный лиц.счет
 	 * @param lskTo - конечный лиц.счет
-	 * @return
 	 */
 	@Query(value = "select a.lsk  from ( " +
 			"select t.lsk, t.mg, sum(t.summa) as summa from scott.v_chargepay t " +
@@ -89,7 +84,6 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * Получить сальдо, оплату, перерасчеты по лицевому счету
 	 * @param lsk лицевой счет
 	 * @param period - период
-	 * @return
 	 */
 	@Query(value = "select sum(t.indebet) as \"indebet\", sum(t.inkredit) as \"inkredit\", "
 			+ "sum(t.outdebet) as \"outdebet\", sum(t.outkredit) as \"outkredit\", "
