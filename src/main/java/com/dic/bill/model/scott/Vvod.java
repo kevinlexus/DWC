@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_VVOD", schema="TEST")
+@Table(name = "C_VVOD", schema="SCOTT")
 @Getter @Setter
 public class Vvod implements java.io.Serializable {
 
@@ -79,6 +79,10 @@ public class Vvod implements java.io.Serializable {
 	// дораспр.факт - итого
 	@Column(name = "KUB_FACT", updatable = true, nullable = true, insertable = true)
 	private BigDecimal kubFact;
+
+	// дораспр.факт - на счетчики
+	@Column(name = "KUB_FACT_UPNORM", updatable = true, nullable = true, insertable = true)
+	private BigDecimal kubFactUpNorm;
 
 	// кол-во лиц.счетов со счетчиками
 	@Column(name = "SCH_CNT", updatable = true, nullable = true, insertable = true)

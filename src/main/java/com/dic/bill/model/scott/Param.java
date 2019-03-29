@@ -14,7 +14,7 @@ import org.hibernate.annotations.Immutable;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "PARAMS", schema="TEST")
+@Table(name = "PARAMS", schema="SCOTT")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
