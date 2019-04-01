@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.Setter;
 /**
  * Перерасчет
  * @author lev
- * @version 1.00
+ * @version 1.01
  *
  */
 @SuppressWarnings("serial")
@@ -39,6 +40,11 @@ public class Change implements java.io.Serializable  {
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
+	// документ перерасчета
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="DOC_ID", referencedColumnName="ID")
+	private ChangeDoc changeDoc;
+
 	// сумма
 	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal summa;
@@ -47,33 +53,41 @@ public class Change implements java.io.Serializable  {
 	@Column(name = "MGCHANGE", updatable = false)
 	private String mgchange;
 
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
+	private Usl usl;
+
+	// организация - поставщик услуги
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
+	private Org org;
+
+	// пользователь
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, nullable = false)
+	private Tuser user;
+
+	// период, которым надо провести разовые изменения
+	// (сделано, чтобы можно было проводить доначисление за прошлый период, не трогая расчёт пени)
+	@Column(name = "MG2", updatable = false)
+	private String mg2;
+
 	// Дата перерасчета
 	@Column(name = "DTEK", updatable = false)
 	private Date dt;
 
 	@Override
 	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof Change))
-	        return false;
-
-	    Change other = (Change)o;
-
-	    if (id == other.getId()) return true;
-	    if (id == null) return false;
-
-	    // equivalence by id
-	    return id.equals(other.getId());
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Change change = (Change) o;
+		return Objects.equals(getId(), change.getId());
 	}
 
 	@Override
 	public int hashCode() {
-	    if (id != null) {
-	        return id.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
+		return Objects.hash(getId());
 	}
-
 }
 

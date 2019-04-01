@@ -16,7 +16,7 @@ import org.hibernate.annotations.Immutable;
 @Entity
 @Table(name = "PARAMS", schema="SCOTT")
 @Immutable
-@Cacheable
+@Cacheable // note как быть при переходе месяца, если закэшировано?
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 @Getter @Setter
 public class Param implements java.io.Serializable {

@@ -34,22 +34,22 @@ public class Nabor implements java.io.Serializable {
 
     // лиц.счет
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false, insertable = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false)
     private Kart kart;
 
     // услуга
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false, insertable = true)
+    @JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
     private Usl usl;
 
     // организация - поставщик услуги
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false, insertable = true)
+    @JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
     private Org org;
 
     // ввод
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "FK_VVOD", referencedColumnName = "ID", updatable = false, insertable = true)
+    @JoinColumn(name = "FK_VVOD", referencedColumnName = "ID", updatable = false)
     private Vvod vvod;
 
     @Column(name = "KOEFF")
@@ -128,32 +128,6 @@ public class Nabor implements java.io.Serializable {
             }
         }
         return false;
-    }
-
-    /**
-     * Получить коэффициент для использования в получении расценки
-     *
-     * @return
-     */
-    @Transient
-    public BigDecimal getKoeffForPrice() {
-        BigDecimal bdKoeff = Utl.nvl(getKoeff(), BigDecimal.ZERO);
-        BigDecimal bdNorm = Utl.nvl(getNorm(), BigDecimal.ZERO);
-        switch (usl.getSptarn()) {
-            case 0:
-            case 1:
-            case 2: {
-                return bdKoeff;
-            }
-            case 3: {
-                // когда koeff-является коэфф. и когда norm-тоже является коэфф.
-                // контроль по коэфф.и нормативу (странно и 2 и 3 sptarn, - потом разобраться, почему так FIXME
-                return bdKoeff.multiply(bdNorm);
-            }
-            default: {
-                return BigDecimal.ZERO;
-            }
-        }
     }
 
     @Override

@@ -23,13 +23,11 @@ public class Tuser implements java.io.Serializable, Simple {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
-	private Integer id; //id
+	private Integer id;
 
+	// CD пользователя
     @Column(name = "CD")
-	private String cd; // CD пользователя
-
-    @Column(name = "IP")
-	private String ip; // Ip
+	private String cd;
 
 	public Tuser() {
 		super();

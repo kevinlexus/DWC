@@ -12,12 +12,13 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * Сальдо по организациям - услугам
  * @author lev
  *
  */
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "SALDO_USL", schema="SCOTT")
 @IdClass(SaldoUslId.class) // суррогатный первичный ключ
@@ -27,30 +28,30 @@ public class SaldoUsl implements java.io.Serializable {
 	public SaldoUsl() {
 	}
 
-    @Id
 	// лиц.счет
+    @Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
-    @Id
-	@Column(name = "usl", updatable = false, nullable = false)
-	private String usl; // код услуги
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
+	private Usl usl;
 
-    @Id
-    @Column(name = "org", updatable = false, nullable = false)
-	private Integer org; // код организации
+	// организация - поставщик услуги
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
+	private Org org;
 
+	// бухгалтерский период
     @Id
     @Column(name = "mg", updatable = false, nullable = false)
-	private String mg; // период
+	private String mg;
 
-    @Id
-    @Column(name = "period", updatable = false, nullable = false)
-	private String period; // период бухгалтерский
-
+    // сумма
     @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // сумма
+	private BigDecimal summa;
 
 }
 

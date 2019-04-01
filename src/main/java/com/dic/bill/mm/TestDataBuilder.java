@@ -3,6 +3,7 @@ package com.dic.bill.mm;
 import com.dic.bill.model.scott.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public interface TestDataBuilder {
     Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers,
@@ -13,6 +14,15 @@ public interface TestDataBuilder {
     void buildMeterForTest(Kart kart);
 
     Meter addMeterForTest(Ko koObj, String uslId, String dt1, String dt2);
+
+    void addChargeForTest(Kart kart, String uslId, String strSumma);
+
+    void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
+                          String mgChange, String mg2, Integer type,
+                          Date dtek, String strSumma);
+
+    void addSaldoUslForTest(Kart kart, int orgId, String uslId,
+                            String mg, String strSumma);
 
     void buildKartPrForTest(Kart kart, int persCount);
 
