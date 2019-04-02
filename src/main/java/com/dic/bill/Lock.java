@@ -99,6 +99,7 @@ public class Lock {
 	 * @return
 	 */
 	public boolean aquireLockId(Integer rqn, Integer tpSel, Long id, Integer timeout) {
+		log.trace("==UNLOCK== RQN={}, ПОПЫТКА БЛОКИРОВКИ: tpSel={}, id={}", rqn, tpSel, id);
 		int waitTick = 0;
 		while (!this.setLockId(rqn, tpSel, id)) {
 			waitTick++;
@@ -116,6 +117,7 @@ public class Lock {
 				return false;
 			}
 		}
+		log.trace("==UNLOCK== RQN={}, БЛОКИРОВКА ВЫПОЛНЕНА: tpSel={}, id={}", rqn, tpSel, id);
 		return true;
 	}
 

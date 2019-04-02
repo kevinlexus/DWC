@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema = "SCOTT")
+@Table(name = "NABOR", schema = "TEST")
 @DynamicUpdate
 @Getter
 @Setter

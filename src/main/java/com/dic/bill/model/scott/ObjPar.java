@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "T_OBJXPAR", schema="SCOTT")
+@Table(name = "T_OBJXPAR", schema="TEST")
 public class ObjPar implements java.io.Serializable {
 
 	@Id
