@@ -1,218 +1,209 @@
 package com.dic.bill.model.scott;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.*;
+import java.util.Objects;
 
 //import com.dic.bill.model.exs.Pdoc; $$$$$$$
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * Оплата по периоду
- * @author lev
- * @version 1.00
+ * Распределение платежа по периоду
  *
+ * @author lev
+ * @version 1.01
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_KWTP_MG", schema="SCOTT")
-@Getter @Setter
-public class KwtpMg implements java.io.Serializable  {
+@Table(name = "C_KWTP_MG", schema = "SCOTT")
+@Getter
+@Setter
+public class KwtpMg implements java.io.Serializable {
 
-	public KwtpMg() {
-	}
+    public KwtpMg() {
+    }
 
-	// Id
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KWTP_MG")
-	@SequenceGenerator(name="SEQ_KWTP_MG", sequenceName="SCOTT.C_KWTP_MG_ID", allocationSize=1)
-	@Column(name = "id", unique=true, updatable = false, nullable = false)
-	private Integer id;
+    // Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KWTP_MG")
+    @SequenceGenerator(name = "SEQ_KWTP_MG", sequenceName = "SCOTT.C_KWTP_MG_ID", allocationSize = 1)
+    @Column(name = "id", unique = true, updatable = false, nullable = false)
+    private Integer id;
 
-	// лиц.счет
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK")
-	private Kart kart;
+    // лиц.счет
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    private Kart kart;
 
-	// сумма
-	@Column(name = "SUMMA", updatable = false)
-	private BigDecimal summa;
+    // сумма
+    @Column(name = "SUMMA", updatable = false)
+    private BigDecimal summa;
 
-	// пеня
-	@Column(name = "PENYA", updatable = false)
-	private BigDecimal penya;
+    // пеня
+    @Column(name = "PENYA", updatable = false)
+    private BigDecimal penya;
 
-	// период оплаты
-	@Column(name = "DOPL", updatable = false)
-	private String dopl;
+    // период оплаты
+    @Column(name = "DOPL", updatable = false)
+    private String dopl;
 
-	// дата платежа
-	@Column(name = "DTEK", updatable = false)
-	private Date dt;
+    // дата платежа
+    @Column(name = "DTEK", updatable = false)
+    private Date dt;
 
-	// № компьютера
-	@Column(name = "NKOM", updatable = false)
-	private String nkom;
+    // № компьютера
+    @Column(name = "NKOM", updatable = false)
+    private String nkom;
 
-	// код операции
-	@Column(name = "OPER", updatable = false)
-	private String oper;
+    // код операции
+    @Column(name = "OPER", updatable = false)
+    private String oper;
 
-	// № инкассации
-	@Column(name = "NINK", updatable = false)
-	private Integer nink;
+    // № инкассации
+    @Column(name = "NINK", updatable = false)
+    private Integer nink;
 
-	// дата инкассации
-	@Column(name = "DAT_INK", updatable = false)
-	private Date dtInk;
+    // дата инкассации
+    @Column(name = "DAT_INK", updatable = false)
+    private Date dtInk;
 
-	// детализация платежа по услугам
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name="KWTP_ID", referencedColumnName="ID")
-	private List<com.dic.bill.model.scott.KwtpDay> KwtpDay = new ArrayList<KwtpDay>(0);
+    // детализация платежа по услугам
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
+    private List<KwtpDay> KwtpDay = new ArrayList<>(0);
 
-	// заголовок платежа
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="C_KWTP_ID", referencedColumnName="ID")
-	private Kwtp kwtp;
+    // заголовок платежа
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
+    private Kwtp kwtp;
 
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof KwtpMg))
-	        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        KwtpMg kwtpMg = (KwtpMg) o;
+        return getId().equals(kwtpMg.getId());
+    }
 
-	    KwtpMg other = (KwtpMg)o;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 
-	    if (id == other.getId()) return true;
-	    if (id == null) return false;
-
-	    // equivalence by id
-	    return id.equals(other.getId());
-	}
-
-	@Override
-	public int hashCode() {
-	    if (id != null) {
-	        return id.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
-	}
-
-	public static final class KwtpMgBuilder {
-		// Id
+    public static final class KwtpMgBuilder {
+        // Id
         private Integer id;
-		// лиц.счет
+        // лиц.счет
         private Kart kart;
-		// сумма
+        // сумма
         private BigDecimal summa;
-		// пеня
+        // пеня
         private BigDecimal penya;
-		// период оплаты
+        // период оплаты
         private String dopl;
-		// дата платежа
+        // дата платежа
         private Date dt;
-		// № компьютера
+        // № компьютера
         private String nkom;
-		// код операции
+        // код операции
         private String oper;
-		// № инкассации
+        // № инкассации
         private Integer nink;
-		// дата инкассации
+        // дата инкассации
         private Date dtInk;
-		// детализация платежа по услугам
-        private List<com.dic.bill.model.scott.KwtpDay> KwtpDay = new ArrayList<KwtpDay>(0);
-		// заголовок платежа
+        // детализация платежа по услугам
+        private List<com.dic.bill.model.scott.KwtpDay> KwtpDay = new ArrayList<>(0);
+        // заголовок платежа
         private Kwtp kwtp;
 
-		private KwtpMgBuilder() {
-		}
+        private KwtpMgBuilder() {
+        }
 
-		public static KwtpMgBuilder aKwtpMg() {
-			return new KwtpMgBuilder();
-		}
+        public static KwtpMgBuilder aKwtpMg() {
+            return new KwtpMgBuilder();
+        }
 
-		public KwtpMgBuilder withId(Integer id) {
-			this.id = id;
-			return this;
-		}
+        public KwtpMgBuilder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
 
-		public KwtpMgBuilder withKart(Kart kart) {
-			this.kart = kart;
-			return this;
-		}
+        public KwtpMgBuilder withKart(Kart kart) {
+            this.kart = kart;
+            return this;
+        }
 
-		public KwtpMgBuilder withSumma(BigDecimal summa) {
-			this.summa = summa;
-			return this;
-		}
+        public KwtpMgBuilder withSumma(BigDecimal summa) {
+            this.summa = summa;
+            return this;
+        }
 
-		public KwtpMgBuilder withPenya(BigDecimal penya) {
-			this.penya = penya;
-			return this;
-		}
+        public KwtpMgBuilder withPenya(BigDecimal penya) {
+            this.penya = penya;
+            return this;
+        }
 
-		public KwtpMgBuilder withDopl(String dopl) {
-			this.dopl = dopl;
-			return this;
-		}
+        public KwtpMgBuilder withDopl(String dopl) {
+            this.dopl = dopl;
+            return this;
+        }
 
-		public KwtpMgBuilder withDt(Date dt) {
-			this.dt = dt;
-			return this;
-		}
+        public KwtpMgBuilder withDt(Date dt) {
+            this.dt = dt;
+            return this;
+        }
 
-		public KwtpMgBuilder withNkom(String nkom) {
-			this.nkom = nkom;
-			return this;
-		}
+        public KwtpMgBuilder withNkom(String nkom) {
+            this.nkom = nkom;
+            return this;
+        }
 
-		public KwtpMgBuilder withOper(String oper) {
-			this.oper = oper;
-			return this;
-		}
+        public KwtpMgBuilder withOper(String oper) {
+            this.oper = oper;
+            return this;
+        }
 
-		public KwtpMgBuilder withNink(Integer nink) {
-			this.nink = nink;
-			return this;
-		}
+        public KwtpMgBuilder withNink(Integer nink) {
+            this.nink = nink;
+            return this;
+        }
 
-		public KwtpMgBuilder withDtInk(Date dtInk) {
-			this.dtInk = dtInk;
-			return this;
-		}
+        public KwtpMgBuilder withDtInk(Date dtInk) {
+            this.dtInk = dtInk;
+            return this;
+        }
 
-		public KwtpMgBuilder withKwtpDay(List<KwtpDay> KwtpDay) {
-			this.KwtpDay = KwtpDay;
-			return this;
-		}
+        public KwtpMgBuilder withKwtpDay(List<KwtpDay> KwtpDay) {
+            this.KwtpDay = KwtpDay;
+            return this;
+        }
 
-		public KwtpMgBuilder withKwtp(Kwtp kwtp) {
-			this.kwtp = kwtp;
-			return this;
-		}
+        public KwtpMgBuilder withKwtp(Kwtp kwtp) {
+            this.kwtp = kwtp;
+            return this;
+        }
 
-		public KwtpMg build() {
-			KwtpMg kwtpMg = new KwtpMg();
-			kwtpMg.setId(id);
-			kwtpMg.setKart(kart);
-			kwtpMg.setSumma(summa);
-			kwtpMg.setPenya(penya);
-			kwtpMg.setDopl(dopl);
-			kwtpMg.setDt(dt);
-			kwtpMg.setNkom(nkom);
-			kwtpMg.setOper(oper);
-			kwtpMg.setNink(nink);
-			kwtpMg.setDtInk(dtInk);
-			kwtpMg.setKwtpDay(KwtpDay);
-			kwtpMg.setKwtp(kwtp);
-			return kwtpMg;
-		}
-	}
+        public KwtpMg build() {
+            KwtpMg kwtpMg = new KwtpMg();
+            kwtpMg.setId(id);
+            kwtpMg.setKart(kart);
+            kwtpMg.setSumma(summa);
+            kwtpMg.setPenya(penya);
+            kwtpMg.setDopl(dopl);
+            kwtpMg.setDt(dt);
+            kwtpMg.setNkom(nkom);
+            kwtpMg.setOper(oper);
+            kwtpMg.setNink(nink);
+            kwtpMg.setDtInk(dtInk);
+            kwtpMg.setKwtpDay(KwtpDay);
+            kwtpMg.setKwtp(kwtp);
+            return kwtpMg;
+        }
+    }
 }
 

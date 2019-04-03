@@ -340,6 +340,64 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     }
 
 
+    /**
+     * Добавить заголовок платежа
+     */
+    @Override
+    public void addKwtpForTest(String dopl, String strSumma, String strPenya) {
+        Kwtp.KwtpBuilder.aKwtp()
+                .withKart()
+                .withDopl()
+                .withDt()
+                .withDtInk()
+                .withNink()
+                .withNkom()
+                .withNumDoc()
+                .withOper()
+                .withSumma()
+
+    }
+
+    /**
+     * Добавить распределение платежа по периоду
+     */
+    @Override
+    public void addKwtpMgForTest(Kwtp kwtp, String dopl, String strSumma, String strPenya) {
+        KwtpMg kwtpMg = KwtpMg.KwtpMgBuilder.aKwtpMg()
+                .withKart(kwtp.getKart())
+                .withKwtp(kwtp)
+                .withDopl(dopl)
+                .withDt(kwtp.getDt())
+                .withDtInk(kwtp.getDtInk())
+                .withNink(kwtp.getNink())
+                .withNkom(kwtp.getNkom())
+                .withOper(kwtp.getOper())
+                .withSumma(new BigDecimal(strSumma))
+                .withPenya(new BigDecimal(strPenya)).build();
+        kwtp.getKwtpMg().add(kwtpMg);
+    }
+
+    /**
+     * Добавить распределение платежа по услугам, организациям
+     */
+    @Override
+    public void addKwtpDayForTest(KwtpMg kwtpMg, int tp, String uslId, String orgId, String strSumma) {
+        Usl usl = em.find(Usl.class, uslId);
+        Org org = em.find(Org.class, orgId);
+        KwtpDay kwtpDay = KwtpDay.KwtpDayBuilder.aKwtpDay()
+                .withKart(kwtpMg.getKart())
+                .withKwtpMg(kwtpMg)
+                .withDopl(kwtpMg.getDopl())
+                .withDt(kwtpMg.getDt())
+                .withDtInk(kwtpMg.getDtInk())
+                .withUsl(usl)
+                .withOrg(org)
+                .withTp(tp)
+                .withSumma(new BigDecimal(strSumma))
+                .build();
+        kwtpMg.getKwtpDay().add(kwtpDay);
+    }
+
     @Override
     public void buildKartPrForTest(Kart kart, int persCount) {
         KartPr kartPr;

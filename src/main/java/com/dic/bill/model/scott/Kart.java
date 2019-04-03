@@ -163,6 +163,11 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<SaldoUsl> saldoUsl = new HashSet<>(0);
 
+    // платеж
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<Kwtp> kwtp = new HashSet<>(0);
+
     // актуальный ли лицевой счет?
     @Transient
     public boolean isActual() {
