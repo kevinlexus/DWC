@@ -1,6 +1,7 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dto.SumUslOrgRec;
+import com.dic.bill.model.scott.Kart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,12 +45,21 @@ public class SaldoMngImpl implements SaldoMng {
 
 
 	/**
-	 * Получить исходящее сальдо, учитывая разные финансовые составляющие
+	 * Получить исходящее сальдо, учитывая разные финансовые составляющие:
+	 * @param kart - лиц.счет
+	 * @param period - текущий период
+	 * @param isSalIn - учесть входящее сальдо
+	 * @param isChrg - учесть начисление
+	 * @param isChng - учесть перерасчеты
+	 * @param isCorrPay - учесть корректировки оплаты
+	 * @param isPay - учесть оплату
 	 * @return
 	 */
-	public List<SumUslOrgRec> getOutSal(boolean isSalIn, boolean isChrg, boolean isChng, boolean isPay) {
+	public List<SumUslOrgRec> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
+										boolean isCorrPay, boolean isPay) {
 
-		return null;
+		List<SumUslOrgRec> lstSalIn = saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period);
+		return lstSalIn;
 	}
 
 
