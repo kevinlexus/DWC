@@ -381,6 +381,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withOper(kwtp.getOper())
                 .withSumma(new BigDecimal(strSumma))
                 .withPenya(new BigDecimal(strPenya)).build();
+        em.persist(kwtpMg);
+
         kwtp.getKwtpMg().add(kwtpMg);
         kwtp.getKart().getKwtpMg().add(kwtpMg);
         return kwtpMg;
@@ -404,6 +406,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withTp(tp)
                 .withSumma(new BigDecimal(strSumma))
                 .build();
+        em.persist(kwtpDay);
+
         kwtpMg.getKwtpDay().add(kwtpDay);
         kwtpMg.getKart().getKwtpDay().add(kwtpDay);
     }
