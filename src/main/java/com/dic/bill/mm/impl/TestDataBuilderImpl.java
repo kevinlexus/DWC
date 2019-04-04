@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Slf4j
 @Service
@@ -294,9 +293,19 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
     }
 
+
+    @Override
+    public ChangeDoc buildChangeDocForTest(String strDt, String mgChange) {
+        ChangeDoc changeDoc = new ChangeDoc();
+        changeDoc.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        changeDoc.setMgchange(mgChange);
+        em.persist(changeDoc);
+        return changeDoc;
+    }
+
     @Override
     public void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
-                                 String mgChange, String mg2, Integer type, Date dt, String strSumma) {
+                                 String mgChange, String mg2, Integer type, String strDt, String strSumma) {
         Usl usl = em.find(Usl.class, uslId);
         Org org = orgId!=null? em.find(Org.class, orgId) : null;
         Tuser user = em.find(Tuser.class, userId);
@@ -307,7 +316,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         change.setUsl(usl);
         change.setOrg(org);
         change.setUser(user);
-        change.setDt(dt);
+        change.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
         change.setMgchange(mgChange);
         change.setMg2(mg2);
         change.setSumma(new BigDecimal(strSumma));
@@ -321,8 +330,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
      * Добавить записи сальдо
      */
     @Override
-    public void addSaldoUslForTest(Kart kart, int orgId, String uslId,
-                                   String mg, String strSumma) {
+    public void buildSaldoUslForTest(Kart kart, int orgId, String uslId,
+                                     String mg, String strSumma) {
         SaldoUsl saldoUsl = new SaldoUsl();
 
         saldoUsl.setKart(kart);
@@ -403,6 +412,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withDtInk(kwtpMg.getDtInk())
                 .withUsl(usl)
                 .withOrg(org)
+                .withOper(kwtpMg.getOper())
+                .withNkom(kwtpMg.getNkom())
+                .withNink(kwtpMg.getNink())
                 .withTp(tp)
                 .withSumma(new BigDecimal(strSumma))
                 .build();

@@ -72,7 +72,7 @@ public class KwtpMg implements java.io.Serializable {
 
     // детализация платежа по услугам
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID", updatable = false)
     private List<KwtpDay> KwtpDay = new ArrayList<>(0);
 
     // заголовок платежа

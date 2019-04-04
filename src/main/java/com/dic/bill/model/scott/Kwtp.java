@@ -30,7 +30,6 @@ public class Kwtp implements java.io.Serializable {
     public Kwtp() {
     }
 
-    // Id
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KWTP")
     @SequenceGenerator(name = "SEQ_KWTP", sequenceName = "SCOTT.C_KWTP_ID", allocationSize = 1)
@@ -56,7 +55,7 @@ public class Kwtp implements java.io.Serializable {
 
     // распределение платежа по услугам, организациям
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID", updatable = false)
     private List<KwtpMg> kwtpMg = new ArrayList<>(0);
 
     // № платежного документа (из банка, из ГИС ЖКХ)

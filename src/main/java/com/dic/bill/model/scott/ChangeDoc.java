@@ -25,7 +25,9 @@ public class ChangeDoc implements java.io.Serializable  {
 	}
 
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CHANGE_DOC_ID")
+	@SequenceGenerator(name = "SEQ_CHANGE_DOC_ID", sequenceName = "SCOTT.CHANGES_ID", allocationSize = 1)
+	@Column(name = "id", unique = true, updatable = false, nullable = false)
 	private Integer id;
 
 	// период за который перерасчет (бред) - убрать бы это, ред.01.04.2019

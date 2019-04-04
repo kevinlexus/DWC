@@ -57,6 +57,14 @@ public class KwtpDay implements java.io.Serializable  {
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
+	// № компьютера
+	@Column(name = "NKOM", updatable = false)
+	private String nkom;
+
+	// № инкассации
+	@Column(name = "NINK", updatable = false)
+	private Integer nink;
+
 	// тип поступления 1 - оплата, 0 - пеня
 	@Column(name = "PRIZNAK", updatable = false, nullable = false)
 	private Integer tp;
@@ -64,6 +72,10 @@ public class KwtpDay implements java.io.Serializable  {
 	// период оплаты
 	@Column(name = "DOPL", updatable = false, nullable = false)
 	private String dopl;
+
+	// код операции
+	@Column(name = "OPER", updatable = false)
+	private String oper;
 
 	// распределение платежа по периоду
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -83,8 +95,8 @@ public class KwtpDay implements java.io.Serializable  {
 		return Objects.hash(getId());
 	}
 
+
 	public static final class KwtpDayBuilder {
-		// Id
 		private Integer id;
 		// лиц.счет
 		private Kart kart;
@@ -98,10 +110,16 @@ public class KwtpDay implements java.io.Serializable  {
 		private Usl usl;
 		// организация
 		private Org org;
+		// № компьютера
+		private String nkom;
+		// № инкассации
+		private Integer nink;
 		// тип поступления 1 - оплата, 0 - пеня
 		private Integer tp;
 		// период оплаты
 		private String dopl;
+		// код операции
+		private String oper;
 		// распределение платежа по периоду
 		private KwtpMg kwtpMg;
 
@@ -147,6 +165,16 @@ public class KwtpDay implements java.io.Serializable  {
 			return this;
 		}
 
+		public KwtpDayBuilder withNkom(String nkom) {
+			this.nkom = nkom;
+			return this;
+		}
+
+		public KwtpDayBuilder withNink(Integer nink) {
+			this.nink = nink;
+			return this;
+		}
+
 		public KwtpDayBuilder withTp(Integer tp) {
 			this.tp = tp;
 			return this;
@@ -157,9 +185,18 @@ public class KwtpDay implements java.io.Serializable  {
 			return this;
 		}
 
+		public KwtpDayBuilder withOper(String oper) {
+			this.oper = oper;
+			return this;
+		}
+
 		public KwtpDayBuilder withKwtpMg(KwtpMg kwtpMg) {
 			this.kwtpMg = kwtpMg;
 			return this;
+		}
+
+		public KwtpDayBuilder but() {
+			return aKwtpDay().withId(id).withKart(kart).withSumma(summa).withDt(dt).withDtInk(dtInk).withUsl(usl).withOrg(org).withNkom(nkom).withNink(nink).withTp(tp).withDopl(dopl).withOper(oper).withKwtpMg(kwtpMg);
 		}
 
 		public KwtpDay build() {
@@ -171,8 +208,11 @@ public class KwtpDay implements java.io.Serializable  {
 			kwtpDay.setDtInk(dtInk);
 			kwtpDay.setUsl(usl);
 			kwtpDay.setOrg(org);
+			kwtpDay.setNkom(nkom);
+			kwtpDay.setNink(nink);
 			kwtpDay.setTp(tp);
 			kwtpDay.setDopl(dopl);
+			kwtpDay.setOper(oper);
 			kwtpDay.setKwtpMg(kwtpMg);
 			return kwtpDay;
 		}

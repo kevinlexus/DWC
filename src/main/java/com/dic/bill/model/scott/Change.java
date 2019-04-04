@@ -4,13 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,9 +24,10 @@ public class Change implements java.io.Serializable  {
 	public Change() {
 	}
 
-	// Id
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CHANGE_ID")
+	@SequenceGenerator(name = "SEQ_CHANGE_ID", sequenceName = "SCOTT.CHANGES_ID", allocationSize = 1)
+	@Column(name = "id", unique = true, updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
