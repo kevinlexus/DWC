@@ -342,27 +342,34 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
     /**
      * Добавить заголовок платежа
+     * @return
      */
     @Override
-    public void addKwtpForTest(String dopl, String strSumma, String strPenya) {
-        Kwtp.KwtpBuilder.aKwtp()
-                .withKart()
-                .withDopl()
-                .withDt()
-                .withDtInk()
-                .withNink()
-                .withNkom()
-                .withNumDoc()
-                .withOper()
-                .withSumma()
-
+    public Kwtp buildKwtpForTest(Kart kart, String dopl, String strDt, String strDtInk, int nink,
+                                 String nkom, String numDoc, String oper,
+                                 String strSumma, String strPenya) {
+        Kwtp kwtp = Kwtp.KwtpBuilder.aKwtp()
+                .withKart(kart)
+                .withDopl(dopl)
+                .withDt(strDt!=null?Utl.getDateFromStr(strDt):null)
+                .withDtInk(strDtInk!=null?Utl.getDateFromStr(strDtInk):null)
+                .withNink(nink)
+                .withNkom(nkom)
+                .withNumDoc(numDoc)
+                .withOper(oper)
+                .withSumma(strSumma!=null?new BigDecimal(strSumma):null)
+                .withPenya(strPenya!=null?new BigDecimal(strPenya):null)
+                .build();
+        kart.getKwtp().add(kwtp);
+        em.persist(kwtp);
+        return kwtp;
     }
 
     /**
      * Добавить распределение платежа по периоду
      */
     @Override
-    public void addKwtpMgForTest(Kwtp kwtp, String dopl, String strSumma, String strPenya) {
+    public KwtpMg addKwtpMgForTest(Kwtp kwtp, String dopl, String strSumma, String strPenya) {
         KwtpMg kwtpMg = KwtpMg.KwtpMgBuilder.aKwtpMg()
                 .withKart(kwtp.getKart())
                 .withKwtp(kwtp)
@@ -375,13 +382,15 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withSumma(new BigDecimal(strSumma))
                 .withPenya(new BigDecimal(strPenya)).build();
         kwtp.getKwtpMg().add(kwtpMg);
+        kwtp.getKart().getKwtpMg().add(kwtpMg);
+        return kwtpMg;
     }
 
     /**
      * Добавить распределение платежа по услугам, организациям
      */
     @Override
-    public void addKwtpDayForTest(KwtpMg kwtpMg, int tp, String uslId, String orgId, String strSumma) {
+    public void addKwtpDayForTest(KwtpMg kwtpMg, int tp, String uslId, int orgId, String strSumma) {
         Usl usl = em.find(Usl.class, uslId);
         Org org = em.find(Org.class, orgId);
         KwtpDay kwtpDay = KwtpDay.KwtpDayBuilder.aKwtpDay()
@@ -396,6 +405,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withSumma(new BigDecimal(strSumma))
                 .build();
         kwtpMg.getKwtpDay().add(kwtpDay);
+        kwtpMg.getKart().getKwtpDay().add(kwtpDay);
     }
 
     @Override

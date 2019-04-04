@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-//import com.dic.bill.model.exs.Pdoc; $$$$$$$
-
 /**
  * Распределение платежа по периоду
  *
@@ -73,7 +71,7 @@ public class KwtpMg implements java.io.Serializable {
     private Date dtInk;
 
     // детализация платежа по услугам
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
     private List<KwtpDay> KwtpDay = new ArrayList<>(0);
 
@@ -87,7 +85,7 @@ public class KwtpMg implements java.io.Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         KwtpMg kwtpMg = (KwtpMg) o;
-        return getId().equals(kwtpMg.getId());
+        return Objects.equals(getId(), kwtpMg.getId());
     }
 
     @Override

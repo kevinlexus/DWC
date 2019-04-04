@@ -24,6 +24,14 @@ public interface TestDataBuilder {
     void addSaldoUslForTest(Kart kart, int orgId, String uslId,
                             String mg, String strSumma);
 
+    Kwtp buildKwtpForTest(Kart kart, String dopl, String strDt, String strDtInk, int nink,
+                          String nkom, String numDoc, String oper,
+                          String strSumma, String strPenya);
+
+    KwtpMg addKwtpMgForTest(Kwtp kwtp, String dopl, String strSumma, String strPenya);
+
+    void addKwtpDayForTest(KwtpMg kwtpMg, int tp, String uslId, int orgId, String strSumma);
+
     void buildKartPrForTest(Kart kart, int persCount);
 
     KartPr addKartPrForTest(Kart kart, int statusId, int relatId,

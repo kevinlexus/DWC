@@ -4,13 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +12,7 @@ import lombok.Setter;
 /**
  * Распределение платежа по услугам, организациям
  * @author lev
- * @version 1.01
+ * @version 1.02
  *
  */
 @SuppressWarnings("serial")
@@ -30,9 +24,10 @@ public class KwtpDay implements java.io.Serializable  {
 	public KwtpDay() {
 	}
 
-	// Id
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KWTP_DAY_ID")
+	@SequenceGenerator(name="SEQ_KWTP_DAY_ID", sequenceName="SCOTT.KWTP_DAY_ID", allocationSize=1)
+	@Column(name = "id", unique = true, updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
@@ -80,7 +75,7 @@ public class KwtpDay implements java.io.Serializable  {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		KwtpDay kwtpDay = (KwtpDay) o;
-		return getId().equals(kwtpDay.getId());
+		return Objects.equals(getId(), kwtpDay.getId());
 	}
 
 	@Override

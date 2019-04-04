@@ -55,7 +55,7 @@ public class Kwtp implements java.io.Serializable {
     private Date dt;
 
     // распределение платежа по услугам, организациям
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
     private List<KwtpMg> kwtpMg = new ArrayList<>(0);
 
@@ -98,14 +98,13 @@ public class Kwtp implements java.io.Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Kwtp kwtp = (Kwtp) o;
-        return getId().equals(kwtp.getId());
+        return Objects.equals(getId(), kwtp.getId());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getId());
     }
-
 
     public static final class KwtpBuilder {
         // Id

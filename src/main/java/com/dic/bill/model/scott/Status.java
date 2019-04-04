@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "STATUS", schema="TEST")
+@Table(name = "STATUS", schema="SCOTT")
 public class Status {
 
 	@Id

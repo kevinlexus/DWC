@@ -19,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "TEST")
+@Table(name = "KART", schema = "SCOTT")
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {
@@ -163,10 +163,20 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<SaldoUsl> saldoUsl = new HashSet<>(0);
 
-    // платеж
+    // платеж, заголовок
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<Kwtp> kwtp = new HashSet<>(0);
+
+    // платеж, распределение по периодам
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<KwtpMg> kwtpMg = new HashSet<>(0);
+
+    // платеж, распределение по услугам, орг.
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<KwtpDay> kwtpDay = new HashSet<>(0);
 
     // актуальный ли лицевой счет?
     @Transient
