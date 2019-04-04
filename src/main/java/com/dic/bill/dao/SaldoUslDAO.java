@@ -2,6 +2,7 @@ package com.dic.bill.dao;
 
 import java.util.List;
 
+import com.dic.bill.dto.SumUslOrgTpRec;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -55,13 +56,13 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	/**
 	 * Получить записи сальдо
 	 * @param lsk - лицевой счет
-	 * @param period - необходимый период
+	 * @param mg - необходимый период
 	 */
-	@Query(value = "select t.usl as uslId, t.org as orgId, t.summa "
-			+ "from SCOTT.SALDO_USL t "
-			+ "where t.lsk=:lsk and t.mg=:period "
-			+ "and nvl(t.summa,0) <> 0", nativeQuery = true)
-	List<SumUslOrgRec> getSaldoUslByLsk(@Param("lsk") String lsk, @Param("period") String period);
+	@Query(value = "select 0 as tp, t.usl.id as uslId, t.org.id as orgId, t.summa as summa "
+			+ "from SaldoUsl t "
+			+ "where t.kart.lsk=:lsk and t.mg=:mg "
+			+ "and nvl(t.summa,0) <> 0")
+	List<SumUslOrgTpRec> getSaldoUslByLsk(@Param("lsk") String lsk, @Param("mg") String mg);
 
 	/**
 	 * Получить записи всех лиц счетов, где есть долги или переплаты

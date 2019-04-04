@@ -21,7 +21,7 @@ public interface TestDataBuilder {
     void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
                           String mgChange, String mg2, Integer type, String strDt, String strSumma);
 
-    void addCorrectPayForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
+    void addCorrectPayForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,
                               String dopl, String mg, String strDt, Integer var, String strSumma);
 
     void buildSaldoUslForTest(Kart kart, int orgId, String uslId,

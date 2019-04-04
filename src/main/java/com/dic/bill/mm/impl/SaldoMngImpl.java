@@ -1,12 +1,12 @@
 package com.dic.bill.mm.impl;
 
+import com.dic.bill.dao.*;
 import com.dic.bill.dto.SumUslOrgRec;
+import com.dic.bill.dto.SumUslOrgTpRec;
 import com.dic.bill.model.scott.Kart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dic.bill.dao.ChargePayDAO;
-import com.dic.bill.dao.SaldoUslDAO;
 import com.dic.bill.mm.SaldoMng;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,15 @@ import java.util.List;
 public class SaldoMngImpl implements SaldoMng {
 
 	@Autowired
+	ChargePayDAO chargePayDAO;
+	@Autowired
+	ChangeDAO changeDAO;
+	@Autowired
 	SaldoUslDAO saldoUslDAO;
 	@Autowired
-	ChargePayDAO chargePayDAO;
+	CorrectPayDAO correctPayDAO;
+	@Autowired
+	KwtpDayDAO kwtpDayDAO;
 
 	/**
 	 * Распределить сальдо по периодам задолженности
@@ -55,10 +61,34 @@ public class SaldoMngImpl implements SaldoMng {
 	 * @param isPay - учесть оплату
 	 * @return
 	 */
+	@Override
 	public List<SumUslOrgRec> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
 										boolean isCorrPay, boolean isPay) {
+		List<SumUslOrgTpRec> lstSalIn = null;
+		if (isSalIn) {
+			lstSalIn = saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period);
+		}
+		List<SumUslOrgTpRec> lstChng = null;
+		if (isChng) {
+			lstChng = changeDAO.getChangeByLskGrouped(kart.getLsk());
+		}
+		List<SumUslOrgTpRec> lstCorrPay = null;
+		if (isCorrPay) {
+			lstCorrPay = correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period);
+		}
+		List<SumUslOrgTpRec> lstPay = null;
+		if (isPay) {
+			lstPay = kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1);
+		}
+		if (isSalIn) {
+			lstSalIn.addAll(lstChng);
+			// note как вычитать оплату???
+			lstSalIn.addAll(lstPay);
+			lstSalIn.addAll(lstCorrPay);
+		}
 
-		List<SumUslOrgRec> lstSalIn = saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period);
+		lstSalIn.forEach(t->t);
+
 		return lstSalIn;
 	}
 
