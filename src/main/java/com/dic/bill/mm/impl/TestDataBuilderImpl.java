@@ -323,7 +323,29 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
         changeDoc.getChange().add(change);
         kart.getChange().add(change);
+    }
 
+    @Override
+    public void addCorrectPayForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
+                                 String dopl, String mg, String strDt, Integer var, String strSumma) {
+        Usl usl = em.find(Usl.class, uslId);
+        Org org = orgId!=null? em.find(Org.class, orgId) : null;
+        Tuser user = em.find(Tuser.class, userId);
+
+        CorrectPay corrPay = new CorrectPay();
+        corrPay.setChangeDoc(changeDoc);
+        corrPay.setKart(kart);
+        corrPay.setUsl(usl);
+        corrPay.setOrg(org);
+        corrPay.setUser(user);
+        corrPay.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        corrPay.setDopl(dopl);
+        corrPay.setMg(mg);
+        corrPay.setVar(var);
+        corrPay.setSumma(new BigDecimal(strSumma));
+
+        changeDoc.getCorrectPay().add(corrPay);
+        kart.getCorrectPay().add(corrPay);
     }
 
     /**

@@ -2,14 +2,9 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +12,7 @@ import lombok.Setter;
 /**
  * Корректировки оплатой
  * @author lev
- * @version 1.00
+ * @version 1.01
  *
  */
 @SuppressWarnings("serial")
@@ -29,9 +24,10 @@ public class CorrectPay implements java.io.Serializable  {
 	public CorrectPay() {
 	}
 
-	// Id
 	@Id
-    @Column(name = "ID", unique=true, updatable = false, nullable = false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CorrectPay_ID")
+	@SequenceGenerator(name = "SEQ_CorrectPay_ID", sequenceName = "SCOTT.T_CORRECTS_PAYMENTS_ID", allocationSize = 1)
+	@Column(name = "id", unique = true, updatable = false, nullable = false)
 	private Integer id;
 
 	// лиц.счет
@@ -65,29 +61,31 @@ public class CorrectPay implements java.io.Serializable  {
 	@Column(name = "MG", updatable = false, nullable = false)
 	private String mg;
 
+	// вариант обработки
+	@Column(name = "VAR", updatable = false, nullable = false)
+	private Integer var;
+
+	// пользователь
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, nullable = false)
+	private Tuser user;
+
+	// документ перерасчета
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_DOC", referencedColumnName="ID")
+	private ChangeDoc changeDoc;
+
 	@Override
 	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof CorrectPay))
-	        return false;
-
-	    CorrectPay other = (CorrectPay)o;
-
-	    if (id == other.getId()) return true;
-	    if (id == null) return false;
-
-	    // equivalence by id
-	    return id.equals(other.getId());
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CorrectPay that = (CorrectPay) o;
+		return Objects.equals(getId(), that.getId());
 	}
 
 	@Override
 	public int hashCode() {
-	    if (id != null) {
-	        return id.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
+		return Objects.hash(getId());
 	}
-
 }
 

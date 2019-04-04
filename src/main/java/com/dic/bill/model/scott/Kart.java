@@ -130,32 +130,32 @@ public class Kart implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     //@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
     private Set<Nabor> nabor = new HashSet<>(0);
 
     // проживающие
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)// updatable = false - чтобы не было Update Foreign key
     @Fetch(FetchMode.JOIN)
-    // updatable = false - чтобы не было Update Foreign key
     private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
     private List<Charge> charge = new ArrayList<>(0);
 
     // перерасчеты
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
     private List<Change> change = new ArrayList<>(0);
+
+    // корректировки оплатой
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private List<CorrectPay> correctPay = new ArrayList<>(0);
 
     // подготовительная информация для расчета начисления
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
     private List<ChargePrep> chargePrep = new ArrayList<>(0);
 
     // сальдо

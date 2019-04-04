@@ -57,7 +57,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 	 * @param lsk - лицевой счет
 	 * @param period - необходимый период
 	 */
-	@Query(value = "select t.org as orgId, t.summa, t.usl as uslId "
+	@Query(value = "select t.usl as uslId, t.org as orgId, t.summa "
 			+ "from SCOTT.SALDO_USL t "
 			+ "where t.lsk=:lsk and t.mg=:period "
 			+ "and nvl(t.summa,0) <> 0", nativeQuery = true)

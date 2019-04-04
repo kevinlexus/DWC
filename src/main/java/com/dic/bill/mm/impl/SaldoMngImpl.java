@@ -1,5 +1,6 @@
 package com.dic.bill.mm.impl;
 
+import com.dic.bill.dto.SumUslOrgRec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,8 @@ import com.dic.bill.dao.SaldoUslDAO;
 import com.dic.bill.mm.SaldoMng;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,17 +34,22 @@ public class SaldoMngImpl implements SaldoMng {
 				// Новый лиц.счет
 				String period = t.getPeriod();
 				log.info("Новый лиц.счет={}", t.getKart().getLsk());
-				//System.out.println("############################## CHECK2="+t.getLsk());
 			} else {
 				// Продолжить распределение старого
-
 			}
-
-			//saldoUslDAO.get
-
 		});
 		log.info("Окончание распределения сальдо!");
 
+	}
+
+
+	/**
+	 * Получить исходящее сальдо, учитывая разные финансовые составляющие
+	 * @return
+	 */
+	public List<SumUslOrgRec> getOutSal(boolean isSalIn, boolean isChrg, boolean isChng, boolean isPay) {
+
+		return null;
 	}
 
 

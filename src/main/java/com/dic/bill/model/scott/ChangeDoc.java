@@ -56,6 +56,11 @@ public class ChangeDoc implements java.io.Serializable  {
 	@JoinColumn(name="DOC_ID", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<Change> change = new ArrayList<>(0);
 
+	// корректировки оплатой
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="FK_DOC", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	private List<CorrectPay> correctPay = new ArrayList<>(0);
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
