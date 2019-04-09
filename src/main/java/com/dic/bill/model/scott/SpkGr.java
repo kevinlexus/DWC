@@ -9,35 +9,34 @@ import javax.persistence.*;
 import java.util.Objects;
 
 /**
- * Тип элемента списка
+ * Закон по льготе
+ *
+ * @version 1.00
  */
+@Getter
+@Setter
 @Entity
 @Immutable
-@Getter @Setter
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "U_LISTTP", schema = "TEST")
-public class LstTp implements java.io.Serializable {
+@Table(name = "SPK_GR", schema = "SCOTT")
+public class SpkGr {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
     private Integer id;
 
-    // CD
-    @Column(name = "CD", updatable = false, nullable = false)
-    private String cd;
-
     // наименование
-    @Column(name = "NAME", updatable = false, nullable = false)
+    @Column(name = "NAME", updatable = false, nullable = true)
     private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LstTp lstTp = (LstTp) o;
-        return getId().equals(lstTp.getId());
+        SpkGr spk = (SpkGr) o;
+        return Objects.equals(getId(), spk.getId());
     }
 
     @Override

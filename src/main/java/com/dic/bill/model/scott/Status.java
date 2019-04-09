@@ -9,53 +9,52 @@ import javax.persistence.*;
 
 /**
  * Статус лицевого счета
- *
- *
  */
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "STATUS", schema="SCOTT")
+@Table(name = "STATUS", schema = "TEST")
 public class Status {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = false)
-	private Integer id;
+    @Column(name = "ID", updatable = false, nullable = true)
+    private Integer id;
 
-	// наименование
+    // наименование
     @Column(name = "NAME", updatable = false, nullable = false)
-	private String name;
+    private String name;
 
-	// CD
-	@Column(name = "CD", updatable = false, nullable = false)
-	private String cd;
+    // CD
+    @Column(name = "CD", updatable = false, nullable = false)
+    private String cd;
 
-	@Override
-	public boolean equals(Object o) {
-	    if (this == o) return true;
-	    if (o == null || !(o instanceof Status))
-	        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof Status))
+            return false;
 
-	    Status other = (Status)o;
+        Status other = (Status) o;
 
-	    if (id == other.getId()) return true;
-	    if (id == null) return false;
+        if (id == other.getId()) return true;
+        if (id == null) return false;
 
-	    // equivalence by id
-	    return id.equals(other.getId());
-	}
+        // equivalence by id
+        return id.equals(other.getId());
+    }
 
-	@Override
-	public int hashCode() {
-	    if (id != null) {
-	        return id.hashCode();
-	    } else {
-	        return super.hashCode();
-	    }
-	}
+    @Override
+    public int hashCode() {
+        if (id != null) {
+            return id.hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
 
 }
 

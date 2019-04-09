@@ -1,9 +1,10 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.*;
-import com.dic.bill.dto.SumUslOrgRec;
-import com.dic.bill.dto.SumUslOrgTpRec;
+import com.dic.bill.dto.SumUslOrgDTO;
 import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Org;
+import com.dic.bill.model.scott.Usl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,12 @@ import com.dic.bill.mm.SaldoMng;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,6 +25,8 @@ public class SaldoMngImpl implements SaldoMng {
 
 	@Autowired
 	ChargePayDAO chargePayDAO;
+	@Autowired
+	ChargeDAO chargeDAO;
 	@Autowired
 	ChangeDAO changeDAO;
 	@Autowired
@@ -28,26 +36,8 @@ public class SaldoMngImpl implements SaldoMng {
 	@Autowired
 	KwtpDayDAO kwtpDayDAO;
 
-	/**
-	 * Распределить сальдо по периодам задолженности
-	 */
-	@Override
-	public void distSalByChPay() {
-		log.info("Начало распределения сальдо!");
-		String lsk = null;
-		chargePayDAO.getAllOrd().stream().forEach(t-> {
-
-			if (!t.getKart().getLsk().equals(lsk)) {
-				// Новый лиц.счет
-				String period = t.getPeriod();
-				log.info("Новый лиц.счет={}", t.getKart().getLsk());
-			} else {
-				// Продолжить распределение старого
-			}
-		});
-		log.info("Окончание распределения сальдо!");
-
-	}
+	@PersistenceContext
+	private EntityManager em;
 
 
 	/**
@@ -59,38 +49,55 @@ public class SaldoMngImpl implements SaldoMng {
 	 * @param isChng - учесть перерасчеты
 	 * @param isCorrPay - учесть корректировки оплаты
 	 * @param isPay - учесть оплату
-	 * @return
 	 */
 	@Override
-	public List<SumUslOrgRec> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
+	public List<SumUslOrgDTO> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
 										boolean isCorrPay, boolean isPay) {
-		List<SumUslOrgTpRec> lstSalIn = null;
+		List<SumUslOrgDTO> lst = new ArrayList<>();
 		if (isSalIn) {
-			lstSalIn = saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period);
+			// вх.сальдо
+			saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period).forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
 		}
-		List<SumUslOrgTpRec> lstChng = null;
+		if (isChrg) {
+			// начисление
+			chargeDAO.getChargeByLskGrouped(kart.getLsk()).forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
+		}
 		if (isChng) {
-			lstChng = changeDAO.getChangeByLskGrouped(kart.getLsk());
+			// перерасчеты
+			changeDAO.getChangeByLskGrouped(kart.getLsk()).forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
 		}
-		List<SumUslOrgTpRec> lstCorrPay = null;
 		if (isCorrPay) {
-			lstCorrPay = correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period);
+			// корректировки оплатой
+			correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period).forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
 		}
-		List<SumUslOrgTpRec> lstPay = null;
 		if (isPay) {
-			lstPay = kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1);
+			// оплата
+			kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1).forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
 		}
-		if (isSalIn) {
-			lstSalIn.addAll(lstChng);
-			// note как вычитать оплату???
-			lstSalIn.addAll(lstPay);
-			lstSalIn.addAll(lstCorrPay);
-		}
-
-		lstSalIn.forEach(t->t);
-
-		return lstSalIn;
+		return lst;
 	}
 
+	/**
+	 * Сгруппировать коллекцию по услуге, организации
+	 * @param lst - исходная коллекция
+	 * @param uslId - услуга
+	 * @param orgId - организация
+	 * @param summa - сумма
+	 */
+	@Override
+	public void groupByUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa) {
+		SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
+				.findFirst().orElse(null);
+		if (foundElem != null) {
+			foundElem.setSumma(foundElem.getSumma().add(summa));
+		} else {
+			lst.add(new SumUslOrgDTO(uslId, orgId, summa));
+		}
+	}
 
 }

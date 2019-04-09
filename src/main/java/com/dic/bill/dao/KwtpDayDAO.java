@@ -3,7 +3,6 @@ package com.dic.bill.dao;
 import java.util.List;
 
 import com.dic.bill.dto.SumUslOrgRec;
-import com.dic.bill.dto.SumUslOrgTpRec;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,6 +48,6 @@ public interface KwtpDayDAO extends JpaRepository<KwtpDay, Integer> {
 			+ "and nvl(t.summa,0) <> 0 "
 			+ "and t.tp=:tp "
 			+ "group by t.usl.id, t.org.id")
-	List<SumUslOrgTpRec> getKwtpDayByLskGrouped(@Param("lsk") String lsk, @Param("tp") Integer tp);
+	List<SumUslOrgRec> getKwtpDayByLskGrouped(@Param("lsk") String lsk, @Param("tp") Integer tp);
 
 }

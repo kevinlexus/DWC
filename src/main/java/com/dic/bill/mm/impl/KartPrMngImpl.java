@@ -1,5 +1,6 @@
 package com.dic.bill.mm.impl;
 
+import com.dic.bill.dao.SpkDAO;
 import com.dic.bill.dto.CountPers;
 import com.dic.bill.dto.SocStandart;
 import com.dic.bill.mm.KartPrMng;
@@ -7,6 +8,7 @@ import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +27,8 @@ public class KartPrMngImpl implements KartPrMng {
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager em;
 
+    @Autowired
+    SpkDAO spkDAO;
 
     /**
      * Получить кол-во проживающих по лиц.счету и услуге, на дату
@@ -40,6 +44,7 @@ public class KartPrMngImpl implements KartPrMng {
                                         Date dt) {
         boolean isOwnerOlder70 = false;
         boolean isYanger70 = false;
+        boolean isNotOwnerOlder70 = false;
         // рассчитываемый лиц.счет
         Kart kart = nabor.getKart();
         CountPers countPers = new CountPers();
@@ -160,9 +165,11 @@ public class KartPrMngImpl implements KartPrMng {
 
                 int yearsOld = Utl.getDiffYears(p.getDtBirdth() == null ? dt : p.getDtBirdth(), dt);
                 if (yearsOld >= 70) {
-                    if (p.getRelation() != null && Utl.in(p.getRelation().getCd(), "Квартиросъемщик", "Собственник")) {
-                        if (status == 1) { // ПЗ
+                    if (status == 1) { // ПЗ
+                        if (p.getRelation() != null && Utl.in(p.getRelation().getCd(), "Квартиросъемщик", "Собственник")) {
                             isOwnerOlder70 = true;
+                        } else {
+                            isNotOwnerOlder70 = true;
                         }
                     }
                 } else {
@@ -177,11 +184,18 @@ public class KartPrMngImpl implements KartPrMng {
             }
         }
 
-
         if (nabor.getUsl().getFkCalcTp().equals(37)) {
             // капремонт, если старше 70 и собственник и нет других проживающих, моложе 70
             if (isOwnerOlder70 && !isYanger70) {
-                countPers.isSingleOwnerOlder70 = true;
+                Spk spk;
+                if (!isNotOwnerOlder70) {
+                    // льгота одинокому собственнику, старше 70 лет
+                    spk = spkDAO.getByCd("PENS_SINGLE_70");
+                } else {
+                    // льгота собственнику, старше 70 лет, проживающему совместно с другими НЕ собственниками, старше 70 лет
+                    spk = spkDAO.getByCd("PENS_70_WITH_70");
+                }
+                countPers.capPriv = spk;
             }
         }
         return countPers;

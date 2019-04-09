@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * @author lev
  */
 @Entity
-@Table(name = "C_CHARGE_PREP", schema = "SCOTT")
+@Table(name = "C_CHARGE_PREP", schema = "TEST")
 @Getter
 @Setter
 public class ChargePrep {
@@ -44,12 +44,18 @@ public class ChargePrep {
     private Usl usl;
 
     // объем
-    @Column(name = "VOL", updatable = false, nullable = false, insertable = true)
+    @Column(name = "VOL", updatable = false, nullable = false)
     private BigDecimal vol;
 
     // наличие счетчика
     @Type(type= "org.hibernate.type.NumericBooleanType")
-    @Column(name = "SCH", updatable = false, nullable = false, insertable = true)
+    @Column(name = "SCH", updatable = false, nullable = false)
     private Boolean isExistMeter;
+
+    // льгота
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_SPK", referencedColumnName = "ID", updatable = false)
+    private Spk spk;
+
 }
 

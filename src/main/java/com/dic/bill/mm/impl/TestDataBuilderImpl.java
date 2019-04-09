@@ -288,9 +288,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
         charge.setUsl(usl);
         charge.setSumma(summa);
-
+        charge.setType(1);
         kart.getCharge().add(charge);
-
     }
 
 
@@ -540,125 +539,125 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     public void buildNaborForTest(Kart kart, int tp) {
         if (tp == 0) {
             // тек.содерж.
-            addNaborForTest(kart, 1, "003", new BigDecimal("0.9888"), null,
+            addNaborForTest(kart, "003", 1, new BigDecimal("0.9888"), null,
                     null, null, null);
             // лифт
-            addNaborForTest(kart, 1, "005", new BigDecimal("0.6332"), null,
+            addNaborForTest(kart, "005", 1, new BigDecimal("0.6332"), null,
                     null, null, null);
             // дератизация
-            addNaborForTest(kart, 1, "029", new BigDecimal("0.481"), null,
+            addNaborForTest(kart, "029", 1, new BigDecimal("0.481"), null,
                     null, null, null);
             // вывоз мусора
-            addNaborForTest(kart, 1, "031", new BigDecimal("0.782"), null,
+            addNaborForTest(kart, "031", 885, new BigDecimal("0.782"), null,
                     null, null, null);
 
             // водоотведение
-            addNaborForTest(kart, 6, "013", new BigDecimal("1"), new BigDecimal("10.25"),
+            addNaborForTest(kart, "013", 6, new BigDecimal("1"), new BigDecimal("10.25"),
                     null, null, null);
             // антенна
-            addNaborForTest(kart, 1, "042", new BigDecimal("1"), null,
+            addNaborForTest(kart, "042", 1, new BigDecimal("1"), null,
                     null, null, null);
 
             // кодовый замок
-            addNaborForTest(kart, 2, "043", new BigDecimal("1"), null,
+            addNaborForTest(kart, "043", 2, new BigDecimal("1"), null,
                     null, null, null);
 
             // Эл.энерг. ОДН, распределенный объем во вводах
-            addNaborForTest(kart, 5, "058", new BigDecimal("1"), null,
+            addNaborForTest(kart, "058", 5, new BigDecimal("1"), null,
                     null, new BigDecimal("2.395"), null);
 
             // Поверка ОДПУ
-            addNaborForTest(kart, 5, "135", new BigDecimal("2.56"), new BigDecimal("1.34"),
+            addNaborForTest(kart, "135", 5, new BigDecimal("2.56"), new BigDecimal("1.34"),
                     null, null, null);
 
             // Эл.энерг.2
-            addNaborForTest(kart, 1, "038", new BigDecimal("1"), null,
+            addNaborForTest(kart, "038", 1, new BigDecimal("1"), null,
                     null, null, null);
 
             // Прочие услуги, расчитываемые как расценка * норматив * Общ.площадь, только НЕ по муницип фонду
-            addNaborForTest(kart, 1, "119", new BigDecimal("1.2"), new BigDecimal("1.3"),
+            addNaborForTest(kart, "119", 1, new BigDecimal("1.2"), new BigDecimal("1.3"),
                     null, null, null);
 
             // Повыш.коэфф к услуге Х.В.
-            addNaborForTest(kart, 2, "092", new BigDecimal("1"), new BigDecimal("2.5"),
+            addNaborForTest(kart, "092", 2, new BigDecimal("1"), new BigDecimal("2.5"),
                     null, null, null);
 
             // Вывоз мусора - кол-во прожив * норматив (Кис.)
-            addNaborForTest(kart, 5, "140", new BigDecimal("1"), null,
+            addNaborForTest(kart, "140", 5, new BigDecimal("1"), null,
                     null, null, null);
 
             // Очистка выгр.ям (Полыс.)
-            addNaborForTest(kart, 5, "141", new BigDecimal("1"), null,
+            addNaborForTest(kart, "141", 5, new BigDecimal("1"), null,
                     null, null, null);
 
             for (Vvod vvod : kart.getHouse().getVvod()) {
                 if (vvod.getUsl().getId().equals("123")) {
                     // Эл.эн. ОДН (вариант с простым распределением по площади)
-                    addNaborForTest(kart, 5, "123", new BigDecimal("1"), new BigDecimal("1"),
+                    addNaborForTest(kart, "123", 5, new BigDecimal("1"), new BigDecimal("1"),
                             null, null, vvod);
                 }
             }
         } else if (tp == 1) {
             // РСО лиц.счет
-            addNaborForTest(kart, 3, "063", new BigDecimal("1.5"), new BigDecimal("0"),
+            addNaborForTest(kart, "063", 3, new BigDecimal("1.5"), new BigDecimal("0"),
                     null, null, null);
             // найм
-            addNaborForTest(kart, 1, "026", new BigDecimal("1"), null,
+            addNaborForTest(kart, "026", 1, new BigDecimal("1"), null,
                     null, null, null);
 
             for (Vvod vvod : kart.getHouse().getVvod()) {
                 if (vvod.getUsl().getId().equals("053")) {
                     // Отопление Гкал
-                    addNaborForTest(kart, 6, "053", new BigDecimal("1"), new BigDecimal("1"),
+                    addNaborForTest(kart, "053", 6, new BigDecimal("1"), new BigDecimal("1"),
                             new BigDecimal("2.70547"), null, vvod);
 
                 } else if (vvod.getUsl().getId().equals("011")) {
                     // Х.в.
-                    addNaborForTest(kart, 2, "011", new BigDecimal("1"), new BigDecimal("5.74"),
+                    addNaborForTest(kart, "011", 2, new BigDecimal("1"), new BigDecimal("5.74"),
                             null, null, vvod);
                     // х.в. св.соц.н.
                     //addNaborForTest(kart, 2, "012", new BigDecimal("1.4"), new BigDecimal("0"),
                     //		null, null, null);
                     // ОДН по х.в.
-                    addNaborForTest(kart, 3, "056", new BigDecimal("1"), null,
+                    addNaborForTest(kart, "056", 3, new BigDecimal("1"), null,
                             null, null, null);
                 } else if (vvod.getUsl().getId().equals("015")) {
                     // г.в.
-                    addNaborForTest(kart, 4, "015", new BigDecimal("1"), new BigDecimal("5.01"),
+                    addNaborForTest(kart, "015", 4, new BigDecimal("1"), new BigDecimal("5.01"),
                             null, null, vvod);
                     // г.в. св.соц.н.
                     //addNaborForTest(kart, 4, "016", new BigDecimal("1.4"), new BigDecimal("0"),
                     //		null, null, null);
                     // ОДН по г.в.
-                    addNaborForTest(kart, 5, "057", new BigDecimal("1.5"), new BigDecimal("0"),
+                    addNaborForTest(kart, "057", 5, new BigDecimal("1.5"), new BigDecimal("0"),
                             null, null, null);
 
                 } else if (vvod.getUsl().getId().equals("099")) {
                     // Х.в. для гвс
-                    addNaborForTest(kart, 2, "099", new BigDecimal("1"), new BigDecimal("5.01"),
+                    addNaborForTest(kart, "099", 2, new BigDecimal("1"), new BigDecimal("5.01"),
                             null, null, vvod);
                     // Х.в. для гвс 0 зарег.
-                    addNaborForTest(kart, 2, "100", new BigDecimal("1"), null,
+                    addNaborForTest(kart, "100", 2, new BigDecimal("1"), null,
                             null, null, null);
                     // Х.в. для гвс 0 зарег.
-                    addNaborForTest(kart, 2, "101", new BigDecimal("1"), new BigDecimal("1"),
+                    addNaborForTest(kart, "101", 2, new BigDecimal("1"), new BigDecimal("1"),
                             null, null, null);
                 } else if (vvod.getUsl().getId().equals("103")) {
                     // Тепл.энерг. для нагрева х.в.
-                    addNaborForTest(kart, 2, "103", new BigDecimal("1"), null,
+                    addNaborForTest(kart, "103", 2, new BigDecimal("1"), null,
                             null, null, vvod);
                     // Тепл.энерг. для нагрева х.в. 0 зарег.
-                    addNaborForTest(kart, 2, "104", new BigDecimal("1"), null,
+                    addNaborForTest(kart, "104", 2, new BigDecimal("1"), null,
                             null, null, null);
                 }
             }
             // Отопление Гкал 0 зарег.
-            addNaborForTest(kart, 6, "054", new BigDecimal("1"), null,
+            addNaborForTest(kart, "054", 6, new BigDecimal("1"), null,
                     null, null, null);
 
         } else if (tp == 2) {
             // капремонт
-            addNaborForTest(kart, 1, "033", new BigDecimal("1"), null,
+            addNaborForTest(kart, "033", 1, new BigDecimal("1"), null,
                     null, null, null);
         }
 
@@ -667,17 +666,16 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
     /**
      * Добавить в набор услугу - для тестов
-     *
-     * @param kart
-     * @param orgId
+     *  @param kart
      * @param uslId
+     * @param orgId
      * @param koeff
      * @param norm
      * @param vol
      * @param volAdd
      */
     @Override
-    public void addNaborForTest(Kart kart, int orgId, String uslId,
+    public void addNaborForTest(Kart kart, String uslId, int orgId,
                                 BigDecimal koeff, BigDecimal norm,
                                 BigDecimal vol, BigDecimal volAdd, Vvod vvod) {
         Nabor nabor = new Nabor();

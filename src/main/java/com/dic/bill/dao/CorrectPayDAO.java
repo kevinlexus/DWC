@@ -3,7 +3,6 @@ package com.dic.bill.dao;
 import java.util.List;
 
 import com.dic.bill.dto.SumUslOrgRec;
-import com.dic.bill.dto.SumUslOrgTpRec;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,11 +30,11 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 	 * @param mg - необходимый период
 	 * @return
 	 */
-	@Query(value = "select 4 as tp, t.usl.id as uslId, t.org.id as orgId, "
+	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
 			+ "sum(t.summa) as summa from CorrectPay t "
 			+ "where t.kart.lsk=:lsk and t.mg=:mg "
 			+ "and nvl(t.summa,0) <> 0 "
 			+ "group by t.usl.id, t.org.id")
-	List<SumUslOrgTpRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk, @Param("mg") String mg);
+	List<SumUslOrgRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk, @Param("mg") String mg);
 
 }

@@ -46,7 +46,7 @@ public interface TestDataBuilder {
 
     void buildNaborForTest(Kart kart, int tp);
 
-    void addNaborForTest(Kart kart, int orgId, String uslId,
+    void addNaborForTest(Kart kart, String uslId, int orgId,
                          BigDecimal koeff, BigDecimal norm,
                          BigDecimal vol, BigDecimal volAdd,
                          Vvod vvod);

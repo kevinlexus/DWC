@@ -36,6 +36,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     // сгруппированное до фактических услуг, для записи в C_CHARGE
     private List<UslVolCharge> lstUslVolCharge = new ArrayList<>(10);
 
+    // признак добавления информации по льготе по капремонту
+    boolean isCapPrivAdded = false;
+
     /**
      * сгруппировать объемы для распределения по вводам
      *
@@ -131,7 +134,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         }
 
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
-        if (vol.compareTo(BigDecimal.ZERO) != 0 && u.isForChrg() && (u.price.compareTo(BigDecimal.ZERO) != 0
+        if (/*vol.compareTo(BigDecimal.ZERO) != 0 && note ред. 05.04.19 Кис. попросили делать пустую строку, даже если нет объема, для статы*/
+                u.isForChrg() && (u.price.compareTo(BigDecimal.ZERO) != 0 || !u.isResidental
                 || u.getUsl().getFkCalcTp().equals(34))) { // объем не нулевой и цена не нулевая или услуга Повыш коэфф для Полыс.
             Date prevDt = Utl.addDays(u.dt, -1);
             // искать по лиц.счету, предыдущей дате, основному ключу
@@ -346,7 +350,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
             Usl uslFact;
             BigDecimal priceFact;
-            if (u.vol.compareTo(BigDecimal.ZERO) != 0) {
+            //if (u.vol.compareTo(BigDecimal.ZERO) != 0) { //note  ред. 05.04.19 закомментировал - Кис. попросили делать пустую строку, даже если нет объема, для статы
                 // прочие услуги
                 if (!u.isEmpty) {
                     // есть проживающие
@@ -358,7 +362,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                     priceFact = u.priceEmpty;
                 }
                 addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
-            }
+            //}
 
             // свыше соц.нормы
             // у услуг типа Текущее содержание - не должно быть объема в u.volOverSoc
@@ -517,7 +521,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 }
 
                 // сумма
-                log.trace("summa={}", charge.getSumma());
+                log.trace("lsk={}, summa={}, priceAmnt={}, kart.getOpl()={}", kart.getLsk(), charge.getSumma(), priceAmnt, kart.getOpl());
                 summAmnt = summAmnt.add(charge.getSumma());
                 if (firstCharge == null)
                     firstCharge = charge;

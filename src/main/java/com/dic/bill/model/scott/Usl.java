@@ -23,7 +23,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL", schema="SCOTT")
+@Table(name = "USL", schema="TEST")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)
@@ -193,6 +193,15 @@ public class Usl implements java.io.Serializable  {
 				|| fkCalcTp.equals(36)// вывоз жидких нечистот и т.п. услуги
 				|| fkCalcTp.equals(37); // капремонт
 	}
+
+	/**
+	 * Учитывать в C_CHARGE, даже если нет объема - пока не удалять, принимаем решение с Кис до 01.06.19
+	 */
+/*	@Transient
+	public boolean isTakeForChargeWhenEmptyVol()
+	{
+		return fkCalcTp.equals(11111)
+	}*/
 
 	@Override
 	public boolean equals(Object o) {
