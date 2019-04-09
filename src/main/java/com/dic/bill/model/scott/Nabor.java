@@ -3,11 +3,11 @@ package com.dic.bill.model.scott;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Наборов услуг по организациям в лицевом счете
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema = "TEST")
+@Table(name = "NABOR", schema = "SCOTT")
 @DynamicUpdate
 @Getter
 @Setter
@@ -48,7 +48,7 @@ public class Nabor implements java.io.Serializable {
     private Org org;
 
     // ввод
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_VVOD", referencedColumnName = "ID", updatable = false)
     private Vvod vvod;
 
@@ -82,9 +82,7 @@ public class Nabor implements java.io.Serializable {
         if (usl.getFkCalcTp() != null && usl.getFkCalcTp().equals(14)) {
             // отопление Гкал - отдельная проверка
             // контроль только по коэфф.
-            if (bdKoeff.compareTo(BigDecimal.ZERO) != 0) {
-                return true;
-            }
+            return bdKoeff.compareTo(BigDecimal.ZERO) != 0;
         } else {
             switch (usl.getSptarn()) {
                 case 0: {
@@ -133,26 +131,14 @@ public class Nabor implements java.io.Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Nabor))
-            return false;
-
-        Nabor other = (Nabor) o;
-
-        if (id == other.getId()) return true;
-        if (id == null) return false;
-
-        // equivalence by id
-        return id.equals(other.getId());
+        if (o == null || getClass() != o.getClass()) return false;
+        Nabor nabor = (Nabor) o;
+        return Objects.equals(getId(), nabor.getId());
     }
 
     @Override
     public int hashCode() {
-        if (id != null) {
-            return id.hashCode();
-        } else {
-            return super.hashCode();
-        }
+        return Objects.hash(getId());
     }
-
 }
 

@@ -16,7 +16,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL_ROUND", schema="TEST")
+@Table(name = "USL_ROUND", schema="SCOTT")
 @IdClass(UslRoundId.class) // суррогатный первичный ключ
 @Getter @Setter
 @org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)

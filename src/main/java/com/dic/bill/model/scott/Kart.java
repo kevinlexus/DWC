@@ -19,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "TEST")
+@Table(name = "KART", schema = "SCOTT")
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {
@@ -86,7 +86,7 @@ public class Kart implements java.io.Serializable {
     private Status status;
 
     // Ko помешения
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
     private Ko koKw;
@@ -97,7 +97,7 @@ public class Kart implements java.io.Serializable {
     private Ko koLsk;
 
     // дом
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HOUSE_ID", referencedColumnName = "ID", updatable = false)
     private House house;
 

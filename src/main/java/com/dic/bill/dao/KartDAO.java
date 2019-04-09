@@ -15,20 +15,20 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     List<Kart> findByKulNdKw(@Param("kul") String kul, @Param("nd") String nd, @Param("kw") String kw);
 
     // закомментировал psch not in (8,9) - не пересчитываются полностью закрытые помещения (закрыты все лиц.счета) ред. 13.03.2019
-    @Query(value = "select distinct t.k_lsk_id from TEST.KART t where t.reu=:reuId /*and t.PSCH not in (8,9)*/ order by t.k_lsk_id",
+    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t where t.reu=:reuId /*and t.PSCH not in (8,9)*/ order by t.k_lsk_id",
             nativeQuery = true)
     List<BigDecimal> findAllKlskIdByReuId(@Param("reuId") String reuId);
 
-    @Query(value = "select distinct t.k_lsk_id from TEST.KART t, TEST.C_VVOD d where d.house_id=t.house_id " +
+    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t, SCOTT.C_VVOD d where d.house_id=t.house_id " +
             "and d.house_id=:houseId /*and t.PSCH not in (8,9)*/ order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskIdByHouseId(@Param("houseId") long houseId);
 
-    @Query(value = "select distinct t.k_lsk_id from TEST.KART t, TEST.C_VVOD d, TEST.NABOR n " +
+    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t, SCOTT.C_VVOD d, SCOTT.NABOR n " +
             "where d.house_id=t.house_id " +
             "and d.id=:vvodId and t.lsk=n.lsk and n.usl=d.usl and n.FK_VVOD=d.id /*and t.PSCH not in (8,9)*/ " +
             "order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskIdByVvodId(@Param("vvodId") long vvodId);
 
-    @Query(value = "select distinct t.k_lsk_id from TEST.KART t /*where t.psch not in (8,9)*/ order by t.k_lsk_id", nativeQuery = true)
+    @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t /*where t.psch not in (8,9)*/ order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskId();
 }

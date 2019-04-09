@@ -17,7 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_HOUSES", schema="TEST")
+@Table(name = "C_HOUSES", schema="SCOTT")
 @Getter @Setter
 public class House implements java.io.Serializable {
 
@@ -42,7 +42,7 @@ public class House implements java.io.Serializable {
 	private Integer psch;
 
 	// Ko дома (здесь OneToOne)
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false, insertable = true)
 	private Ko ko;
 
