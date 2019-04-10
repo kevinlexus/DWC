@@ -94,7 +94,7 @@ public class SaldoMngImpl implements SaldoMng {
 		SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
 				.findFirst().orElse(null);
 		if (foundElem != null) {
-			foundElem.setSumma(foundElem.getSumma().add(summa));
+			foundElem.setBdForDist(foundElem.getBdForDist().add(summa));
 		} else {
 			lst.add(new SumUslOrgDTO(uslId, orgId, summa));
 		}
