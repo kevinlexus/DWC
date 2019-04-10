@@ -18,7 +18,7 @@ public interface TestDataBuilder {
 
     ChangeDoc buildChangeDocForTest(String strDt, String mgChange);
 
-    void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
+    void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,
                           String mgChange, String mg2, Integer type, String strDt, String strSumma);
 
     void addCorrectPayForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,

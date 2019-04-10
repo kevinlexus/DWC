@@ -131,14 +131,25 @@ public class Nabor implements java.io.Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Nabor nabor = (Nabor) o;
-        return Objects.equals(getId(), nabor.getId());
+        if (!(o instanceof Nabor))
+            return false;
+
+        Nabor other = (Nabor) o;
+
+        if (id == other.getId()) return true;
+        if (id == null) return false;
+
+        // equivalence by id
+        return id.equals(other.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        if (id != null) {
+            return id.hashCode();
+        } else {
+            return super.hashCode();
+        }
     }
 }
 

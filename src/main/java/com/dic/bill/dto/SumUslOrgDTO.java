@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * DTO для хранения сгруппированных сумм по услуге и организации
@@ -30,5 +31,18 @@ public class SumUslOrgDTO implements DistributableBigDecimal {
         this.summa = bd;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SumUslOrgDTO that = (SumUslOrgDTO) o;
+        return Objects.equals(getUslId(), that.getUslId()) &&
+                Objects.equals(getOrgId(), that.getOrgId()) &&
+                Objects.equals(getSumma(), that.getSumma());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUslId(), getOrgId(), getSumma());
+    }
 }

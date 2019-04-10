@@ -303,7 +303,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     }
 
     @Override
-    public void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, Integer orgId, String uslId,
+    public void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,
                                  String mgChange, String mg2, Integer type, String strDt, String strSumma) {
         Usl usl = em.find(Usl.class, uslId);
         Org org = orgId!=null? em.find(Org.class, orgId) : null;
