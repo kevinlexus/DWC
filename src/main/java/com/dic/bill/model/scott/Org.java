@@ -61,6 +61,10 @@ public class Org implements java.io.Serializable {
 	@JoinColumn(name="FK_ORGTP", referencedColumnName="ID")
 	private OrgTp orgTp;
 
+	// Тип распределения оплаты KWTP_MG (0-общий тип, 1 - сложный тип (ук 14,15 Кис)
+	@Column(name = "DIST_PAY_TP")
+	private Integer distPayTp;
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;

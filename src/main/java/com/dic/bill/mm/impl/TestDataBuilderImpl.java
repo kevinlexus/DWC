@@ -39,16 +39,17 @@ public class TestDataBuilderImpl implements TestDataBuilder {
      * @param isAddNabor - добавлять наборы услуг?
      * @param statusId   - Id статуса
      * @param psch       - тип счетчика
+     * @param ukId
      */
     @Override
     public Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
-                               int statusId, int psch) {
+                               int statusId, int psch, int ukId) {
 
         // помещение
         Ko ko = new Ko();
         Kart kart = new Kart();
         // УК
-        Org uk = em.find(Org.class, 547);
+        Org uk = em.find(Org.class, ukId);
         // тип счета
         Lst tp = lstDao.getByCd("LSK_TP_MAIN");
         kart.setTp(tp);
