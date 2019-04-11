@@ -9,7 +9,7 @@ import java.util.List;
 public interface SaldoMng {
 
 
-    List<SumUslOrgDTO> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
+    List<SumUslOrgDTO> getOutSal(Kart kart, String period, List<SumUslOrgDTO> lstDistPayment, boolean isSalIn, boolean isChrg, boolean isChng,
                                  boolean isCorrPay, boolean isPay);
 
     void groupByUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa);

@@ -3,8 +3,6 @@ package com.dic.bill.mm.impl;
 import com.dic.bill.dao.*;
 import com.dic.bill.dto.SumUslOrgDTO;
 import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Org;
-import com.dic.bill.model.scott.Usl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,6 @@ import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,6 +41,7 @@ public class SaldoMngImpl implements SaldoMng {
 	 * Получить исходящее сальдо, учитывая разные финансовые составляющие:
 	 * @param kart - лиц.счет
 	 * @param period - текущий период
+	 * @param lstDistPayment - уже распределенная оплата
 	 * @param isSalIn - учесть входящее сальдо
 	 * @param isChrg - учесть начисление
 	 * @param isChng - учесть перерасчеты
@@ -51,9 +49,15 @@ public class SaldoMngImpl implements SaldoMng {
 	 * @param isPay - учесть оплату
 	 */
 	@Override
-	public List<SumUslOrgDTO> getOutSal(Kart kart, String period, boolean isSalIn, boolean isChrg, boolean isChng,
+	public List<SumUslOrgDTO> getOutSal(Kart kart, String period, List<SumUslOrgDTO> lstDistPayment,
+										boolean isSalIn, boolean isChrg, boolean isChng,
 										boolean isCorrPay, boolean isPay) {
 		List<SumUslOrgDTO> lst = new ArrayList<>();
+		// уже распределенная оплата
+		if (lstDistPayment != null) {
+			lstDistPayment.forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+		}
 		if (isSalIn) {
 			// вх.сальдо
 			saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period).forEach(t->
