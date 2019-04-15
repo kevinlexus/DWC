@@ -24,7 +24,7 @@ public interface TestDataBuilder {
     void addCorrectPayForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,
                               String dopl, String mg, String strDt, Integer var, String strSumma);
 
-    void buildSaldoUslForTest(Kart kart, int orgId, String uslId,
+    void buildSaldoUslForTest(Kart kart, String uslId, int orgId,
                               String mg, String strSumma);
 
     Kwtp buildKwtpForTest(Kart kart, String dopl, String strDt, String strDtInk, int nink,

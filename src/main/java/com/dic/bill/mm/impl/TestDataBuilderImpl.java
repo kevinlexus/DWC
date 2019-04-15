@@ -352,7 +352,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
      * Добавить записи сальдо
      */
     @Override
-    public void buildSaldoUslForTest(Kart kart, int orgId, String uslId,
+    public void buildSaldoUslForTest(Kart kart, String uslId, int orgId,
                                      String mg, String strSumma) {
         SaldoUsl saldoUsl = new SaldoUsl();
 

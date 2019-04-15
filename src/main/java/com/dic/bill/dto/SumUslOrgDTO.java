@@ -17,9 +17,16 @@ import java.util.Objects;
 @AllArgsConstructor
 public class SumUslOrgDTO implements DistributableBigDecimal {
 
+    // Id услуги
     private String uslId;
+    // Id организации
     private Integer orgId;
+    // сумма
     private BigDecimal summa;
+
+    SumUslOrgDTO() {
+
+    }
 
     @Override
     public BigDecimal getBdForDist() {

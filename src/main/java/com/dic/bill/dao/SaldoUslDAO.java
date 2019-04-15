@@ -93,4 +93,15 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 			nativeQuery = true)
 	  SumSaldoRec getSaldoByLsk(@Param("lsk") String lsk, @Param("period") String period);
 
+
+	/**
+	 * Получить список сальдо определенного знака, за период
+	 * @param mg - необходимый период
+	 */
+	@Query(value = "select t "
+			+ "from SaldoUsl t "
+			+ "where t.mg=:mg "
+			+ "and sign(t.summa) = :sign")
+	List<SaldoUsl> getSaldoUslBySign(@Param("mg") String mg, @Param("sign") Integer sign);
+
 }
