@@ -542,6 +542,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
             // тек.содерж.
             addNaborForTest(kart, "003", 1, new BigDecimal("0.9888"), null,
                     null, null, null);
+            // строка для тестов распределения оплаты
+            addNaborForTest(kart, "004", 885, new BigDecimal("0.9888"), null,
+                    null, null, null);
             // лифт
             addNaborForTest(kart, "005", 1, new BigDecimal("0.6332"), null,
                     null, null, null);

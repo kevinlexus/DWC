@@ -16,11 +16,12 @@ public interface ChangeDAO extends JpaRepository<Change, Integer> {
      * Получить сгруппированные записи перерасчетов текущего периода
      * @param lsk - лицевой счет
      */
-    @Query(value = "select t.usl.id as uslId, t.org.id as orgId, sum(t.summa) as summa "
-            + "from Change t "
-            + "where t.kart.lsk=:lsk "
+    @Query(value = "select t.usl as uslId, t.org as orgId, sum(t.summa) as summa "
+            + "from SCOTT.V_CHANGES_FOR_SALDO t "
+            + "where t.lsk=:lsk "
             + "and nvl(t.summa,0) <> 0 "
-            + "group by t.usl.id, t.org.id")
+            + "group by t.usl, t.org",
+            nativeQuery = true)
     List<SumUslOrgRec> getChangeByLskGrouped(@Param("lsk") String lsk);
 
 }
