@@ -27,6 +27,10 @@ public class Kart implements java.io.Serializable {
     public Kart() {
     }
 
+    public Kart(String lsk) {
+        this.lsk = lsk;
+    }
+
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO) // ID задается при создании Entity
     @Column(name = "LSK", updatable = false, nullable = false)
