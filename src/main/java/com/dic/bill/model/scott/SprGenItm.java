@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 
@@ -15,17 +16,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-//Класс строки из справочника spr_gen_itm
-//описывающего шаги выполнения формирования
-
+/**
+ * Строка из справочника spr_gen_itm,
+ * описывающая шаги выполнения формирования
+ * @version 1.0
+ */
 @Entity
 @Table(name = "SPR_GEN_ITM", schema="SCOTT")
+@DynamicUpdate
 @Getter @Setter
 public class SprGenItm {
 
 	@Id
 	@Column(name = "ID", unique = true, nullable = false)
-	private int id;
+	private Integer id;
 
 	@NaturalId
 	@Column(name = "CD", unique = true, nullable = false)
