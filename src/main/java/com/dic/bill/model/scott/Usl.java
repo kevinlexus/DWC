@@ -23,7 +23,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "USL", schema="SCOTT")
+@Table(name = "USL", schema="TEST201903")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)

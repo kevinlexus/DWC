@@ -18,7 +18,7 @@ import org.hibernate.annotations.Immutable;
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "U_LIST", schema="SCOTT")
+@Table(name = "U_LIST", schema="TEST201903")
 public class Lst implements java.io.Serializable {
 
 	@Id

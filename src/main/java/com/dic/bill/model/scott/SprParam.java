@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "SPR_PARAMS", schema="SCOTT")
+@Table(name = "SPR_PARAMS", schema="TEST201903")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectEntitiesCache", usage = CacheConcurrencyStrategy.READ_ONLY)

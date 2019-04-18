@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "METER", schema="SCOTT")
+@Table(name = "METER", schema="TEST201903")
 @Getter @Setter
 public class Meter implements java.io.Serializable {
 

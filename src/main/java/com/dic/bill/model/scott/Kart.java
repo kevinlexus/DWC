@@ -19,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "SCOTT")
+@Table(name = "KART", schema = "TEST201903")
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {
@@ -105,7 +105,7 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "HOUSE_ID", referencedColumnName = "ID", updatable = false)
     private House house;
 
-    // родительский лицевой счет
+    // родительский лицевой счет (привязка)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_LSK", referencedColumnName = "LSK", updatable = false)
     private Kart parentKart;

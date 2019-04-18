@@ -14,7 +14,7 @@ import org.hibernate.annotations.Immutable;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "PARAMS", schema="SCOTT")
+@Table(name = "PARAMS", schema="TEST201903")
 @Immutable
 @Cacheable // note как быть при переходе месяца, если закэшировано?
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)

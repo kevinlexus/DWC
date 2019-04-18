@@ -45,8 +45,6 @@ public class KartPrMngImpl implements KartPrMng {
         boolean isOwnerOlder70 = false;
         boolean isYanger70 = false;
         boolean isNotOwnerOlder70 = false;
-        // рассчитываемый лиц.счет
-        Kart kart = nabor.getKart();
         CountPers countPers = new CountPers();
 
         // перебрать проживающих

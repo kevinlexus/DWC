@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "NABOR", schema = "SCOTT")
+@Table(name = "NABOR", schema = "TEST201903")
 @DynamicUpdate
 @Getter
 @Setter

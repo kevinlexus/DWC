@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter @Setter
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-@Table(name = "U_LISTTP", schema = "SCOTT")
+@Table(name = "U_LISTTP", schema = "TEST201903")
 public class LstTp implements java.io.Serializable {
 
     @Id
