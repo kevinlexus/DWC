@@ -2,8 +2,10 @@ package com.dic.bill.dao;
 
 import java.util.List;
 
+import com.dic.bill.dto.SumUslOrgRec;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Acharge;
@@ -98,5 +100,18 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 			+ " where t.id >= ?1 order by t.id")
 	List<Kart> getAfterLsk(String firstLsk);
 
+
+	/**
+	 * Получить сгруппированные записи начислений прошлого периода
+	 * @param lsk - лицевой счет
+	 * @param period - период
+	 */
+	@Query(value = "select t.usl.id as uslId, n.org.id as orgId, sum(t.summa) as summa "
+			+ "from Acharge t join t.kart k join k.nabor n on n.usl.id=t.usl.id "
+			+ "where t.kart.lsk=:lsk "
+			+ "and nvl(t.summa,0) <> 0 "
+			+ "and :period between t.mgFrom and t.mgTo "
+			+ "group by t.usl.id, n.org.id")
+	List<SumUslOrgRec> getAchargeByLskPeriodGrouped(@Param("lsk") String lsk, @Param("period") String period);
 
 }
