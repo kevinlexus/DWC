@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "RELATIONS", schema="TEST201903")
+@Table(name = "RELATIONS", schema="SCOTT")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", usage = CacheConcurrencyStrategy.READ_ONLY)

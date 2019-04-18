@@ -41,7 +41,8 @@ public class SaldoMngImpl implements SaldoMng {
 	 * Получить исходящее сальдо, учитывая разные финансовые составляющие:
 	 * @param kart - лиц.счет
 	 * @param period - текущий период
-	 * @param lstDistPayment - уже распределенная оплата
+	 * @param lstDistPayment - уже распределенная, сохраненная оплата
+	 * @param lstDistControl - распределенная оплата для контроля исх кред.сал.
 	 * @param isSalIn - учесть входящее сальдо
 	 * @param isChrg - учесть начисление
 	 * @param isChng - учесть перерасчеты
@@ -49,13 +50,20 @@ public class SaldoMngImpl implements SaldoMng {
 	 * @param isPay - учесть оплату
 	 */
 	@Override
-	public List<SumUslOrgDTO> getOutSal(Kart kart, String period, List<SumUslOrgDTO> lstDistPayment,
+	public List<SumUslOrgDTO> getOutSal(Kart kart, String period,
+										List<SumUslOrgDTO> lstDistPayment,
+										List<SumUslOrgDTO> lstDistControl,
 										boolean isSalIn, boolean isChrg, boolean isChng,
 										boolean isCorrPay, boolean isPay) {
 		List<SumUslOrgDTO> lst = new ArrayList<>();
-		// уже распределенная оплата
+		// уже распределенная, сохраненная оплата
 		if (lstDistPayment != null) {
 			lstDistPayment.forEach(t->
+					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+		}
+		// распределенная оплата для контроля исх кред.сал.
+		if (lstDistControl != null) {
+			lstDistControl.forEach(t->
 					groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
 		}
 		if (isSalIn) {

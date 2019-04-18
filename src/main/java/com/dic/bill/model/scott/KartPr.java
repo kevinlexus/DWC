@@ -17,7 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_KART_PR", schema="TEST201903")
+@Table(name = "C_KART_PR", schema="SCOTT")
 @Getter @Setter
 public class KartPr implements java.io.Serializable  {
 

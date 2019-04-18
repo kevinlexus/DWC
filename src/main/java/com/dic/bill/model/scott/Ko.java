@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "K_LSK", schema = "TEST201903")
+@Table(name = "K_LSK", schema = "SCOTT")
 @Immutable
 @Cacheable
 @org.hibernate.annotations.Cache(region = "BillDirectNeverClearCache", // никогда не обновляется извне данная таблица

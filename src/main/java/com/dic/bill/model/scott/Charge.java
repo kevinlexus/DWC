@@ -16,7 +16,7 @@ import org.hibernate.annotations.Type;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGE", schema="TEST201903")
+@Table(name = "C_CHARGE", schema="SCOTT")
 @Getter @Setter
 public class Charge implements java.io.Serializable  {
 

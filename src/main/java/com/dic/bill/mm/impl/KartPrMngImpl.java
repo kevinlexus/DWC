@@ -53,14 +53,25 @@ public class KartPrMngImpl implements KartPrMng {
             int status = 0;
             int statusTemp = 0;
 
+            // счетчики кол-ва строк статусов в периоде, для индикации ошибок
+            int statusCnt = 0;
+            int statusTempCnt = 0;
+
             for (StatePr t : p.getStatePr()) {
                 if (t.getKartPr().equals(p) && Utl.between(dt, t.getDtFrom(), t.getDtTo())) {
                     if (t.getStatusPr().getTp().getCd().equals("PROP")) {
                         status = t.getStatusPr().getId();
+                        statusCnt++;
                     } else if (t.getStatusPr().getTp().getCd().equals("PROP_REG")) {
                         statusTemp = t.getStatusPr().getId();
+                        statusTempCnt++;
                     }
                 }
+            }
+
+            // контроль ошибок наличия дублей статусов
+            if (statusCnt > 1 || statusTempCnt > 1) {
+                kartMain.setFkErr(2);
             }
 
             if (parVarCntKpr == 0) {

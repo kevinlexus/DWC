@@ -19,7 +19,7 @@ import org.hibernate.annotations.FetchMode;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "KART", schema = "TEST201903")
+@Table(name = "KART", schema = "SCOTT")
 @Getter
 @Setter
 public class Kart implements java.io.Serializable {
@@ -34,7 +34,7 @@ public class Kart implements java.io.Serializable {
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO) // ID задается при создании Entity
     @Column(name = "LSK", updatable = false, nullable = false)
-    private String lsk; //id записи
+    private String lsk;
 
     // УК
     @ManyToOne(fetch = FetchType.LAZY)
@@ -121,6 +121,10 @@ public class Kart implements java.io.Serializable {
     // показания по счетчику отопления
     @Column(name = "POT")
     private BigDecimal pot;
+
+    // наличие ошибки при контроле статусов проживающих, счетчиков и т.п.
+    @Column(name = "FK_ERR", nullable = false)
+    private Integer fkErr;
 
     // начало действия
     @Column(name = "MG1")
