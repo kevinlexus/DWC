@@ -4,10 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,9 +17,9 @@ import java.util.Objects;
 @Table(name = "KWTP_DAY_LOG", schema = "SCOTT")
 @Getter
 @Setter
-public class KwtpMgLog implements java.io.Serializable {
+public class KwtpDayLog implements java.io.Serializable {
 
-    public KwtpMgLog() {
+    public KwtpDayLog() {
     }
 
     @Id
@@ -45,7 +41,7 @@ public class KwtpMgLog implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        KwtpMgLog kwtpMg = (KwtpMgLog) o;
+        KwtpDayLog kwtpMg = (KwtpDayLog) o;
         return Objects.equals(getId(), kwtpMg.getId());
     }
 
@@ -54,5 +50,36 @@ public class KwtpMgLog implements java.io.Serializable {
         return Objects.hash(getId());
     }
 
+
+    public static final class KwtpMgLogBuilder {
+        // распределение платежа по периоду
+        private KwtpMg kwtpMg;
+        // комментарий распределения
+        private String text;
+
+        private KwtpMgLogBuilder() {
+        }
+
+        public static KwtpMgLogBuilder aKwtpMgLog() {
+            return new KwtpMgLogBuilder();
+        }
+
+        public KwtpMgLogBuilder withKwtpMg(KwtpMg kwtpMg) {
+            this.kwtpMg = kwtpMg;
+            return this;
+        }
+
+        public KwtpMgLogBuilder withText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public KwtpDayLog build() {
+            KwtpDayLog kwtpMgLog = new KwtpDayLog();
+            kwtpMgLog.setKwtpMg(kwtpMg);
+            kwtpMgLog.setText(text);
+            return kwtpMgLog;
+        }
+    }
 }
 

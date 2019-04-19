@@ -83,7 +83,7 @@ public class KwtpMg implements java.io.Serializable {
     // комментарий распределения строки платежа
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", updatable = false)
-    private List<KwtpMgLog> kwtpMgLog = new ArrayList<>(0);
+    private List<KwtpDayLog> kwtpMgLog = new ArrayList<>(0);
 
     @Override
     public boolean equals(Object o) {
