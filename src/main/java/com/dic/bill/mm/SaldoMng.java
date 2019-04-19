@@ -13,5 +13,7 @@ public interface SaldoMng {
     List<SumUslOrgDTO> getOutSal(Kart kart, String period, List<SumUslOrgDTO> lstDistPayment, List<SumUslOrgDTO> lstDistControl, boolean isSalIn, boolean isChrg, boolean isChrgPrevPeriod, boolean isChng,
                                  boolean isCorrPay, boolean isPay, String prevPeriod) throws WrongParam;
 
+    void groupByUslOrg(List<SumUslOrgDTO> lst, SumUslOrgDTO t);
+
     void groupByUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa);
 }

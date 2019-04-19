@@ -122,18 +122,31 @@ public class SaldoMngImpl implements SaldoMng {
      * Сгруппировать коллекцию по услуге, организации
      *
      * @param lst   - исходная коллекция
+     * @param t - строка усл, орг, сумма
+     */
+    @Override
+    public void groupByUslOrg(List<SumUslOrgDTO> lst, SumUslOrgDTO t) {
+        groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma());
+    }
+
+    /**
+     * Сгруппировать коллекцию по услуге, организации
+     *
+     * @param lst   - исходная коллекция
      * @param uslId - услуга
      * @param orgId - организация
      * @param summa - сумма
      */
     @Override
     public void groupByUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa) {
-        SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
-                .findFirst().orElse(null);
-        if (foundElem != null) {
-            foundElem.setBdForDist(foundElem.getBdForDist().add(summa));
-        } else {
-            lst.add(new SumUslOrgDTO(uslId, orgId, summa));
+        if (summa.compareTo(BigDecimal.ZERO) !=0) {
+            SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
+                    .findFirst().orElse(null);
+            if (foundElem != null) {
+                foundElem.setBdForDist(foundElem.getBdForDist().add(summa));
+            } else {
+                lst.add(new SumUslOrgDTO(uslId, orgId, summa));
+            }
         }
     }
 

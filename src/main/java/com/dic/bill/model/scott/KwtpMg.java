@@ -80,6 +80,11 @@ public class KwtpMg implements java.io.Serializable {
     @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID")
     private Kwtp kwtp;
 
+    // комментарий распределения строки платежа
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", updatable = false)
+    private List<KwtpMgLog> kwtpMgLog = new ArrayList<>(0);
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
