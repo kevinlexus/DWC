@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -28,9 +29,14 @@ public class KwtpDayLog implements java.io.Serializable {
     @Column(name = "id", unique = true, updatable = false, nullable = false)
     private Integer id;
 
+
+    // fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
+    @Column(name = "FK_C_KWTP_MG")
+    private Integer fkKwtpMg;
+
     // распределение платежа по периоду
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID")
+    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", insertable = false, updatable = false)
     private KwtpMg kwtpMg;
 
     // комментарий распределения
@@ -51,34 +57,41 @@ public class KwtpDayLog implements java.io.Serializable {
     }
 
 
-    public static final class KwtpMgLogBuilder {
+    public static final class KwtpDayLogBuilder {
+        private Integer fkKwtpMg;
         // распределение платежа по периоду
         private KwtpMg kwtpMg;
         // комментарий распределения
         private String text;
 
-        private KwtpMgLogBuilder() {
+        private KwtpDayLogBuilder() {
         }
 
-        public static KwtpMgLogBuilder aKwtpMgLog() {
-            return new KwtpMgLogBuilder();
+        public static KwtpDayLogBuilder aKwtpDayLog() {
+            return new KwtpDayLogBuilder();
         }
 
-        public KwtpMgLogBuilder withKwtpMg(KwtpMg kwtpMg) {
+        public KwtpDayLogBuilder withFkKwtpMg(Integer fkKwtpMg) {
+            this.fkKwtpMg = fkKwtpMg;
+            return this;
+        }
+
+        public KwtpDayLogBuilder withKwtpMg(KwtpMg kwtpMg) {
             this.kwtpMg = kwtpMg;
             return this;
         }
 
-        public KwtpMgLogBuilder withText(String text) {
+        public KwtpDayLogBuilder withText(String text) {
             this.text = text;
             return this;
         }
 
         public KwtpDayLog build() {
-            KwtpDayLog kwtpMgLog = new KwtpDayLog();
-            kwtpMgLog.setKwtpMg(kwtpMg);
-            kwtpMgLog.setText(text);
-            return kwtpMgLog;
+            KwtpDayLog kwtpDayLog = new KwtpDayLog();
+            kwtpDayLog.setFkKwtpMg(fkKwtpMg);
+            kwtpDayLog.setKwtpMg(kwtpMg);
+            kwtpDayLog.setText(text);
+            return kwtpDayLog;
         }
     }
 }

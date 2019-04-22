@@ -77,9 +77,13 @@ public class KwtpDay implements java.io.Serializable  {
 	@Column(name = "OPER", updatable = false)
 	private String oper;
 
+	// fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
+	@Column(name = "KWTP_ID")
+	private Integer fkKwtpMg;
+
 	// распределение платежа по периоду
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="KWTP_ID", referencedColumnName="ID")
+	@JoinColumn(name="KWTP_ID", referencedColumnName="ID", insertable = false, updatable = false)
 	private KwtpMg kwtpMg;
 
 	@Override
@@ -97,7 +101,6 @@ public class KwtpDay implements java.io.Serializable  {
 
 
 	public static final class KwtpDayBuilder {
-		private Integer id;
 		// лиц.счет
 		private Kart kart;
 		// сумма
@@ -120,6 +123,8 @@ public class KwtpDay implements java.io.Serializable  {
 		private String dopl;
 		// код операции
 		private String oper;
+		// fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
+		private Integer fkKwtpMg;
 		// распределение платежа по периоду
 		private KwtpMg kwtpMg;
 
@@ -128,11 +133,6 @@ public class KwtpDay implements java.io.Serializable  {
 
 		public static KwtpDayBuilder aKwtpDay() {
 			return new KwtpDayBuilder();
-		}
-
-		public KwtpDayBuilder withId(Integer id) {
-			this.id = id;
-			return this;
 		}
 
 		public KwtpDayBuilder withKart(Kart kart) {
@@ -190,18 +190,18 @@ public class KwtpDay implements java.io.Serializable  {
 			return this;
 		}
 
+		public KwtpDayBuilder withFkKwtpMg(Integer fkKwtpMg) {
+			this.fkKwtpMg = fkKwtpMg;
+			return this;
+		}
+
 		public KwtpDayBuilder withKwtpMg(KwtpMg kwtpMg) {
 			this.kwtpMg = kwtpMg;
 			return this;
 		}
 
-		public KwtpDayBuilder but() {
-			return aKwtpDay().withId(id).withKart(kart).withSumma(summa).withDt(dt).withDtInk(dtInk).withUsl(usl).withOrg(org).withNkom(nkom).withNink(nink).withTp(tp).withDopl(dopl).withOper(oper).withKwtpMg(kwtpMg);
-		}
-
 		public KwtpDay build() {
 			KwtpDay kwtpDay = new KwtpDay();
-			kwtpDay.setId(id);
 			kwtpDay.setKart(kart);
 			kwtpDay.setSumma(summa);
 			kwtpDay.setDt(dt);
@@ -213,6 +213,7 @@ public class KwtpDay implements java.io.Serializable  {
 			kwtpDay.setTp(tp);
 			kwtpDay.setDopl(dopl);
 			kwtpDay.setOper(oper);
+			kwtpDay.setFkKwtpMg(fkKwtpMg);
 			kwtpDay.setKwtpMg(kwtpMg);
 			return kwtpDay;
 		}
