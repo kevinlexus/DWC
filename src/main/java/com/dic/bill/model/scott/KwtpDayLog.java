@@ -34,6 +34,10 @@ public class KwtpDayLog implements java.io.Serializable {
     @Column(name = "FK_C_KWTP_MG")
     private Integer fkKwtpMg;
 
+    // № п.п.
+    @Column(name = "NPP")
+    private Integer npp;
+
     // распределение платежа по периоду
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", insertable = false, updatable = false)
@@ -58,7 +62,10 @@ public class KwtpDayLog implements java.io.Serializable {
 
 
     public static final class KwtpDayLogBuilder {
+        // fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
         private Integer fkKwtpMg;
+        // № п.п.
+        private Integer npp;
         // распределение платежа по периоду
         private KwtpMg kwtpMg;
         // комментарий распределения
@@ -76,6 +83,11 @@ public class KwtpDayLog implements java.io.Serializable {
             return this;
         }
 
+        public KwtpDayLogBuilder withNpp(Integer npp) {
+            this.npp = npp;
+            return this;
+        }
+
         public KwtpDayLogBuilder withKwtpMg(KwtpMg kwtpMg) {
             this.kwtpMg = kwtpMg;
             return this;
@@ -89,6 +101,7 @@ public class KwtpDayLog implements java.io.Serializable {
         public KwtpDayLog build() {
             KwtpDayLog kwtpDayLog = new KwtpDayLog();
             kwtpDayLog.setFkKwtpMg(fkKwtpMg);
+            kwtpDayLog.setNpp(npp);
             kwtpDayLog.setKwtpMg(kwtpMg);
             kwtpDayLog.setText(text);
             return kwtpDayLog;
