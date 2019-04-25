@@ -70,6 +70,10 @@ public class KwtpMg implements java.io.Serializable {
     @Column(name = "DAT_INK", updatable = false)
     private Date dtInk;
 
+    // задолженность на момент распределения по периоду в C_GET_PAY строка 580
+    @Column(name = "DEBT", updatable = false)
+    private BigDecimal debt;
+
     // детализация платежа по услугам
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID", updatable = false)
