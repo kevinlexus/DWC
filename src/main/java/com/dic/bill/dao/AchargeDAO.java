@@ -106,12 +106,12 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * @param lsk - лицевой счет
 	 * @param period - период
 	 */
-	@Query(value = "select t.usl.id as uslId, n.org.id as orgId, sum(t.summa) as summa "
-			+ "from Acharge t join t.kart k join k.nabor n on n.usl.id=t.usl.id "
-			+ "where t.kart.lsk=:lsk "
-			+ "and nvl(t.summa,0) <> 0 "
-			+ "and :period between t.mgFrom and t.mgTo "
-			+ "group by t.usl.id, n.org.id")
-	List<SumUslOrgRec> getAchargeByLskPeriodGrouped(@Param("lsk") String lsk, @Param("period") String period);
+	@Query(value = "select a.usl as uslId, n.org as orgId, sum(a.summa) as summa from scott.A_CHARGE2 a " +
+			"join scott.A_NABOR2 n on a.lsk=n.lsk and a.usl=n.usl " +
+			"where a.lsk=:lsk and a.type=1 and " +
+			":period between a.mgFrom and a.mgTo " +
+			"and :period between n.mgFrom and n.mgTo " +
+			"group by a.usl, n.org", nativeQuery = true)
+	List<SumUslOrgRec> getAchargeByLskPeriodGrouped(@Param("lsk") String lsk, @Param("period") Integer period);
 
 }

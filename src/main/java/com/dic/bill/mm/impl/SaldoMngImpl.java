@@ -97,7 +97,7 @@ public class SaldoMngImpl implements SaldoMng {
         }
         if (isChrgPrevPeriod) {
             // начисление предыдущего периода
-            achargeDAO.getAchargeByLskPeriodGrouped(kart.getLsk(), prevPeriod).forEach(t ->
+            achargeDAO.getAchargeByLskPeriodGrouped(kart.getLsk(), Integer.valueOf(prevPeriod)).forEach(t ->
                     groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
         }
         if (isChng) {
