@@ -1,7 +1,5 @@
 package com.dic.bill.dto;
 
-import com.dic.bill.model.scott.Org;
-import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.DistributableBigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +11,8 @@ import java.util.Objects;
 /**
  * DTO для хранения сгруппированных сумм по услуге и организации
  */
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 public class SumUslOrgDTO implements DistributableBigDecimal {
 

@@ -75,6 +75,7 @@ public class CorrectPay implements java.io.Serializable  {
 	@JoinColumn(name="FK_DOC", referencedColumnName="ID")
 	private ChangeDoc changeDoc;
 
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -86,6 +87,101 @@ public class CorrectPay implements java.io.Serializable  {
 	@Override
 	public int hashCode() {
 		return Objects.hash(getId());
+	}
+
+	public static final class CorrectPayBuilder {
+		// лиц.счет
+		private Kart kart;
+		// сумма
+		private BigDecimal summa;
+		// дата
+		private Date dt;
+		// услуга
+		private Usl usl;
+		// организация
+		private Org org;
+		// период оплаты
+		private String dopl;
+		// бухгалтерский период
+		private String mg;
+		// вариант обработки
+		private Integer var;
+		// пользователь
+		private Tuser user;
+		// документ перерасчета
+		private ChangeDoc changeDoc;
+
+		private CorrectPayBuilder() {
+		}
+
+		public static CorrectPayBuilder aCorrectPay() {
+			return new CorrectPayBuilder();
+		}
+
+		public CorrectPayBuilder withKart(Kart kart) {
+			this.kart = kart;
+			return this;
+		}
+
+		public CorrectPayBuilder withSumma(BigDecimal summa) {
+			this.summa = summa;
+			return this;
+		}
+
+		public CorrectPayBuilder withDt(Date dt) {
+			this.dt = dt;
+			return this;
+		}
+
+		public CorrectPayBuilder withUsl(Usl usl) {
+			this.usl = usl;
+			return this;
+		}
+
+		public CorrectPayBuilder withOrg(Org org) {
+			this.org = org;
+			return this;
+		}
+
+		public CorrectPayBuilder withDopl(String dopl) {
+			this.dopl = dopl;
+			return this;
+		}
+
+		public CorrectPayBuilder withMg(String mg) {
+			this.mg = mg;
+			return this;
+		}
+
+		public CorrectPayBuilder withVar(Integer var) {
+			this.var = var;
+			return this;
+		}
+
+		public CorrectPayBuilder withUser(Tuser user) {
+			this.user = user;
+			return this;
+		}
+
+		public CorrectPayBuilder withChangeDoc(ChangeDoc changeDoc) {
+			this.changeDoc = changeDoc;
+			return this;
+		}
+
+		public CorrectPay build() {
+			CorrectPay correctPay = new CorrectPay();
+			correctPay.setKart(kart);
+			correctPay.setSumma(summa);
+			correctPay.setDt(dt);
+			correctPay.setUsl(usl);
+			correctPay.setOrg(org);
+			correctPay.setDopl(dopl);
+			correctPay.setMg(mg);
+			correctPay.setVar(var);
+			correctPay.setUser(user);
+			correctPay.setChangeDoc(changeDoc);
+			return correctPay;
+		}
 	}
 }
 

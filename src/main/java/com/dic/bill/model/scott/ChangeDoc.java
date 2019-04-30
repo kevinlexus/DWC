@@ -61,6 +61,7 @@ public class ChangeDoc implements java.io.Serializable  {
 	@JoinColumn(name="FK_DOC", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
 	private List<CorrectPay> correctPay = new ArrayList<>(0);
 
+
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
@@ -85,5 +86,77 @@ public class ChangeDoc implements java.io.Serializable  {
 	    }
 	}
 
+	public static final class ChangeDocBuilder {
+		// период за который перерасчет (бред) - убрать бы это, ред.01.04.2019
+		private String mgchange;
+		// дата перерасчета
+		private Date dt;
+		// период которым надо провести изменения (бред) - убрать бы это, ред.01.04.2019
+		private String mg2;
+		// примечание - тип корректировки (PAY_SAL-корректировка сальдо, оплатой)
+		private String cdTp;
+		// пользователь
+		private Tuser user;
+		// перерасчеты
+		// updatable = false - чтобы не было Update Foreign key
+		private List<Change> change = new ArrayList<>(0);
+		// корректировки оплатой
+		// updatable = false - чтобы не было Update Foreign key
+		private List<CorrectPay> correctPay = new ArrayList<>(0);
+
+		private ChangeDocBuilder() {
+		}
+
+		public static ChangeDocBuilder aChangeDoc() {
+			return new ChangeDocBuilder();
+		}
+
+		public ChangeDocBuilder withMgchange(String mgchange) {
+			this.mgchange = mgchange;
+			return this;
+		}
+
+		public ChangeDocBuilder withDt(Date dt) {
+			this.dt = dt;
+			return this;
+		}
+
+		public ChangeDocBuilder withMg2(String mg2) {
+			this.mg2 = mg2;
+			return this;
+		}
+
+		public ChangeDocBuilder withCdTp(String cdTp) {
+			this.cdTp = cdTp;
+			return this;
+		}
+
+		public ChangeDocBuilder withUser(Tuser user) {
+			this.user = user;
+			return this;
+		}
+
+		public ChangeDocBuilder withChange(List<Change> change) {
+			this.change = change;
+			return this;
+		}
+
+		public ChangeDocBuilder withCorrectPay(List<CorrectPay> correctPay) {
+			this.correctPay = correctPay;
+			return this;
+		}
+
+		public ChangeDoc build() {
+			ChangeDoc changeDoc = new ChangeDoc();
+			changeDoc.setMgchange(mgchange);
+			changeDoc.setDt(dt);
+			changeDoc.setMg2(mg2);
+			changeDoc.setCdTp(cdTp);
+			changeDoc.setUser(user);
+			changeDoc.setChange(change);
+			changeDoc.setCorrectPay(correctPay);
+			return changeDoc;
+		}
+	}
 }
 
