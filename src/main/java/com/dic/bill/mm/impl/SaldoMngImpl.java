@@ -78,44 +78,57 @@ public class SaldoMngImpl implements SaldoMng {
         // уже распределенная, сохраненная оплата
         if (lstDistPayment != null) {
             lstDistPayment.forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
         // распределенная оплата для контроля исх кред.сал.
         if (lstDistControl != null) {
             lstDistControl.forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
         if (isSalIn) {
             // вх.сальдо
             saldoUslDAO.getSaldoUslByLsk(kart.getLsk(), period).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
         }
         if (isChrg) {
             // начисление
             chargeDAO.getChargeByLskGrouped(kart.getLsk()).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
         }
         if (isChrgPrevPeriod) {
             // начисление предыдущего периода
             achargeDAO.getAchargeByLskPeriodGrouped(kart.getLsk(), Integer.valueOf(prevPeriod)).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
         }
         if (isChng) {
             // перерасчеты
             changeDAO.getChangeByLskGrouped(kart.getLsk()).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma()));
         }
         if (isCorrPay) {
             // корректировки оплатой
             correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
         if (isPay) {
             // оплата
             kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1).forEach(t ->
-                    groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
         return lst;
+    }
+
+    /**
+     * Сгруппировать коллекцию с другой коллекцией
+     *
+     * @param lst   - исходная коллекция, подлежащая модификации
+     * @param lstCorr - корректировка
+     */
+    @Override
+    public void groupByLstUslOrg(List<SumUslOrgDTO> lst, List<SumUslOrgDTO> lstCorr) {
+        lstCorr.forEach(t-> {
+            groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma());
+        });
     }
 
     /**
@@ -125,8 +138,8 @@ public class SaldoMngImpl implements SaldoMng {
      * @param t - строка усл, орг, сумма
      */
     @Override
-    public void groupByUslOrg(List<SumUslOrgDTO> lst, SumUslOrgDTO t) {
-        groupByUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma());
+    public void groupByLstUslOrg(List<SumUslOrgDTO> lst, SumUslOrgDTO t) {
+        groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma());
     }
 
     /**
@@ -138,7 +151,7 @@ public class SaldoMngImpl implements SaldoMng {
      * @param summa - сумма
      */
     @Override
-    public void groupByUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa) {
+    public void groupByLstUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa) {
         if (summa.compareTo(BigDecimal.ZERO) !=0) {
             SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
                     .findFirst().orElse(null);
@@ -149,5 +162,6 @@ public class SaldoMngImpl implements SaldoMng {
             }
         }
     }
+
 
 }

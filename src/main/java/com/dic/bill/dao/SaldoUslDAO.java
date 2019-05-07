@@ -104,16 +104,15 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
     List<SaldoUsl> getCreditSaldoUsl(@Param("mg") String mg);
 
     /**
-     * Получить записи кредитового сальдо при наличии сальдо дебетового по данному лс
+     * Получить записи сальдо при наличии сальдо с другим знаком по данному лс
      *
      * @param mg - необходимый период
      */
     @Query(value = "select t " +
             "from SaldoUsl t " +
-            "where exists (select d.kart.lsk from SaldoUsl d where d.kart=t.kart and nvl(d.summa,0) > 0) " +
-            "and t.mg=:mg " +
-            "and nvl(t.summa,0) < 0")
-    List<SaldoUsl> getCreditSaldoUslWhereDebitExists(@Param("mg") String mg);
+            "where exists (select d.kart.lsk from SaldoUsl d where d.kart=t.kart and sign(nvl(d.summa,0)) != sign(nvl(t.summa,0))) " +
+            "and t.mg=:mg ")
+    List<SaldoUsl> getSaldoUslWhereCreditAndDebitExists(@Param("mg") String mg);
 
     /**
      * Получить записи всех лиц счетов, где есть долги или переплаты
