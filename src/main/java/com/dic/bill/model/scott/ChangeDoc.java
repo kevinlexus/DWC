@@ -46,6 +46,10 @@ public class ChangeDoc implements java.io.Serializable  {
 	@Column(name = "CD_TP", updatable = false)
 	private String cdTp;
 
+	// описание
+	@Column(name = "TEXT", updatable = false)
+	private String text;
+
 	// пользователь
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, nullable = false)
@@ -95,6 +99,8 @@ public class ChangeDoc implements java.io.Serializable  {
 		private String mg2;
 		// примечание - тип корректировки (PAY_SAL-корректировка сальдо, оплатой)
 		private String cdTp;
+		// описание
+		private String text;
 		// пользователь
 		private Tuser user;
 		// перерасчеты
@@ -128,6 +134,11 @@ public class ChangeDoc implements java.io.Serializable  {
 
 		public ChangeDocBuilder withCdTp(String cdTp) {
 			this.cdTp = cdTp;
+			return this;
+		}
+
+		public ChangeDocBuilder withText(String text) {
+			this.text = text;
 			return this;
 		}
 
