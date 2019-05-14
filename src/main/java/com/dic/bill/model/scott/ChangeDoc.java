@@ -166,6 +166,7 @@ public class ChangeDoc implements java.io.Serializable  {
 			changeDoc.setUser(user);
 			changeDoc.setChange(change);
 			changeDoc.setCorrectPay(correctPay);
+			changeDoc.setText(text);
 			return changeDoc;
 		}
 	}

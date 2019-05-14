@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
+import java.text.ParseException;
 
 @Slf4j
 @Service
@@ -265,8 +266,12 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     public Meter addMeterForTest(Ko koObj, String uslId, String dt1, String dt2) {
         Ko ko = new Ko();
         Meter meter = new Meter();
-        meter.setDt1(Utl.getDateFromStr(dt1));
-        meter.setDt2(Utl.getDateFromStr(dt2));
+        try {
+            meter.setDt1(Utl.getDateFromStr(dt1));
+            meter.setDt2(Utl.getDateFromStr(dt2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         meter.setKo(ko);
         meter.setKoObj(koObj);
         Usl usl = em.find(Usl.class, uslId);
@@ -297,7 +302,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     @Override
     public ChangeDoc buildChangeDocForTest(String strDt, String mgChange) {
         ChangeDoc changeDoc = new ChangeDoc();
-        changeDoc.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        try {
+            changeDoc.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         changeDoc.setMgchange(mgChange);
         em.persist(changeDoc);
         return changeDoc;
@@ -316,7 +325,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         change.setUsl(usl);
         change.setOrg(org);
         change.setUser(user);
-        change.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        try {
+            change.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         change.setMgchange(mgChange);
         change.setMg2(mg2);
         change.setSumma(new BigDecimal(strSumma));
@@ -338,7 +351,11 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         corrPay.setUsl(usl);
         corrPay.setOrg(org);
         corrPay.setUser(user);
-        corrPay.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        try {
+            corrPay.setDt(strDt!=null?Utl.getDateFromStr(strDt):null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         corrPay.setDopl(dopl);
         corrPay.setMg(mg);
         corrPay.setVar(var);
@@ -379,18 +396,23 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     public Kwtp buildKwtpForTest(Kart kart, String dopl, String strDt, String strDtInk, int nink,
                                  String nkom, String numDoc, String oper,
                                  String strSumma, String strPenya) {
-        Kwtp kwtp = Kwtp.KwtpBuilder.aKwtp()
-                .withKart(kart)
-                .withDopl(dopl)
-                .withDt(strDt!=null?Utl.getDateFromStr(strDt):null)
-                .withDtInk(strDtInk!=null?Utl.getDateFromStr(strDtInk):null)
-                .withNink(nink)
-                .withNkom(nkom)
-                .withNumDoc(numDoc)
-                .withOper(oper)
-                .withSumma(strSumma!=null?new BigDecimal(strSumma):null)
-                .withPenya(strPenya!=null?new BigDecimal(strPenya):null)
-                .build();
+        Kwtp kwtp = null;
+        try {
+            kwtp = Kwtp.KwtpBuilder.aKwtp()
+                    .withKart(kart)
+                    .withDopl(dopl)
+                    .withDt(strDt!=null? Utl.getDateFromStr(strDt):null)
+                    .withDtInk(strDtInk!=null?Utl.getDateFromStr(strDtInk):null)
+                    .withNink(nink)
+                    .withNkom(nkom)
+                    .withNumDoc(numDoc)
+                    .withOper(oper)
+                    .withSumma(strSumma!=null?new BigDecimal(strSumma):null)
+                    .withPenya(strPenya!=null?new BigDecimal(strPenya):null)
+                    .build();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         kart.getKwtp().add(kwtp);
         em.persist(kwtp);
         return kwtp;
@@ -507,9 +529,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         KartPr kartPr = new KartPr();
         kartPr.setKart(kart);
         kartPr.setFio(fio);
-        kartPr.setDtBirdth(Utl.getDateFromStr(dtBirdth));
-        kartPr.setDtReg(Utl.getDateFromStr(dtReg));
-        kartPr.setDtUnReg(Utl.getDateFromStr(dtUnreg));
+        try {
+            kartPr.setDtBirdth(Utl.getDateFromStr(dtBirdth));
+            kartPr.setDtReg(Utl.getDateFromStr(dtReg));
+            kartPr.setDtUnReg(Utl.getDateFromStr(dtUnreg));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         StatusPr statusPr = em.find(StatusPr.class, statusId);
         kartPr.setStatusPr(statusPr);
         Relation relation = em.find(Relation.class, relatId);
@@ -525,8 +551,12 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         StatePr statePr = new StatePr();
         statePr.setKartPr(kartPr);
         statePr.setStatusPr(statusPr);
-        statePr.setDtFrom(dtFrom == null ? null : Utl.getDateFromStr(dtFrom));
-        statePr.setDtTo(dtTo == null ? null : Utl.getDateFromStr(dtTo));
+        try {
+            statePr.setDtFrom(dtFrom == null ? null : Utl.getDateFromStr(dtFrom));
+            statePr.setDtTo(dtTo == null ? null : Utl.getDateFromStr(dtTo));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         kartPr.getStatePr().add(statePr);
     }
 

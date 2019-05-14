@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.dic.bill.dto.SumUslOrgRec;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -36,5 +37,14 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 			+ "and nvl(t.summa,0) <> 0 "
 			+ "group by t.usl.id, t.org.id")
 	List<SumUslOrgRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk, @Param("mg") String mg);
+
+	/**
+	 * Удалить корректировки по cdtp документа
+	 * @param cdTp - cd документа
+	 */
+	@Modifying
+	@Query(value = "delete from CorrectPay t where exists (select d from ChangeDoc d where d.cdTp=:cdTp " +
+			"and t.changeDoc=d)")
+	void deleteCorrectPayByChangeDoc(@Param("cdTp") String cdTp);
 
 }

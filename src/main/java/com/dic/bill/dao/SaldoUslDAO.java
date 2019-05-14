@@ -117,6 +117,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
 
     /**
      * Получить записи сальдо при наличии кредита по определенной услуге, и дебета по другим услугам
+     * и при отсутствии оплаты
      * @param usl - услуга
      * @param mg - необходимый период
      */
@@ -124,10 +125,11 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
             "from SaldoUsl t " +
             "where exists (select d.kart.lsk from SaldoUsl d " +
             "where d.usl.id=:usl and d.mg=t.mg and d.kart=t.kart and nvl(d.summa,0)  < 0) " +
+            "and not exists (select d.kart.lsk from Kwtp d where d.kart=t.kart and nvl(d.summa,0) != 0) " +
             "and exists (select d.kart.lsk from SaldoUsl d " +
             "where d.mg=t.mg and d.kart=t.kart and nvl(d.summa,0)  > 0) " +
             "and t.mg=:mg ")
-    List<SaldoUsl> getSaldoUslWhereCreditAndDebitExistsByUsl(@Param("usl") String usl, @Param("mg") String mg);
+    List<SaldoUsl> getSaldoUslWhereCreditAndDebitExistsWoPayByUsl(@Param("usl") String usl, @Param("mg") String mg);
 
     /**
      * Получить записи всех лиц счетов, где есть долги или переплаты
