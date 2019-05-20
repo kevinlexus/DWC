@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 
 /**
  * Лицевой счет (он же - помещение)
@@ -187,6 +187,11 @@ public class Kart implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<KwtpDay> kwtpDay = new HashSet<>(0);
+
+    // кран из системы отопления
+    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Column(name = "KRAN1", updatable = false, nullable = false)
+    private Boolean isKran1;
 
     // актуальный ли лицевой счет?
     @Transient
