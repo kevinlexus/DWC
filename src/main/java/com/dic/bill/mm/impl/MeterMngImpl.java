@@ -149,6 +149,7 @@ public class MeterMngImpl implements MeterMng {
 	 */
 	@Override
 	public boolean getIsMeterActual(Meter meter, Date dt) {
+		log.info("meter={}, dt={}", meter, dt);
 		return Utl.between(dt, meter.getDt1(), meter.getDt2());
 	}
 
