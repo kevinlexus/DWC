@@ -83,7 +83,7 @@ public class Task implements java.io.Serializable  {
 	private List<Task> slave = new ArrayList<Task>(0);
 
 	// кол-во ошибок при запросе ACK
-    @Column(name = "ERRACKCNT", updatable = true, nullable = false)
+    @Column(name = "ERRACKCNT", updatable = true, nullable = true)
 	private Integer errAckCnt;
 
 	// Дочерние задания, связанные через TASKXTASK - короче это всё работает, но как обработать тип связи?? TASKXTASK.FK_TP
