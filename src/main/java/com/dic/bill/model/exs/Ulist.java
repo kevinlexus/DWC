@@ -121,13 +121,13 @@ public class Ulist implements java.io.Serializable  {
 
 	// родительский элемент
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="PARENT_ID", referencedColumnName="ID", insertable = true, updatable = true, nullable = false)
+	@JoinColumn(name="PARENT_ID", referencedColumnName="ID", insertable = true, updatable = true/*, nullable = true*/) // ред. 21.05.2019 - закомментировал nullable = true - выдавало: ibernate.PropertyValueException: not-null property references a null or transient value : com.dic.bill.model.exs.Ulist.parent
 	private Ulist parent;
 
 	// дочерние элементы
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name="PARENT_ID", referencedColumnName="ID", insertable = false, updatable = false, nullable = false)
-	private List<Ulist> child = new ArrayList<Ulist>(0);
+	private List<Ulist> child = new ArrayList<>(0);
 
 	// связь записи услуги ОИ с основной услугой
 	@OneToOne(fetch = FetchType.LAZY)

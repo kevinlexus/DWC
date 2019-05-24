@@ -39,13 +39,19 @@ public class KartMngImpl implements KartMng {
         List<Kart> lst = kartDao.findByKulNdKw(kul, nd, kw);
         Ko ko = null;
         for (Kart kart : lst) {
-            if (kart.getKoKw().getId() == null) {
-                throw new EmptyId("ОШИБКА! Обнаружен пустой KLSK_ID по лиц.счету: lsk" + kart.getLsk());
-            } else if (ko == null) {
-                ko = kart.getKoKw();
-            } else if (!ko.equals(kart.getKoKw())) {
-                throw new DifferentKlskBySingleAdress("ОШИБКА! Обнаружен разный KLSK_ID на один адрес: kul="
-                        + kul + ", nd=" + nd + ", kw=" + kw);
+            if (kart.isActual()) {
+                // ред. 22.05.2019 - условие, проверять только по активным лс
+                if (kart.getKoKw().getId() == null) {
+                    log.error("ОШИБКА! Обнаружен пустой KLSK_ID по лиц.счету: lsk" + kart.getLsk());
+                    throw new EmptyId("ОШИБКА! Обнаружен пустой KLSK_ID по лиц.счету: lsk" + kart.getLsk());
+                } else if (ko == null) {
+                    ko = kart.getKoKw();
+                } else if (!ko.equals(kart.getKoKw())) {
+                    log.error("ОШИБКА! Обнаружен разный KLSK_ID на один адрес: kul="
+                            + kul + ", nd=" + nd + ", kw=" + kw);
+                    throw new DifferentKlskBySingleAdress("ОШИБКА! Обнаружен разный KLSK_ID на один адрес: kul="
+                            + kul + ", nd=" + nd + ", kw=" + kw);
+                }
             }
         }
         return ko;
@@ -58,7 +64,7 @@ public class KartMngImpl implements KartMng {
      */
     @Override
     public List<Ko> getKoByHouse(House house) {
-        return house.getKart().stream().map(t -> t.getKoKw()).distinct().collect(Collectors.toList());
+        return house.getKart().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
     }
 
     /**
