@@ -21,7 +21,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk    - лицевой счет
      * @param period - необходимый период
      */
-    @Query(value = "select t.mg, t.summa "
+    @Query(value = "select t.mg, nvl(t.summa,0) as summa "
             + "from SCOTT.V_CHARGEPAY t "
             + "where t.lsk=:lsk and t.period=:period "
             + "and nvl(t.summa,0) <> 0 "
@@ -34,7 +34,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk    - лицевой счет
      * @param period - необходимый период
      */
-    @Query(value = "select n.org as orgId, t.summa_it as summa, t.usl_id as uslId from SCOTT.ARCH_CHARGES t "
+    @Query(value = "select n.org as orgId, nvl(t.summa_it,0) as summa, t.usl_id as uslId from SCOTT.ARCH_CHARGES t "
             + "left join SCOTT.A_NABOR2 n on t.lsk = n.lsk and t.usl_id=n.usl "
             + "and t.mg between n.mgFrom and n.mgTo "
             + "where t.mg=:period "
@@ -49,7 +49,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk    - лицевой счет
      * @param period - необходимый период
      */
-    @Query(value = "select t.org as b1, t.charges as c1, t.usl as a1 from SCOTT.XITOG3_LSK t "
+    @Query(value = "select t.org as orgId, nvl(t.charges,0) as summa, t.usl as uslId from SCOTT.XITOG3_LSK t "
             + "where t.mg=:period "
             + "and t.lsk=:lsk "
             + "and nvl(t.charges,0) > 0", // только положительные значения!
@@ -62,7 +62,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk    - лицевой счет
      * @param period - необходимый период
      */
-    @Query(value = "select t.usl as uslId, t.org as orgId, t.pinsal as summa from SCOTT.XITOG3_LSK t "
+    @Query(value = "select t.usl as uslId, t.org as orgId, nvl(t.pinsal,0) as summa from SCOTT.XITOG3_LSK t "
             + "where t.mg=:period "
             + "and t.lsk=:lsk "
             + "and nvl(t.pinsal,0) <> 0",
@@ -75,7 +75,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk - лицевой счет
      * @param mg  - необходимый период
      */
-    @Query(value = "select t.usl.id as uslId, t.org.id as orgId, t.summa as summa "
+    @Query(value = "select t.usl.id as uslId, t.org.id as orgId, nvl(t.summa,0) as summa "
             + "from SaldoUsl t "
             + "where t.kart.lsk=:lsk and t.mg=:mg "
             + "and nvl(t.summa,0) <> 0")
@@ -154,7 +154,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      *
      * @param lsk    лицевой счет
      * @param period - период
-     */
+     *
     @Query(value = "select sum(t.indebet) as \"indebet\", sum(t.inkredit) as \"inkredit\", "
             + "sum(t.outdebet) as \"outdebet\", sum(t.outkredit) as \"outkredit\", "
             + "sum(t.payment) as \"payment\" "
