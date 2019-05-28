@@ -16,7 +16,8 @@ public interface PenyaDAO extends JpaRepository<Penya, Integer> {
      * @param lsk - лиц.счет
      */
     @Query("select t from Penya t "
-            + "where t.kart.id = :lsk")
+            + "where t.kart.id = :lsk and nvl(t.summa,0) <> 0 "
+            + "order by t.mg1")
     List<Penya> getByLsk(@Param("lsk") String lsk);
 
 }
