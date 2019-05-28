@@ -155,6 +155,7 @@ public interface SaldoUslDAO extends JpaRepository<SaldoUsl, Integer> {
      * @param lsk    лицевой счет
      * @param period - период
      *
+     *               */
     @Query(value = "select sum(t.indebet) as \"indebet\", sum(t.inkredit) as \"inkredit\", "
             + "sum(t.outdebet) as \"outdebet\", sum(t.outkredit) as \"outkredit\", "
             + "sum(t.payment) as \"payment\" "

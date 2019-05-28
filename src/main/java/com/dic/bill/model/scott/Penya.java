@@ -2,10 +2,7 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,8 +25,12 @@ public class Penya implements java.io.Serializable {
 	@Column(name = "id", updatable = false, nullable = false)
 	private Integer id; // Id
 
-	@Column(name = "lsk", updatable = false, nullable = false)
-	private String lsk; // лиц.счет
+	//@Column(name = "lsk", updatable = false, nullable = false)
+	//private String lsk; // лиц.счет
+	// лиц.счет
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = true, nullable = false, insertable = true)
+	private Kart kart;
 
     @Column(name = "summa", updatable = false, nullable = false)
 	private BigDecimal summa; // задолженность
