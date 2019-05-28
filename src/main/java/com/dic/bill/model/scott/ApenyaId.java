@@ -8,7 +8,7 @@ public class ApenyaId  implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Kart kart; // лиц.счет
-	private Integer mg1; // период задолженности
+	private String mg1; // период задолженности
 	private String mg; // архивный период
 	@Override
 	public int hashCode() {

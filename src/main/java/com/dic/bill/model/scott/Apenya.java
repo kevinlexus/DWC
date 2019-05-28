@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * Пеня
  * @author lev
@@ -34,10 +36,10 @@ public class Apenya implements java.io.Serializable {
 	private Kart kart;
 
     @Column(name = "summa", updatable = false, nullable = false)
-	private Double summa; // задолженность
+	private BigDecimal summa; // задолженность
 
     @Column(name = "penya", updatable = false, nullable = false)
-	private Double penya; // пеня
+	private BigDecimal penya; // пеня
 
     @Id
 	@Column(name = "mg1", updatable = false, nullable = false)

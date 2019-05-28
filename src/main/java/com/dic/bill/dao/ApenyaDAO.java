@@ -2,9 +2,12 @@ package com.dic.bill.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import com.dic.bill.model.scott.Penya;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Apenya;
@@ -19,6 +22,16 @@ import com.dic.bill.model.scott.ApenyaId;
 @Repository()
 public interface ApenyaDAO extends JpaRepository<Apenya, ApenyaId> {
 
+
+	/**
+	 * Получить все элементы по lsk
+	 *
+	 * @param lsk - лиц.счет
+	 */
+	@Query("select t from Apenya t "
+			+ "where t.kart.id = :lsk and t.mg = :mg and nvl(t.summa,0) <> 0 "
+			+ "order by t.mg1")
+	List<Apenya> getByLsk(@Param("lsk") String lsk, @Param("mg") String mg);
 
 	/**
 	 * Получить совокупную пеню по основным услугам
