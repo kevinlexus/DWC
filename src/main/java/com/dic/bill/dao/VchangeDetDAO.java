@@ -21,7 +21,7 @@ public interface VchangeDetDAO extends JpaRepository<VchangeDet, Integer> {
 	 * @param lsk - лицевой счет
 	 * @return
 	 */
-	@Query(value = "select '003' as uslId, 677 as orgId, t.summa as summa, "/*t.usl.id, t.org.id ВРЕМЕННО!!! TODO ###*/
+	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, t.summa as summa, "
 			+ "t.mgchange as mg, 5 as tp, t.dt as dt from VchangeDet t "
 			+ "where t.kart.lsk=:lsk "
 			+ "and nvl(t.summa,0) <> 0")
