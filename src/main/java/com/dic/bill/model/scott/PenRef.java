@@ -12,14 +12,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Ставки рефинансирования по типам услуг
+ * Ставки рефинансирования по типам услуг. Не используется. Планировался для расчета пени по услугам, не взлетело, сделал abstract,
+ * во избежания использования
  * @author Lev
  * @version 1.00
  */
 @Entity
 @Table(name = "PEN_REF", schema="SCOTT")
 @Getter @Setter
-public class PenRef {
+abstract class PenRef {
 
 	// Id
 	@Id

@@ -13,14 +13,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Справочник дат начисления пени по типам услуг
+ * Справочник дат начисления пени по типам услуг. Не используется. Планировался для расчета пени по услугам, не взлетело, сделал abstract,
+ * во избежания использования
  * @author Lev
  * @version 1.00
  */
 @Entity
 @Table(name = "PEN_DT", schema="SCOTT")
 @Getter @Setter
-public class PenDt {
+abstract class PenDt {
 
 	// Id
 	@Id

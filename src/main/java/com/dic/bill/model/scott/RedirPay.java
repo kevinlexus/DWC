@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "REDIR_PAY", schema="SCOTT")
+@AllArgsConstructor
 @Getter @Setter
 public class RedirPay {
 
