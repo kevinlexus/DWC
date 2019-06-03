@@ -48,6 +48,9 @@ public class Amount {
     private Date datInk;
 
     // Прочие параметры:
+    // тип распределения оплаты (0 - Нет, 1-Кис, 2- ТСЖ)
+    private int distTp = 0;
+
     // входящее, общее сальдо
     private List<SumUslOrgDTO> inSal;
     // итог по общ.сал.
