@@ -110,7 +110,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 			"join scott.A_NABOR2 n on a.lsk=n.lsk and a.usl=n.usl " +
 			"where a.lsk=:lsk and a.type=1 and " +
 			":period between a.mgFrom and a.mgTo " +
-			"and :period between n.mgFrom and n.mgTo " +
+			"and :period between n.mgFrom and n.mgTo and nvl(a.summa,0)<>0" +
 			"group by a.usl, n.org", nativeQuery = true)
 	List<SumUslOrgRec> getAchargeByLskPeriodGrouped(@Param("lsk") String lsk, @Param("period") Integer period);
 

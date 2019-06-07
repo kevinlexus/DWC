@@ -15,20 +15,14 @@ import lombok.Setter;
 public class CalcStoreLocal {
 	// задолженность предыдущего периода
 	List<SumDebPenRec> lstDebFlow;
-	// задолженность предыдущего периода по ПЕНЕ
-	List<SumDebPenRec> lstDebPenFlow;
 	// текущее начисление
 	List<SumRec> lstChrgFlow;
 	// перерасчеты
 	List<SumRec> lstChngFlow;
 	// оплата долга
 	List<SumRec> lstPayFlow;
-	// оплата пени
-	List<SumRec> lstPayPenFlow;
 	// корректировки оплаты
 	List<SumRec> lstPayCorrFlow;
-	// корректировки начисления пени
-	List<SumRec> lstPenChrgCorrFlow;
 	// общий список всех финансовых операций
 	List<UslOrg> lstAll;
 	// код УК в числовом выражении (для ускорения фильтров)
@@ -53,13 +47,10 @@ public class CalcStoreLocal {
 		lstAll = lstDebFlow.stream()
 		.map(t-> new UslOrg(t.getUslId(), t.getOrgId()))
 		.collect(Collectors.toList());
-		addLst2(lstDebPenFlow);
 		addLst(lstChrgFlow);
 		addLst(lstChngFlow);
 		addLst(lstPayFlow);
-		addLst(lstPayPenFlow);
 		addLst(lstPayCorrFlow);
-		addLst(lstPenChrgCorrFlow);
 	}
 
 	// получить уникальный список услуг + организаций

@@ -29,18 +29,6 @@ public interface SumDebPenRec {
 	BigDecimal getDebPay();
 	// корректировки оплаты
 	BigDecimal getPayCorr();
-    // входящее сальдо по пене
-	BigDecimal getPenIn();
-    // пеня начисленная в текущем периоде (в т.ч. корректировки пени)
-	BigDecimal getPenChrg();
-    // корректировки начисления пени
-	BigDecimal getPenCorr();
-	// пеня оплаченная
-	BigDecimal getPenPay();
-	// задолженность по пене (исходящее сальдо по пене)
-	BigDecimal getPenOut();
-	 // дней просрочки
-	Integer getDays();
 	// прочие суммы по операциям
 	BigDecimal getSumma();
 	// период

@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 /*
  * DTO для хранения записи финансовой операции (долг, оплата и т.п.)
  * @author - Lev
- * @ver 1.00
+ * @ver 1.2
  */
 @Slf4j
 @Getter @Setter
@@ -34,26 +34,10 @@ public class SumDebRec {
 	BigDecimal debIn;
 	// корректировки оплаты
 	BigDecimal payCorr;
-	// корректировки начисленной пени
-	BigDecimal penChrgCorr;
-	// сумма задолженности, для расчета пени
-	BigDecimal summa;
-	// cумма задолженности (исходящее сальдо по задолженности)
+	// cумма задолженности (исходящее сальдо по задолженности) (включая поступления текущего дня)
 	BigDecimal debOut;
-	// сумма для свернутого долга (будут учтены переплаты ранних периодов)
+	// свернутый долг. сумма задолженности, для расчета пени (не включая поступления текущего дня) (будут учтены переплаты ранних периодов)
 	BigDecimal debRolled;
-	// сумма пени (вх.сальдо по пене)
-	BigDecimal penyaIn;
-	// сумма рассчитанной (текущей пени)
-	BigDecimal penyaChrg;
-	// сумма оплаты пени
-	BigDecimal penyaPay;
-	// сумма корректировки начисления пени
-	BigDecimal penyaCorr;
-	// % по которому рассчитана пеня (информационно)
-	BigDecimal proc;
-	// кол-во дней просрочки
-	Integer days;
 	// период
 	Integer mg;
 	// вспомогательный тип записи
@@ -61,28 +45,19 @@ public class SumDebRec {
 
 	/**
 	 * конструктор
-	 * @param summa - сумма долга для расчета пени
 	 * @param debOut - сумма свернутого долга
-	 * @param penyaIn - сумма пени (входящее сальдо по пене)
-	 * @param penyaCorr - сумма корректировки пени
 	 * @param mg - период
 	 * @param tp - вспомогательный тип записи
 	 */
-	public SumDebRec(BigDecimal debIn, BigDecimal penyaPay, BigDecimal payCorr, BigDecimal debPay, BigDecimal chrg,
-			BigDecimal chng, BigDecimal summa, BigDecimal debOut, BigDecimal penyaIn,
-			BigDecimal penyaCorr, Integer mg, Integer tp) {
+	public SumDebRec(BigDecimal debIn, BigDecimal payCorr, BigDecimal debPay, BigDecimal chrg,
+					 BigDecimal chng, BigDecimal debOut,
+					 Integer mg, Integer tp) {
 		super();
 
 		if (debIn == null) {
 			this.debIn = BigDecimal.ZERO;
 		} else {
 			this.debIn = debIn;
-		}
-
-		if (penyaPay == null) {
-			this.penyaPay = BigDecimal.ZERO;
-		} else {
-			this.penyaPay = penyaPay;
 		}
 
 		if (payCorr == null) {
@@ -109,11 +84,6 @@ public class SumDebRec {
 			this.chng = chng;
 		}
 
-		if (summa == null) {
-			this.summa = BigDecimal.ZERO;
-		} else {
-			this.summa = summa;
-		}
 		if (debOut == null) {
 			this.debOut = BigDecimal.ZERO;
 			this.debRolled = BigDecimal.ZERO;
@@ -121,22 +91,8 @@ public class SumDebRec {
 			this.debOut = debOut;
 			this.debRolled = debOut;
 		}
-		if (penyaIn == null) {
-			this.penyaIn = BigDecimal.ZERO;
-		} else {
-			this.penyaIn = penyaIn;
-		}
-
-		if (penyaCorr == null) {
-			this.penyaCorr = BigDecimal.ZERO;
-		} else {
-			this.penyaCorr = penyaCorr;
-		}
 		this.mg = mg;
 		this.tp = tp;
-		// нулим, потому что значения появятся при расчете
-		this.penyaChrg = BigDecimal.ZERO;
-		this.days = 0;
 	}
 
 }
