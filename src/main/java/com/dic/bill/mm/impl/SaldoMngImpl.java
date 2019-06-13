@@ -48,24 +48,27 @@ public class SaldoMngImpl implements SaldoMng {
     /**
      * Получить исходящее сальдо, учитывая разные финансовые составляющие:
      *
-     * @param kart             - лиц.счет
-     * @param period           - текущий период
-     * @param lstDistPayment   - уже распределенная, сохраненная оплата
-     * @param lstDistControl   - распределенная оплата для контроля исх кред.сал.
-     * @param isSalIn          - учесть входящее сальдо
-     * @param isChrg           - учесть начисление
-     * @param isChrgPrevPeriod - учесть начисление предыдущего периода
-     * @param isChng           - учесть перерасчеты
-     * @param isCorrPay        - учесть корректировки оплаты
-     * @param isPay            - учесть оплату
-     * @param prevPeriod       - предыдущий период (работает совместно с isChrgPrevPeriod)
+     * @param kart               - лиц.счет
+     * @param period             - текущий период
+     * @param lstDistPayment     - уже распределенная, сохраненная оплата
+     * @param lstDistControl     - распределенная оплата для контроля исх кред.сал.
+     * @param isSalIn            - учесть входящее сальдо
+     * @param isChrg             - учесть начисление
+     * @param isChrgPrevPeriod   - учесть начисление предыдущего периода
+     * @param isChng             - учесть перерасчеты
+     * @param isCorrPay          - учесть корректировки оплаты
+     * @param isPay              - учесть оплату
+     * @param prevPeriod         - предыдущий период (работает совместно с isChrgPrevPeriod)
+     * @param isCurPeriodPay     - учесть оплату за текущий период
+     * @param isCurPeriodCorrPay - учесть корректировки оплаты за текущий период
      */
     @Override
     public List<SumUslOrgDTO> getOutSal(Kart kart, String period,
                                         List<SumUslOrgDTO> lstDistPayment,
                                         List<SumUslOrgDTO> lstDistControl,
                                         boolean isSalIn, boolean isChrg, boolean isChrgPrevPeriod, boolean isChng,
-                                        boolean isCorrPay, boolean isPay, String prevPeriod) throws WrongParam {
+                                        boolean isCorrPay, boolean isPay, String prevPeriod,
+                                        boolean isCurPeriodPay, boolean isCurPeriodCorrPay) throws WrongParam {
         if (isChrg && isChrgPrevPeriod) {
             throw new WrongParam("ОШИБКА! Не допустимо использовать isChrg=true и isChrgPrevPeriod=true одновременно");
         } else if (isChrgPrevPeriod && prevPeriod == null) {
@@ -110,8 +113,18 @@ public class SaldoMngImpl implements SaldoMng {
             correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period).forEach(t ->
                     groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
+        if (isCurPeriodCorrPay) {
+            // корректировки оплатой за текущий период
+            correctPayDAO.getCorrectPayByLskGrouped(kart.getLsk(), period, period).forEach(t ->
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+        }
         if (isPay) {
             // оплата
+            kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1).forEach(t ->
+                    groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
+        }
+        if (isCurPeriodPay) {
+            // оплата за текущий период
             kwtpDayDAO.getKwtpDayByLskGrouped(kart.getLsk(), 1).forEach(t ->
                     groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma().negate()));
         }
@@ -121,12 +134,12 @@ public class SaldoMngImpl implements SaldoMng {
     /**
      * Сгруппировать коллекцию с другой коллекцией
      *
-     * @param lst   - исходная коллекция, подлежащая модификации
+     * @param lst     - исходная коллекция, подлежащая модификации
      * @param lstCorr - корректировка
      */
     @Override
     public void groupByLstUslOrg(List<SumUslOrgDTO> lst, List<SumUslOrgDTO> lstCorr) {
-        lstCorr.forEach(t-> {
+        lstCorr.forEach(t -> {
             groupByLstUslOrg(lst, t.getUslId(), t.getOrgId(), t.getSumma());
         });
     }
@@ -134,8 +147,8 @@ public class SaldoMngImpl implements SaldoMng {
     /**
      * Сгруппировать коллекцию по услуге, организации
      *
-     * @param lst   - исходная коллекция
-     * @param t - строка усл, орг, сумма
+     * @param lst - исходная коллекция
+     * @param t   - строка усл, орг, сумма
      */
     @Override
     public void groupByLstUslOrg(List<SumUslOrgDTO> lst, SumUslOrgDTO t) {
@@ -152,7 +165,7 @@ public class SaldoMngImpl implements SaldoMng {
      */
     @Override
     public void groupByLstUslOrg(List<SumUslOrgDTO> lst, String uslId, Integer orgId, BigDecimal summa) {
-        if (summa.compareTo(BigDecimal.ZERO) !=0) {
+        if (summa.compareTo(BigDecimal.ZERO) != 0) {
             SumUslOrgDTO foundElem = lst.stream().filter(t -> t.getUslId().equals(uslId) && t.getOrgId().equals(orgId))
                     .findFirst().orElse(null);
             if (foundElem != null) {

@@ -17,7 +17,6 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 	/**
 	 * Получить записи корректировок оплаты по услугам - организациям
 	 * @param lsk - лицевой счет
-	 * @return
 	 */
 	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
 			+ "t.summa as summa, t.dopl as mg, t.dt as dt, "
@@ -29,7 +28,6 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 	/**
 	 * Получить записи корректировок оплаты по услугам - организациям
 	 * @param mg - необходимый период
-	 * @return
 	 */
 	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
 			+ "sum(t.summa) as summa from CorrectPay t "
@@ -37,6 +35,19 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 			+ "and nvl(t.summa,0) <> 0 "
 			+ "group by t.usl.id, t.org.id")
 	List<SumUslOrgRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk, @Param("mg") String mg);
+
+	/**
+	 * Получить записи корректировок оплаты по услугам - организациям за выбраный период DOPL
+	 * @param mg - необходимый бухгалтерский период
+	 * @param dopl - период оплаты
+	 */
+	@Query(value = "select t.usl.id as uslId, t.org.id as orgId, "
+			+ "sum(t.summa) as summa from CorrectPay t "
+			+ "where t.kart.lsk=:lsk and t.mg=:mg and t.dopl=:dopl "
+			+ "and nvl(t.summa,0) <> 0 "
+			+ "group by t.usl.id, t.org.id")
+	List<SumUslOrgRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk,
+												 @Param("mg") String mg, @Param("dopl") String dopl);
 
 	/**
 	 * Удалить корректировки по cdtp документа
