@@ -299,6 +299,27 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     }
 
 
+    /**
+     * Добавить записи задолженности
+     */
+    @Override
+    public void addDebForTest(Kart kart, String uslId, int orgId, int mgFrom, int mgTo, int mg, String strDebOut) {
+        Deb deb = new Deb();
+        deb.setKart(kart);
+
+        Usl usl = em.find(Usl.class, uslId);
+        Org org = em.find(Org.class, orgId);
+        BigDecimal debout = new BigDecimal(strDebOut);
+
+        deb.setUsl(usl);
+        deb.setOrg(org);
+        deb.setDebOut(debout);
+        deb.setMgFrom(mgFrom);
+        deb.setMgTo(mgTo);
+        deb.setMg(mg);
+        kart.getDeb().add(deb);
+    }
+
     @Override
     public ChangeDoc buildChangeDocForTest(String strDt, String mgChange) {
         ChangeDoc changeDoc = new ChangeDoc();
@@ -647,7 +668,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
                 } else if (vvod.getUsl().getId().equals("011")) {
                     // Х.в.
-                    addNaborForTest(kart, "011", 2, new BigDecimal("1"), new BigDecimal("5.74"),
+                    addNaborForTest(kart, "011", 3, new BigDecimal("1"), new BigDecimal("5.74"),
                             null, null, vvod);
                     // х.в. св.соц.н.
                     //addNaborForTest(kart, 2, "012", new BigDecimal("1.4"), new BigDecimal("0"),
