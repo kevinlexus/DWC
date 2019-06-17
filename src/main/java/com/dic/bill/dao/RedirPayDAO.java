@@ -12,7 +12,9 @@ import com.dic.bill.model.scott.RedirPay;
 public interface RedirPayDAO extends JpaRepository<RedirPay, Integer> {
 
 
-	@Query(value = "select t.reu, fk_usl_src, fk_usl_dst, fk_org_src, fk_org_dst, tp, mg1, mg2, id "
+	@Query(value = "select t.id, t.tp, t.fk_usl_src, " +
+			"t.fk_usl_dst, t.fk_org_src, " +
+			"t.fk_org_dst, t.reu "
 		+ "from scott.redir_pay t "
 		+ "where t.tp=:tp "
 		+ "order by "
