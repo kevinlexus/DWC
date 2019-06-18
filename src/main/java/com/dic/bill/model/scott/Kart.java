@@ -193,6 +193,11 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<Deb> deb = new ArrayList<>(0);
 
+    // текущая пеня
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private List<PenCur> penCur = new ArrayList<>(0);
+
     // кран из системы отопления
     @Type(type= "org.hibernate.type.NumericBooleanType")
     @Column(name = "KRAN1", updatable = false, nullable = false)

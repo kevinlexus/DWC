@@ -20,7 +20,7 @@ import lombok.Setter;
 /**
  * Задолженность по организациям - услугам - периодам
  * @author lev
- * @version 1.00
+ * @version 1.2
  */
 @Getter @Setter
 @SuppressWarnings("serial")
@@ -52,33 +52,9 @@ public class Deb implements java.io.Serializable{
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-	 // входящее сальдо по задолженности
-    @Column(name = "DEBIN", updatable = false, nullable = false)
-	private BigDecimal debIn;
-
     // исходящее сальдо по задолженности
     @Column(name = "DEBOUT", updatable = false, nullable = false)
 	private BigDecimal debOut;
-
-    // свернутый долг
-    @Column(name = "DEBROLLED", updatable = false, nullable = false)
-	private BigDecimal debRolled;
-
-    // начисление
-    @Column(name = "CHRG", updatable = false, nullable = false)
-	private BigDecimal chrg;
-
-    // перерасчеты
-    @Column(name = "CHNG", updatable = false, nullable = false)
-	private BigDecimal chng;
-
-    // оплата задолженности
-    @Column(name = "DEBPAY", updatable = false, nullable = false)
-	private BigDecimal debPay;
-
-    // корректировки оплаты
-    @Column(name = "PAYCORR", updatable = false, nullable = false)
-	private BigDecimal payCorr;
 
     // период задолжности
     @Column(name = "MG", updatable = false, nullable = false)
@@ -98,13 +74,7 @@ public class Deb implements java.io.Serializable{
 		this.kart = builder.kart;
 		this.usl = builder.usl;
 		this.org = builder.org;
-		this.debIn = builder.debIn;
 		this.debOut = builder.debOut;
-		this.debRolled = builder.debRolled;
-		this.chrg = builder.chrg;
-		this.chng = builder.chng;
-		this.debPay = builder.debPay;
-		this.payCorr = builder.payCorr;
 		this.mg = builder.mg;
 		this.mgFrom = builder.mgFrom;
 		this.mgTo = builder.mgTo;
@@ -152,13 +122,7 @@ public class Deb implements java.io.Serializable{
 		private Kart kart;
 		private Usl usl;
 		private Org org;
-		private BigDecimal debIn;
 		private BigDecimal debOut;
-		private BigDecimal debRolled;
-		private BigDecimal chrg;
-		private BigDecimal chng;
-		private BigDecimal debPay;
-		private BigDecimal payCorr;
 		private Integer mg;
 		private Integer mgFrom;
 		private Integer mgTo;
@@ -186,38 +150,8 @@ public class Deb implements java.io.Serializable{
 			return this;
 		}
 
-		public Builder withDebIn(BigDecimal debIn) {
-			this.debIn = debIn;
-			return this;
-		}
-
 		public Builder withDebOut(BigDecimal debOut) {
 			this.debOut = debOut;
-			return this;
-		}
-
-		public Builder withDebRolled(BigDecimal debRolled) {
-			this.debRolled = debRolled;
-			return this;
-		}
-
-		public Builder withChrg(BigDecimal chrg) {
-			this.chrg = chrg;
-			return this;
-		}
-
-		public Builder withChng(BigDecimal chng) {
-			this.chng = chng;
-			return this;
-		}
-
-		public Builder withDebPay(BigDecimal debPay) {
-			this.debPay = debPay;
-			return this;
-		}
-
-		public Builder withPayCorr(BigDecimal payCorr) {
-			this.payCorr = payCorr;
 			return this;
 		}
 
