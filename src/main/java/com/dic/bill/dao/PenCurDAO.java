@@ -17,7 +17,7 @@ public interface PenCurDAO extends JpaRepository<PenCur, Integer> {
      * @param lsk - лиц.счет
      */
     @Modifying
-    @Query(value = "delete from CorrectPay t where t.kart.lsk=:lsk")
+    @Query(value = "delete from PenCur t where t.kart.lsk=:lsk")
     void deleteByLsk(@Param("lsk") String lsk);
 
 

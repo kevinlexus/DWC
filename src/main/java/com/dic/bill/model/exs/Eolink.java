@@ -9,9 +9,9 @@ import javax.annotation.Generated;
 import javax.persistence.*;
 
 //import com.dic.bill.model.scott.Kart; $$$$$
+import com.dic.bill.model.bs.Lst2;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.bs.AddrTp;
-import com.dic.bill.model.bs.Lst;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.sec.User;
 
@@ -102,7 +102,7 @@ public class Eolink implements java.io.Serializable  {
 	// расширенный тип объекта (например "Договор управления") (используется для обмена с "Квартплатой")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_OBJTPX", referencedColumnName="ID")
-	private Lst objTpx;
+	private Lst2 objTpx;
 
 	// идентификатор объекта связанного с EOLINK, в новой разработке
 	@OneToOne(fetch = FetchType.LAZY)
@@ -278,7 +278,7 @@ public class Eolink implements java.io.Serializable  {
 		private String cd;
 		private AddrTp objTp;
 		private Integer appTp;
-		private Lst objTpx;
+		private Lst2 objTpx;
 		private Ko koObj;
 		private Eolink parent;
 		private String ogrn;
@@ -372,7 +372,7 @@ public class Eolink implements java.io.Serializable  {
 			return this;
 		}
 
-		public Builder withObjTpx(Lst objTpx) {
+		public Builder withObjTpx(Lst2 objTpx) {
 			this.objTpx = objTpx;
 			return this;
 		}

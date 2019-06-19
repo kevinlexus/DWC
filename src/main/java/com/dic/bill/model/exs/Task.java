@@ -20,7 +20,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.dic.bill.model.bs.Lst;
+import com.dic.bill.model.bs.Lst2;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -115,7 +115,7 @@ public class Task implements java.io.Serializable  {
 	// заданное действие
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_ACT", referencedColumnName="ID")
-	private Lst act;
+	private Lst2 act;
 
 	// GUID объекта присвоенный ГИС
 	@Column(name = "GUID", updatable = true, nullable = true)
@@ -243,7 +243,7 @@ public class Task implements java.io.Serializable  {
 		private Integer errAckCnt;
 		private String cd;
 		private String state;
-		private Lst act;
+		private Lst2 act;
 		private String guid;
 		private String msgGuid;
 		private String un;
@@ -315,7 +315,7 @@ public class Task implements java.io.Serializable  {
 			return this;
 		}
 
-		public Builder withAct(Lst act) {
+		public Builder withAct(Lst2 act) {
 			this.act = act;
 			return this;
 		}

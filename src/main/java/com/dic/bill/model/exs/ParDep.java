@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.dic.bill.model.bs.Lst;
+import com.dic.bill.model.bs.Lst2;
 import com.dic.bill.model.bs.Par;
 
 
@@ -32,7 +32,7 @@ public class ParDep implements java.io.Serializable  {
 	// Действие из справочника
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_ACT", referencedColumnName="ID")
-	private Lst act;
+	private Lst2 act;
 
 	// Параметр, ассоциированный с ГИС ЖКХ
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -59,11 +59,11 @@ public class ParDep implements java.io.Serializable  {
 		this.par = par;
 	}
 
-	public Lst getAct() {
+	public Lst2 getAct() {
 		return act;
 	}
 
-	public void setAct(Lst act) {
+	public void setAct(Lst2 act) {
 		this.act = act;
 	}
 

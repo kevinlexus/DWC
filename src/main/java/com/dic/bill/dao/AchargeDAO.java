@@ -39,7 +39,6 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * @param lsk - лицевой счет
 	 * @param period - период
 	 * @param eolOrgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
-	 * @return
 	 */
 	@Query(value = "select e.id as \"ulistId\", nvl(a.summa,0) as \"chrg\", nvl(b.summa,0) as \"chng\", " +
             "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\" " +

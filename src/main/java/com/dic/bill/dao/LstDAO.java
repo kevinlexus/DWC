@@ -2,13 +2,13 @@ package com.dic.bill.dao;
 
 import java.util.List;
 
-import com.dic.bill.model.bs.Lst;
+import com.dic.bill.model.bs.Lst2;
 
 
 public interface LstDAO {
 
-	public Lst getByCD(String cd);
+	public Lst2 getByCD(String cd);
 
-	public List<Lst> getByTp(String cdTp);
+	public List<Lst2> getByTp(String cdTp);
 
 }

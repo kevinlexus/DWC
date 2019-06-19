@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.dic.bill.dao.LstDAO;
 import com.dic.bill.mm.LstMng;
 import com.dic.bill.model.bs.AddrTp;
-import com.dic.bill.model.bs.Lst;
+import com.dic.bill.model.bs.Lst2;
 
 @Service
 public class LstMngImpl implements LstMng {
@@ -25,15 +25,15 @@ public class LstMngImpl implements LstMng {
 	private AddrTpDAO addrTpDao;
 
 	@Cacheable(cacheNames="LstMngImpl.getByCD", unless = "#result == null") //здесь кэш работает очень эффективно, не убирать!
-	public Lst getByCD(String cd) {
+	public Lst2 getByCD(String cd) {
 		return lstDao.getByCD(cd);
 	}
 
 	/*
-	 * Получить список Lst по типу
+	 * Получить список Lst2 по типу
 	 * cdTp - тип списка
 	 */
-	public List<Lst> getByTp(String cdTp) {
+	public List<Lst2> getByTp(String cdTp) {
 		return lstDao.getByTp(cdTp);
 	}
 

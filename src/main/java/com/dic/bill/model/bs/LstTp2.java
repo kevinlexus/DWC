@@ -2,26 +2,23 @@ package com.dic.bill.model.bs;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.dic.bill.Simple;
 
 /**
- * Элемент списка
+ * Тип элемента списка
  *
  *
  */
 @SuppressWarnings("serial")
 @Entity
 //@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="rrr1")
-@Table(name = "LIST", schema="BS")
-public class Lst implements java.io.Serializable, Simple {
+@Table(name = "LISTTP", schema="BS")
+public class LstTp2 implements java.io.Serializable, Simple {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,11 +30,6 @@ public class Lst implements java.io.Serializable, Simple {
 
     @Column(name = "NAME", updatable = false, nullable = false)
 	private String name; //Наименование
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")
-	private LstTp lstTp ;
-
 
     public Integer getId() {
 		return this.id;
@@ -58,19 +50,12 @@ public class Lst implements java.io.Serializable, Simple {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public LstTp getLstTp() {
-		return lstTp;
-	}
-	public void setLstTp(LstTp lstTp) {
-		this.lstTp = lstTp;
-	}
-
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Lst))
+	    if (o == null || !(o instanceof LstTp2))
 	        return false;
 
-	    Lst other = (Lst)o;
+	    LstTp2 other = (LstTp2)o;
 
 	    if (id == other.getId()) return true;
 	    if (id == null) return false;

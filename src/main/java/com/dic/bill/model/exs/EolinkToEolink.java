@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.dic.bill.model.bs.Lst;
+import com.dic.bill.model.bs.Lst2;
 
 
 /**
@@ -28,7 +28,7 @@ public class EolinkToEolink implements java.io.Serializable  {
 	public EolinkToEolink() {
 	}
 
-	public EolinkToEolink(Eolink parent, Eolink child, Lst tp) {
+	public EolinkToEolink(Eolink parent, Eolink child, Lst2 tp) {
 		super();
 		this.parent = parent;
 		this.child = child;
@@ -54,7 +54,7 @@ public class EolinkToEolink implements java.io.Serializable  {
 	// Тип связи
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_TP", referencedColumnName="ID")
-	private Lst tp;
+	private Lst2 tp;
 
 	public Integer getId() {
 		return id;
@@ -80,11 +80,11 @@ public class EolinkToEolink implements java.io.Serializable  {
 		this.child = child;
 	}
 
-	public Lst getTp() {
+	public Lst2 getTp() {
 		return tp;
 	}
 
-	public void setTp(Lst tp) {
+	public void setTp(Lst2 tp) {
 		this.tp = tp;
 	}
 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * DAO сущности com.dic.bill.model.scott.Lst. Так как существовал LstDAO другой сущности com.dic.bill.model.bs.Lst,
+ * DAO сущности com.dic.bill.model.scott.Lst2. Так как существовал LstDAO другой сущности com.dic.bill.model.bs.Lst2,
  * пришлось этот назвать UlstDAO
  */
 public interface UlstDAO extends JpaRepository<Lst, Integer> {
