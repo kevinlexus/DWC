@@ -33,6 +33,13 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 		+ "group by u.id, s.grp) t2 "
 		+ "group by t2.id", nativeQuery = true)
 */
+
+/*
+	@Query(value = "select 1 as \"ulistId\", 2 as \"chng\", 3 as \"chrg\", " +
+			"4 as \"vol\", 5 as \"price\", 6 as \"sqr\", 7 as \"norm\" " +
+			"from dual", nativeQuery = true)
+*/
+
 	/**
 	 * Получить сгруппированные записи начислений (полного начисления, без учета льгот),
 	 * связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
@@ -40,7 +47,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * @param period - период
 	 * @param eolOrgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
 	 */
-	@Query(value = "select e.id as \"ulistId\", nvl(a.summa,0) as \"chrg\", nvl(b.summa,0) as \"chng\", " +
+	@Query(value = "select e.id as \"ulistId\", nvl(b.summa,0) as \"chng\", nvl(a.summa,0) as \"chrg\",  " +
             "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\" " +
             "from exs.u_list e left join ( " +
 			"select b.ulistId, sum(b.summa) as summa, sum(b.vol) as vol, sum(b.price) as price, " +

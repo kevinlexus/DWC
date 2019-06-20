@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-@AllArgsConstructor
 public class SumChrgRecAlter implements SumChrgRec {
     // Id услуги из ГИС
     Integer ulistId;
@@ -25,4 +24,15 @@ public class SumChrgRecAlter implements SumChrgRec {
     // услуга из справочника ГИС
     Ulist ulist;
     // услуга из справочника ГИС
+
+    public SumChrgRecAlter(Integer ulistId, Double chrg, Double chng, Double vol, Double price, Double norm, Double sqr, Ulist ulist) {
+        this.ulistId = ulistId;
+        this.chrg = chrg;
+        this.chng = chng;
+        this.vol = vol;
+        this.price = price;
+        this.norm = norm;
+        this.sqr = sqr;
+        this.ulist = ulist;
+    }
 }
