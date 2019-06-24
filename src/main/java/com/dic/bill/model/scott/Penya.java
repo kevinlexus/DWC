@@ -21,28 +21,32 @@ public class Penya implements java.io.Serializable {
 	public Penya() {
 	}
 
-    @Id
-	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id; // Id
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PENYA")
+	@SequenceGenerator(name = "SEQ_PENYA", sequenceName = "SCOTT.C_PENYA_ID", allocationSize = 1)
+	@Column(name = "ID", unique = true, updatable = false, nullable = false)
+	private Integer id;
 
-	//@Column(name = "lsk", updatable = false, nullable = false)
-	//private String lsk; // лиц.счет
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = true, nullable = false, insertable = true)
 	private Kart kart;
 
-    @Column(name = "summa", updatable = false, nullable = false)
-	private BigDecimal summa; // задолженность
+	// долг
+    @Column(name = "SUMMA", updatable = false, nullable = false)
+	private BigDecimal summa;
 
-    @Column(name = "penya", updatable = false, nullable = false)
-	private BigDecimal penya; // пеня
+    // пеня
+    @Column(name = "PENYA", updatable = false, nullable = false)
+	private BigDecimal penya;
 
-    @Column(name = "days", updatable = false, nullable = false)
-	private Integer days; // кол-во дней долга
+	// кол-во дней долга
+    @Column(name = "DAYS", updatable = false, nullable = false)
+	private Integer days;
 
-    @Column(name = "mg1", updatable = false, nullable = false)
-	private String mg1; // период задолженности
+	// период долга
+    @Column(name = "MG1", updatable = false, nullable = false)
+	private String mg1;
 
 }
 

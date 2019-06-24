@@ -4,14 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.dic.bill.model.scott.Penya;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dic.bill.model.scott.Apenya;
-import com.dic.bill.model.scott.ApenyaId;
 
 /**
  * DAO сущности Apenya
@@ -20,7 +18,7 @@ import com.dic.bill.model.scott.ApenyaId;
  *
  */
 @Repository()
-public interface ApenyaDAO extends JpaRepository<Apenya, ApenyaId> {
+public interface ApenyaDAO extends JpaRepository<Apenya, Integer> {
 
 
 	/**

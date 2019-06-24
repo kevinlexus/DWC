@@ -26,7 +26,6 @@ public class KwtpMg implements java.io.Serializable {
     public KwtpMg() {
     }
 
-    // Id
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_KWTP_MG")
     @SequenceGenerator(name = "SEQ_KWTP_MG", sequenceName = "SCOTT.C_KWTP_MG_ID", allocationSize = 1)

@@ -2,9 +2,6 @@ package com.dic.bill.dao;
 
 import com.dic.bill.dto.MeterData;
 import com.dic.bill.dto.SumMeterVol;
-import com.dic.bill.model.scott.Apenya;
-import com.dic.bill.model.scott.ApenyaId;
-import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
