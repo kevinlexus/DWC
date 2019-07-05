@@ -16,8 +16,10 @@ public interface SumDebPenRec {
 	String getUslId();
 	// Id организации
 	Integer getOrgId();
-	// cумма задолженности (исходящее сальдо по задолженности)
+	// исходящий долг
 	BigDecimal getDebOut();
+	// исходящий, свернутый долг
+	BigDecimal getDebRolled();
 	// период
 	Integer getMg();
 	// дата операции

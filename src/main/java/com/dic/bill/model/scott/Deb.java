@@ -52,20 +52,24 @@ public class Deb implements java.io.Serializable{
 	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
 	private Org org;
 
-    // исходящее сальдо по задолженности
+    // исходящий долг
     @Column(name = "DEBOUT", updatable = false, nullable = false)
 	private BigDecimal debOut;
+
+    // исходящий свернутый долг
+    @Column(name = "DEBROLLED", updatable = false, nullable = false)
+	private BigDecimal debRolled;
 
     // период задолжности
     @Column(name = "MG", updatable = false, nullable = false)
 	private Integer mg;
 
-    // бухгалтерский период - начало
+    // бухгалтерский период - начало - updatable = false!!!
     @Column(name = "MGFROM", updatable = false, nullable = false)
 	private Integer mgFrom;
 
-    // бухгалтерский период - окончание
-    @Column(name = "MGTO", updatable = false, nullable = false)
+    // бухгалтерский период - окончание - updatable = true!!! - обновляется при расширении периода!!!
+    @Column(name = "MGTO", nullable = false)
 	private Integer mgTo;
 
 	@Generated("SparkTools")
@@ -75,6 +79,7 @@ public class Deb implements java.io.Serializable{
 		this.usl = builder.usl;
 		this.org = builder.org;
 		this.debOut = builder.debOut;
+		this.debRolled = builder.debRolled;
 		this.mg = builder.mg;
 		this.mgFrom = builder.mgFrom;
 		this.mgTo = builder.mgTo;
@@ -123,6 +128,7 @@ public class Deb implements java.io.Serializable{
 		private Usl usl;
 		private Org org;
 		private BigDecimal debOut;
+		private BigDecimal debRolled;
 		private Integer mg;
 		private Integer mgFrom;
 		private Integer mgTo;
@@ -152,6 +158,11 @@ public class Deb implements java.io.Serializable{
 
 		public Builder withDebOut(BigDecimal debOut) {
 			this.debOut = debOut;
+			return this;
+		}
+
+		public Builder withDebRolled(BigDecimal debRolled) {
+			this.debRolled = debRolled;
 			return this;
 		}
 
