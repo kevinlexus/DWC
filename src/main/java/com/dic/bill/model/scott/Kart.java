@@ -203,6 +203,10 @@ public class Kart implements java.io.Serializable {
     @Column(name = "KRAN1", updatable = false, nullable = false)
     private Boolean isKran1;
 
+    // список коротких наименований услуг, по лиц.счету  (для удобного представления счета при оплате) обновляется при начислении
+    @Column(name = "USL_NAME_SHORT")
+    private String uslNameShort;
+
     // актуальный ли лицевой счет?
     @Transient
     public boolean isActual() {

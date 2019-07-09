@@ -1,7 +1,10 @@
 package com.dic.bill.dto;
 
 import ch.qos.logback.classic.Logger;
-import com.dic.bill.model.scott.*;
+import com.dic.bill.model.scott.Charge;
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Usl;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -16,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * DTO для хранения объемов по Квартире(локальное использование)
+ * Хранилище объемов по помещению (локальное использование)
  */
 @Getter
 @Setter
@@ -136,7 +139,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         // Сгруппировать до дат, для записи реультата начисления в C_CHARGE
         if (/*vol.compareTo(BigDecimal.ZERO) != 0 && note ред. 05.04.19 Кис. попросили делать пустую строку, даже если нет объема, для статы*/
                 u.isForChrg() && (u.price.compareTo(BigDecimal.ZERO) != 0 || !u.isResidental
-                || u.getUsl().getFkCalcTp().equals(34))) { // объем не нулевой и цена не нулевая или услуга Повыш коэфф для Полыс.
+                        || u.getUsl().getFkCalcTp().equals(34))) { // объем не нулевой и цена не нулевая или услуга Повыш коэфф для Полыс.
             Date prevDt = Utl.addDays(u.dt, -1);
             // искать по лиц.счету, предыдущей дате, основному ключу
             UslPriceVolKartDt prevUslPriceVolKartDt = lstUslPriceVolKartDt.stream().filter(t -> t.kart.equals(u.kart)
@@ -196,6 +199,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             }
         }
     }
+
     /**
      * Округлить объемы по всем услугам
      */
@@ -351,17 +355,17 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             Usl uslFact;
             BigDecimal priceFact;
             //if (u.vol.compareTo(BigDecimal.ZERO) != 0) { //note  ред. 05.04.19 закомментировал - Кис. попросили делать пустую строку, даже если нет объема, для статы
-                // прочие услуги
-                if (!u.isEmpty) {
-                    // есть проживающие
-                    uslFact = u.usl;
-                    priceFact = u.price;
-                } else {
-                    // нет проживающих
-                    uslFact = u.uslEmpt;
-                    priceFact = u.priceEmpty;
-                }
-                addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
+            // прочие услуги
+            if (!u.isEmpty) {
+                // есть проживающие
+                uslFact = u.usl;
+                priceFact = u.price;
+            } else {
+                // нет проживающих
+                uslFact = u.uslEmpt;
+                priceFact = u.priceEmpty;
+            }
+            addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
             //}
 
             // свыше соц.нормы
@@ -421,9 +425,9 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * Сохранить и округлить начисление в C_CHARGE
      *
      * @param ko        - квартира
-     * @param lstSelUsl - список выбранных услуг
+     * @param lstSelUsl - список выбранных услуг // fixme почему никем не используется?
      */
-    public synchronized void saveChargeAndRound(Ko ko, List<Usl> lstSelUsl) throws ErrorWhileChrg { //note synchronized????
+    public /*synchronized */void saveChargeAndRound(Ko ko, List<Usl> lstSelUsl) throws ErrorWhileChrg { //note synchronized???? - убрал! ред.05.07.2019
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
@@ -512,7 +516,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                             .anyMatch(d -> d.getReu().equals(kart.getUk().getReu())))
                     .sorted(Comparator.comparing(d -> d.getUsl().getId())) // сортировать по коду услуги
                     .collect(Collectors.toList())
-                    ) {
+            ) {
                 // цена
                 if (mapPrice.get(charge.getUsl()) == null) {
                     mapPrice.put(charge.getUsl(), charge.getTestCena());
@@ -528,7 +532,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             }
             // округлить на первую услугу по порядку кода USL
             if (firstCharge != null) {
-                BigDecimal summCheck = Utl.nvl(kart.getOpl(),BigDecimal.ZERO).multiply(priceAmnt).setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal summCheck = Utl.nvl(kart.getOpl(), BigDecimal.ZERO).multiply(priceAmnt).setScale(2, BigDecimal.ROUND_HALF_UP);
                 BigDecimal diff = summCheck.subtract(summAmnt);
                 log.trace("Итого сумма ={} рассчит={}", summAmnt, summCheck);
                 if (diff.abs().compareTo(new BigDecimal("0.05")) < 0) {
@@ -542,6 +546,63 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
         }
 
+
+    }
+
+
+    /**
+     * Сохранить в Kart короткое описание Лиц.счета и услуг
+     * @param ko
+     */
+    public void saveShortKartDescription(Ko ko) {
+        Map<Kart, Set<String>> mapShortNames = new HashMap<>();
+
+        getLstUslVolCharge()
+                .stream()
+                .filter(t -> t.getUsl().getNameShort() != null)
+                .forEach(t -> {
+                            if (t.getUsl().getNameShort() != null) {
+                                Set<String> set = mapShortNames.get(t.getKart());
+                                if (set != null) {
+                                    set.add(t.getUsl().getNameShort());
+                                } else {
+                                    mapShortNames.put(t.getKart(),
+                                            new TreeSet<>(Collections.singleton(t.getUsl().getNameShort())));
+                                }
+                            }
+                        }
+                );
+
+        // признак что было установлено короткое описание услуг по лиц.сч.
+        Set <Kart> setKartAccessed = new HashSet<>();
+        // сохранить, если изменилось
+        mapShortNames
+                .forEach((kart, setShortNames) ->
+                {
+                    String uslNameShort;
+                    setKartAccessed.add(kart);
+                    if (setShortNames.size() > 7 || setShortNames.size()==0) {
+                        // если много услуг в лиц.сч. или 0- написать просто тип лиц.счета
+                        uslNameShort = kart.getTp().getName();
+                    } else {
+                        // ограничить 16 символами
+                        uslNameShort = String.join(" ", setShortNames);
+                    }
+                    int len = uslNameShort.length();
+                    uslNameShort = uslNameShort.substring(0, len > 15 ? 15 : len);
+                    if (kart.getUslNameShort() == null || !kart.getUslNameShort().equals(uslNameShort)) {
+                        kart.setUslNameShort(uslNameShort);
+                    }
+                });
+
+        ko.getKart().forEach(t-> {
+            if (!setKartAccessed.contains(t)) {
+                // не было установлено короткое наименование услуг, установить просто тип лиц.счета
+                if (t.getUslNameShort() == null || !t.getUslNameShort().equals(t.getTp().getName())) {
+                    t.setUslNameShort(t.getTp().getName());
+                }
+            }
+        });
 
     }
 
