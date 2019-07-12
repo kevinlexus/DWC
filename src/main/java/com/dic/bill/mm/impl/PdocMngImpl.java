@@ -38,5 +38,22 @@ public class PdocMngImpl implements PdocMng {
 		return lst;
 	}
 
+	/**
+	 * Получить список незагруженных ПД в ГИС по Дому и по УК, по всем помещениям
+	 * отсортированно по номеру документа в биллинге
+	 * @param houseEol - дом
+	 * @param uk - владеющая лиц.счетами по ПД УК (РСО)
+	 * @param dt - дата ПД
+	 * @return
+	 */
+	@Override
+	public List<Pdoc> getPdocForLoadByHouse(Eolink houseEol, Eolink uk, Date dt) {
+
+		List<Pdoc> lst = pdocDao.getForLoadByHouseWithEntry(houseEol.getId(), uk.getId(), dt);
+
+		lst.addAll(pdocDao.getForLoadByHouseWOEntry(houseEol.getId(), dt));
+
+		return lst;
+	}
 
 }

@@ -32,9 +32,28 @@ public interface PdocDAO extends JpaRepository<Pdoc, Integer> {
 			+ "join e.parent h on h.id=:eolinkId "  // дом
 			+ "where (p.status=0 and p.v=1 or p.status=1 and p.v=0) " // либо добавленные, но не загруженные, либо отмененные и не отмененные в ГИС
 			+ "and p.dt=:dt "
-			//+ "and nvl(p.err,0) = 0 " // без ошибок загрузки -  пока убрал ред.16.08.2018
 			+ "order by p.cd")
 	  List<Pdoc> getForLoadByHouseWithEntry(@Param("eolinkId") Integer eolinkId, @Param("dt") Date dt);
+
+	/**
+	 * Получить список незагруженных ПД в ГИС по Дому, по УК, по помещениям в подъездах
+	 * отсортированно по номеру документа в биллинге
+	 * @param eolinkId - Id дома
+	 * @param ukId - Id владеющая лиц.счетом УК
+	 * @param dt - дата ПД (РСО)
+	 * @return
+	 */
+	@Query("select p from Pdoc p join p.eolink s " // лиц.счет
+			+ "join s.parent k " // квартира
+			+ "join k.parent e " // подъезд
+			+ "join e.parent h on h.id=:eolinkId "  // дом
+			+ "where s.uk.id=:eolinkUkId " // УК
+			+ "and (p.status=0 and p.v=1 or p.status=1 and p.v=0) " // либо добавленные, но не загруженные, либо отмененные и не отмененные в ГИС
+			+ "and p.dt=:dt "
+			+ "order by p.cd")
+	List<Pdoc> getForLoadByHouseWithEntry(@Param("eolinkId") Integer eolinkId,
+											@Param("eolinkUkId") Integer ukId,
+											@Param("dt") Date dt);
 
 	/**
 	 * Получить список незагруженных ПД в ГИС по Дому, по помещениям без подъездов

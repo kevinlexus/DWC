@@ -1,19 +1,29 @@
 package com.dic.bill.dao;
 
-import java.util.List;
-
 import com.dic.bill.model.exs.Eolink;
+
+import java.util.List;
 
 public interface EolinkDAO {
 
-	Eolink getEolinkHouseByKulNd(String kul, String nd);
+    Eolink getEolinkByGuid(String guid);
 
-	//public List<Eolink> getAll();
-	public Eolink getEolinkByGuid(String guid);
-	public List<Eolink> getChildByTp(Eolink parent, String tp);
-	public Eolink getEolinkByReuKulNdTp(String reu, String kul, String nd,
-			String kw, String entry, String tp);
-	public List<Eolink> getValsNotSaved();
-	public List<Eolink> getEolinkByTpWoTaskTp(String eolTp, String actTp, String parentCD);
+    List<Eolink> getChildByTp(Eolink parent, String tp);
+
+    Eolink getEolinkByReuKulNdTp(String reu, String kul, String nd,
+                                 String kw, String entry, String tp);
+
+    List<Eolink> getValsNotSaved();
+
+    List<Eolink> getUk();
+
+    List<Eolink> getHouse();
+
+    List<Eolink> getEolinkByTpWoTaskTp(String eolTp, String actTp, String parentCD);
+
+    Eolink getHouseByKulNd(String kul, String nd);
+
+    Eolink getEolinkUkByReu(String reu);
+
 
 }

@@ -10,4 +10,5 @@ public interface PdocMng {
 
 	public List<Pdoc> getPdocForLoadByHouse(Eolink houseEol, Date dt);
 
+    List<Pdoc> getPdocForLoadByHouse(Eolink houseEol, Eolink uk, Date dt);
 }

@@ -52,6 +52,11 @@ public class Task implements java.io.Serializable  {
 	@JoinColumn(name="FK_EOLINK", referencedColumnName="ID")
 	private Eolink eolink;
 
+	// обрабатываемая УК (обычно для загрузки платежных документов)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_PROC_UK", referencedColumnName="ID")
+	private Eolink procUk;
+
 	// родительское задание
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="PARENT_ID", referencedColumnName="ID")
@@ -192,6 +197,7 @@ public class Task implements java.io.Serializable  {
 		this.npp = builder.npp;
 		this.priority = builder.priority;
 		this.trace = builder.trace;
+		this.procUk = builder.procUk;
 	}
 
 	@Override
@@ -256,6 +262,7 @@ public class Task implements java.io.Serializable  {
 		private String npp;
 		private Integer priority;
 		private Integer trace;
+		private Eolink procUk;
 
 		private Builder() {
 		}
@@ -267,6 +274,11 @@ public class Task implements java.io.Serializable  {
 
 		public Builder withEolink(Eolink eolink) {
 			this.eolink = eolink;
+			return this;
+		}
+
+		public Builder withProcUk(Eolink procUk) {
+			this.procUk = procUk;
 			return this;
 		}
 

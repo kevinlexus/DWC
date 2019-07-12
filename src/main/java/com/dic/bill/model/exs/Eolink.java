@@ -43,51 +43,51 @@ public class Eolink implements java.io.Serializable  {
 	private Integer id;
 
 	// РЭУ в системе "Квартплата"
-	@Column(name = "REU", updatable = true, nullable = true)
+	@Column(name = "REU")
 	private String reu;
 
 	// улица в системе "Квартплата"
-	@Column(name = "KUL", updatable = true, nullable = true)
+	@Column(name = "KUL")
 	private String kul;
 
 	// дом в системе "Квартплата"
-	@Column(name = "ND", updatable = true, nullable = true)
+	@Column(name = "ND")
 	private String nd;
 
 	// квартира в системе "Квартплата"
-	@Column(name = "KW", updatable = true, nullable = true)
+	@Column(name = "KW")
 	private String kw;
 
 	// подъезд в  системе "Квартплата"
-	@Column(name = "ENTRY", updatable = true, nullable = true)
+	@Column(name = "ENTRY")
 	private Integer entry;
 
 	// услуга в системе "Квартплата" (для счетчика)
-	@Column(name = "USL", updatable = true, nullable = true)
+	@Column(name = "USL")
 	private String usl;
 
 	// ID Группового счетчика в системе "Квартплата" из таблицы a_flow.n1
-	@Column(name = "ID_CNT", updatable = true, nullable = true)
+	@Column(name = "ID_CNT")
 	private Integer idCnt;
 
 	// ID Группы счетчика в системе "Квартплата" из таблицы a_flow.n2
-	@Column(name = "ID_GRP", updatable = true, nullable = true)
+	@Column(name = "ID_GRP")
 	private Integer idGrp;
 
 	// GUID объекта во внешней системе
-	@Column(name = "GUID", updatable = true, nullable = true)
+	@Column(name = "GUID")
 	private String guid;
 
 	// уникальный номер объекта во внешней системе
-	@Column(name = "UNIQNUM", updatable = true, nullable = true)
+	@Column(name = "UNIQNUM")
 	private String un;
 
 	// идентификатор ЖКУ (Заполняется только для Лиц.счетов, при экспорте из ГИС)
-	@Column(name = "SERVICEID", updatable = true, nullable = true)
+	@Column(name = "SERVICEID")
 	private String serviceId;
 
 	// CD (для ПД - номер документа в биллинге)
-	@Column(name = "CD", updatable = true, nullable = true)
+	@Column(name = "CD")
 	private String cd;
 
 	// тип объекта (например "Договор") (используется для обмена с "Квартплатой")
@@ -96,7 +96,7 @@ public class Eolink implements java.io.Serializable  {
 	private AddrTp objTp;
 
 	// тип информационной системы (0- "Квартплата", 1 - "Новая разработка")
-	@Column(name = "APP_TP", updatable = true, nullable = true)
+	@Column(name = "APP_TP")
 	private Integer appTp;
 
 	// расширенный тип объекта (например "Договор управления") (используется для обмена с "Квартплатой")
@@ -116,12 +116,22 @@ public class Eolink implements java.io.Serializable  {
 
 	// родительский объект
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="PARENT_ID", referencedColumnName="ID", nullable = true, updatable = true)
+	@JoinColumn(name="PARENT_ID", referencedColumnName="ID")
 	private Eolink parent;
 
+	// УК (Принадлежащий УК лиц.счет)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_UK", referencedColumnName="ID")
+	private Eolink uk;
+
 	// ОГРН Организации
-	@Column(name = "OGRN", updatable = true, nullable = true)
+	@Column(name = "OGRN")
 	private String ogrn;
+
+	// Тип обработки организации при выгрузке лиц.счетов дома 0 - РКЦ, 1 - УК, ТСЖ, 2 - Оператор (например ТБО)
+	// Если 2 (Оператор) то не создавать заданий на выгрузку объектов дома и не привязывать выгруженные лс к помещениям (их просто нет)
+	//@Column(name = "EXP_LSK_TP")
+	//private Integer expLsKTp;
 
 	// пользователь создавший запись
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -131,17 +141,22 @@ public class Eolink implements java.io.Serializable  {
 	// параметры
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="FK_EOLINK", referencedColumnName="ID")
-	private List<EolinkPar> eolinkPar = new ArrayList<EolinkPar>(0);
+	private List<EolinkPar> eolinkPar = new ArrayList<>(0);
 
 	// дочерние объекты
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="PARENT_ID", referencedColumnName="ID")
-	private List<Eolink> child = new ArrayList<Eolink>(0);
+	private List<Eolink> child = new ArrayList<>(0);
+
+	// задания
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name="FK_EOLINK", referencedColumnName="ID")
+	private List<Task> task = new ArrayList<>(0);
 
 	// платежные документы (для уровня Лицевой счет)
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name="FK_EOLINK", referencedColumnName="ID")
-	private List<Pdoc> pdoc = new ArrayList<Pdoc>(0);
+	private List<Pdoc> pdoc = new ArrayList<>(0);
 
 	// дочерние объекты, связанные через EOLXEOL
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -149,7 +164,7 @@ public class Eolink implements java.io.Serializable  {
 			@JoinColumn(name = "FK_PARENT", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "FK_CHILD",
 					nullable = false, updatable = false) })
-	private List<Eolink> childLinked = new ArrayList<Eolink>(0);
+	private List<Eolink> childLinked = new ArrayList<>(0);
 
 	// родительские объекты, связанные через EOLXEOL
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -157,7 +172,7 @@ public class Eolink implements java.io.Serializable  {
 			@JoinColumn(name = "FK_CHILD", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "FK_PARENT",
 					nullable = false, updatable = false) })
-	private List<Eolink> parentLinked = new ArrayList<Eolink>(0);
+	private List<Eolink> parentLinked = new ArrayList<>(0);
 
 	// Дочерние объекты, связанные через внешнюю таблицу
 /*	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
@@ -170,11 +185,11 @@ public class Eolink implements java.io.Serializable  {
 	private List<EolinkToEolink> parentLinked = new ArrayList<EolinkToEolink>(0);
 */
 	// статус, 0 - архивная запись, 1-активная запись
-	@Column(name = "STATUS", updatable = true, nullable = true)
+	@Column(name = "STATUS")
 	private Integer status;
 
 	// ID лиц.счета в системе "Квартплата" (Заполняется только для Лиц.счетов)
-	@Column(name = "C_LSK_ID", updatable = true, nullable = true)
+	@Column(name = "C_LSK_ID")
 	private Integer cLskId;
 
 	// дата создания
@@ -186,11 +201,11 @@ public class Eolink implements java.io.Serializable  {
 	private Date updDt;
 
 	// код ошибки
-	@Column(name = "ERR", updatable = true, nullable = true)
+	@Column(name = "ERR")
 	private Long err;
 
 	// примечание по объекту (описание ошибки)
-	@Column(name = "COMM", updatable = true, nullable = true)
+	@Column(name = "COMM")
 	private String comm;
 
 	@Generated("SparkTools")
@@ -213,6 +228,7 @@ public class Eolink implements java.io.Serializable  {
 		this.objTpx = builder.objTpx;
 		this.koObj = builder.koObj;
 		this.parent = builder.parent;
+		this.uk = builder.uk;
 		this.ogrn = builder.ogrn;
 		this.user = builder.user;
 		this.eolinkPar = builder.eolinkPar;
@@ -281,6 +297,7 @@ public class Eolink implements java.io.Serializable  {
 		private Lst2 objTpx;
 		private Ko koObj;
 		private Eolink parent;
+		private Eolink uk;
 		private String ogrn;
 		private User user;
 		private List<EolinkPar> eolinkPar = Collections.emptyList();
@@ -384,6 +401,11 @@ public class Eolink implements java.io.Serializable  {
 
 		public Builder withParent(Eolink parent) {
 			this.parent = parent;
+			return this;
+		}
+
+		public Builder withUk(Eolink uk) {
+			this.uk = uk;
 			return this;
 		}
 

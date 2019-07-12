@@ -45,7 +45,7 @@ public class EolinkDAOImpl implements EolinkDAO {
      * @return
      */
     @Override
-    public Eolink getEolinkHouseByKulNd(String kul, String nd) {
+    public Eolink getHouseByKulNd(String kul, String nd) {
         Query query =em.createQuery("select t from com.dic.bill.model.exs.Eolink t " +
                 "join t.objTp tp where tp.cd=:tp and t.kul = :kul and t.nd=:nd");
         query.setParameter("tp", "Дом");
@@ -177,6 +177,46 @@ public class EolinkDAOImpl implements EolinkDAO {
 				+ "join Par a with a.cd = 'ГИС ЖКХ.Счетчик.СтатусОбработкиПоказания' "
 				+ "join EolinkPar p with p.eolink.id = t.id and p.par.id = a.id "
 				+ "where (p.n1 = 1) ");
+		return query.getResultList();
+	}
+
+	/**
+	 * Получить Eolink УК по коду REU
+	 */
+	@Override
+	public Eolink getEolinkUkByReu(String reu) {
+		Query query = em.createQuery("select t from Eolink t "
+				+ "where t.reu=:reu and t.objTp.cd='Организация'");
+		query.setParameter("reu", reu);
+		try {
+			return (Eolink) query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+
+	/**
+	 * Получить список УК в объектах Eolink
+	 * @return
+	 */
+	@Override
+	public List<Eolink> getUk() {
+		Query query = em.createQuery("select e from Eolink e "
+				+ "join e.objTp b "
+				+ "where e.parent is not null and b.cd ='Организация' ");
+		return query.getResultList();
+	}
+
+	/**
+	 * Получить список Домов в объектах Eolink
+	 * @return
+	 */
+	@Override
+	public List<Eolink> getHouse() {
+		Query query = em.createQuery("select e from Eolink e "
+				+ "join e.objTp b "
+				+ "where e.parent is not null and b.cd ='Дом' ");
 		return query.getResultList();
 	}
 
