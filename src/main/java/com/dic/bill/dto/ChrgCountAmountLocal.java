@@ -552,7 +552,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
     /**
      * Сохранить в Kart короткое описание Лиц.счета и услуг
-     * @param ko
+     *
+     * @param ko - объект Ko
      */
     public void saveShortKartDescription(Ko ko) {
         Map<Kart, Set<String>> mapShortNames = new HashMap<>();
@@ -574,37 +575,85 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 );
 
         // признак что было установлено короткое описание услуг по лиц.сч.
-        Set <Kart> setKartAccessed = new HashSet<>();
+        Set<Kart> setKartAccessed = new HashSet<>();
         // сохранить, если изменилось
         mapShortNames
                 .forEach((kart, setShortNames) ->
                 {
-                    String uslNameShort;
+                    final int maxWords = 5;
+                    String uslNameShort = "";
                     setKartAccessed.add(kart);
-                    if (setShortNames.size() > 7 || setShortNames.size()==0) {
+                    if (setShortNames.size() > maxWords || setShortNames.size() == 0) {
                         // если много услуг в лиц.сч. или 0- написать просто тип лиц.счета
-                        uslNameShort = kart.getTp().getName();
+                        uslNameShort = kart.getTp().getName().substring(0, 3);
                     } else {
-                        // ограничить 16 символами
-                        uslNameShort = String.join(" ", setShortNames);
+                        int i = 1;
+                        for (String name : setShortNames) {
+                            uslNameShort = uslNameShort + name + " ";
+                            // органичить макс 5 слов по 3 символа
+                            if (i == maxWords) break;
+                            i++;
+                        }
                     }
-                    int len = uslNameShort.length();
-                    uslNameShort = uslNameShort.substring(0, len > 15 ? 15 : len);
+
                     if (kart.getUslNameShort() == null || !kart.getUslNameShort().equals(uslNameShort)) {
                         kart.setUslNameShort(uslNameShort);
                     }
                 });
 
-        ko.getKart().forEach(t-> {
+        ko.getKart().forEach(t -> {
             if (!setKartAccessed.contains(t)) {
                 // не было установлено короткое наименование услуг, установить просто тип лиц.счета
-                if (t.getUslNameShort() == null || !t.getUslNameShort().equals(t.getTp().getName())) {
-                    t.setUslNameShort(t.getTp().getName());
+                String uslNameShort;
+                if (t.isActual()) {
+                    uslNameShort = t.getTp().getName().substring(0, 3);
+                } else {
+                    uslNameShort = "Закр";
+                }
+
+                if (t.getUslNameShort() == null || !t.getUslNameShort().equals(uslNameShort)) {
+                    t.setUslNameShort(t.getTp().getName().substring(0, 3));
                 }
             }
         });
 
     }
+
+
+    /**
+     * Сохранить фактическое наличие счетчика, в случае отсутствия объема, для формирования статистики
+     *
+     * @param ko          - объект Ko
+     * @param lstMeterVol - список актуальных счетчиков и их объемы
+     * @param lastDt      - последняя дата месяца
+     */
+    public void saveFactMeterTp(Ko ko, List<SumMeterVol> lstMeterVol, Date lastDt) {
+
+        boolean existColdWater = false;
+        boolean existHotWater = false;
+        for (SumMeterVol e : lstMeterVol) {
+            if (Utl.between(lastDt, e.getDtFrom(), e.getDtTo())) {
+                // на последнюю дату - работающий счетчик
+                if (e.getUslId().equals("011")) {
+                    existColdWater = true;
+                } else if (e.getUslId().equals("015")) {
+                    existHotWater = true;
+                }
+            }
+        }
+        // по умолачнию - нет счетчиков
+        int meterFactTp = 0;
+        if (existColdWater && existHotWater) {
+            meterFactTp = 1;
+        } else if (existColdWater) {
+            meterFactTp = 2;
+        } else if (existHotWater) {
+            meterFactTp = 3;
+        }
+        int finalMeterFactTp = meterFactTp;
+        ko.getKart().forEach(t -> t.setFactMeterTp(finalMeterFactTp));
+    }
+
 
     /**
      * Добавить строку начисления

@@ -4,6 +4,7 @@ import com.dic.bill.Simple;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
  *
  */
 @SuppressWarnings("serial")
+@Immutable
 @Entity
 @Table(name = "T_USER", schema="SCOTT")
 @Cacheable

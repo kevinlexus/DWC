@@ -2,10 +2,12 @@ package com.dic.bill.dao;
 
 import com.dic.bill.dto.HouseUkTaskRec;
 import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.model.exs.Pdoc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
@@ -57,7 +59,42 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
 	 * @param klskId - Id объекта типа KO
 	 */
 	@Query(value = "select t from Eolink t where t.koObj.id=:klskId")
-	List<Eolink> getEolinkByKo(@Param("klskId") Long klskId);
+	List<Eolink> getEolinkByKlskId(@Param("klskId") Long klskId);
 
+/*
+	*/
+/**
+	 * Найти незагруженные Лиц.счета, по помещениям, входящим в подъезд, по Дому, по УК
+	 * @param eolinkId - Id дома
+	 * @param ukId - Id владеющая лиц.счетом УК
+	 *//*
+
+	@Query("select p from Eolink s " // лиц.счет
+			+ "join s.parent k " // квартира
+			+ "join k.parent e " // подъезд
+			+ "join e.parent h on h.id=:eolinkId "  // дом
+			+ "where s.uk.id=:eolinkUkId " // УК
+			+ "and s.guid = null " // незагруженные
+			+ "order by s.id")
+	List<Eolink> getEolLskForLoadByHouseWithEntry(@Param("eolinkId") Integer eolinkId,
+										  @Param("eolinkUkId") Integer ukId);
+
+	*/
+/**
+	 * Найти незагруженные Лиц.счета, по помещениям, входящим в подъезд, по Дому, по УК
+	 * @param eolinkId - Id дома
+	 * @param ukId - Id владеющая лиц.счетом УК
+	 *//*
+
+	@Query("select p from Eolink s " // лиц.счет
+			+ "join s.parent k " // квартира
+			+ "join k.parent e " // подъезд
+			+ "join e.parent h on h.id=:eolinkId "  // дом
+			+ "where s.uk.id=:eolinkUkId " // УК
+			+ "and s.guid = null " // незагруженные
+			+ "order by s.id")
+	List<Eolink> getEolLskForLoadByHouseWOEntry(@Param("eolinkId") Integer eolinkId,
+												@Param("eolinkUkId") Integer ukId);
+*/
 
 }

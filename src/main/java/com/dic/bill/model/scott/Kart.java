@@ -125,8 +125,12 @@ public class Kart implements java.io.Serializable {
     private BigDecimal pot;
 
     // наличие ошибки при контроле статусов проживающих, счетчиков и т.п.
-    @Column(name = "FK_ERR", nullable = false)
+    @Column(name = "FK_ERR")
     private Integer fkErr;
+
+    // наличие ошибки при контроле статусов проживающих, счетчиков и т.п.
+    @Column(name = "FACT_METER_TP")
+    private Integer factMeterTp;
 
     // начало действия
     @Column(name = "MG1")

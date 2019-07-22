@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
+@Immutable
 @Table(name = "USL_ROUND", schema="SCOTT")
 @IdClass(UslRoundId.class) // суррогатный первичный ключ
 @Getter @Setter

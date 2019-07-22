@@ -1,23 +1,11 @@
 package com.dic.bill.model.exs;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Generated;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.ric.cmn.Utl;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.dic.bill.model.bs.Lst2;
@@ -146,8 +134,16 @@ public class Task implements java.io.Serializable  {
 	@Column(name = "DT_UPD")
 	private Date updDt;
 
+	// дата-время следующего старта (При опросе ACK, если не пришёл ответ, увеличить следующий старт на N секунд)
+	@Column(name = "DT_NEXTSTART")
+	private Date dtNextStart;
+
+	// следующая задержка задания в статусе ACK, в секундах
+	@Column(name = "LAG_NEXTSTART")
+	private Integer lagNextStart;
+
 	// транспортный GUID объекта
-	@Column(name = "TGUID", updatable = true, nullable = true)
+	@Column(name = "TGUID")
 	private String tguid;
 
 	// пользователь (специально не стал делать MANY TO ONE - так как возможно не будет таблицы, куда TO ONE)
@@ -170,6 +166,40 @@ public class Task implements java.io.Serializable  {
 	// уровень трассировки (0 - не трассировать в лог, 1 - только XML)
 	@Column(name = "trace", updatable = false, nullable = false)
 	private Integer trace;
+
+
+	/**
+	 * Установить время следующего старта
+	 * @param lag - через lag секунд
+	 */
+	@Transient
+	public void alterDtNextStart(int lag) {
+		GregorianCalendar cal = new GregorianCalendar();
+		int lag2 = Utl.nvl(lagNextStart, 0) + lag;
+		// не более 5 минут
+		if (lag2 > 300) {
+			lag2 = 300;
+		}
+		cal.add(Calendar.SECOND, lag2);
+
+		setLagNextStart(lag2);
+		setDtNextStart(cal.getTime());
+	}
+
+	// активировать задание?
+	@Transient
+	public boolean isActivate() {
+		if (dtNextStart == null) {
+			return true;
+		} else {
+			if (dtNextStart.getTime() < new GregorianCalendar().getTime().getTime()) {
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+	}
 
 	@Generated("SparkTools")
 	private Task(Builder builder) {
