@@ -60,7 +60,7 @@ public class TaskMngImpl implements TaskMng {
 
 	/**
 	 * Установить идентификаторы объектов (если не заполненны)
-	 * @param eolink - Объект
+	 * @param eo - Объект
 	 * @param guid - GUID, полученный от ГИС
 	 * @param un - уникальный номер, полученный от ГИС
 	 * @param status - статус

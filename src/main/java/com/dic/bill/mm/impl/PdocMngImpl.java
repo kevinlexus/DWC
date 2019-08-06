@@ -2,6 +2,7 @@ package com.dic.bill.mm.impl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,8 +50,8 @@ public class PdocMngImpl implements PdocMng {
 	@Override
 	public List<Pdoc> getPdocForLoadByHouse(Eolink houseEol, Eolink uk, Date dt) {
 
-		List<Pdoc> lst = pdocDao.getForLoadByHouseWithEntry(houseEol.getId(), uk.getId(), dt);
-
+		List<Pdoc> lst = new ArrayList<>();
+		lst.addAll(pdocDao.getForLoadByHouseWithEntry(houseEol.getId(), uk.getId(), dt));
 		lst.addAll(pdocDao.getForLoadByHouseWOEntry(houseEol.getId(), dt));
 
 		return lst;

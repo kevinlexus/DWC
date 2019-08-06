@@ -128,10 +128,9 @@ public class Eolink implements java.io.Serializable  {
 	@Column(name = "OGRN")
 	private String ogrn;
 
-	// Тип обработки организации при выгрузке лиц.счетов дома 0 - РКЦ, 1 - УК, ТСЖ, 2 - Оператор (например ТБО)
-	// Если 2 (Оператор) то не создавать заданий на выгрузку объектов дома и не привязывать выгруженные лс к помещениям (их просто нет)
-	//@Column(name = "EXP_LSK_TP")
-	//private Integer expLsKTp;
+	// транспортный GUID объекта
+	@Column(name = "TGUID")
+	private String tguid;
 
 	// пользователь создавший запись
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -62,7 +62,7 @@ public class Pdoc implements java.io.Serializable  {
 	private Eolink eolink;
 
 	// транспортный GUID объекта
-	@Column(name = "TGUID", updatable = true, nullable = true)
+	@Column(name = "TGUID")
 	private String tguid;
 
 	// статус загрузки в ГИС (0-добавлен на загрузку, 1-загружен, 2-отменён)

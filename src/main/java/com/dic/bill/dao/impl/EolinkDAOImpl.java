@@ -59,25 +59,6 @@ public class EolinkDAOImpl implements EolinkDAO {
     }
 
     /**
-     * Получить объект по GUID
-     * @param guid - GUID
-     * @return
-     */
-    @Override
-    @Cacheable(cacheNames="EolinkDAOImpl.getEolinkByGuid", key="{#guid }", unless = "#result == null")
-	public Eolink getEolinkByGuid(String guid) {
-    	//log.info("GUID={}", guid);
-		Query query =em.createQuery("select t from com.dic.bill.model.exs.Eolink t where t.guid = :guid");
-		query.setParameter("guid", guid);
-		try {
-			return (Eolink) query.getSingleResult();
-		} catch (NoResultException e) {
-		  return null;
-		}
-	}
-
-
-    /**
      * Получить объекты по типу, начиная с начальной точки иерархии
      * @param parent - начальная точка иерархии
      * @param tp - тип
@@ -248,4 +229,22 @@ public class EolinkDAOImpl implements EolinkDAO {
 		query.setParameter("parentCD", parentCD);
 		return query.getResultList();
 	}
+
+	/**
+	 * Получить объект по GUID
+	 * @param guid - GUID
+	 */
+	@Override
+	@Cacheable(cacheNames="EolinkDAOImpl.getEolinkByGuid", key="{#guid }", unless = "#result == null")
+	public Eolink getEolinkByGuid(String guid) {
+		//log.info("GUID={}", guid);
+		javax.persistence.Query query =em.createQuery("select t from com.dic.bill.model.exs.Eolink t where t.guid = :guid");
+		query.setParameter("guid", guid);
+		try {
+			return (Eolink) query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
 }

@@ -53,6 +53,18 @@ public class Kart implements java.io.Serializable {
     @Column(name = "KW", updatable = false, nullable = false)
     private String num;
 
+    // фамилия
+    @Column(name = "K_FAM", updatable = false, nullable = false)
+    private String kFam;
+
+    // имя
+    @Column(name = "K_IM", updatable = false, nullable = false)
+    private String kIm;
+
+    // отчество
+    @Column(name = "K_OT", updatable = false, nullable = false)
+    private String kOt;
+
     // дата ограничения пени
     @Column(name = "PN_DT", updatable = false, nullable = false)
     private Date pnDt;
