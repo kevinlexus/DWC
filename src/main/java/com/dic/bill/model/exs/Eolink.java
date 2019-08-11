@@ -13,6 +13,7 @@ import com.dic.bill.model.bs.Lst2;
 import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.bs.AddrTp;
 import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Org;
 import com.dic.bill.model.sec.User;
 
 import lombok.Getter;
@@ -42,37 +43,34 @@ public class Eolink implements java.io.Serializable  {
     @Column(name = "id", unique=true, updatable = false, nullable = false)
 	private Integer id;
 
-	// РЭУ в системе "Квартплата"
-	@Column(name = "REU")
-	private String reu;
+	// РЭУ в системе "Директ" note - повторяемая колонка - исправить
+	//@Column(name = "REU", insertable = false, updatable = false)
+	//private String reu;
 
-	// улица в системе "Квартплата"
+	// УК/РСО в системе "Директ"
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="REU", referencedColumnName="REU")
+	private Org org;
+
+	// улица в системе "Директ"
 	@Column(name = "KUL")
 	private String kul;
 
-	// дом в системе "Квартплата"
+	// дом в системе "Директ"
 	@Column(name = "ND")
 	private String nd;
 
-	// квартира в системе "Квартплата"
+	// квартира в системе "Директ"
 	@Column(name = "KW")
 	private String kw;
 
-	// подъезд в  системе "Квартплата"
+	// подъезд в  системе "Директ"
 	@Column(name = "ENTRY")
 	private Integer entry;
 
-	// услуга в системе "Квартплата" (для счетчика)
+	// услуга в системе "Директ" (для счетчика)
 	@Column(name = "USL")
 	private String usl;
-
-	// ID Группового счетчика в системе "Квартплата" из таблицы a_flow.n1
-	@Column(name = "ID_CNT")
-	private Integer idCnt;
-
-	// ID Группы счетчика в системе "Квартплата" из таблицы a_flow.n2
-	@Column(name = "ID_GRP")
-	private Integer idGrp;
 
 	// GUID объекта во внешней системе
 	@Column(name = "GUID")
@@ -90,7 +88,7 @@ public class Eolink implements java.io.Serializable  {
 	@Column(name = "CD")
 	private String cd;
 
-	// тип объекта (например "Договор") (используется для обмена с "Квартплатой")
+	// тип объекта, например "Дом"
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_OBJTP", referencedColumnName="ID", updatable = false)
 	private AddrTp objTp;
@@ -110,9 +108,9 @@ public class Eolink implements java.io.Serializable  {
 	private Ko koObj;
 
 	// лицевой счет (если объект Eolink - является лиц.счетом)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
-	private com.dic.bill.model.scott.Kart kart;
+	private Kart kart;
 
 	// родительский объект
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -210,14 +208,13 @@ public class Eolink implements java.io.Serializable  {
 	@Generated("SparkTools")
 	private Eolink(Builder builder) {
 		this.id = builder.id;
-		this.reu = builder.reu;
+		// note исправить this.reu = builder.reu;
 		this.kul = builder.kul;
 		this.nd = builder.nd;
 		this.kw = builder.kw;
+		this.org = builder.org;
 		this.entry = builder.entry;
 		this.usl = builder.usl;
-		this.idCnt = builder.idCnt;
-		this.idGrp = builder.idGrp;
 		this.guid = builder.guid;
 		this.un = builder.un;
 		this.serviceId = builder.serviceId;
@@ -279,11 +276,12 @@ public class Eolink implements java.io.Serializable  {
 	@Generated("SparkTools")
 	public static final class Builder {
 		private Integer id;
-		private String reu;
+		//private String reu;
 		private String kul;
 		private String nd;
 		private String kw;
 		private Integer entry;
+		private Org org;
 		private String usl;
 		private Integer idCnt;
 		private Integer idGrp;
@@ -318,10 +316,12 @@ public class Eolink implements java.io.Serializable  {
 			return this;
 		}
 
+/*
 		public Builder withReu(String reu) {
 			this.reu = reu;
 			return this;
 		}
+*/
 
 		public Builder withKul(String kul) {
 			this.kul = kul;
@@ -335,6 +335,11 @@ public class Eolink implements java.io.Serializable  {
 
 		public Builder withKw(String kw) {
 			this.kw = kw;
+			return this;
+		}
+
+		public Builder withOrg(Org org) {
+			this.org = org;
 			return this;
 		}
 

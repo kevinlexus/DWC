@@ -4,24 +4,33 @@ import com.dic.bill.dao.EolinkDAO;
 import com.dic.bill.dao.EolinkDAO2;
 import com.dic.bill.mm.EolinkMng;
 import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.model.scott.Kart;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @Slf4j
 public class EolinkMngImpl implements EolinkMng {
 
-    @Autowired
-    private EolinkDAO eolinkDAO;
-    @Autowired
-    private EolinkDAO2 eolinkDAO2;
+    @PersistenceContext
+    private EntityManager em;
+    private final EolinkDAO eolinkDAO;
+    private final EolinkDAO2 eolinkDAO2;
+
+    public EolinkMngImpl(EolinkDAO eolinkDAO, EolinkDAO2 eolinkDAO2) {
+        this.eolinkDAO = eolinkDAO;
+        this.eolinkDAO2 = eolinkDAO2;
+    }
 
     /**
      * Получить Внешний объект по reu,kul,nd
@@ -56,16 +65,35 @@ public class EolinkMngImpl implements EolinkMng {
     /**
      * Получить лицевые счета по дому (входящие в подъезды и  не входящие)
      *
-     * @param eolink - объект типа Дом
+     * @param eolHouseId - Eolink.Id объекта типа "Дом"
+     * @param eolUkId - Eolink.Id объекта типа "Организация"
+     *
      */
     @Override
-    public List<Eolink> getLskEolByHouseEol(Eolink eolink, Integer ukId) {
+    public List<Eolink> getLskEolByHouseEol(Integer eolHouseId, Integer eolUkId) {
         List<Eolink> lst = new ArrayList<>();
         lst.addAll(
-                eolinkDAO2.getLskEolByHouseWithEntry(eolink.getId(), ukId));
+                eolinkDAO2.getLskEolByHouseWithEntry(eolHouseId, eolUkId));
         lst.addAll(
-                eolinkDAO2.getLskEolByHouseWOEntry(eolink.getId(), ukId));
+                eolinkDAO2.getLskEolByHouseWOEntry(eolHouseId, eolUkId));
         return lst;
+    }
+
+    /**
+     * Получить лицевые счета Kart по дому, отсутствующие в Eolink
+     * (входящие в подъезды и  не входящие)
+     *
+     * @param eolHouseId - Eolink.Id объекта типа "Дом"
+     * @param eolUkId - Eolink.Id объекта типа "Организация"
+     */
+    @Override
+    public List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId) {
+        List<String> lst = new ArrayList<>();
+        lst.addAll(
+                eolinkDAO2.getKartNotExistsInEolinkWithEntry(eolHouseId, eolUkId));
+        lst.addAll(
+                eolinkDAO2.getKartNotExistsInEolinkWOEntry(eolHouseId, eolUkId));
+        return lst.stream().map(t->em.find(Kart.class, t)).collect(Collectors.toList());
     }
 
 }

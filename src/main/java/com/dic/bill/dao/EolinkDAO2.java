@@ -2,6 +2,7 @@ package com.dic.bill.dao;
 
 import com.dic.bill.dto.HouseUkTaskRec;
 import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.model.scott.Kart;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -62,12 +63,12 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
      * @param klskId - Id объекта типа KO
      */
     @Query(value = "select t from Eolink t where t.koObj.id=:klskId")
-    List<Eolink> getEolinkByKlskId(@Param("klskId") Long klskId);
+    Eolink getEolinkByKlskId(@Param("klskId") Long klskId);
 
     /*
      * Найти Лиц.счета, по помещениям, входящим в подъезд, по Дому, по УК
-     * @param eolinkId - Id дома
-     * @param ukId - Id владеющая лиц.счетом УК
+     * @param eolHouseId - Id дома
+     * @param eolUkId - Id владеющая лиц.счетом УК
      */
     @Query("select s from Eolink s " // лиц.счет
             + "join s.parent k " // квартира
@@ -80,8 +81,8 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
 
     /*
      * Найти Лиц.счета, по помещениям, не входящим в подъезд, по Дому, по УК
-     * @param eolinkId - Id дома
-     * @param ukId - Id владеющая лиц.счетом УК
+     * @param eolHouseId - Id дома
+     * @param eolUkId - Id владеющая лиц.счетом УК
      */
     @Query("select s from Eolink s " // лиц.счет
             + "join s.parent k " // квартира
@@ -92,6 +93,55 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
                                          @Param("eolUkId") Integer eolUkId);
 
 
+    /**
+     * Найти открытые лиц.счета из Kart, которых нет в Eolink, но по которым есть помещения в Eolink
+     * @param eolHouseId -
+     */
+/*
+    @Query("select k from Kart k "
+            + "where not exists (select e.id from Eolink e where e.kart=k and e.objTp.cd='ЛС') "
+            + "and exists (select e from Eolink e where e.koObj=k.koKw and e.objTp.cd='Квартира' "
+            + "     and (e.parent.parent.id=:eolHouseId or e.parent.id=:eolHouseId)) " // входящая или не входящая в подъезд
+            + "and k.psch not in (8,9)"
+    )
+*/
+
+    /**
+     * Найти открытые лиц.счета из Kart, которых нет в Eolink, но по которым есть помещения в Eolink,
+     * входящие в подъезд
+     * @param eolHouseId - Id дома
+     * @param eolUkId - Id владеющая лиц.счетом УК
+     */
+    @Query(value = "select k.lsk from SCOTT.KART k " +
+            "join EXS.EOLINK t on k.reu=t.reu and t.id=:eolUkId " +
+            "join BS.ADDR_TP tp on t.FK_OBJTP=tp.id and tp.cd='Организация' " +
+            "where k.psch not in (8,9) and not " +
+            "exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='ЛС' " +
+            "where e.lsk=k.lsk) " +
+            "and exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='Квартира' " +
+            "join EXS.EOLINK p on e.PARENT_ID=p.id join BS.ADDR_TP tp2 on p.FK_OBJTP=tp2.ID and tp2.cd='Подъезд' " +
+            "where p.PARENT_ID=:eolHouseId " +
+            "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
+    List<String> getKartNotExistsInEolinkWithEntry(@Param("eolHouseId") Integer eolHouseId,
+                                                 @Param("eolUkId") Integer eolUkId);
+
+    /**
+     * Найти открытые лиц.счета из Kart, которых нет в Eolink, но по которым есть помещения в Eolink,
+     * НЕ входящие в подъезд
+     * @param eolHouseId - Id дома
+     * @param eolUkId - Id владеющая лиц.счетом УК
+     */
+    @Query(value = "select k.lsk from SCOTT.KART k " +
+            "join EXS.EOLINK t on k.reu=t.reu and t.id=:eolUkId " +
+            "join BS.ADDR_TP tp on t.FK_OBJTP=tp.id and tp.cd='Организация' " +
+            "where k.psch not in (8,9) and not " +
+            "exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='ЛС' " +
+            "where e.lsk=k.lsk) " +
+            "and exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='Квартира' " +
+            "where e.PARENT_ID=:eolHouseId " +
+            "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
+    List<String> getKartNotExistsInEolinkWOEntry(@Param("eolHouseId") Integer eolHouseId,
+                                               @Param("eolUkId") Integer eolUkId);
 
     /**
      * Получить объект по TGUID

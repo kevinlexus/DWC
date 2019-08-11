@@ -8,7 +8,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.dic.bill.model.exs.Eolink;
 import com.ric.cmn.Utl;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -109,10 +111,17 @@ public class Kart implements java.io.Serializable {
     // updatable = false - чтобы не было Update Foreign key
     private Ko koKw;
 
-    // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
+    // объект Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
     private Ko koLsk;
+
+    // объект Eolink лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
+/*
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Eolink eolink;
+*/
 
     // дом
     @ManyToOne(fetch = FetchType.LAZY)
