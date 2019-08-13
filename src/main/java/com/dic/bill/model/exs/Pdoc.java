@@ -20,6 +20,7 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
 
@@ -32,6 +33,7 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "PDOC", schema="EXS")
+@DynamicUpdate
 @Getter @Setter
 public class Pdoc implements java.io.Serializable  {
 
