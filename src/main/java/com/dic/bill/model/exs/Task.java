@@ -75,9 +75,9 @@ public class Task implements java.io.Serializable  {
 	@JoinColumn(name="DEP_ID", referencedColumnName="ID")
 	private List<Task> slave = new ArrayList<Task>(0);
 
-	// кол-во ошибок при запросе ACK
-    @Column(name = "ERRACKCNT", updatable = true, nullable = true)
-	private Integer errAckCnt;
+	// кол-во ошибок при запросе ACK - не используется?
+    //@Column(name = "ERRACKCNT", updatable = true, nullable = true)
+	//private Integer errAckCnt;
 
 	// Дочерние задания, связанные через TASKXTASK - короче это всё работает, но как обработать тип связи?? TASKXTASK.FK_TP
 	// Возможный ответ -  @Filter and @FilterJoinTable ред.09.10.2017 почитать: http://www.concretepage.com/hibernate/hibernate-filter-and-filterjointable-annotation-example
@@ -211,7 +211,7 @@ public class Task implements java.io.Serializable  {
 		this.outside = builder.outside;
 		this.master = builder.master;
 		this.slave = builder.slave;
-		this.errAckCnt = builder.errAckCnt;
+		//this.errAckCnt = builder.errAckCnt;
 		this.cd = builder.cd;
 		this.state = builder.state;
 		this.act = builder.act;
@@ -276,7 +276,7 @@ public class Task implements java.io.Serializable  {
 		private List<TaskToTask> outside = new ArrayList<TaskToTask>(0);
 		private Task master;
 		private List<Task> slave = new ArrayList<Task>(0);
-		private Integer errAckCnt;
+		//private Integer errAckCnt;
 		private String cd;
 		private String state;
 		private Lst2 act;
@@ -342,11 +342,13 @@ public class Task implements java.io.Serializable  {
 			return this;
 		}
 
+/*
 		public Builder withErrAckCnt(Integer errAckCnt) {
 			this.errAckCnt = errAckCnt;
 			return this;
 		}
 
+*/
 		public Builder withCd(String cd) {
 			this.cd = cd;
 			return this;

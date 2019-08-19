@@ -67,15 +67,41 @@ public class Org implements java.io.Serializable {
 	@Column(name = "DIST_PAY_TP")
 	private Integer distPayTp;
 
-	// является ли РСО?
-	@Type(type= "org.hibernate.type.NumericBooleanType")
-	@Column(name = "IS_RSO", updatable = false)
-	private Boolean isRSO;
-
 	// осуществлять обмен по организации с ГИС ЖКХ? (0-нет, 1-да)
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "IS_EXCHANGE_GIS", updatable = false)
 	private Boolean isExchangeGis;
+
+	// Тип организации для ГИС ЖКХ (1-УО (упр.орг.), 2-РСО, 3-ТКО)
+	@Column(name = "ORG_TP_GIS")
+	private Integer orgTpGis;
+
+	@Transient
+	public boolean isUO() {
+		if (orgTpGis == null) {
+			return false;
+		} else {
+			return orgTpGis.equals(1);
+		}
+	}
+
+	@Transient
+	public boolean isRSO() {
+		if (orgTpGis == null) {
+			return false;
+		} else {
+			return orgTpGis.equals(2);
+		}
+	}
+
+	@Transient
+	public boolean isTKO() {
+		if (orgTpGis == null) {
+			return false;
+		} else {
+			return orgTpGis.equals(3);
+		}
+	}
 
 	@Override
 	public boolean equals(Object o) {

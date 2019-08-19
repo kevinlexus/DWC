@@ -6,7 +6,6 @@ import com.dic.bill.mm.EolinkMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Kart;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,9 +89,9 @@ public class EolinkMngImpl implements EolinkMng {
     public List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId) {
         List<String> lst = new ArrayList<>();
         lst.addAll(
-                eolinkDAO2.getKartNotExistsInEolinkWithEntry(eolHouseId, eolUkId));
+                eolinkDAO2.getKartActiveNotExistsInEolinkWithEntry(eolHouseId, eolUkId));
         lst.addAll(
-                eolinkDAO2.getKartNotExistsInEolinkWOEntry(eolHouseId, eolUkId));
+                eolinkDAO2.getKartActiveNotExistsInEolinkWOEntry(eolHouseId, eolUkId));
         return lst.stream().map(t->em.find(Kart.class, t)).collect(Collectors.toList());
     }
 

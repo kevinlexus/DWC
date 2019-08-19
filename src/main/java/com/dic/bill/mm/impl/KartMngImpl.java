@@ -3,6 +3,7 @@ package com.dic.bill.mm.impl;
 import com.dic.bill.dao.KartDAO;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
+import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -121,5 +123,19 @@ public class KartMngImpl implements KartMng {
         return kart.getLsk();
     }
 
+    /**
+     * Возвращает состояние лиц.счета на указанную дату
+     * @param kart - лиц.счет
+     * @param dt - дата
+     */
+    @Override
+    public Optional<StateSch> getKartStateByDate(Kart kart, Date dt) {
+        for (StateSch stateSch : kart.getStateSch()) {
+            if (Utl.between(dt, stateSch.getDt1(), stateSch.getDt2())) {
+                return Optional.of(stateSch);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

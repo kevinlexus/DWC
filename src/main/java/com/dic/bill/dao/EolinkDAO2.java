@@ -122,8 +122,8 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             "join EXS.EOLINK p on e.PARENT_ID=p.id join BS.ADDR_TP tp2 on p.FK_OBJTP=tp2.ID and tp2.cd='Подъезд' " +
             "where p.PARENT_ID=:eolHouseId " +
             "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
-    List<String> getKartNotExistsInEolinkWithEntry(@Param("eolHouseId") Integer eolHouseId,
-                                                 @Param("eolUkId") Integer eolUkId);
+    List<String> getKartActiveNotExistsInEolinkWithEntry(@Param("eolHouseId") Integer eolHouseId,
+                                                         @Param("eolUkId") Integer eolUkId);
 
     /**
      * Найти открытые лиц.счета из Kart, которых нет в Eolink, но по которым есть помещения в Eolink,
@@ -140,8 +140,8 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             "and exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='Квартира' " +
             "where e.PARENT_ID=:eolHouseId " +
             "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
-    List<String> getKartNotExistsInEolinkWOEntry(@Param("eolHouseId") Integer eolHouseId,
-                                               @Param("eolUkId") Integer eolUkId);
+    List<String> getKartActiveNotExistsInEolinkWOEntry(@Param("eolHouseId") Integer eolHouseId,
+                                                       @Param("eolUkId") Integer eolUkId);
 
     /**
      * Получить объект по TGUID

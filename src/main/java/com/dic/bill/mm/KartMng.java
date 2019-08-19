@@ -6,6 +6,7 @@ import com.ric.cmn.excp.EmptyId;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface KartMng {
 
@@ -19,4 +20,6 @@ public interface KartMng {
     boolean getPersCountByDate(Kart kart, Date dt);
 
     String getKartMainLsk(Kart kart);
+
+    Optional<StateSch> getKartStateByDate(Kart kart, Date dt);
 }

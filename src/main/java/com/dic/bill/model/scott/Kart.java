@@ -232,7 +232,12 @@ public class Kart implements java.io.Serializable {
     @Column(name = "USL_NAME_SHORT")
     private String uslNameShort;
 
-    // актуальный ли лицевой счет?
+    // статус лиц.счета (открыт, закрыт, наличие счетчиков
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<StateSch> stateSch = new HashSet<>(0);
+
+    // активный ли лицевой счет?
     @Transient
     public boolean isActual() {
         return !psch.equals(8) && !psch.equals(9);
