@@ -17,7 +17,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Immutable
-@Table(name = "C_STATE_SCH", schema = "SCOTT")
+@Table(name = "C_STATES_SCH", schema = "SCOTT")
 public class StateSch {
 
     @Id
