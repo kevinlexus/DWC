@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface KartMng {
 
 
-	Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
+	Ko getKoPremiseByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId;
 
     List<Ko> getKoByHouse(House house);
 

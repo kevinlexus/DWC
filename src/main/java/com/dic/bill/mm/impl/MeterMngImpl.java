@@ -7,6 +7,7 @@ import com.dic.bill.dto.SumMeterVol;
 import com.dic.bill.dto.UslMeterDateVol;
 import com.dic.bill.mm.MeterMng;
 import com.dic.bill.model.exs.Eolink;
+import com.dic.bill.model.scott.Kart;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
 import com.dic.bill.model.scott.Usl;
@@ -52,6 +53,28 @@ public class MeterMngImpl implements MeterMng {
 		return null;
 	}
 
+	/**
+	 * Получить первый попавшийся актуальный счетчик по помещению
+	 * @param koPremis - Ko помещения, где установлен счетчик
+	 * @param usl - код услуги
+	 * @param dt - дата на которую получить
+	 * @return
+	 */
+
+	@Override
+	public Meter getActualMeterByKoPremiseUsl(Ko koPremis, String usl, Date dt) {
+		// список уникальных фин.лиц. к которым привязаны счетчики (бред)
+		List<Ko> lstKoFinLsk = koPremis.getKart().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
+		for (Ko koFinLsk : lstKoFinLsk) {
+			// найти счетчик по всем фин.лиц.
+			Meter meter = getActualMeterByKoUsl(koFinLsk, usl, dt);
+			if (meter != null) {
+				return meter;
+			}
+		}
+		// не найдено
+		return null;
+	}
 
 	/**
 	 * Получить объем в доле одного дня по счетчикам помещения
@@ -189,7 +212,6 @@ public class MeterMngImpl implements MeterMng {
 	 * Проверить, возможно ли сохранить показания по счетчику в Директ
 	 * @param meterEol - счетчик Eolink
 	 * @param dt - проверочная дата
-	 * @return
 	 */
 	@Override
 	public boolean getCanSaveDataMeter(Eolink meterEol, Date dt) {
@@ -202,8 +224,6 @@ public class MeterMngImpl implements MeterMng {
 	 * ТЕСТОВЫЙ МЕТОД - ПРОВЕРЯЛ LockModeType.PESSIMISTIC_READ
 	 * @param i
 	 * @param i1
-	 * @return
-	 * @throws InterruptedException
 	 */
 	@Override
 	@Transactional(propagation= Propagation.REQUIRES_NEW)

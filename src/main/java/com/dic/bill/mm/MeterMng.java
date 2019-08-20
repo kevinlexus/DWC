@@ -28,6 +28,8 @@ public interface MeterMng {
 
     Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
+    Meter getActualMeterByKoPremiseUsl(Ko koPremis, String usl, Date dt);
+
     List<UslMeterDateVol> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore);
 
     boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt);

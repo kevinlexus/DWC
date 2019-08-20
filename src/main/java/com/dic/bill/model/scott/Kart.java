@@ -105,13 +105,18 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
     private Status status;
 
-    // Ko помешения
+    // Ko финансового лиц.счета
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
     private Ko koKw;
 
-    // объект Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
+    // Ko помещения
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_PREMISE", referencedColumnName = "ID", updatable = false)
+    private Ko koPremise;
+
+    // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
     private Ko koLsk;

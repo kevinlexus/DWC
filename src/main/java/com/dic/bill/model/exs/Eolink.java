@@ -43,10 +43,6 @@ public class Eolink implements java.io.Serializable  {
     @Column(name = "id", unique=true, updatable = false, nullable = false)
 	private Integer id;
 
-	// РЭУ в системе "Директ" note - повторяемая колонка - исправить
-	//@Column(name = "REU", insertable = false, updatable = false)
-	//private String reu;
-
 	// УК/РСО в системе "Директ"
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="REU", referencedColumnName="REU")
@@ -185,10 +181,6 @@ public class Eolink implements java.io.Serializable  {
 	@Column(name = "STATUS")
 	private Integer status;
 
-	// ID лиц.счета в системе "Квартплата" (Заполняется только для Лиц.счетов)
-	@Column(name = "C_LSK_ID")
-	private Integer cLskId;
-
 	// дата создания
 	@Column(name = "DT_CRT", updatable = false)
 	private Date dtCrt;
@@ -208,7 +200,6 @@ public class Eolink implements java.io.Serializable  {
 	@Generated("SparkTools")
 	private Eolink(Builder builder) {
 		this.id = builder.id;
-		// note исправить this.reu = builder.reu;
 		this.kul = builder.kul;
 		this.nd = builder.nd;
 		this.kw = builder.kw;
@@ -232,7 +223,6 @@ public class Eolink implements java.io.Serializable  {
 		this.childLinked = builder.childLinked;
 		this.parentLinked = builder.parentLinked;
 		this.status = builder.status;
-		this.cLskId = builder.cLskId;
 		this.dtCrt = builder.crtDt;
 		this.updDt = builder.updDt;
 		this.comm = builder.comm;
@@ -242,7 +232,7 @@ public class Eolink implements java.io.Serializable  {
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o) return true;
-	    if (o == null || !(o instanceof Eolink))
+	    if (!(o instanceof Eolink))
 	        return false;
 
 	    Eolink other = (Eolink)o;

@@ -37,23 +37,20 @@ public class KartMngImpl implements KartMng {
      * @return
      */
     @Override
-    public Ko getKoByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
+    public Ko getKoPremiseByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
         List<Kart> lst = kartDao.findByKulNdKw(kul, nd, kw);
         Ko ko = null;
         for (Kart kart : lst) {
-            if (kart.isActual()) {
-                // ред. 22.05.2019 - условие, проверять только по активным лс
-                if (kart.getKoKw().getId() == null) {
-                    log.error("ОШИБКА! Обнаружен пустой KLSK_ID по лиц.счету: lsk" + kart.getLsk());
-                    throw new EmptyId("ОШИБКА! Обнаружен пустой KLSK_ID по лиц.счету: lsk" + kart.getLsk());
-                } else if (ko == null) {
-                    ko = kart.getKoKw();
-                } else if (!ko.equals(kart.getKoKw())) {
-                    log.error("ОШИБКА! Обнаружен разный KLSK_ID на один адрес: kul="
-                            + kul + ", nd=" + nd + ", kw=" + kw);
-                    throw new DifferentKlskBySingleAdress("ОШИБКА! Обнаружен разный KLSK_ID на один адрес: kul="
-                            + kul + ", nd=" + nd + ", kw=" + kw);
-                }
+            if (kart.getKoPremise() == null) {
+                log.error("ОШИБКА! Обнаружен пустой KLSK_PREMISE по лиц.счету: lsk" + kart.getLsk());
+                throw new EmptyId("ОШИБКА! Обнаружен пустой KLSK_PREMISE по лиц.счету: lsk" + kart.getLsk());
+            } else if (ko == null) {
+                ko = kart.getKoPremise();
+            } else if (!ko.equals(kart.getKoPremise())) {
+                log.error("ОШИБКА! Обнаружен разный KLSK_PREMISE на один адрес: kul="
+                        + kul + ", nd=" + nd + ", kw=" + kw);
+                throw new DifferentKlskBySingleAdress("ОШИБКА! Обнаружен разный KLSK_PREMISE на один адрес: kul="
+                        + kul + ", nd=" + nd + ", kw=" + kw);
             }
         }
         return ko;

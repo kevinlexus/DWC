@@ -26,7 +26,6 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * Получить все актуальные счетчики по объекту Ko, коду услуги
 	 * @param koId - объект Ko, к которому прикреплен счетчик
 	 * @param uslId - код услуги
-	 * @return
 	 */
 	@Query(value = "select t from Meter t "
 			+ "where t.koObj.id = ?1 and t.usl.id = ?2 " +
@@ -38,7 +37,6 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * @param koObjId - Klsk объекта, к которому привязан счетчик
 	 * @param dtFrom - начало периода
 	 * @param dtTo - оконачание периода
-	 * @return
 	 */
 	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, nvl(sum(o.n1),0) as vol " +
 			"from Meter t left join t.objPar o with o.lst.cd='ins_vol_sch' and o.mg = TO_CHAR(?2,'YYYYMM') "
@@ -46,7 +44,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 			"and ((?2 between t.dt1 and t.dt2 or ?3 between t.dt1 and t.dt2) or " +
 			"(t.dt1 between ?2 and ?3 or t.dt2 between ?2 and ?3)) " +
 			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
-	List<SumMeterVol> findMeterVolByKlsk(Long koObjId, Date dtFrom, Date dtTo);
+	List<SumMeterVol> findMeterVolUsingKlsk(Long koObjId, Date dtFrom, Date dtTo);
 /*
 	@Query(value = "select t.id as meterId, t.usl.id as uslId, t.dt1 as dtFrom, t.dt2 as dtTo, nvl(sum(o.n1),0) as vol " +
 			"from Meter t left join t.objPar o with o.lst.cd='ins_vol_sch' and o.mg = TO_CHAR(?2,'YYYYMM') "
@@ -54,7 +52,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 			"and ((?2 between t.dt1 and t.dt2 or ?3 between t.dt1 and t.dt2) or " +
 			"(t.dt1 between ?2 and ?3 or t.dt2 between ?2 and ?3)) " +
 			"group by t.id, t.usl.id, t.dt1, t.dt2 ")
-	List<SumMeterVol> findMeterVolByKlsk(Long koObjId, Date dtFrom, Date dtTo);
+	List<SumMeterVol> findMeterVolUsingKlsk(Long koObjId, Date dtFrom, Date dtTo);
 */
 
 	/**
@@ -62,11 +60,10 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	 * @param userCd - CD внёсшего пользователя
 	 * @param period - период
 	 * @param lstCd - тип действия
-	 * @return
 	 */
 	@Query(value = "select t.ts as ts, t.ko.eolink.guid as guid from ObjPar t "
 			+ "where t.tuser.cd = ?1 and t.lst.cd=?2 and t.mg=?3")
-	List<MeterData> findMeteringDataTsByUser(String userCd, String lstCd, String period);
+	List<MeterData> findMeteringDataTsUsingUser(String userCd, String lstCd, String period);
 
 	/**
 	 * ТЕСТОВЫЙ МЕТОД - ПРОВЕРЯЛ LockModeType.PESSIMISTIC_READ
