@@ -235,7 +235,8 @@ public class EolinkDAOImpl implements EolinkDAO {
 	 * @param guid - GUID
 	 */
 	@Override
-	@Cacheable(cacheNames="EolinkDAOImpl.getEolinkByGuid", key="{#guid }", unless = "#result == null")
+	//@Cacheable(cacheNames="EolinkDAOImpl.getEolinkByGuid", key="{#guid }", unless = "#result == null")
+	//  note Нельзя кэшировать! приводит к тому что не перечитываются изменения сделанные в Bexs
 	public Eolink getEolinkByGuid(String guid) {
 		//log.info("GUID={}", guid);
 		javax.persistence.Query query =em.createQuery("select t from com.dic.bill.model.exs.Eolink t where t.guid = :guid");

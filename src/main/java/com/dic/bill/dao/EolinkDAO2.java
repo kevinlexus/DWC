@@ -121,7 +121,7 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             "and exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='Квартира' " +
             "join EXS.EOLINK p on e.PARENT_ID=p.id join BS.ADDR_TP tp2 on p.FK_OBJTP=tp2.ID and tp2.cd='Подъезд' " +
             "where p.PARENT_ID=:eolHouseId " +
-            "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
+            "and e.FK_KLSK_OBJ=k.FK_KLSK_PREMISE)", nativeQuery = true)
     List<String> getKartActiveNotExistsInEolinkWithEntry(@Param("eolHouseId") Integer eolHouseId,
                                                          @Param("eolUkId") Integer eolUkId);
 
@@ -139,7 +139,7 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             "where e.lsk=k.lsk) " +
             "and exists (select * from EXS.EOLINK e join BS.ADDR_TP tp on e.FK_OBJTP=tp.ID and tp.cd='Квартира' " +
             "where e.PARENT_ID=:eolHouseId " +
-            "and e.FK_KLSK_OBJ=k.K_LSK_ID)", nativeQuery = true)
+            "and e.FK_KLSK_OBJ=k.FK_KLSK_PREMISE)", nativeQuery = true)
     List<String> getKartActiveNotExistsInEolinkWOEntry(@Param("eolHouseId") Integer eolHouseId,
                                                        @Param("eolUkId") Integer eolUkId);
 

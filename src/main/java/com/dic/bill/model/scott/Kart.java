@@ -113,7 +113,7 @@ public class Kart implements java.io.Serializable {
 
     // Ko помещения
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_PREMISE", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Ko koPremise;
 
     // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
