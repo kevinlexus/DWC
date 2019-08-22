@@ -160,13 +160,26 @@ public class Task implements java.io.Serializable  {
 	private String npp;
 
 	// приоритет - больше значение - выше приоритет обработки
-	@Column(name = "priority", updatable = false, nullable = true)
+	@Column(name = "priority", updatable = false)
 	private Integer priority;
 
 	// уровень трассировки (0 - не трассировать в лог, 1 - только XML)
 	@Column(name = "trace", updatable = false, nullable = false)
 	private Integer trace;
 
+
+	// загружать объекты начиная с Id, для проверки XML запроса в ГИС, если не заполнено - возьмутся все объекты
+	@Column(name = "ID_FROM", updatable = false)
+	private Integer idFrom;
+
+	// загружать объекты по Id, для проверки XML запроса в ГИС, если не заполнено - возьмутся все объекты
+	@Column(name = "ID_TO", updatable = false)
+	private Integer idTo;
+
+	// последний обработанный объект, в задачах, где обрабатывать необходимо по N объектов
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_EOLINK_LAST", referencedColumnName = "ID")
+	private Eolink eolinkLast;
 
 	/**
 	 * Установить время следующего старта
