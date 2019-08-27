@@ -242,6 +242,11 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<StateSch> stateSch = new HashSet<>(0);
 
+    // разделенный в ГИС ЖКХ ЕЛС?
+    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Column(name = "DIVIDED", updatable = false)
+    private Boolean isDivided;
+
     // активный ли лицевой счет?
     @Transient
     public boolean isActual() {

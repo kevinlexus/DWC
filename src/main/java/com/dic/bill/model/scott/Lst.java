@@ -2,6 +2,7 @@ package com.dic.bill.model.scott;
 
 import javax.persistence.*;
 
+import com.dic.bill.model.exs.Ulist;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -42,6 +43,12 @@ public class Lst implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="FK_LISTTP", referencedColumnName="ID")
 	private LstTp lstTp ;
+
+	// элемент справочника ГИС ЖКХ, для сопоставления например типа документа из Директ и из ГИС ЖКХ
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_EXS_U_LIST", referencedColumnName="ID")
+	private Ulist ulist;
+
 
 	@Override
 	public boolean equals(Object o) {
