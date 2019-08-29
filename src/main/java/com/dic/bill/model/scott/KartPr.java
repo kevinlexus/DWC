@@ -78,14 +78,14 @@ public class KartPr implements java.io.Serializable {
 
     // документ: дата выдачи
     @Column(name = "DOK_D", updatable = false)
-    private String docDtIssued;
+    private Date docDtIssued;
 
     // документ: выдан
     @Column(name = "DOK_V", updatable = false)
-    private Date docIssued;
+    private String docIssued;
 
     // СНИЛС
-    @Column(name = "SNILS", updatable = false)
+    @Column(name = "DOK_SNILS", updatable = false)
     private String snils;
 
     // использовать информацию о собственнике в разделенном ЕЛС ГИС ЖКХ?
@@ -94,7 +94,6 @@ public class KartPr implements java.io.Serializable {
     private Boolean isUseDividedEls;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    // поставил EAGER - отваливается LazyInitExcpt
     @JoinColumn(name = "FK_KART_PR", referencedColumnName = "ID", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
     private List<StatePr> statePr = new ArrayList<>(0);
