@@ -40,6 +40,9 @@ public class Ko implements java.io.Serializable {
     // объект Eolink
     @OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY)
     private Eolink eolink;
+    //@OneToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "ID", referencedColumnName = "FK_KLSK_OBJ", updatable = false)
+    //private Eolink eolink;
 
     // счетчик
     @OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)

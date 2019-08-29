@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.dic.bill.model.scott.Ko;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,5 +41,9 @@ public interface ApenyaDAO extends JpaRepository<Apenya, Integer> {
 	@Query(value = "select sum(t.penya) from Apenya t "
 			+ "where t.kart.id = ?1 and t.mg = TO_CHAR(?2,'YYYYMM')")
 	BigDecimal getPenAmnt(String lsk, Date dt);
+
+	@Query(value = "select distinct t from Ko t join fetch t.kart k join fetch k.aPenya a " +
+			"join fetch k.eolink e where a.mg=:mg")
+	List<Ko> getKoWhereDebitExists(@Param("mg") String mg);
 
 }

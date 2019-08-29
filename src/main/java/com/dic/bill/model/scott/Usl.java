@@ -45,6 +45,10 @@ public class Usl implements java.io.Serializable  {
 	@Column(name = "NM")
 	private String name;
 
+	// укороченное наименование
+	@Column(name = "NM2")
+	private String nm2;
+
 	// короткое название услуги (для удобного представления счета при оплате)
 	@Column(name = "NM_SHORT")
 	private String nameShort;
@@ -52,6 +56,10 @@ public class Usl implements java.io.Serializable  {
 	// наименование поля счетчик в scott.kart
 	@Column(name = "COUNTER")
 	private String counter;
+
+	// сортировка
+	@Column(name = "NPP")
+	private Integer npp;
 
 	// для справочника дат начала обязательств по долгу -  PEN_DT Тип услуги (0-прочие услуги, 1-капремонт)
     @Column(name = "TP_PEN_DT", updatable = false)

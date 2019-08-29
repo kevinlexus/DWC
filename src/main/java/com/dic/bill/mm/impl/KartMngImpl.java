@@ -10,12 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -95,8 +95,8 @@ public class KartMngImpl implements KartMng {
         return true;
     }
 
-/*
-    */
+    /*
+     */
 
     /**
      * Получить основной лиц.счет (родительский)
@@ -107,7 +107,7 @@ public class KartMngImpl implements KartMng {
      * @return - возвращает String lsk, потому что нельзя кэшировать в потоке managed entity
      */
     @Override
-    @Cacheable(cacheNames="KartMng.getKartMainLsk", key="{#kart.getLsk()}")
+    @Cacheable(cacheNames = "KartMng.getKartMainLsk", key = "{#kart.getLsk()}")
     public String getKartMainLsk(Kart kart) {
         for (Kart t : kart.getKoKw().getKart()) {
             if (t.isActual()) {
@@ -122,8 +122,9 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Возвращает состояние лиц.счета на указанную дату
+     *
      * @param kart - лиц.счет
-     * @param dt - дата
+     * @param dt   - дата
      */
     @Override
     public Optional<StateSch> getKartStateByDate(Kart kart, Date dt) {
@@ -135,4 +136,75 @@ public class KartMngImpl implements KartMng {
         return Optional.empty();
     }
 
+
+    /**
+     * Сохранить в Kart короткое описание Лиц.счета и услуг
+     *
+     * @param ko - объект Ko
+     */
+    @Override
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            rollbackFor = Exception.class)
+    public void saveShortKartDescription(Ko ko) {
+        ko.getKart().forEach(t -> {
+            if (t.getUslNameShort() == null ||
+                    !t.getUslNameShort().equals(generateUslNameShort(t, 0, 5))) {
+                t.setUslNameShort(t.getTp().getName().substring(0, 3));
+            }
+        });
+
+    }
+
+    /**
+     * Сформировать список укороченных наименований услуг по фин.лиц.счету
+     * @param kart - лиц.сч.
+     * @param var  - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2
+     * @param maxWords - макс.кол-во наименований услуг с списке
+     */
+    @Override
+    public String generateUslNameShort(Kart kart, int var, int maxWords) {
+        StringBuilder uslNameShort = new StringBuilder();
+
+        // получить действующие, главные услуги, по которым есть короткие наименования
+        List<Nabor> lst = kart.getNabor().stream()
+                .filter(t -> t.isValid(false) && t.getUsl().isMain() &&
+                        (var == 0 && t.getUsl().getNameShort() != null ||
+                                var == 1 && t.getUsl().getNm2() != null)
+                )
+                .sorted(Comparator.comparing(t -> t.getUsl().getNpp())).collect(Collectors.toList());
+
+        int i = 1;
+
+        for (Nabor nabor : lst) {
+            String delimiter = "";
+            if (i < lst.size() && i < maxWords) {
+                delimiter = ",";
+            }
+            String fldName = null;
+            if (var == 0) {
+                fldName = nabor.getUsl().getNameShort().trim();
+            } else if (var == 1) {
+                fldName = nabor.getUsl().getNm2().trim();
+            }
+            uslNameShort.append(fldName).append(delimiter);
+            // ограничить макс кол-во слов
+            if (i == maxWords) {
+                break;
+            }
+            i++;
+        }
+
+        if (uslNameShort.length() == 0) {
+            // не было установлено короткое наименование услуг
+            if (kart.isActual()) {
+                // установить тип лиц.счета
+                uslNameShort = new StringBuilder(kart.getTp().getName().substring(0, 3));
+            } else {
+                // закрытый лиц.счет
+                uslNameShort = new StringBuilder("Долг ЖКУ");
+            }
+        }
+        return uslNameShort.toString();
+    }
 }

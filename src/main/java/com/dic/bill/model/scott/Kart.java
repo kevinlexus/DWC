@@ -36,7 +36,6 @@ public class Kart implements java.io.Serializable {
     }
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO) // ID задается при создании Entity
     @Column(name = "LSK", updatable = false, nullable = false)
     private String lsk;
 
@@ -122,11 +121,12 @@ public class Kart implements java.io.Serializable {
     private Ko koLsk;
 
     // объект Eolink лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
-/*
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    //@OneToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "LSK", referencedColumnName = "LSK2", updatable = false)
+    //private Eolink eolink;
+    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY)
     private Eolink eolink;
-*/
+
 
     // дом
     @ManyToOne(fetch = FetchType.LAZY)
@@ -227,6 +227,11 @@ public class Kart implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<PenCur> penCur = new ArrayList<>(0);
+
+    // архивная пеня (долги)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<Apenya> aPenya = new HashSet<>(0);
 
     // кран из системы отопления
     @Type(type= "org.hibernate.type.NumericBooleanType")

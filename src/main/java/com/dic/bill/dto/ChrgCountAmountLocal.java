@@ -1,10 +1,7 @@
 package com.dic.bill.dto;
 
 import ch.qos.logback.classic.Logger;
-import com.dic.bill.model.scott.Charge;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Usl;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.Getter;
@@ -548,77 +545,6 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
 
     }
-
-
-    /**
-     * Сохранить в Kart короткое описание Лиц.счета и услуг
-     *
-     * @param ko - объект Ko
-     */
-    public void saveShortKartDescription(Ko ko) {
-        Map<Kart, Set<String>> mapShortNames = new HashMap<>();
-
-        getLstUslVolCharge()
-                .stream()
-                .filter(t -> t.getUsl().getNameShort() != null)
-                .forEach(t -> {
-                            if (t.getUsl().getNameShort() != null) {
-                                Set<String> set = mapShortNames.get(t.getKart());
-                                if (set != null) {
-                                    set.add(t.getUsl().getNameShort());
-                                } else {
-                                    mapShortNames.put(t.getKart(),
-                                            new TreeSet<>(Collections.singleton(t.getUsl().getNameShort())));
-                                }
-                            }
-                        }
-                );
-
-        // признак что было установлено короткое описание услуг по лиц.сч.
-        Set<Kart> setKartAccessed = new HashSet<>();
-        // сохранить, если изменилось
-        mapShortNames
-                .forEach((kart, setShortNames) ->
-                {
-                    final int maxWords = 5;
-                    String uslNameShort = "";
-                    setKartAccessed.add(kart);
-                    if (setShortNames.size() > maxWords || setShortNames.size() == 0) {
-                        // если много услуг в лиц.сч. или 0- написать просто тип лиц.счета
-                        uslNameShort = kart.getTp().getName().substring(0, 3);
-                    } else {
-                        int i = 1;
-                        for (String name : setShortNames) {
-                            uslNameShort = uslNameShort + name + " ";
-                            // органичить макс 5 слов по 3 символа
-                            if (i == maxWords) break;
-                            i++;
-                        }
-                    }
-
-                    if (kart.getUslNameShort() == null || !kart.getUslNameShort().equals(uslNameShort)) {
-                        kart.setUslNameShort(uslNameShort);
-                    }
-                });
-
-        ko.getKart().forEach(t -> {
-            if (!setKartAccessed.contains(t)) {
-                // не было установлено короткое наименование услуг, установить просто тип лиц.счета
-                String uslNameShort;
-                if (t.isActual()) {
-                    uslNameShort = t.getTp().getName().substring(0, 3);
-                } else {
-                    uslNameShort = "Закр";
-                }
-
-                if (t.getUslNameShort() == null || !t.getUslNameShort().equals(uslNameShort)) {
-                    t.setUslNameShort(t.getTp().getName().substring(0, 3));
-                }
-            }
-        });
-
-    }
-
 
     /**
      * Сохранить фактическое наличие счетчика, в случае отсутствия объема, для формирования статистики

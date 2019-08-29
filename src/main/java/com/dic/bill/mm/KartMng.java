@@ -22,4 +22,8 @@ public interface KartMng {
     String getKartMainLsk(Kart kart);
 
     Optional<StateSch> getKartStateByDate(Kart kart, Date dt);
+
+    void saveShortKartDescription(Ko ko);
+
+    String generateUslNameShort(Kart kart, int var, int maxWords);
 }

@@ -19,7 +19,6 @@ import com.dic.bill.model.bs.AddrTp;
 @Repository
 public class KoDAOImpl implements KoDAO {
 
-	//EntityManager - EM нужен на каждый DAO или сервис свой!
     @PersistenceContext
     private EntityManager em;
 
