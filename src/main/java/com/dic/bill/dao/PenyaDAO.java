@@ -1,5 +1,7 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Penya;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +21,12 @@ public interface PenyaDAO extends JpaRepository<Penya, Integer> {
             + "where t.kart.id = :lsk and nvl(t.summa,0) <> 0 "
             + "order by t.mg1")
     List<Penya> getByLsk(@Param("lsk") String lsk);
+
+    /**
+     * Получить лиц.счета, которые имеют задолженность или текущее начисление
+     */
+    @Query(value = "select distinct k from Kart k join fetch k.penya p ")
+    List<Kart> getKartWhereDebitExists();
+
 
 }

@@ -106,8 +106,9 @@ public class Eolink implements java.io.Serializable  {
 	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false)
 	private Ko koObj;
 
-	// лицевой счет (если объект Eolink - является лиц.счетом)
-	@OneToOne(fetch = FetchType.LAZY)
+	// лицевой счет (если объект Eolink - является лиц.счетом),
+	// здесь ManyToOne, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
@@ -181,7 +182,7 @@ public class Eolink implements java.io.Serializable  {
 	private List<EolinkToEolink> parentLinked = new ArrayList<EolinkToEolink>(0);
 */
 	// статус, 0 - архивная запись, 1-активная запись
-	@Column(name = "STATUS")
+	@Column(name = "STATUS", nullable = false)
 	private Integer status;
 
 	// дата создания
@@ -199,6 +200,12 @@ public class Eolink implements java.io.Serializable  {
 	// примечание по объекту (описание ошибки)
 	@Column(name = "COMM")
 	private String comm;
+
+	// актуальный?
+	@Transient
+	public boolean isActual() {
+		return getStatus().equals(1);
+	}
 
 	@Generated("SparkTools")
 	private Eolink(Builder builder) {

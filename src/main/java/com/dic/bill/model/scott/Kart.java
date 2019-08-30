@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import com.dic.bill.model.exs.Eolink;
 import com.ric.cmn.Utl;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -120,13 +119,10 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
     private Ko koLsk;
 
-    // объект Eolink лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
-    //@OneToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "LSK", referencedColumnName = "LSK2", updatable = false)
-    //private Eolink eolink;
-    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY)
-    private Eolink eolink;
-
+    // объект Eolink лиц.счета, здесь OneToMany, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private Set<Eolink> eolink = new HashSet<>(0);
 
     // дом
     @ManyToOne(fetch = FetchType.LAZY)
@@ -231,7 +227,7 @@ public class Kart implements java.io.Serializable {
     // архивная пеня (долги)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-    private Set<Apenya> aPenya = new HashSet<>(0);
+    private Set<Penya> penya = new HashSet<>(0);
 
     // кран из системы отопления
     @Type(type= "org.hibernate.type.NumericBooleanType")
@@ -267,13 +263,13 @@ public class Kart implements java.io.Serializable {
     // наличие счетчика х.в. (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
     @Transient
     public boolean isExistColdWaterMeter() {
-        return psch != null && Utl.in(psch, 1, 2);
+        return Utl.in(psch, 1, 2);
     }
 
     // наличие счетчика г.в. (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
     @Transient
     public boolean isExistHotWaterMeter() {
-        return psch != null && Utl.in(psch, 1, 3);
+        return Utl.in(psch, 1, 3);
     }
 
     // наличие счетчика эл.эн (решил сделать Transient, так как неудобно обрабатывать NVL в методах)
@@ -282,10 +278,18 @@ public class Kart implements java.io.Serializable {
         return schEl != null && schEl.equals(1);
     }
 
+    // получить ФИО собственника
+    @Transient
+    public String getOwnerFIO() {
+        return getKFam()!=null?getKFam():"".concat(" ")
+                .concat(getKIm()!=null?getKIm():"").concat(" ")
+                .concat(getKOt()!=null?getKOt():"");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Kart))
+        if (!(o instanceof Kart))
             return false;
 
         Kart other = (Kart) o;

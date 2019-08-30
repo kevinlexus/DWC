@@ -14,6 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 
@@ -78,6 +80,26 @@ public class EolinkMngImpl implements EolinkMng {
         return lst;
     }
 
+
+    /**
+     * Найти объект определенного типа, двигаясь по иерархии вверх
+     * @param eolink - объект, начиная от которого искать
+     * @param cdTp - тип объекта, который найти
+     */
+    @Override
+    public Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp){
+        if (eolink.getObjTp().getCd().equals(cdTp)) {
+            return Optional.of(eolink);
+        } else {
+            if (eolink.getParent() != null) {
+                // рекурсией искать далее
+                return getEolinkByEolinkUpHierarchy(eolink.getParent(), cdTp);
+            } else {
+                return Optional.empty();
+            }
+        }
+    }
+
     /**
      * Получить лицевые счета Kart по дому, отсутствующие в Eolink
      * (входящие в подъезды и  не входящие)
@@ -94,5 +116,6 @@ public class EolinkMngImpl implements EolinkMng {
                 eolinkDAO2.getKartActiveNotExistsInEolinkWOEntry(eolHouseId, eolUkId));
         return lst.stream().map(t->em.find(Kart.class, t)).collect(Collectors.toList());
     }
+
 
 }

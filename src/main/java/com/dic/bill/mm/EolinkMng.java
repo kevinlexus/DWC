@@ -4,6 +4,7 @@ import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Kart;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EolinkMng {
 
@@ -12,5 +13,8 @@ public interface EolinkMng {
 	public void setChildActive(Eolink eolink, String tp, Integer status);
 
 	List<Eolink> getLskEolByHouseEol(Integer eolHouseId, Integer eolUkId);
-	List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId);
+
+    Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp);
+
+    List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId);
 }

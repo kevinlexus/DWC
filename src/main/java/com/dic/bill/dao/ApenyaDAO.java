@@ -42,8 +42,4 @@ public interface ApenyaDAO extends JpaRepository<Apenya, Integer> {
 			+ "where t.kart.id = ?1 and t.mg = TO_CHAR(?2,'YYYYMM')")
 	BigDecimal getPenAmnt(String lsk, Date dt);
 
-	@Query(value = "select distinct t from Ko t join fetch t.kart k join fetch k.aPenya a " +
-			"join k.eolink e where a.mg=:mg")
-	List<Ko> getKoWhereDebitExists(@Param("mg") String mg);
-
 }

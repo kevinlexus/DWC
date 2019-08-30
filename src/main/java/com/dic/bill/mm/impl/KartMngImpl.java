@@ -2,6 +2,7 @@ package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
 import com.dic.bill.mm.KartMng;
+import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
@@ -207,4 +208,22 @@ public class KartMngImpl implements KartMng {
         }
         return uslNameShort.toString();
     }
+
+
+    /**
+     * Получить ЕЛС ГИС ЖКХ фин.лиц.счета
+     * @param ko
+     */
+/*
+    @Override
+    public Kart getActualKartBy(Ko ko) {
+        for (Kart kart : ko.getKart()) {
+
+            Eolink eolink = kart.getEolink();
+
+
+        }
+    }
+*/
+
 }
