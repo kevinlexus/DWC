@@ -2,7 +2,6 @@ package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
 import com.dic.bill.mm.KartMng;
-import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
@@ -150,7 +149,7 @@ public class KartMngImpl implements KartMng {
     public void saveShortKartDescription(Ko ko) {
         ko.getKart().forEach(t -> {
             if (t.getUslNameShort() == null ||
-                    !t.getUslNameShort().equals(generateUslNameShort(t, 0, 5))) {
+                    !t.getUslNameShort().equals(generateUslNameShort(t, 0, 5, ","))) {
                 t.setUslNameShort(t.getTp().getName().substring(0, 3));
             }
         });
@@ -159,37 +158,40 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Сформировать список укороченных наименований услуг по фин.лиц.счету
-     *
      * @param kart     - лиц.сч.
-     * @param var      - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2
+     * @param var      - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2, 2-по USL.ID (код)
      * @param maxWords - макс.кол-во наименований услуг с списке
+     * @param delimiter - разделитель
      */
     @Override
-    public String generateUslNameShort(Kart kart, int var, int maxWords) {
+    public String generateUslNameShort(Kart kart, int var, int maxWords, String delimiter) {
         StringBuilder uslNameShort = new StringBuilder();
 
         // получить действующие, главные услуги, по которым есть короткие наименования
         List<Nabor> lst = kart.getNabor().stream()
                 .filter(t -> t.isValid(false) && t.getUsl().isMain() &&
                         (var == 0 && t.getUsl().getNameShort() != null ||
-                                var == 1 && t.getUsl().getNm2() != null)
+                                var == 1 && t.getUsl().getNm2() != null ||
+                                var == 2 && t.getUsl().getId() != null)
                 )
                 .sorted(Comparator.comparing(t -> t.getUsl().getNpp())).collect(Collectors.toList());
 
         int i = 1;
 
         for (Nabor nabor : lst) {
-            String delimiter = "";
+            String localDelimiter = "";
             if (i < lst.size() && i < maxWords) {
-                delimiter = ",";
+                localDelimiter = delimiter;
             }
-            String fldName = null;
+            String fld = null;
             if (var == 0) {
-                fldName = nabor.getUsl().getNameShort().trim();
+                fld = nabor.getUsl().getNameShort().trim();
             } else if (var == 1) {
-                fldName = nabor.getUsl().getNm2().trim();
+                fld = nabor.getUsl().getNm2().trim();
+            } else if (var == 2) {
+                fld = nabor.getUsl().getId();
             }
-            uslNameShort.append(fldName).append(delimiter);
+            uslNameShort.append(fld).append(localDelimiter);
             // ограничить макс кол-во слов
             if (i == maxWords) {
                 break;
@@ -201,10 +203,18 @@ public class KartMngImpl implements KartMng {
             // не было установлено короткое наименование услуг
             if (kart.isActual()) {
                 // установить тип лиц.счета
-                uslNameShort = new StringBuilder(kart.getTp().getName().substring(0, 3));
+                if (var == 2) {
+                    uslNameShort = new StringBuilder(kart.getTp().getCd());
+                } else {
+                    uslNameShort = new StringBuilder(kart.getTp().getName().substring(0, 3));
+                }
             } else {
                 // закрытый лиц.счет
-                uslNameShort = new StringBuilder("Долг ЖКУ");
+                if (var == 2) {
+                    uslNameShort = new StringBuilder("CLSD");
+                } else {
+                    uslNameShort = new StringBuilder("Долг ЖКУ");
+                }
             }
         }
         return uslNameShort.toString();
