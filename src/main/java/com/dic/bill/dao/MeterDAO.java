@@ -33,6 +33,15 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
 	List<Meter> findActualByKoUsl(Long koId, String uslId, Date dt);
 
 	/**
+	 * Получить все актуальные счетчики по объекту Ko
+	 * @param koId - объект Ko, к которому прикреплен счетчик
+	 */
+	@Query(value = "select t from Meter t "
+			+ "where t.koObj.id = ?1 " +
+			"and ?2 between t.dt1 and t.dt2")
+	List<Meter> findActualByKo(Long koId, Date dt);
+
+	/**
 	 * Получить суммарный объем по счетчикам всех услуг, в объекте koObj за период
 	 * @param koObjId - Klsk объекта, к которому привязан счетчик
 	 * @param dtFrom - начало периода

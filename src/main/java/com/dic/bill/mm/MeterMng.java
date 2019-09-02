@@ -11,6 +11,7 @@ import com.dic.bill.model.scott.Meter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface MeterMng {
 
@@ -26,9 +27,9 @@ public interface MeterMng {
 
     List<Meter> findMeter(int i, int i1) throws InterruptedException;
 
-    Meter getActualMeterByKoUsl(Ko ko, String usl, Date dt);
+    Optional<Meter> getActualMeterByKoUsl(Ko ko, String usl, Date dt);
 
-    Meter getActualMeterByKoPremiseUsl(Ko koPremis, String usl, Date dt);
+    Optional<Meter> getActualMeterByKo(Ko koPremis, String usl, Date dt);
 
     List<UslMeterDateVol> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore);
 

@@ -43,9 +43,11 @@ public class Kart implements java.io.Serializable {
     @JoinColumn(name = "REU", referencedColumnName = "REU")
     private Org uk;
 
-    @Column(name = "KUL", updatable = false, nullable = false)
+    // код улицы (повторяемый столбец, так как есть Spul!)
+    @Column(name = "KUL", insertable = false, updatable = false, nullable = false)
     private String kul;
 
+    // номер дома
     @Column(name = "ND", updatable = false, nullable = false)
     private String nd;
 
@@ -102,6 +104,11 @@ public class Kart implements java.io.Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
     private Status status;
+
+    // улица
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "KUL", referencedColumnName = "ID", nullable = false, updatable = false)
+    private Spul spul;
 
     // Ko финансового лиц.счета
     @ManyToOne(fetch = FetchType.LAZY)
@@ -170,7 +177,8 @@ public class Kart implements java.io.Serializable {
 
     // проживающие
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)// updatable = false - чтобы не было Update Foreign key
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+// updatable = false - чтобы не было Update Foreign key
     @Fetch(FetchMode.JOIN)
     private Set<KartPr> kartPr = new HashSet<>(0);
 
@@ -230,7 +238,7 @@ public class Kart implements java.io.Serializable {
     private Set<Penya> penya = new HashSet<>(0);
 
     // кран из системы отопления
-    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "KRAN1", updatable = false, nullable = false)
     private Boolean isKran1;
 
@@ -244,7 +252,7 @@ public class Kart implements java.io.Serializable {
     private Set<StateSch> stateSch = new HashSet<>(0);
 
     // разделенный в ГИС ЖКХ ЕЛС?
-    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "DIVIDED", updatable = false)
     private Boolean isDivided;
 
@@ -278,12 +286,30 @@ public class Kart implements java.io.Serializable {
         return schEl != null && schEl.equals(1);
     }
 
-    // получить ФИО собственника
+    /**
+     * получить ФИО собственника
+     */
     @Transient
     public String getOwnerFIO() {
-        return getKFam()!=null?getKFam():"".concat(" ")
-                .concat(getKIm()!=null?getKIm():"").concat(" ")
-                .concat(getKOt()!=null?getKOt():"");
+        return (getKFam() != null ? getKFam() : "") + " "
+                + (getKIm() != null ? getKIm() : "") + " "
+                + (getKOt() != null ? getKOt() : "");
+    }
+
+    /**
+     * Получить обрезанную версию номера дома
+     */
+    @Transient
+    public String getNdTrimmed() {
+        return Utl.ltrim(getNd(), "0");
+    }
+
+    /**
+     * Получить обрезанную версию номера квартиры
+     */
+    @Transient
+    public String getNumTrimmed() {
+        return Utl.ltrim(getNum(), "0");
     }
 
     @Override

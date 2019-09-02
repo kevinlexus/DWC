@@ -159,8 +159,9 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Сформировать список укороченных наименований услуг по фин.лиц.счету
-     * @param kart - лиц.сч.
-     * @param var  - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2
+     *
+     * @param kart     - лиц.сч.
+     * @param var      - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2
      * @param maxWords - макс.кол-во наименований услуг с списке
      */
     @Override
@@ -209,6 +210,26 @@ public class KartMngImpl implements KartMng {
         return uslNameShort.toString();
     }
 
+    /**
+     * Получить адрес по лиц.счету
+     *
+     * @param kart - лиц.счет
+     */
+    @Override
+    public String getAdr(Kart kart) {
+        return kart.getSpul().getName() + ", д." + kart.getNdTrimmed() +
+                (kart.getNumTrimmed().length()>0?(", кв."+kart.getNumTrimmed()):"");
+    }
+
+    /**
+     * Получить адрес с УК по лиц.счету
+     *
+     * @param kart - лиц.счет
+     */
+    @Override
+    public String getAdrWithUk(Kart kart) {
+        return kart.getUk().getName() + ", " + getAdr(kart);
+    }
 
     /**
      * Получить ЕЛС ГИС ЖКХ фин.лиц.счета

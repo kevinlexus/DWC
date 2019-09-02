@@ -26,4 +26,8 @@ public interface KartMng {
     void saveShortKartDescription(Ko ko);
 
     String generateUslNameShort(Kart kart, int var, int maxWords);
+
+    String getAdr(Kart kart);
+
+    String getAdrWithUk(Kart kart);
 }
