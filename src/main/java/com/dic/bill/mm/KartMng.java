@@ -30,4 +30,6 @@ public interface KartMng {
     String getAdr(Kart kart);
 
     String getAdrWithUk(Kart kart);
+
+    void updateKartDetailOrd1();
 }

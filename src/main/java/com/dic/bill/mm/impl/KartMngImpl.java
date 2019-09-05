@@ -148,9 +148,10 @@ public class KartMngImpl implements KartMng {
             rollbackFor = Exception.class)
     public void saveShortKartDescription(Ko ko) {
         ko.getKart().forEach(t -> {
+            String uslNameShort = generateUslNameShort(t, 0, 5, ",");
             if (t.getUslNameShort() == null ||
-                    !t.getUslNameShort().equals(generateUslNameShort(t, 0, 5, ","))) {
-                t.setUslNameShort(t.getTp().getName().substring(0, 3));
+                    !t.getUslNameShort().equals(uslNameShort)) {
+                t.setUslNameShort(uslNameShort);
             }
         });
 
@@ -158,9 +159,10 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Сформировать список укороченных наименований услуг по фин.лиц.счету
-     * @param kart     - лиц.сч.
-     * @param var      - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2, 2-по USL.ID (код)
-     * @param maxWords - макс.кол-во наименований услуг с списке
+     *
+     * @param kart      - лиц.сч.
+     * @param var       - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2, 2-по USL.ID (код)
+     * @param maxWords  - макс.кол-во наименований услуг с списке
      * @param delimiter - разделитель
      */
     @Override
@@ -228,7 +230,7 @@ public class KartMngImpl implements KartMng {
     @Override
     public String getAdr(Kart kart) {
         return kart.getSpul().getName() + ", д." + kart.getNdTrimmed() +
-                (kart.getNumTrimmed().length()>0?(", кв."+kart.getNumTrimmed()):"");
+                (kart.getNumTrimmed().length() > 0 ? (", кв." + kart.getNumTrimmed()) : "");
     }
 
     /**
@@ -242,19 +244,26 @@ public class KartMngImpl implements KartMng {
     }
 
     /**
-     * Получить ЕЛС ГИС ЖКХ фин.лиц.счета
-     * @param ko
+     * Обновить порядок следования адресов
      */
-/*
     @Override
-    public Kart getActualKartBy(Ko ko) {
-        for (Kart kart : ko.getKart()) {
-
-            Eolink eolink = kart.getEolink();
-
-
-        }
+    @Transactional(
+            propagation = Propagation.REQUIRES_NEW,
+            rollbackFor = Exception.class)
+    public void updateKartDetailOrd1() {
+        log.info("Начало обновления порядка следования адресов Kart");
+        final int[] i = {0};
+        kartDao.findAll().stream()
+                .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
+                        .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
+                        .thenComparing(Kart::getNdIndex)
+                        .thenComparing(t -> t.getNumDigit().equals("") ? 0 : Integer.parseInt(t.getNumDigit()))
+                        .thenComparing(Kart::getNumIndex)
+                        .thenComparing(Kart::isActual)
+                ).forEach(t -> {
+            i[0]++;
+            t.getKartDetail().setOrd1(i[0]);
+        });
+        log.info("Окончание обновления порядка следования адресов Kart");
     }
-*/
-
 }

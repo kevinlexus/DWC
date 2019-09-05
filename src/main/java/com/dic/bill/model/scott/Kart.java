@@ -2,6 +2,8 @@ package com.dic.bill.model.scott;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.*;
 import javax.persistence.CascadeType;
@@ -125,6 +127,10 @@ public class Kart implements java.io.Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
     private Ko koLsk;
+
+    // детализация по лиц.счету
+    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY)
+    private KartDetail kartDetail;
 
     // объект Eolink лиц.счета, здесь OneToMany, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -305,11 +311,72 @@ public class Kart implements java.io.Serializable {
     }
 
     /**
+     * Получить обрезанную версию номера дома, без индекса
+     */
+    @Transient
+    public String getNdDigit() {
+        String trimNd = Utl.ltrim(getNd(), "0");
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(trimNd);
+        if (matcher.find()) {
+            return matcher.group(0);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Получить обрезанную версию индекса дома (буквы)
+     */
+    @Transient
+    public String getNdIndex() {
+        String trimNd = Utl.ltrim(getNd(), "0");
+        Pattern pattern = Pattern.compile("([/\\\\-].+|\\d\\p{L}+)$");
+        Matcher matcher = pattern.matcher(trimNd);
+        if (matcher.find()) {
+            return matcher.group(0).substring(1);
+        } else {
+            return "";
+        }
+    }
+
+    /**
      * Получить обрезанную версию номера квартиры
      */
     @Transient
     public String getNumTrimmed() {
         return Utl.ltrim(getNum(), "0");
+    }
+
+
+    /**
+     * Получить обрезанную версию номера квартиры, без индекса
+     */
+    @Transient
+    public String getNumDigit() {
+        String trimNum = Utl.ltrim(getNum(), "0");
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(trimNum);
+        if (matcher.find()) {
+            return matcher.group(0);
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Получить обрезанную версию индекса квартиры (буквы)
+     */
+    @Transient
+    public String getNumIndex() {
+        String trimNum = Utl.ltrim(getNum(), "0");
+        Pattern pattern = Pattern.compile("([/\\\\-].+|\\d\\p{L}+)$");
+        Matcher matcher = pattern.matcher(trimNum);
+        if (matcher.find()) {
+            return matcher.group(0).substring(1);
+        } else {
+            return "";
+        }
     }
 
     @Override

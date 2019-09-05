@@ -99,11 +99,8 @@ public class Eolink implements java.io.Serializable  {
 	private Lst2 objTpx;
 
 	// идентификатор объекта связанного с EOLINK, в новой разработке
-//	@OneToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName="ID")
-	//private Ko koObj;
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false)
+	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID")
 	private Ko koObj;
 
 	// лицевой счет (если объект Eolink - является лиц.счетом),
