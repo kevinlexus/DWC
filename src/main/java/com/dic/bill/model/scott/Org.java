@@ -1,12 +1,12 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 
 /**
  * Организация
@@ -75,6 +75,10 @@ public class Org implements java.io.Serializable {
 	// Тип организации для ГИС ЖКХ (1-УО (упр.орг.), 2-РСО, 3-ТКО)
 	@Column(name = "ORG_TP_GIS")
 	private Integer orgTpGis;
+
+	// Группировка для долгов Сбера (Не заполнено - брать REU, заполнено - группировать по этому полю)
+	@Column(name = "GRP_DEB")
+	private Integer grpDeb;
 
 	@Transient
 	public boolean isUO() {

@@ -1,5 +1,6 @@
 package com.dic.bill.mm;
 
+import com.dic.bill.mm.impl.EolinkMngImpl;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Kart;
 
@@ -17,4 +18,6 @@ public interface EolinkMng {
     Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp);
 
     List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId);
+
+    EolinkMngImpl.EolinkParams getActualEolinkParams(Optional<Eolink> eolink);
 }

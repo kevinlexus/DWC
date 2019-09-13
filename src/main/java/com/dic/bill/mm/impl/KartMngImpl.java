@@ -1,13 +1,13 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
+import com.dic.bill.dao.OrgDAO;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,26 +15,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class KartMngImpl implements KartMng {
 
-    @Autowired
-    private KartDAO kartDao;
+    private final KartDAO kartDao;
+    private final OrgDAO orgDao;
 
     @PersistenceContext
     private EntityManager em;
 
+    public KartMngImpl(KartDAO kartDao, OrgDAO orgDao) {
+        this.kartDao = kartDao;
+        this.orgDao = orgDao;
+    }
+
     /**
-     * Получить Ko помещения по параметрам
+     * Получить Ko фин.лиц.счета по параметрам
      *
      * @param kul - код улицы
      * @param nd  - № дома
      * @param kw  - № помещения
-     * @return
+     * @return - Ko фин.лиц.счета
      */
     @Override
     public Ko getKoPremiseByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
@@ -229,8 +237,8 @@ public class KartMngImpl implements KartMng {
      */
     @Override
     public String getAdr(Kart kart) {
-        return kart.getSpul().getName() + ", д." + kart.getNdTrimmed() +
-                (kart.getNumTrimmed().length() > 0 ? (", кв." + kart.getNumTrimmed()) : "");
+        return kart.getSpul().getName() + ", " + kart.getNdTrimmed() +
+                (kart.getNumTrimmed().length() > 0 ? (", " + kart.getNumTrimmed()) : "");
     }
 
     /**
@@ -241,6 +249,16 @@ public class KartMngImpl implements KartMng {
     @Override
     public String getAdrWithUk(Kart kart) {
         return kart.getUk().getName() + ", " + getAdr(kart);
+    }
+
+    /**
+     * Получить адрес с названием горда по лиц.счету
+     *
+     * @param kart - лиц.счет
+     */
+    @Override
+    public String getAdrWithCity(Kart kart) {
+        return orgDao.getByOrgTp("Город").getName()+", "+getAdr(kart);
     }
 
     /**

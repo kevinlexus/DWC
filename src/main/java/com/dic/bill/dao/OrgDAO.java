@@ -1,10 +1,8 @@
 package com.dic.bill.dao;
 
-import com.dic.bill.model.scott.Charge;
 import com.dic.bill.model.scott.Org;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 /**
  * DAO сущности com.dic.bill.model.scott.Org
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * @version 1.01
  *
  */
-@Repository("OrgDAO_DWC")
+//@Repository("OrgDAO_DWC") note убрал 13.09.2019
 public interface OrgDAO extends JpaRepository<Org, Integer> {
 
 

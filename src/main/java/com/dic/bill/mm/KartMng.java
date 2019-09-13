@@ -31,5 +31,7 @@ public interface KartMng {
 
     String getAdrWithUk(Kart kart);
 
+    String getAdrWithCity(Kart kart);
+
     void updateKartDetailOrd1();
 }

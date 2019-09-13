@@ -5,6 +5,8 @@ import com.dic.bill.dao.EolinkDAO2;
 import com.dic.bill.mm.EolinkMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Kart;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,7 +17,6 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 
@@ -67,8 +68,7 @@ public class EolinkMngImpl implements EolinkMng {
      * Получить лицевые счета по дому (входящие в подъезды и  не входящие)
      *
      * @param eolHouseId - Eolink.Id объекта типа "Дом"
-     * @param eolUkId - Eolink.Id объекта типа "Организация"
-     *
+     * @param eolUkId    - Eolink.Id объекта типа "Организация"
      */
     @Override
     public List<Eolink> getLskEolByHouseEol(Integer eolHouseId, Integer eolUkId) {
@@ -83,11 +83,12 @@ public class EolinkMngImpl implements EolinkMng {
 
     /**
      * Найти объект определенного типа, двигаясь по иерархии вверх
+     *
      * @param eolink - объект, начиная от которого искать
-     * @param cdTp - тип объекта, который найти
+     * @param cdTp   - тип объекта, который найти
      */
     @Override
-    public Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp){
+    public Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp) {
         if (eolink.getObjTp().getCd().equals(cdTp)) {
             return Optional.of(eolink);
         } else {
@@ -105,7 +106,7 @@ public class EolinkMngImpl implements EolinkMng {
      * (входящие в подъезды и  не входящие)
      *
      * @param eolHouseId - Eolink.Id объекта типа "Дом"
-     * @param eolUkId - Eolink.Id объекта типа "Организация"
+     * @param eolUkId    - Eolink.Id объекта типа "Организация"
      */
     @Override
     public List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId) {
@@ -114,8 +115,35 @@ public class EolinkMngImpl implements EolinkMng {
                 eolinkDAO2.getKartActiveNotExistsInEolinkWithEntry(eolHouseId, eolUkId));
         lst.addAll(
                 eolinkDAO2.getKartActiveNotExistsInEolinkWOEntry(eolHouseId, eolUkId));
-        return lst.stream().map(t->em.find(Kart.class, t)).collect(Collectors.toList());
+        return lst.stream().map(t -> em.find(Kart.class, t)).collect(Collectors.toList());
     }
 
+
+    /**
+     * DTO с параметрами лиц.счета Eolink
+     */
+    @Getter @Setter
+    public class EolinkParams {
+        String houseGUID="";
+        String un="";
+    }
+
+    /**
+     * Получить параметры лиц.счета
+     * @param eolink - объект лиц.счета
+     * @return - DTO с параметрами
+     */
+    @Override
+    public EolinkParams getActualEolinkParams(Optional<Eolink> eolink) {
+        EolinkParams eolinkParams = new EolinkParams();
+        if (eolink.isPresent()) {
+            // получить первый актуальный объект лиц.счета
+            getEolinkByEolinkUpHierarchy(eolink.get(), "Дом").ifPresent(t -> {
+                eolinkParams.setHouseGUID(t.getGuid());
+                eolinkParams.setUn(eolink.get().getUn());
+            });
+        }
+        return eolinkParams;
+    }
 
 }
