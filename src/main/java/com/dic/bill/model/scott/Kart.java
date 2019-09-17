@@ -1,20 +1,19 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.dic.bill.model.exs.Eolink;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Лицевой счет (он же - помещение)
@@ -27,7 +26,7 @@ import org.hibernate.annotations.*;
 @DynamicUpdate
 @Getter
 @Setter
-public class Kart implements java.io.Serializable {
+public class Kart {
 
     public Kart() {
     }

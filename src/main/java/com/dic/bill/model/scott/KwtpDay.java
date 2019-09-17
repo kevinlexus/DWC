@@ -1,13 +1,12 @@
 package com.dic.bill.model.scott;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
-
-import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Распределение платежа по услугам, организациям
