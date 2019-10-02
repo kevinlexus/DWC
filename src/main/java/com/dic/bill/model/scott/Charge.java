@@ -1,17 +1,16 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+
 /**
  * Начисление
- * @author lev
- * @version 1.00
+ * @author Lev
+ * @version 1.01
  *
  */
 @SuppressWarnings("serial")
@@ -28,57 +27,57 @@ public class Charge implements java.io.Serializable  {
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = true, nullable = false, insertable = true)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", nullable = false)
 	private Kart kart;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = true, nullable = false, insertable = true)
+	@JoinColumn(name="USL", referencedColumnName="USl", nullable = false)
 	private Usl usl;
 
 	// № п.п.
-	@Column(name = "NPP", updatable = true, nullable = true, insertable = true)
+	@Column(name = "NPP")
 	private Integer npp;
 
 	// сумма
-	@Column(name = "SUMMA", updatable = true, nullable = true, insertable = true)
+	@Column(name = "SUMMA")
 	private BigDecimal summa;
 
 	// объем
-	@Column(name = "TEST_OPL", updatable = true, nullable = true, insertable = true)
+	@Column(name = "TEST_OPL")
 	private BigDecimal testOpl;
 
 	// кол-во проживающих
-	@Column(name = "KPR", updatable = true, nullable = true, insertable = true)
+	@Column(name = "KPR")
 	private BigDecimal kpr;
 
 	// кол-во временно зарег
-	@Column(name = "KPRZ", updatable = true, nullable = true, insertable = true)
+	@Column(name = "KPRZ")
 	private BigDecimal kprz;
 
 	// кол-во временно отсут
-	@Column(name = "KPRO", updatable = true, nullable = true, insertable = true)
+	@Column(name = "KPRO")
 	private BigDecimal kpro;
 
 	// кол-во проживающих, в т.ч. все, В.О. В.З. В.П.
-	@Column(name = "KPR2", updatable = true, nullable = true, insertable = true)
+	@Column(name = "KPR2")
 	private BigDecimal kpr2;
 
 	// площадь
-	@Column(name = "OPL", updatable = true, nullable = true, insertable = true)
+	@Column(name = "OPL")
 	private BigDecimal opl;
 
 	// цена
-	@Column(name = "TEST_CENA", updatable = true, nullable = true, insertable = true)
+	@Column(name = "TEST_CENA")
 	private BigDecimal testCena;
 
 	// тип записи 0 - начисл со льгот.(без уч. изменений)  1 - начисл без льгот(по тарифу). 2- субсидия (с уч. изменений) 3 - сами льготы 4 - льготы (с уч. изменений) 5-инф.ОДН
-	@Column(name = "TYPE", updatable = true, nullable = false, insertable = true)
+	@Column(name = "TYPE")
 	private Integer type;
 
 	// наличие счетчика
 	@Type(type= "org.hibernate.type.NumericBooleanType")
-	@Column(name = "SCH", nullable = true)
+	@Column(name = "SCH")
 	private Boolean isSch;
 
 	@Override
