@@ -34,4 +34,6 @@ public interface KartMng {
     String getAdrWithCity(Kart kart);
 
     void updateKartDetailOrd1();
+
+    boolean getIsRenter(Kart kart);
 }

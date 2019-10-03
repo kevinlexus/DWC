@@ -284,4 +284,15 @@ public class KartMngImpl implements KartMng {
         });
         log.info("Окончание обновления порядка следования адресов Kart");
     }
+
+    /**
+     * Является ли нанимателем или имеется ли в лиц.счете действующая услуга "найм"
+     * @param kart - лиц.счет
+     */
+    @Override
+    public boolean getIsRenter(Kart kart) {
+        return kart.getNabor().stream()
+            .anyMatch(t -> t.isValid(true) && t.getUsl().isMain()
+                    && t.getUsl().getCd().equals("найм"));
+    }
 }
