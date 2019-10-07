@@ -3,6 +3,7 @@ package com.dic.bill.mm;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
+import com.ric.cmn.excp.WrongValue;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public interface KartMng {
 
     String getAdrWithCity(Kart kart);
 
-    void updateKartDetailOrd1();
+    void updateKartDetailOrd1() throws WrongValue;
 
     boolean getIsRenter(Kart kart);
 }

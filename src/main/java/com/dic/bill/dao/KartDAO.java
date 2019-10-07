@@ -1,6 +1,5 @@
 package com.dic.bill.dao;
 
-import com.dic.bill.dto.SumRecMg;
 import com.dic.bill.model.scott.Kart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +30,5 @@ public interface KartDAO extends JpaRepository<Kart, String> {
 
     @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t /*where t.psch not in (8,9)*/ order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskId();
+
 }

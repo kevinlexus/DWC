@@ -1,12 +1,14 @@
 package com.dic.bill.mm.impl;
 
 import com.dic.bill.dao.KartDAO;
+import com.dic.bill.dao.KartDetailDAO;
 import com.dic.bill.dao.OrgDAO;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
+import com.ric.cmn.excp.WrongValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -26,13 +28,15 @@ import java.util.stream.Collectors;
 public class KartMngImpl implements KartMng {
 
     private final KartDAO kartDao;
+    private final KartDetailDAO kartDetailDAO;
     private final OrgDAO orgDao;
 
     @PersistenceContext
     private EntityManager em;
 
-    public KartMngImpl(KartDAO kartDao, OrgDAO orgDao) {
+    public KartMngImpl(KartDAO kartDao, KartDetailDAO kartDetailDAO, OrgDAO orgDao) {
         this.kartDao = kartDao;
+        this.kartDetailDAO = kartDetailDAO;
         this.orgDao = orgDao;
     }
 
@@ -268,20 +272,28 @@ public class KartMngImpl implements KartMng {
     @Transactional(
             propagation = Propagation.REQUIRES_NEW,
             rollbackFor = Exception.class)
-    public void updateKartDetailOrd1() {
+    public void updateKartDetailOrd1() throws WrongValue {
         log.info("Начало обновления порядка следования адресов Kart");
+
+        kartDetailDAO.updateOrd1ToNull();
         final int[] i = {0};
-        kartDao.findAll().stream()
+        List<Kart> lstKart = kartDao.findAll().stream()
                 .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
                         .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
                         .thenComparing(Kart::getNdIndex)
                         .thenComparing(t -> t.getNumDigit().equals("") ? 0 : Integer.parseInt(t.getNumDigit()))
                         .thenComparing(Kart::getNumIndex)
                         .thenComparing(Kart::isActual)
-                ).forEach(t -> {
+                ).collect(Collectors.toList());
+        for (Kart kart:lstKart) {
             i[0]++;
-            t.getKartDetail().setOrd1(i[0]);
-        });
+            if (kart.getKartDetail() == null) {
+                throw new WrongValue(
+                        "ОШИБКА! Не существует записи SCOTT.KART_DETAIL для лиц.счета lsk="+
+                        kart.getLsk());
+            }
+            kart.getKartDetail().setOrd1(i[0]);
+        }
         log.info("Окончание обновления порядка следования адресов Kart");
     }
 
