@@ -50,6 +50,10 @@ public class Org implements java.io.Serializable {
     @Column(name = "BIK")
 	private String bik;
 
+	// ОГРН
+	@Column(name = "KOD_OGRN")
+	private String ogrn;
+
 	// расчетный счет
     @Column(name = "RASCHET_SCHET")
 	private String operAcc;
