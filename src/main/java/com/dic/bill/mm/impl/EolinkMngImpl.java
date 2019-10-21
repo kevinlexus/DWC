@@ -131,17 +131,21 @@ public class EolinkMngImpl implements EolinkMng {
     /**
      * Получить параметры лиц.счета
      * @param eolink - объект лиц.счета
+     * @param kart - лиц.счет
      * @return - DTO с параметрами
      */
     @Override
-    public EolinkParams getActualEolinkParams(Optional<Eolink> eolink) {
+    public EolinkParams getActualEolinkParams(Optional<Eolink> eolink, Kart kart) {
         EolinkParams eolinkParams = new EolinkParams();
-        if (eolink.isPresent()) {
-            // получить первый актуальный объект лиц.счета
-            getEolinkByEolinkUpHierarchy(eolink.get(), "Дом").ifPresent(t -> {
-                eolinkParams.setHouseGUID(t.getGuid());
-                eolinkParams.setUn(eolink.get().getUn());
-            });
+        // получить первый актуальный объект типа "Дом" по данному лиц.счету
+        eolink.ifPresent(value -> getEolinkByEolinkUpHierarchy(value, "Дом").ifPresent(t -> {
+            eolinkParams.setHouseGUID(t.getGuid());
+            eolinkParams.setUn(value.getUn());
+        }));
+        if (!eolink.isPresent()) {
+            if (kart.getHouse().getPrepHouseFias()!=null) {
+                eolinkParams.setHouseGUID(kart.getHouse().getPrepHouseFias().getId());
+            }
         }
         return eolinkParams;
     }

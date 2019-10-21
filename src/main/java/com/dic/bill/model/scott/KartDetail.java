@@ -30,7 +30,7 @@ public class KartDetail implements java.io.Serializable {
     private Integer id;
 
     // лиц.счет
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Kart kart;
 

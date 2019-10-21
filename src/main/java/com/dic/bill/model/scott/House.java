@@ -1,11 +1,9 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +38,10 @@ public class House implements java.io.Serializable {
     // статус дома (0 - открытый, 1 - закрытый) - Бред!
     @Column(name = "psch", updatable = false, nullable = true)
 	private Integer psch;
+
+	// GUID дома по справочнику FIAS
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "house", cascade = CascadeType.ALL)
+	private PrepHouseFias prepHouseFias;
 
 	// Ko дома (здесь OneToOne)
 	@ManyToOne(fetch = FetchType.LAZY)

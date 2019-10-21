@@ -1,24 +1,23 @@
 package com.dic.bill.model.exs;
 
+import com.dic.bill.model.bs.AddrTp;
+import com.dic.bill.model.bs.Lst2;
+import com.dic.bill.model.scott.Kart;
+import com.dic.bill.model.scott.Ko;
+import com.dic.bill.model.scott.Org;
+import com.dic.bill.model.sec.User;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.annotation.Generated;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Generated;
-import javax.persistence.*;
-
 //import com.dic.bill.model.scott.Kart; $$$$$
-import com.dic.bill.model.bs.Lst2;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.bs.AddrTp;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Org;
-import com.dic.bill.model.sec.User;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 
 
 /**
@@ -71,6 +70,14 @@ public class Eolink implements java.io.Serializable  {
 	// GUID объекта во внешней системе
 	@Column(name = "GUID")
 	private String guid;
+
+	// GUID объекта во внешней системе note Решил отменить эти изменения, убрать поле, дождаться Е.И. из полыс!
+	// note - используется, только по уровню Организация (УК) и если GUID - не заполнен
+	// при заполнении PPGUID организции,
+	// если в t_org две строки описывают одну орг например
+	// 016 СКЭК прямые договора и 017 СКЭК непосредственное - в Полыс. ред.15.10.19
+	//@Column(name = "GUID2")
+	//private String guid2;
 
 	// уникальный номер объекта во внешней системе
 	@Column(name = "UNIQNUM")

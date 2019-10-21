@@ -19,5 +19,5 @@ public interface EolinkMng {
 
     List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId);
 
-    EolinkMngImpl.EolinkParams getActualEolinkParams(Optional<Eolink> eolink);
+    EolinkMngImpl.EolinkParams getActualEolinkParams(Optional<Eolink> eolink, Kart kart);
 }
