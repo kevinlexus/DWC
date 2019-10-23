@@ -48,13 +48,14 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * @param eolOrgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
 	 */
 	@Query(value = "select e.id as \"ulistId\", nvl(b.summa,0) as \"chng\", nvl(a.summa,0) as \"chrg\",  " +
-            "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\" " +
+            "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\"," +
+			"nvl(a.sch,0) as \"sch\" " +
             "from exs.u_list e left join ( " +
 			"select b.ulistId, sum(b.summa) as summa, sum(b.vol) as vol, sum(b.price) as price, " +
-            "max(b.sqr) as sqr, max(b.norm) as norm from ( " +
+            "max(b.sqr) as sqr, max(b.norm) as norm, max(b.sch) as sch from ( " +
 			"select t.usl, u.id as ulistId, sum(t.summa) as summa, " +
 			"sum(t.test_opl) as vol, max(t.test_cena) as price, " +
-			"max(k.opl) as sqr, max(n.norm) as norm " +
+			"max(k.opl) as sqr, max(n.norm) as norm, max(t.sch) as sch " +
 			"from scott.a_charge2 t " + // начисление
 			"join scott.kart k on t.lsk=k.lsk and ?2 between t.mgFrom and t.mgTo " +
 			"join scott.a_nabor2 n on t.lsk=n.lsk and t.usl=n.usl and ?2 between n.mgFrom and n.mgTo " +

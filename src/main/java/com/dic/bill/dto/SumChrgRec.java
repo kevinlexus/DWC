@@ -1,9 +1,6 @@
 package com.dic.bill.dto;
 
 import com.dic.bill.model.exs.Ulist;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 /*
  * Projection для хранения записи начисления
@@ -29,6 +26,8 @@ public interface SumChrgRec {
 	Ulist getUlist();
 	// услуга из справочника ГИС
 	void setUlist(Ulist ulist);
+	// наличие счетчика
+	Integer getSch();
 
 }
 

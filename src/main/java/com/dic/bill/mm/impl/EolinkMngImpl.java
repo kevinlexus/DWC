@@ -143,8 +143,8 @@ public class EolinkMngImpl implements EolinkMng {
             eolinkParams.setUn(value.getUn());
         }));
         if (!eolink.isPresent()) {
-            if (kart.getHouse().getPrepHouseFias()!=null) {
-                eolinkParams.setHouseGUID(kart.getHouse().getPrepHouseFias().getId());
+            if (kart.getHouse().getGuid()!=null) {
+                eolinkParams.setHouseGUID(kart.getHouse().getGuid());
             }
         }
         return eolinkParams;

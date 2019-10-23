@@ -40,8 +40,8 @@ public class House implements java.io.Serializable {
 	private Integer psch;
 
 	// GUID дома по справочнику FIAS
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "house", cascade = CascadeType.ALL)
-	private PrepHouseFias prepHouseFias;
+	@Column(name = "GUID")
+	private String guid;
 
 	// Ko дома (здесь OneToOne)
 	@ManyToOne(fetch = FetchType.LAZY)
