@@ -10,9 +10,6 @@ import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -73,7 +70,6 @@ public class KartPrMngImpl implements KartPrMng {
             if (statusCnt > 1 || statusTempCnt > 1) {
                 kartMain.setFkErr(2);
             }
-
             if (parVarCntKpr == 0) {
                 // Киселёвск
                 if ((status == 4 || status == 0) && statusTemp == 3) {
@@ -129,8 +125,9 @@ public class KartPrMngImpl implements KartPrMng {
                     countPers.kpr++;
                     countPers.kprOt++;
                     //countPers.kprMax++;
-                    if (nabor.getUsl().isHousing()) {
-                        // жилищная услуга
+                    if (nabor.getUsl().isHousing() ||
+                            Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18,19)) {
+                        // жилищная услуга или х.в., г.в., кан. ред.25.10.2019
                         countPers.kprNorm++;
                     }
                 } else if ((status == 1 || status == 5) && (statusTemp == 3 || statusTemp == 6)) {
