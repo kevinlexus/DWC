@@ -45,7 +45,7 @@ public interface AchargeDAO extends JpaRepository<Acharge, Integer> {
 	 * связанных с услугой из ГИС ЖКХ по лиц.счету и периоду
 	 * @param lsk - лицевой счет
 	 * @param period - период
-	 * @param eolOrgId - Id организации, по которой выбирается начисление (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
+	 * @param eolOrgId - Id организации, по которой выбирается справочник услуг ГИС (для обработки справочника №1 (доп.услуг) или №51 (коммун.услуг))
 	 */
 	@Query(value = "select e.id as \"ulistId\", nvl(b.summa,0) as \"chng\", nvl(a.summa,0) as \"chrg\",  " +
             "nvl(a.vol,0) as \"vol\", nvl(a.price,0) as \"price\", nvl(a.sqr,0) as \"sqr\", nvl(a.norm,0) as \"norm\"," +

@@ -2,13 +2,10 @@ package com.dic.bill.dao;
 
 import com.dic.bill.dto.HouseUkTaskRec;
 import com.dic.bill.model.exs.Eolink;
-import com.dic.bill.model.scott.Kart;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
@@ -31,8 +28,10 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             + "join bs.list stp2 on stp2.cd=:masterTaskCD "
             + "join exs.task s2 on s2.fk_eolink=t.id and s2.fk_act=stp2.id " // ведущее задание, к которому прикреплять
             + "where not exists " // где нет заданий указанного типа
-            + "		(select * from exs.task s join bs.list stp on s.fk_act=stp.id and stp.cd=:checkTaskCD  "
-            + "				where s.fk_proc_uk=uk.id "
+            + "		(select * from exs.task s join bs.list stp on s.fk_act=stp.id "
+            + "     and stp.cd=:checkTaskCD "
+            + "		where s.fk_proc_uk=uk.id "
+            + "     and s.fk_eolink=t.id "
             + "		)", nativeQuery = true)
     List<HouseUkTaskRec> getHouseByTpWoTaskTp(@Param("masterTaskCD") String masterTaskCD,
                                               @Param("checkTaskCD") String checkTaskCD);
@@ -52,8 +51,10 @@ public interface EolinkDAO2 extends JpaRepository<Eolink, Integer> {
             + "join bs.addr_tp tp2 on tp2.cd='Организация' "
             + "join exs.eolink uk on uk.fk_objtp=tp2.id and tp2.parent_id is not null and k.reu=uk.reu " // УК
             + "where not exists " // где нет заданий указанного типа
-            + "		(select * from exs.task s join bs.list stp on s.fk_act=stp.id and stp.cd=:checkTaskCD  "
-            + "				where s.fk_proc_uk=uk.id "
+            + "		(select * from exs.task s join bs.list stp on s.fk_act=stp.id "
+            + "     and stp.cd=:checkTaskCD  "
+            + "		where s.fk_proc_uk=uk.id "
+            + "     and s.fk_eolink=t.id "
             + "		)", nativeQuery = true)
     List<HouseUkTaskRec> getHouseByTpWoTaskTp(@Param("checkTaskCD") String checkTaskCD);
 
