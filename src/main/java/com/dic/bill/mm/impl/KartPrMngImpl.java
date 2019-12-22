@@ -29,16 +29,16 @@ public class KartPrMngImpl implements KartPrMng {
 
     /**
      * Получить кол-во проживающих по лиц.счету и услуге, на дату
-     *
-     * @param kartMain        - основной лиц.счет
+     *  @param kartMain        - основной лиц.счет
      * @param nabor           - строка набора услуг
      * @param parVarCntKpr    - параметр, тип расчета, 0 - Кис, 1 - Полыс, 2 - ТСЖ
      * @param parCapCalcKprTp - параметр учета проживающих для капремонта
      * @param dt              - дата расчета
+     * @param isMeterExist    - наличие счетчика в расчетный день (работает только в КИС)
      */
     @Override
     public CountPers getCountPersByDate(Kart kartMain, Nabor nabor, int parVarCntKpr, int parCapCalcKprTp,
-                                        Date dt) {
+                                        Date dt, boolean isMeterExist) {
         boolean isOwnerOlder70 = false;
         boolean isYanger70 = false;
         boolean isNotOwnerOlder70 = false;
@@ -91,6 +91,10 @@ public class KartPrMngImpl implements KartPrMng {
                     // прописан или статус=для_начисления и временно отсут.
                     if (nabor.getUsl().isHousing()) {
                         // жилищная услуга
+                        countPers.kpr++;
+                    } else if (Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19)) {
+                        // х.в., г.в., водоотвед - КИС согласно ТЗ на 22.10.2019
+                        // расценка по ВО - на уровне для населения
                         countPers.kpr++;
                     }
                     countPers.kprOt++;

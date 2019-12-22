@@ -11,7 +11,7 @@ import java.util.Date;
 public interface KartPrMng {
 
     CountPers getCountPersByDate(Kart kartMain, Nabor nabor, int parVarCntKpr, int parCapCalcKprTp,
-                                 Date dt);
+                                 Date dt, boolean isMeterExist);
 
     SocStandart getSocStdtVol(Nabor t, CountPers countPers) throws ErrorWhileChrg;
 }
