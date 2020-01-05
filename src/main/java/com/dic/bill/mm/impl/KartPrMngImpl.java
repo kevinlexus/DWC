@@ -32,7 +32,7 @@ public class KartPrMngImpl implements KartPrMng {
      *  @param kartMain        - основной лиц.счет
      * @param nabor           - строка набора услуг
      * @param parVarCntKpr    - параметр, тип расчета, 0 - Кис, 1 - Полыс, 2 - ТСЖ
-     * @param parCapCalcKprTp - параметр учета проживающих для капремонта
+     * @param parCapCalcKprTp - параметр учета проживающих для капремонта (0,1-учёт ВЗ, 2=льготы отключены)
      * @param dt              - дата расчета
      * @param isMeterExist    - наличие счетчика в расчетный день (работает только в КИС)
      */
@@ -169,7 +169,7 @@ public class KartPrMngImpl implements KartPrMng {
                 }
             }
 
-            if (nabor.getUsl().getFkCalcTp().equals(37)) {
+            if (nabor.getUsl().getFkCalcTp().equals(37) && parCapCalcKprTp != 2) {
                 // Капремонт
                 // получить возраст на дату расчета, если дата рождения пустая - поставить текущую
 
@@ -194,7 +194,7 @@ public class KartPrMngImpl implements KartPrMng {
             }
         }
 
-        if (nabor.getUsl().getFkCalcTp().equals(37)) {
+        if (nabor.getUsl().getFkCalcTp().equals(37) && parCapCalcKprTp != 2) {
             // капремонт, если старше 70 и собственник и нет других проживающих, моложе 70
             if (isOwnerOlder70 && !isYanger70) {
                 Spk spk;
