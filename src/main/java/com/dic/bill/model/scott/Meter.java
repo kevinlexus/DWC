@@ -2,7 +2,6 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -63,6 +62,10 @@ public class Meter implements java.io.Serializable {
 	// последнее показание
 	@Column(name = "N1", updatable = false)
 	private BigDecimal n1;
+
+	// заводской номер
+	@Column(name = "FACTORY_NUM", updatable = false)
+	private String factoryNum;
 
 	// тип обмена с ГИС ЖКХ (null, 0 - нет обмена, 1-принимать показания от ГИС, 2-отправлять показания в ГИС, 3-принимать и отправлять показания в ГИС)
 	@Column(name = "GIS_CONN_TP", updatable = false, nullable = true)

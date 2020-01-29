@@ -63,7 +63,7 @@ public class MeterMngImpl implements MeterMng {
         // список уникальных фин.лиц. к которым привязаны счетчики (бред)
         List<Ko> lstKoFinLsk = ko.getKart().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
         for (Ko koFinLsk : lstKoFinLsk) {
-            // найти счетчик по всем фин.лиц.
+            // найти первый попавшийся счетчик по всем фин.лиц.
             return getActualMeterByKoUsl(koFinLsk, usl, dt);
         }
         // не найдено

@@ -34,4 +34,5 @@ public interface MeterMng {
     List<UslMeterDateVol> getPartDayMeterVol(List<SumMeterVol> lstMeterVol, CalcStore calcStore);
 
     boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt);
+
 }

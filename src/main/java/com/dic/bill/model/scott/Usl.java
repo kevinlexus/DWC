@@ -1,18 +1,13 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.*;
-
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Immutable;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,6 +51,10 @@ public class Usl implements java.io.Serializable  {
 	// наименование поля счетчик в scott.kart
 	@Column(name = "COUNTER")
 	private String counter;
+
+	// ед.измерения
+	@Column(name = "ED_IZM")
+	private String unitVol;
 
 	// сортировка
 	@Column(name = "NPP")
