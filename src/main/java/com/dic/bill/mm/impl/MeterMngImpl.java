@@ -51,9 +51,9 @@ public class MeterMngImpl implements MeterMng {
     }
 
     /**
-     * Получить первый попавшийся актуальный счетчик по фин.лиц.счету
+     * Получить первый попавшийся актуальный счетчик по помещению
      *
-     * @param ko  - Ko фин.лиц.сч., где установлен счетчик
+     * @param ko  - Ko помещения., где установлен счетчик
      * @param usl - код услуги
      * @param dt  - дата на которую получить
      */
@@ -61,9 +61,9 @@ public class MeterMngImpl implements MeterMng {
     @Override
     public Optional<Meter> getActualMeterByKo(Ko ko, String usl, Date dt) {
         // список уникальных фин.лиц. к которым привязаны счетчики (бред)
-        List<Ko> lstKoFinLsk = ko.getKart().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
+        List<Ko> lstKoFinLsk = ko.getKartByPremise().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
         for (Ko koFinLsk : lstKoFinLsk) {
-            // найти первый попавшийся счетчик по всем фин.лиц.
+            // найти первый попавшийся счетчик по всем фин.лиц. в помещении
             return getActualMeterByKoUsl(koFinLsk, usl, dt);
         }
         // не найдено

@@ -3,15 +3,13 @@ package com.dic.bill.model.scott;
 import com.dic.bill.model.exs.Eolink;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,8 +50,13 @@ public class Ko implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
     private Set<Kart> kart = new HashSet<>(0);
+
+    // лицевые счета, через id помещения
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
+    private Set<Kart> kartByPremise = new HashSet<>(0);
 
     public Ko() {
         super();
