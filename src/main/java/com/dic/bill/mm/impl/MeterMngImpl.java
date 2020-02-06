@@ -7,10 +7,7 @@ import com.dic.bill.dto.SumMeterVol;
 import com.dic.bill.dto.UslMeterDateVol;
 import com.dic.bill.mm.MeterMng;
 import com.dic.bill.model.exs.Eolink;
-import com.dic.bill.model.scott.Kart;
-import com.dic.bill.model.scott.Ko;
-import com.dic.bill.model.scott.Meter;
-import com.dic.bill.model.scott.Usl;
+import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +167,6 @@ public class MeterMngImpl implements MeterMng {
      */
     @Override
     public boolean getIsMeterActual(Meter meter, Date dt) {
-        log.info("meter={}, dt={}", meter, dt);
         return Utl.between(dt, meter.getDt1(), meter.getDt2());
     }
 
@@ -219,6 +215,21 @@ public class MeterMngImpl implements MeterMng {
         Ko ko = meterEol.getKoObj();
         Meter meter = ko.getMeter();
         return getIsMeterActual(meter, dt) && getIsMeterOpenForReceiveData(meter);
+    }
+
+    /**
+     * Получить показания по счетчику со статусом, по периоду
+     * @param meter - счетчик
+     * @param status - статус
+     * @param period - период
+     */
+    @Override
+    public List<ObjPar> getValuesByMeter(Meter meter, int status, String period) {
+        return meter.getObjPar().stream()
+                .filter(t->t.getLst().getCd().equals("ins_sch") && t.getMg().equals(period)
+                && t.getStatus().equals(status))
+                .sorted(Comparator.comparing(ObjPar::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     /**

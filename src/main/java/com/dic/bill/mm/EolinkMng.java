@@ -17,6 +17,8 @@ public interface EolinkMng {
 
     Optional<Eolink> getEolinkByEolinkUpHierarchy(Eolink eolink, String cdTp);
 
+    List<Eolink> getEolinkByEolinkDownHierarchy(Eolink eolink, String cdTp);
+
     List<Kart> getKartNotExistsInEolink(Integer eolHouseId, Integer eolUkId);
 
     EolinkMngImpl.EolinkParams getActualEolinkParams(Optional<Eolink> eolink, Kart kart);

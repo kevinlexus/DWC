@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -99,6 +97,26 @@ public class EolinkMngImpl implements EolinkMng {
                 return Optional.empty();
             }
         }
+    }
+
+    /**
+     * Найти объекты определенного типа, двигаясь по иерархии вниз
+     *
+     * @param eolink - объект, начиная от которого искать
+     * @param cdTp   - тип объекта, который найти
+     */
+    @Override
+    public List<Eolink> getEolinkByEolinkDownHierarchy(Eolink eolink, String cdTp) {
+        List<Eolink> lstFound = new ArrayList<>();
+
+        if (eolink.getObjTp().getCd().equals(cdTp)) {
+            lstFound.add(eolink);
+        }
+        for (Eolink child : eolink.getChild()) {
+            List<Eolink> lstChild = getEolinkByEolinkDownHierarchy(child, cdTp);
+            lstFound.addAll(lstChild);
+        }
+        return lstFound;
     }
 
     /**

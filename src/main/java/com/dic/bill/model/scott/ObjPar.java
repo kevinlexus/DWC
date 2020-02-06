@@ -2,11 +2,9 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -65,6 +63,18 @@ public class ObjPar implements java.io.Serializable {
 	// timestamp
 	@Column(name = "TS", updatable = false, nullable = true)
 	private Date ts;
+
+	// статус загрузки показания в ГИС (0-добавлен на загрузку, 1-в процессе загрузки, 2-загружен, 3-ошибка, смотреть COMM)
+	@Column(name = "STATUS", updatable = false, nullable = false)
+	private Integer status;
+
+	// транспортрый GUID для ГИС
+	@Column(name = "tguid")
+	private String tguid;
+
+	// результат загрузки в ГИС
+	@Column(name = "comm")
+	private String comm;
 
 	@Override
 	public boolean equals(Object o) {

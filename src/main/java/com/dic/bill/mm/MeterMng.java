@@ -7,6 +7,7 @@ import com.dic.bill.dto.UslMeterDateVol;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Ko;
 import com.dic.bill.model.scott.Meter;
+import com.dic.bill.model.scott.ObjPar;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
@@ -24,6 +25,8 @@ public interface MeterMng {
     boolean getIsMeterOpenForSendData(Meter meter);
 
     boolean getCanSaveDataMeter(Eolink meterEol, Date dt);
+
+    List<ObjPar> getValuesByMeter(Meter meter, int status, String period);
 
     List<Meter> findMeter(int i, int i1) throws InterruptedException;
 
