@@ -31,4 +31,9 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     @Query(value = "select distinct t.k_lsk_id from SCOTT.KART t /*where t.psch not in (8,9)*/ order by t.k_lsk_id", nativeQuery = true)
     List<BigDecimal> findAllKlskId();
 
+    @Query("select t from Kart t where t.uk.reu=:reu and t.tp.cd=:tpCd " +
+            "and t.house.id = :houseId and t.num=:kw and t.psch not in (8,9)")
+    List<Kart> findActualByReuHouseIdTpKw(@Param("reu") String reu, @Param("tpCd") String tpCd,
+                                          @Param("houseId") Integer houseId, @Param("kw") String kw);
+
 }
