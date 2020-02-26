@@ -64,7 +64,7 @@ public class Meter implements java.io.Serializable {
 	private BigDecimal n1;
 
 	// тип обмена с ГИС ЖКХ (null, 0 - нет обмена, 1-принимать показания от ГИС, 2-отправлять показания в ГИС, 3-принимать и отправлять показания в ГИС)
-	@Column(name = "GIS_CONN_TP", updatable = false, nullable = true)
+	@Column(name = "GIS_CONN_TP", updatable = false)
 	private Integer gisConnTp;
 
 	@Override

@@ -64,7 +64,7 @@ public class ObjPar implements java.io.Serializable {
 	@Column(name = "TS", updatable = false, nullable = true)
 	private Date ts;
 
-	// сСтатус загрузки показания в ГИС (0-добавлен на загрузку, 1-в процессе загрузки, 2-загружен, 3-принят из ГИС, 4-ошибка, смотреть COMM)
+	// Статус загрузки показания при обмене с ГИС ЖКХ (0-добавлен на загрузку в ГИС, 1-в процессе загрузки в ГИС, 2-загружен в ГИС, 3-принят из ГИС, 4-ошибка загрузки в ГИС, смотреть COMM)
 	@Column(name = "STATUS", nullable = false)
 	private Integer status;
 

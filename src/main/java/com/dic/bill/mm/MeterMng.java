@@ -10,6 +10,8 @@ import com.dic.bill.model.scott.Meter;
 import com.dic.bill.model.scott.ObjPar;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -38,4 +40,5 @@ public interface MeterMng {
 
     boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt);
 
+    int sendMeterVal(BufferedWriter writer, String lsk, String strUsl, String value, String period, Integer userId) throws IOException;
 }

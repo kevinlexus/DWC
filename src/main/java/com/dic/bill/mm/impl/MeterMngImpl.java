@@ -8,16 +8,23 @@ import com.dic.bill.dto.UslMeterDateVol;
 import com.dic.bill.mm.MeterMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.*;
+import com.ric.cmn.CommonErrs;
+import com.ric.cmn.MeterValConsts;
 import com.ric.cmn.Utl;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.procedure.ProcedureOutputs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -219,15 +226,16 @@ public class MeterMngImpl implements MeterMng {
 
     /**
      * Получить показания по счетчику со статусом, по периоду
-     * @param meter - счетчик
+     *
+     * @param meter  - счетчик
      * @param status - статус
      * @param period - период
      */
     @Override
     public List<ObjPar> getValuesByMeter(Meter meter, int status, String period) {
         return meter.getObjPar().stream()
-                .filter(t->t.getLst().getCd().equals("ins_sch") && t.getMg().equals(period)
-                && t.getStatus().equals(status))
+                .filter(t -> t.getLst().getCd().equals("ins_sch") && t.getMg().equals(period)
+                        && t.getStatus().equals(status))
                 .sorted(Comparator.comparing(ObjPar::getId).reversed())
                 .collect(Collectors.toList());
     }
@@ -262,6 +270,152 @@ public class MeterMngImpl implements MeterMng {
             log.info("Meter.id={} n1={}", t.getId(), t.getN1());
         });
         return lst;
+    }
+
+    /**
+     * Отправить показания по счетчику в биллинг
+     *
+     * @param writer - объект записи
+     * @param lsk    - лиц.счет
+     * @param strUsl - код услуги
+     * @param value  - показание
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int sendMeterVal(BufferedWriter writer, String lsk, String strUsl, String value, String period, Integer userId) throws IOException {
+        if (strUsl != null && strUsl.length() >= 3) {
+            String codeUsl = strUsl.substring(0, 3);
+            if (value != null && value.length() > 0) {
+                Double val = Double.valueOf(value);
+                log.trace("Отправка по лиц={}, услуге usl={}, показание ={}", lsk, codeUsl, val);
+
+                StoredProcedureQuery query = em
+                        .createStoredProcedureQuery(
+                                "scott.p_meter.ins_data_meter")
+                        .registerStoredProcedureParameter(
+                                "p_lsk",
+                                String.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_usl",
+                                String.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_n1",
+                                Double.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_ts",
+                                Date.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_period",
+                                String.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_status",
+                                Integer.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_user",
+                                Integer.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_ret",
+                                Integer.class,
+                                ParameterMode.OUT
+                        )
+                        .setParameter("p_lsk", lsk)
+                        .setParameter("p_usl", codeUsl)
+                        .setParameter("p_n1", val)
+                        .setParameter("p_ts", new Date())
+                        .setParameter("p_period", period)
+                        .setParameter("p_status", MeterValConsts.INSERT_FOR_LOAD_TO_GIS)
+                        .setParameter("p_user", userId);
+                Integer ret=-1;
+                try {
+                    query.execute();
+
+                    ret = (Integer) query
+                            .getOutputParameterValue("p_ret");
+
+                } finally {
+                    query.unwrap(ProcedureOutputs.class).release();
+                }
+
+/*
+                CallableStatement callableStatement = ReflectionUtils
+                        .getFieldValue(
+                                query.unwrap(ProcedureOutputs.class),
+                                "scott.p_meter.ins_data_meter"
+                        );
+*/
+/*                StoredProcedureQuery qr = em.createStoredProcedureQuery("scott.p_meter.ins_data_meter");
+                qr.registerStoredProcedureParameter(1, String.class,
+                        ParameterMode.IN); // p_lsk
+                qr.registerStoredProcedureParameter(2, String.class,
+                        ParameterMode.IN); // p_usl
+                qr.registerStoredProcedureParameter(3, Double.class,
+                        ParameterMode.IN); // p_n1
+                qr.registerStoredProcedureParameter(4, Date.class,
+                        ParameterMode.IN); // p_ts
+                qr.registerStoredProcedureParameter(5, String.class,
+                        ParameterMode.IN); // p_period
+                qr.registerStoredProcedureParameter(6, Integer.class,
+                        ParameterMode.IN); // p_status
+                qr.registerStoredProcedureParameter(7, Integer.class,
+                        ParameterMode.IN); // p_user
+                qr.registerStoredProcedureParameter(8, Integer.class,
+                        ParameterMode.OUT);// p_ret
+                qr.setParameter(1, lsk);
+                qr.setParameter(2, codeUsl);
+                qr.setParameter(3, val);
+                qr.setParameter(4, new Date());
+                qr.setParameter(5, period);
+                qr.setParameter(6, MeterValConsts.INSERT_FOR_LOAD_TO_GIS);
+                qr.setParameter(7, userId);
+                qr.executeUpdate();
+                Integer ret = (Integer) qr.getOutputParameterValue(8);
+
+ */
+                log.trace("Результат исполнения scott.p_meter.ins_data_meter={}", ret);
+                String mess = " По лиц p_lsk=%s, услуге p_usl=%s, показание p_n1=%f, период p_period=%s";
+                if (ret.equals(-1)) {
+                    String str = String.format(CommonErrs.ERR_MSG_METER_VAL_OTHERS +
+                            mess, lsk, codeUsl, val, period);
+                    writer.write(str + "\r\n");
+                } else if (ret.equals(1)) {
+                    String str = String.format(CommonErrs.ERR_MSG_METER_VAL_ZERO +
+                            mess, lsk, codeUsl, val, period);
+                    writer.write(str + "\r\n");
+                } else if (ret.equals(3)) {
+                    // показания меньше или равны существующим - не считать за ошибку
+                    //String str = String.format(CommonErrs.ERR_MSG_METER_VAL_LESS +
+                    //        mess, lsk, codeUsl, val, configApp.getPeriod());
+                    //writer.write(str + "\r\n");
+                } else if (ret.equals(4)) {
+                    String str = String.format(CommonErrs.ERR_MSG_METER_NOT_FOUND +
+                            mess, lsk, codeUsl, val, period);
+                    writer.write(str + "\r\n");
+                } else if (ret.equals(5)) {
+                    String str = String.format(CommonErrs.ERR_MSG_METER_VAL_TOO_BIG +
+                            mess, lsk, codeUsl, val, period);
+                    writer.write(str + "\r\n");
+                } else {
+                    log.trace(CommonErrs.ERR_MSG_METER_VAL_SUCCESS + mess,
+                            lsk, codeUsl, val, period);
+                }
+                return ret;
+            }
+        }
+        return 0; // нет данных для отправки
     }
 
 
