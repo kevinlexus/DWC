@@ -274,20 +274,30 @@ public class MeterMngImpl implements MeterMng {
 
     /**
      * Отправить показания по счетчику в биллинг
-     *
-     * @param writer - объект записи
+     * @param writer - объект записи лога
      * @param lsk    - лиц.счет
      * @param strUsl - код услуги
-     * @param value  - показание
+     * @param prevValue  - предыдущее показание
+     * @param curValue  - текущее показание
+     * @param isSetPreviousVal - установить предыдущее показание? ВНИМАНИЕ! Текущие введёные показания будут сброшены назад
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public int sendMeterVal(BufferedWriter writer, String lsk, String strUsl, String value, String period, Integer userId) throws IOException {
+    public int sendMeterVal(BufferedWriter writer, String lsk, String strUsl,
+                            String prevValue, String curValue, String period,
+                            Integer userId, boolean isSetPreviousVal) throws IOException {
         if (strUsl != null && strUsl.length() >= 3) {
             String codeUsl = strUsl.substring(0, 3);
-            if (value != null && value.length() > 0) {
-                Double val = Double.valueOf(value);
-                log.trace("Отправка по лиц={}, услуге usl={}, показание ={}", lsk, codeUsl, val);
+            Double curVal = 0D;
+            Double prevVal = 0D;
+            if (curValue != null && curValue.length() > 0) {
+                curVal = Double.valueOf(curValue);
+            }
+            if (prevValue != null && prevValue.length() > 0) {
+                prevVal = Double.valueOf(prevValue);
+            }
+
+                log.trace("Отправка по лиц={}, услуге usl={}, пред.показание ={}, показание ={}",
+                        lsk, codeUsl, prevVal, curVal);
 
                 StoredProcedureQuery query = em
                         .createStoredProcedureQuery(
@@ -303,8 +313,18 @@ public class MeterMngImpl implements MeterMng {
                                 ParameterMode.IN
                         )
                         .registerStoredProcedureParameter(
-                                "p_n1",
+                                "p_prev_val",
                                 Double.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_cur_val",
+                                Double.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
+                                "p_is_set_prev",
+                                Integer.class,
                                 ParameterMode.IN
                         )
                         .registerStoredProcedureParameter(
@@ -334,7 +354,9 @@ public class MeterMngImpl implements MeterMng {
                         )
                         .setParameter("p_lsk", lsk)
                         .setParameter("p_usl", codeUsl)
-                        .setParameter("p_n1", val)
+                        .setParameter("p_prev_val", prevVal)
+                        .setParameter("p_cur_val", curVal)
+                        .setParameter("p_is_set_prev", isSetPreviousVal?1:0)
                         .setParameter("p_ts", new Date())
                         .setParameter("p_period", period)
                         .setParameter("p_status", MeterValConsts.INSERT_FOR_LOAD_TO_GIS)
@@ -350,70 +372,37 @@ public class MeterMngImpl implements MeterMng {
                     query.unwrap(ProcedureOutputs.class).release();
                 }
 
-/*
-                CallableStatement callableStatement = ReflectionUtils
-                        .getFieldValue(
-                                query.unwrap(ProcedureOutputs.class),
-                                "scott.p_meter.ins_data_meter"
-                        );
-*/
-/*                StoredProcedureQuery qr = em.createStoredProcedureQuery("scott.p_meter.ins_data_meter");
-                qr.registerStoredProcedureParameter(1, String.class,
-                        ParameterMode.IN); // p_lsk
-                qr.registerStoredProcedureParameter(2, String.class,
-                        ParameterMode.IN); // p_usl
-                qr.registerStoredProcedureParameter(3, Double.class,
-                        ParameterMode.IN); // p_n1
-                qr.registerStoredProcedureParameter(4, Date.class,
-                        ParameterMode.IN); // p_ts
-                qr.registerStoredProcedureParameter(5, String.class,
-                        ParameterMode.IN); // p_period
-                qr.registerStoredProcedureParameter(6, Integer.class,
-                        ParameterMode.IN); // p_status
-                qr.registerStoredProcedureParameter(7, Integer.class,
-                        ParameterMode.IN); // p_user
-                qr.registerStoredProcedureParameter(8, Integer.class,
-                        ParameterMode.OUT);// p_ret
-                qr.setParameter(1, lsk);
-                qr.setParameter(2, codeUsl);
-                qr.setParameter(3, val);
-                qr.setParameter(4, new Date());
-                qr.setParameter(5, period);
-                qr.setParameter(6, MeterValConsts.INSERT_FOR_LOAD_TO_GIS);
-                qr.setParameter(7, userId);
-                qr.executeUpdate();
-                Integer ret = (Integer) qr.getOutputParameterValue(8);
-
- */
                 log.trace("Результат исполнения scott.p_meter.ins_data_meter={}", ret);
-                String mess = " По лиц p_lsk=%s, услуге p_usl=%s, показание p_n1=%f, период p_period=%s";
+                String mess = " По лиц p_lsk=%s, услуге p_usl=%s, предыдущ.показ p_prev_val=%f, показание p_cur_val=%f, период p_period=%s";
                 if (ret.equals(-1)) {
                     String str = String.format(CommonErrs.ERR_MSG_METER_VAL_OTHERS +
-                            mess, lsk, codeUsl, val, period);
+                            mess, lsk, codeUsl, prevVal, curVal, period);
                     writer.write(str + "\r\n");
                 } else if (ret.equals(1)) {
-                    String str = String.format(CommonErrs.ERR_MSG_METER_VAL_ZERO +
-                            mess, lsk, codeUsl, val, period);
-                    writer.write(str + "\r\n");
+                    // нулевые показания - не считать за ошибку
+                    //String str = String.format(CommonErrs.ERR_MSG_METER_VAL_ZERO +
+                    //        mess, lsk, codeUsl, prevVal, curVal, period);
+                    //writer.write(str + "\r\n");
                 } else if (ret.equals(3)) {
                     // показания меньше или равны существующим - не считать за ошибку
                     //String str = String.format(CommonErrs.ERR_MSG_METER_VAL_LESS +
-                    //        mess, lsk, codeUsl, val, configApp.getPeriod());
+                    //        mess, lsk, codeUsl, prevVal, curVal, period);
                     //writer.write(str + "\r\n");
                 } else if (ret.equals(4)) {
                     String str = String.format(CommonErrs.ERR_MSG_METER_NOT_FOUND +
-                            mess, lsk, codeUsl, val, period);
+                            mess, lsk, codeUsl, prevVal, curVal, period);
                     writer.write(str + "\r\n");
                 } else if (ret.equals(5)) {
                     String str = String.format(CommonErrs.ERR_MSG_METER_VAL_TOO_BIG +
-                            mess, lsk, codeUsl, val, period);
+                            mess, lsk, codeUsl, prevVal, curVal, period);
                     writer.write(str + "\r\n");
                 } else {
                     log.trace(CommonErrs.ERR_MSG_METER_VAL_SUCCESS + mess,
-                            lsk, codeUsl, val, period);
+                            lsk, codeUsl, prevVal, curVal, period);
                 }
                 return ret;
-            }
+
+
         }
         return 0; // нет данных для отправки
     }

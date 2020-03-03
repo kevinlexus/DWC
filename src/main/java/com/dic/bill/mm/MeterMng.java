@@ -40,5 +40,7 @@ public interface MeterMng {
 
     boolean isExistAnyMeter(List<SumMeterVol> lstMeterVol, String uslId, Date dt);
 
-    int sendMeterVal(BufferedWriter writer, String lsk, String strUsl, String value, String period, Integer userId) throws IOException;
+    int sendMeterVal(BufferedWriter writer, String lsk, String strUsl,
+                     String prevValue, String value, String period,
+                     Integer userId, boolean isSetPreviosVal) throws IOException;
 }
