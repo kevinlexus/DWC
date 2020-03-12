@@ -1,19 +1,13 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import com.dic.bill.Compress;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
-import com.dic.bill.Compress;
+import javax.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;;
+;
 
 /**
  * Архивное начисление
@@ -132,7 +126,6 @@ public class Acharge implements java.io.Serializable, Compress {
 
 	/**
 	 * Получить hash всех полей, кроме id, npp, mgFrom, mgTo - для компаратора
-	 * @return
 	 */
 	@Override
 	public int getHash() {
