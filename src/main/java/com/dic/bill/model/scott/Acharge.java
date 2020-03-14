@@ -25,7 +25,7 @@ public class Acharge implements java.io.Serializable, Compress {
 
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id;
+	private Long id;
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)

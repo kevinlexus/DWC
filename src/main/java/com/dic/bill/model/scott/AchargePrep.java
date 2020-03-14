@@ -1,19 +1,13 @@
 package com.dic.bill.model.scott;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import com.dic.bill.Compress;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
-import com.dic.bill.Compress;
+import javax.persistence.*;
 
-import lombok.Getter;
-import lombok.Setter;;
+;
 
 /**
  * Архивное начисление
@@ -31,7 +25,7 @@ public class AchargePrep implements java.io.Serializable, Compress {
 
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id; // Id
+	private Long id; // Id
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
