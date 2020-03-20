@@ -46,13 +46,19 @@ public class Ko implements java.io.Serializable {
     @OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
     private Meter meter;
 
+    // счетчики, через Id фин.лиц.счета
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
+    private Set<Meter> meterByKo = new HashSet<>(0);
+
     // лицевые счета
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
     private Set<Kart> kart = new HashSet<>(0);
 
-    // лицевые счета, через id помещения
+    // лицевые счета, через Id помещения
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)

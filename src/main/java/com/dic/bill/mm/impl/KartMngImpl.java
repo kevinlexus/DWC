@@ -235,34 +235,13 @@ public class KartMngImpl implements KartMng {
     }
 
     /**
-     * Получить адрес по лиц.счету
-     *
-     * @param kart - лиц.счет
-     */
-    @Override
-    public String getAdr(Kart kart) {
-        return kart.getSpul().getName() + ", " + kart.getNdTrimmed() +
-                (kart.getNumTrimmed().length() > 0 ? (", " + kart.getNumTrimmed()) : "");
-    }
-
-    /**
-     * Получить адрес с УК по лиц.счету
-     *
-     * @param kart - лиц.счет
-     */
-    @Override
-    public String getAdrWithUk(Kart kart) {
-        return kart.getUk().getName() + ", " + getAdr(kart);
-    }
-
-    /**
      * Получить адрес с названием горда по лиц.счету
      *
      * @param kart - лиц.счет
      */
     @Override
     public String getAdrWithCity(Kart kart) {
-        return orgDao.getByOrgTp("Город").getName()+", "+getAdr(kart);
+        return orgDao.getByOrgTp("Город").getName()+", "+kart.getAdr();
     }
 
     /**

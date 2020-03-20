@@ -28,10 +28,6 @@ public interface KartMng {
 
     String generateUslNameShort(Kart kart, int var, int maxWords, String delimiter);
 
-    String getAdr(Kart kart);
-
-    String getAdrWithUk(Kart kart);
-
     String getAdrWithCity(Kart kart);
 
     void updateKartDetailOrd1() throws WrongValue;

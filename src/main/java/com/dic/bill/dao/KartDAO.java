@@ -36,4 +36,8 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     List<Kart> findActualByReuHouseIdTpKw(@Param("reu") String reu, @Param("tpCd") String tpCd,
                                           @Param("houseId") Integer houseId, @Param("kw") String kw);
 
+    @Query("select t from Kart t where t.uk.reu=:reu and t.tp.cd=:tpCd " +
+            "and t.psch not in (8,9) order by t.kartDetail.ord1")
+    List<Kart> findActualByUkOrderedByAddress(@Param("reu") String reu, @Param("tpCd") String tpCd);
+
 }

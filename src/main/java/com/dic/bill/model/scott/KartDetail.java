@@ -34,6 +34,7 @@ public class KartDetail implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Kart kart;
 
+    // сортировка по адресу
     @Column(name = "ORD1")
     private Integer ord1;
 

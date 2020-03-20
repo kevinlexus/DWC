@@ -166,16 +166,18 @@ public class MeterMngImpl implements MeterMng {
 
 
     /**
-     * Проверить, является ли счетчик в Директ актуальным
+     * Проверить, является ли счетчик в Директ актуальным //note удалить!
      *
      * @param meter - счетчик
      * @param dt    - проверочная дата
      * @return
      */
+/*
     @Override
     public boolean getIsMeterActual(Meter meter, Date dt) {
         return Utl.between(dt, meter.getDt1(), meter.getDt2());
     }
+*/
 
     /**
      * Проверить, открыт ли счетчик в Директ принятия показаний от ГИС
@@ -221,7 +223,7 @@ public class MeterMngImpl implements MeterMng {
     public boolean getCanSaveDataMeter(Eolink meterEol, Date dt) {
         Ko ko = meterEol.getKoObj();
         Meter meter = ko.getMeter();
-        return getIsMeterActual(meter, dt) && getIsMeterOpenForReceiveData(meter);
+        return meter.getIsMeterActual(dt) && getIsMeterOpenForReceiveData(meter);
     }
 
     /**
@@ -285,7 +287,7 @@ public class MeterMngImpl implements MeterMng {
     public int sendMeterVal(BufferedWriter writer, String lsk, String strUsl,
                             String prevValue, String curValue, String period,
                             Integer userId, boolean isSetPreviousVal) throws IOException {
-        if (strUsl != null && strUsl.length() >= 3) {
+        if (strUsl != null && strUsl.length() >= 3 && !strUsl.equals("Нет счетчика")) {
             String codeUsl = strUsl.substring(0, 3);
             Double curVal = 0D;
             Double prevVal = 0D;
@@ -397,8 +399,9 @@ public class MeterMngImpl implements MeterMng {
                             mess, lsk, codeUsl, prevVal, curVal, period);
                     writer.write(str + "\r\n");
                 } else {
-                    log.trace(CommonErrs.ERR_MSG_METER_VAL_SUCCESS + mess,
-                            lsk, codeUsl, prevVal, curVal, period);
+                    String str = String.format(CommonErrs.ERR_MSG_METER_VAL_SUCCESS +
+                            mess, lsk, codeUsl, prevVal, curVal, period);
+                    log.trace(str);
                 }
                 return ret;
 

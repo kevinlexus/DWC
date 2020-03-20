@@ -378,6 +378,25 @@ public class Kart {
         }
     }
 
+
+    /**
+     * Получить адрес по лиц.счету
+     */
+    @Transient
+    public String getAdr() {
+        return getSpul().getName() + ", " + getNdTrimmed() +
+                (getNumTrimmed().length() > 0 ? (", " + getNumTrimmed()) : "");
+    }
+
+    /**
+     * Получить адрес с УК по лиц.счету
+     */
+    @Transient
+    public String getAdrWithUk() {
+        return getUk().getName() + ", " + getAdr();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

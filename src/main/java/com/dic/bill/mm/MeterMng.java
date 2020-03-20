@@ -20,8 +20,6 @@ public interface MeterMng {
 
     boolean getIsMeterDataExist(List<MeterData> lst, String guid, XMLGregorianCalendar ts);
 
-    boolean getIsMeterActual(Meter meter, Date dt);
-
     boolean getIsMeterOpenForReceiveData(Meter meter);
 
     boolean getIsMeterOpenForSendData(Meter meter);
