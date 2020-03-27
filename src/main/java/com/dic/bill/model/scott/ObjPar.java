@@ -60,6 +60,11 @@ public class ObjPar implements java.io.Serializable {
 	@JoinColumn(name="FK_USER", referencedColumnName="ID")
 	private Tuser tuser;
 
+	// документ по обработке параметра (например реестр показаний по счетчикам)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_DOC", referencedColumnName="ID")
+	private DocPar docPar;
+
 	// timestamp
 	@Column(name = "TS", updatable = false, nullable = true)
 	private Date ts;

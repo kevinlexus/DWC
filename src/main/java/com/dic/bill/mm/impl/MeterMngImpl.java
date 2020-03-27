@@ -281,12 +281,14 @@ public class MeterMngImpl implements MeterMng {
      * @param strUsl - код услуги
      * @param prevValue  - предыдущее показание
      * @param curValue  - текущее показание
+     * @param docParId - Id записи реестра
      * @param isSetPreviousVal - установить предыдущее показание? ВНИМАНИЕ! Текущие введёные показания будут сброшены назад
      */
     @Override
     public int sendMeterVal(BufferedWriter writer, String lsk, String strUsl,
                             String prevValue, String curValue, String period,
-                            Integer userId, boolean isSetPreviousVal) throws IOException {
+                            int userId, int docParId,
+                            boolean isSetPreviousVal) throws IOException {
         if (strUsl != null && strUsl.length() >= 3 && !strUsl.equals("Нет счетчика")) {
             String codeUsl = strUsl.substring(0, 3);
             Double curVal = 0D;
@@ -350,6 +352,11 @@ public class MeterMngImpl implements MeterMng {
                                 ParameterMode.IN
                         )
                         .registerStoredProcedureParameter(
+                                "p_doc_par_id",
+                                Integer.class,
+                                ParameterMode.IN
+                        )
+                        .registerStoredProcedureParameter(
                                 "p_ret",
                                 Integer.class,
                                 ParameterMode.OUT
@@ -362,6 +369,7 @@ public class MeterMngImpl implements MeterMng {
                         .setParameter("p_ts", new Date())
                         .setParameter("p_period", period)
                         .setParameter("p_status", MeterValConsts.INSERT_FOR_LOAD_TO_GIS)
+                        .setParameter("p_doc_par_id", docParId)
                         .setParameter("p_user", userId);
                 Integer ret=-1;
                 try {

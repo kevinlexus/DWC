@@ -40,5 +40,6 @@ public interface MeterMng {
 
     int sendMeterVal(BufferedWriter writer, String lsk, String strUsl,
                      String prevValue, String value, String period,
-                     Integer userId, boolean isSetPreviosVal) throws IOException;
+                     int userId, int docParId,
+                     boolean isSetPreviosVal) throws IOException;
 }
