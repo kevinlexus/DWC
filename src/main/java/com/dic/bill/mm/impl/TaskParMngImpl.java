@@ -96,7 +96,7 @@ public class TaskParMngImpl implements TaskParMng {
 			} else {
 				// создать значение
 				ap = new TaskPar(task, par, val1, null, null);
-				em.persist(ap);
+				em.persist(ap); // note Используй crud.save
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -145,7 +145,7 @@ public class TaskParMngImpl implements TaskParMng {
 			} else {
 				// создать значение
 				ap = new TaskPar(task, par, val, null, null);
-				em.persist(ap);
+				em.persist(ap); // note Используй crud.save
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -194,7 +194,7 @@ public class TaskParMngImpl implements TaskParMng {
 			} else {
 				// создать значение
 				ap = new TaskPar(task, par, null, val, null);
-				em.persist(ap);
+				em.persist(ap); // note Используй crud.save
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -243,7 +243,7 @@ public class TaskParMngImpl implements TaskParMng {
 			} else {
 				// создать значение
 				ap = new TaskPar(task, par, null, null, val);
-				em.persist(ap);
+				em.persist(ap); // note Используй crud.save
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");

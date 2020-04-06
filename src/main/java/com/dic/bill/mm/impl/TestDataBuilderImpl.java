@@ -91,7 +91,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         // счетчики
         buildMeterForTest(kart);
         house.getKart().add(kart);
-        em.persist(kart);
+        em.persist(kart); // note Используй crud.save
 
         // Лиц.счет РСО
         kart = new Kart();
@@ -127,7 +127,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         }
 
         house.getKart().add(kart);
-        em.persist(kart);
+        em.persist(kart); // note Используй crud.save
 
         // Лиц.счет Капремонта
         kart = new Kart();
@@ -163,7 +163,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         }
 
         house.getKart().add(kart);
-        em.persist(kart);
+        em.persist(kart); // note Используй crud.save
         return ko;
     }
 
@@ -276,8 +276,8 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         meter.setKoObj(koObj);
         Usl usl = em.find(Usl.class, uslId);
         meter.setUsl(usl);
-        em.persist(ko);
-        em.persist(meter);
+        em.persist(ko); // note Используй crud.save
+        em.persist(meter); // note Используй crud.save
         return meter;
     }
 
@@ -329,7 +329,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
             e.printStackTrace();
         }
         changeDoc.setMgchange(mgChange);
-        em.persist(changeDoc);
+        em.persist(changeDoc); // note Используй crud.save
         return changeDoc;
     }
 
@@ -435,7 +435,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
             e.printStackTrace();
         }
         kart.getKwtp().add(kwtp);
-        em.persist(kwtp);
+        em.persist(kwtp); // note Используй crud.save
         return kwtp;
     }
 
@@ -455,7 +455,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withOper(kwtp.getOper())
                 .withSumma(new BigDecimal(strSumma))
                 .withPenya(new BigDecimal(strPenya)).build();
-        em.persist(kwtpMg);
+        em.persist(kwtpMg); // note Используй crud.save
 
         kwtp.getKwtpMg().add(kwtpMg);
         kwtp.getKart().getKwtpMg().add(kwtpMg);
@@ -483,7 +483,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
                 .withTp(tp)
                 .withSumma(new BigDecimal(strSumma))
                 .build();
-        em.persist(kwtpDay);
+        em.persist(kwtpDay); // note Используй crud.save
 
         kwtpMg.getKwtpDay().add(kwtpDay);
         kwtpMg.getKart().getKwtpDay().add(kwtpDay);
