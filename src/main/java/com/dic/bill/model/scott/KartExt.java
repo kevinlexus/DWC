@@ -50,6 +50,16 @@ public class KartExt implements java.io.Serializable {
     @Column(name = "DT_UPD")
     private Date updDt;
 
+    // статус (1-действующий, 0-закрыт)
+    @Column(name = "V", nullable = false)
+    private Integer v;
+
+    // активный ли лицевой счет?
+    @Transient
+    public boolean isActual() {
+        return v.equals(1);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +84,8 @@ public class KartExt implements java.io.Serializable {
         private Date dtCrt;
         // дата обновления
         private Date updDt;
+        // статус (1-действующий, 0-закрыт)
+        private Integer v;
 
         private KartExtBuilder() {
         }
@@ -107,6 +119,11 @@ public class KartExt implements java.io.Serializable {
             return this;
         }
 
+        public KartExtBuilder withV(Integer v) {
+            this.v = v;
+            return this;
+        }
+
         public KartExt build() {
             KartExt kartExt = new KartExt();
             kartExt.setKart(kart);
@@ -114,6 +131,7 @@ public class KartExt implements java.io.Serializable {
             kartExt.setFio(fio);
             kartExt.setDtCrt(dtCrt);
             kartExt.setUpdDt(updDt);
+            kartExt.setV(v);
             return kartExt;
         }
     }

@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * DAO сущности com.dic.bill.model.scott.Org
  * @author Lev
@@ -39,4 +41,5 @@ public interface OrgDAO extends JpaRepository<Org, Integer> {
 	@Query("select t from com.dic.bill.model.scott.Org t where t.orgTp.cd = ?1")
     Org getByOrgTp(String tp);
 
+	List<Org> findByIsExchangeExt(boolean isExchangeExt);
 }

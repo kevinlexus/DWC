@@ -371,7 +371,7 @@ public class MeterMngImpl implements MeterMng {
                         .setParameter("p_status", MeterValConsts.INSERT_FOR_LOAD_TO_GIS)
                         .setParameter("p_doc_par_id", docParId)
                         .setParameter("p_user", userId);
-                Integer ret=-1;
+                Integer ret;
                 try {
                     query.execute();
 

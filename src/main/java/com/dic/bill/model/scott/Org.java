@@ -67,7 +67,7 @@ public class Org implements java.io.Serializable {
 	@JoinColumn(name="FK_ORGTP", referencedColumnName="ID")
 	private OrgTp orgTp;
 
-	// Тип распределения оплаты KWTP_MG (0-общий тип, 1 - сложный тип (ук 14,15 Кис)
+	// тип распределения оплаты KWTP_MG (0-общий тип, 1 - сложный тип (ук 14,15 Кис)
 	@Column(name = "DIST_PAY_TP")
 	private Integer distPayTp;
 
@@ -76,13 +76,18 @@ public class Org implements java.io.Serializable {
 	@Column(name = "IS_EXCHANGE_GIS", updatable = false)
 	private Boolean isExchangeGis;
 
-	// Тип организации для ГИС ЖКХ (1-УО (упр.орг.), 2-РСО, 3-ТКО)
+	// тип организации для ГИС ЖКХ (1-УО (упр.орг.), 2-РСО, 3-ТКО)
 	@Column(name = "ORG_TP_GIS")
 	private Integer orgTpGis;
 
-	// Группировка для долгов Сбера (Не заполнено - брать REU, заполнено - группировать по этому полю)
+	// группировка для долгов Сбера (Не заполнено - брать REU, заполнено - группировать по этому полю)
 	@Column(name = "GRP_DEB")
 	private Integer grpDeb;
+
+	// обмен внешними лиц счетами (0-нет, 1-да) (Например Полыс - Чистый город)
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "IS_EXCHANGE_EXT", updatable = false)
+	private Boolean isExchangeExt;
 
 	@Transient
 	public boolean isUO() {

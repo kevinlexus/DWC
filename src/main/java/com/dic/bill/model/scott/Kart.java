@@ -195,6 +195,11 @@ public class Kart {
     // перерасчеты
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    private List<KartExt> kartExt = new ArrayList<>(0);
+
+    // перерасчеты
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<Change> change = new ArrayList<>(0);
 
     // корректировки оплатой

@@ -17,12 +17,12 @@ import java.util.List;
 @Setter
 @Entity
 @DynamicUpdate // так как обновляем не все поля
-@Table(name = "T_DOCXPAR", schema = "SCOTT")
-public class DocPar {
+@Table(name = "T_DOC", schema = "SCOTT")
+public class Doc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DocPar_id")
-    @SequenceGenerator(name = "SEQ_DocPar_id", sequenceName = "scott.T_DOCXPAR_ID", allocationSize = 1)
+    @SequenceGenerator(name = "SEQ_DocPar_id", sequenceName = "scott.T_DOC_ID", allocationSize = 1)
     @Column(name = "ID", updatable = false, nullable = false)
     private Integer id;
 
@@ -47,7 +47,7 @@ public class DocPar {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "FK_DOC", referencedColumnName = "ID", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
-    private List<DocPar> docPar = new ArrayList<>(0);
+    private List<Doc> doc = new ArrayList<>(0);
 
     // комментарий
     @Column(name = "comm")
@@ -58,13 +58,17 @@ public class DocPar {
     @Column(name = "IS_SET_PREV_VAL")
     private Boolean isSetPreviousVal;
 
+    // Период
+    @Column(name = "MG")
+    private String mg;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof DocPar))
+        if (o == null || !(o instanceof Doc))
             return false;
 
-        DocPar other = (DocPar) o;
+        Doc other = (Doc) o;
 
         if (id == other.getId()) return true;
         if (id == null) return false;
@@ -133,15 +137,15 @@ public class DocPar {
             return this;
         }
 
-        public DocPar build() {
-            DocPar docPar = new DocPar();
-            docPar.setCd(cd);
-            docPar.setDtCrt(dtCrt);
-            docPar.setUpdDt(updDt);
-            docPar.setTuser(tuser);
-            docPar.setComm(comm);
-            docPar.setIsSetPreviousVal(isSetPreviousVal);
-            return docPar;
+        public Doc build() {
+            Doc doc = new Doc();
+            doc.setCd(cd);
+            doc.setDtCrt(dtCrt);
+            doc.setUpdDt(updDt);
+            doc.setTuser(tuser);
+            doc.setComm(comm);
+            doc.setIsSetPreviousVal(isSetPreviousVal);
+            return doc;
         }
     }
 }
