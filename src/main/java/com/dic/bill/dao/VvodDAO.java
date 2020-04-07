@@ -32,7 +32,7 @@ public interface VvodDAO extends JpaRepository<Vvod, Integer> {
 			"join SCOTT.USL u on d.usl=u.usl and u.fk_calc_tp is not null " +
 			"where k.reu=:reuId and k.PSCH not in (8,9) order by d.id",
 			nativeQuery = true)
-	List<BigDecimal> findVvodByUk(@Param("reuId") String reuId);
+	List<BigDecimal> findVvodByReu(@Param("reuId") String reuId);
 
 	/**
 	 * Найти все вводы, по дому, упорядочить

@@ -55,7 +55,7 @@ public interface MeterDAO extends JpaRepository<Meter, Integer> {
             "and ?2 between t.dt1 and t.dt2 " +
             "and k.psch not in (8,9) and k.tp.cd='LSK_TP_MAIN'" +
             "order by k.kartDetail.ord1")
-    List<Meter> findActualByUkOrderedByAdress(String reu, Date dt);
+    List<Meter> findActualByReuOrderedByAdress(String reu, Date dt);
 
     /**
      * Получить суммарный объем по счетчикам всех услуг, в объекте koObj за период

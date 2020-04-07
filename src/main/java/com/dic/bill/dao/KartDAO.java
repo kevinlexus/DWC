@@ -38,6 +38,6 @@ public interface KartDAO extends JpaRepository<Kart, String> {
 
     @Query("select t from Kart t where t.uk.reu=:reu and t.tp.cd=:tpCd " +
             "and t.psch not in (8,9) order by t.kartDetail.ord1")
-    List<Kart> findActualByUkOrderedByAddress(@Param("reu") String reu, @Param("tpCd") String tpCd);
+    List<Kart> findActualByReuOrderedByAddress(@Param("reu") String reu, @Param("tpCd") String tpCd);
 
 }

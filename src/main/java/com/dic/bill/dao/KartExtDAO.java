@@ -33,7 +33,7 @@ public interface KartExtDAO extends JpaRepository<KartExt, Integer> {
      * @param ukId - Id УК
      */
     @Query(value = "select distinct t from Kwtp t join t.kart k join k.kartExt e " +
-            " where k.uk.reu=:ukId")
-    List<Kwtp> getKwtpKartExtByUk(@Param("ukId") String ukId);
+            " where k.uk.reu=:ukId order by t.id")
+    List<Kwtp> getKwtpKartExtByReu(@Param("ukId") String ukId);
 
 }
