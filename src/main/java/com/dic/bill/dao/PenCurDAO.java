@@ -1,13 +1,10 @@
 package com.dic.bill.dao;
 
 import com.dic.bill.model.scott.PenCur;
-import com.dic.bill.model.scott.Penya;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 
 public interface PenCurDAO extends JpaRepository<PenCur, Integer> {
