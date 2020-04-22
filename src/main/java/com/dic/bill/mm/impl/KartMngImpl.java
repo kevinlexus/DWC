@@ -241,7 +241,7 @@ public class KartMngImpl implements KartMng {
      */
     @Override
     public String getAdrWithCity(Kart kart) {
-        return orgDao.getByOrgTp("Город").getName()+", "+kart.getAdr();
+        return orgDao.getByOrgTp("Город").getName() + ", " + kart.getAdr();
     }
 
     /**
@@ -255,35 +255,45 @@ public class KartMngImpl implements KartMng {
         log.info("Начало обновления порядка следования адресов Kart");
 
         kartDetailDAO.updateOrd1ToNull();
-        final int[] i = {0};
+        int i = 0;
         List<Kart> lstKart = kartDao.findAll().stream()
                 .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
                         .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
                         .thenComparing(Kart::getNdIndex)
                         .thenComparing(t -> t.getNumDigit().equals("") ? 0 : Integer.parseInt(t.getNumDigit()))
                         .thenComparing(Kart::getNumIndex)
-                        .thenComparing(Kart::isActual)
+                        .thenComparing(t -> !t.isActual())
                 ).collect(Collectors.toList());
-        for (Kart kart:lstKart) {
-            i[0]++;
+        for (Kart kart : lstKart) {
+            i++;
+            // обновление порядка адресов
             if (kart.getKartDetail() == null) {
                 throw new WrongValue(
-                        "ОШИБКА! Не существует записи SCOTT.KART_DETAIL для лиц.счета lsk="+
-                        kart.getLsk());
+                        "ОШИБКА! Не существует записи SCOTT.KART_DETAIL для лиц.счета lsk=" +
+                                kart.getLsk());
             }
-            kart.getKartDetail().setOrd1(i[0]);
+            kart.getKartDetail().setOrd1(i);
+
+            // обновление главного лиц.счета по K_LSK_ID (Актуальный, желательно LSK_TP_MAIN, далее по lsk)
+            Optional<Kart> kartMain = kart.getKoKw().getKart().stream().min(Comparator.comparing((Kart o1) -> !o1.isActual())
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_MAIN"))
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
+                    .thenComparing(Kart::getLsk));
+            kartMain.ifPresent(t -> t.getKartDetail().setIsMain(true));
         }
+
         log.info("Окончание обновления порядка следования адресов Kart");
     }
 
     /**
      * Является ли нанимателем или имеется ли в лиц.счете действующая услуга "найм"
+     *
      * @param kart - лиц.счет
      */
     @Override
     public boolean getIsRenter(Kart kart) {
         return kart.getNabor().stream()
-            .anyMatch(t -> t.isValid(true) && t.getUsl().isMain()
-                    && t.getUsl().getCd().equals("найм"));
+                .anyMatch(t -> t.isValid(true) && t.getUsl().isMain()
+                        && t.getUsl().getCd().equals("найм"));
     }
 }

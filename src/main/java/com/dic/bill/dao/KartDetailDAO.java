@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface KartDetailDAO extends JpaRepository<KartDetail, Integer> {
 
     @Modifying
-    @Query("update KartDetail t set t.ord1=null")
+    @Query("update KartDetail t set t.ord1=null, t.isMain=false")
     int updateOrd1ToNull();
 
 }

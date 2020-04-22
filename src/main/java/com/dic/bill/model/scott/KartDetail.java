@@ -3,6 +3,7 @@ package com.dic.bill.model.scott;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -37,6 +38,11 @@ public class KartDetail implements java.io.Serializable {
     // сортировка по адресу
     @Column(name = "ORD1")
     private Integer ord1;
+
+    // на текущий момент, в контексте K_LSK_ID: Основной(Если нет основного - РСО), незакрытый лиц.счет.-1 Остальные - 0
+    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Column(name = "IS_MAIN")
+    Boolean isMain;
 
     @Override
     public boolean equals(Object o) {
