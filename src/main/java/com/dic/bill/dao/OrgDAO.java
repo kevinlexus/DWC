@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.01
  *
  */
-@Repository("OrgDAO_DWC")
+//@Repository("OrgDAO_DWC")
 public interface OrgDAO extends JpaRepository<Org, Integer> {
 
 

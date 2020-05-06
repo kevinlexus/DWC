@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "A_KWTP", schema="SCOTT")
 @Getter @Setter
-public class Akwtp implements java.io.Serializable  {
+public class Akwtp implements java.io.Serializable, KwtpPay  {
 
 	public Akwtp() {
 	}
@@ -48,6 +48,10 @@ public class Akwtp implements java.io.Serializable  {
 	// дата
 	@Column(name = "DTEK", updatable = false)
 	private Date dt;
+
+	// дата инкассации
+	@Column(name = "DAT_INK", updatable = false)
+	private Date dtInk;
 
 	// детализация платежа по периодам
 	@OneToMany(fetch = FetchType.LAZY)

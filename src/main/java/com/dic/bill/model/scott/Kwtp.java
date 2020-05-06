@@ -25,7 +25,7 @@ import java.util.Objects;
 @Table(name = "C_KWTP", schema = "SCOTT")
 @Getter
 @Setter
-public class Kwtp implements java.io.Serializable {
+public class Kwtp implements java.io.Serializable, KwtpPay {
 
     public Kwtp() {
     }

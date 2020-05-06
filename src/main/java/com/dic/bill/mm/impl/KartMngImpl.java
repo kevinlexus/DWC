@@ -280,6 +280,13 @@ public class KartMngImpl implements KartMng {
                     .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
                     .thenComparing(Kart::getLsk));
             kartMain.ifPresent(t -> t.getKartDetail().setIsMain(true));
+
+            // обновление главного лиц.счета по FK_KLSK_PREMISE (Актуальный, желательно LSK_TP_MAIN, далее по lsk)
+            kartMain = kart.getKoPremise().getKartByPremise().stream().min(Comparator.comparing((Kart o1) -> !o1.isActual())
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_MAIN"))
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
+                    .thenComparing(Kart::getLsk));
+            kartMain.ifPresent(t -> t.getKartDetail().setIsMainInPremise(true));
         }
 
         log.info("Окончание обновления порядка следования адресов Kart");

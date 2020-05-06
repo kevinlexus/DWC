@@ -34,6 +34,11 @@ public class KartExt implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Kart kart;
 
+    // Ko помещения
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
+    private Ko koPremise;
+
     // Уникальный лиц.счет во внешней системе
     @Column(name = "EXT_LSK", unique = true, updatable = false)
     private String extLsk;
@@ -73,9 +78,12 @@ public class KartExt implements java.io.Serializable {
         return Objects.hash(getId());
     }
 
+
     public static final class KartExtBuilder {
         // лиц.счет в системе "Директ"
         private Kart kart;
+        // Ko помещения
+        private Ko koPremise;
         // Уникальный лиц.счет во внешней системе
         private String extLsk;
         // ФИО абонента во внешней системе
@@ -96,6 +104,11 @@ public class KartExt implements java.io.Serializable {
 
         public KartExtBuilder withKart(Kart kart) {
             this.kart = kart;
+            return this;
+        }
+
+        public KartExtBuilder withKoPremise(Ko koPremise) {
+            this.koPremise = koPremise;
             return this;
         }
 
@@ -127,6 +140,7 @@ public class KartExt implements java.io.Serializable {
         public KartExt build() {
             KartExt kartExt = new KartExt();
             kartExt.setKart(kart);
+            kartExt.setKoPremise(koPremise);
             kartExt.setExtLsk(extLsk);
             kartExt.setFio(fio);
             kartExt.setDtCrt(dtCrt);

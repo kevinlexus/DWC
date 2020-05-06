@@ -31,6 +31,11 @@ public class LoadKartExt implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Kart kart;
 
+    // Ko помещения
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
+    private Ko koPremise;
+
     // уникальный лиц.счет во внешней системе
     @Column(name = "EXT_LSK")
     private String extLsk;

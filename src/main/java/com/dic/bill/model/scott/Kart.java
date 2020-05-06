@@ -192,7 +192,7 @@ public class Kart {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<Charge> charge = new ArrayList<>(0);
 
-    // перерасчеты
+    // внешние лиц счета
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<KartExt> kartExt = new ArrayList<>(0);
