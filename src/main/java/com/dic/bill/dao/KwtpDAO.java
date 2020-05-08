@@ -31,6 +31,17 @@ public interface KwtpDAO extends JpaRepository<Kwtp, Integer> {
     List<Kwtp> getKwtpKartExtByReuWithLsk(@Param("ukId") String ukId,
                                    @Param("genDt1") Date genDt1, @Param("genDt2") Date genDt2);
 
+    /**
+     * Получить платежи по внешним лиц.счетам, используя LSK и наборы услуг
+     * @param ukId - Id УК
+     * @param orgId - Id организации
+     * @param genDt1 - дата начала
+     * @param genDt2 - дата окончания
+     */
+    @Query(value = "select distinct t from Kwtp t join t.kart k join k.kartExt e join k.nabor n " +
+            " where k.uk.reu <> :ukId and n.org.id=:orgId and t.dtInk between :genDt1 and :genDt2 order by t.id")
+    List<Kwtp> getKwtpKartExtByReuWithLsk(@Param("ukId") String ukId, @Param("orgId") Integer orgId,
+                                          @Param("genDt1") Date genDt1, @Param("genDt2") Date genDt2);
 
     /**
      * Получить платежи по внешним лиц.счетам, используя FK_KLSK_PREMISE
@@ -39,8 +50,20 @@ public interface KwtpDAO extends JpaRepository<Kwtp, Integer> {
      * @param genDt2 - дата окончания
      */
     @Query(value = "select distinct t from Kwtp t join t.kart k join k.koPremise.kartExtByPremise e " +
-            " where k.uk.reu=:ukId and t.dtInk between :genDt1 and :genDt2 order by t.id")
+            " where k.uk.reu = :ukId and t.dtInk between :genDt1 and :genDt2 order by t.id")
     List<Kwtp> getKwtpKartExtByReuWithPremise(@Param("ukId") String ukId,
                                    @Param("genDt1") Date genDt1, @Param("genDt2") Date genDt2);
+
+    /**
+     * Получить платежи по внешним лиц.счетам, используя FK_KLSK_PREMISE и наборы услуг
+     * @param ukId - Id УК
+     * @param orgId - Id организации
+     * @param genDt1 - дата начала
+     * @param genDt2 - дата окончания
+     */
+    @Query(value = "select distinct t from Kwtp t join t.kart k join k.koPremise.kartExtByPremise e join k.nabor n " +
+            " where k.uk.reu <> :ukId and n.org.id=:orgId and t.dtInk between :genDt1 and :genDt2 order by t.id")
+    List<Kwtp> getKwtpKartExtByReuWithPremise(@Param("ukId") String ukId, @Param("orgId") Integer orgId,
+                                              @Param("genDt1") Date genDt1, @Param("genDt2") Date genDt2);
 
 }
