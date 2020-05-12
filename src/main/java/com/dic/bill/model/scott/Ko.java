@@ -64,11 +64,17 @@ public class Ko implements java.io.Serializable {
     @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Set<Kart> kartByPremise = new HashSet<>(0);
 
-    // внешние лиц.счета
+    // внешние лиц.счета, через помещение
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Set<KartExt> kartExtByPremise = new HashSet<>(0);
+
+    // внешние лиц.счета, через фин.лиц.счет
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "FK_KLSK_ID", referencedColumnName = "ID", updatable = false)
+    private Set<KartExt> kartExtByKoKw = new HashSet<>(0);
 
     public Ko() {
         super();

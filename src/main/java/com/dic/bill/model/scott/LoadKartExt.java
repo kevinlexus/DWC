@@ -31,6 +31,11 @@ public class LoadKartExt implements java.io.Serializable {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Kart kart;
 
+    // Ko фин лиц.счета
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_ID", referencedColumnName = "ID", updatable = false)
+    private Ko koKw;
+
     // Ko помещения
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
@@ -89,9 +94,14 @@ public class LoadKartExt implements java.io.Serializable {
         return Objects.hash(getId());
     }
 
+
     public static final class LoadKartExtBuilder {
         // лиц.счет в системе "Директ"
         private Kart kart;
+        // Ko фин лиц.счета
+        private Ko koKw;
+        // Ko помещения
+        private Ko koPremise;
         // уникальный лиц.счет во внешней системе
         private String extLsk;
         // GUID из ФИАС
@@ -122,6 +132,16 @@ public class LoadKartExt implements java.io.Serializable {
 
         public LoadKartExtBuilder withKart(Kart kart) {
             this.kart = kart;
+            return this;
+        }
+
+        public LoadKartExtBuilder withKoKw(Ko koKw) {
+            this.koKw = koKw;
+            return this;
+        }
+
+        public LoadKartExtBuilder withKoPremise(Ko koPremise) {
+            this.koPremise = koPremise;
             return this;
         }
 
@@ -178,6 +198,8 @@ public class LoadKartExt implements java.io.Serializable {
         public LoadKartExt build() {
             LoadKartExt loadKartExt = new LoadKartExt();
             loadKartExt.setKart(kart);
+            loadKartExt.setKoKw(koKw);
+            loadKartExt.setKoPremise(koPremise);
             loadKartExt.setExtLsk(extLsk);
             loadKartExt.setGuid(guid);
             loadKartExt.setFio(fio);
