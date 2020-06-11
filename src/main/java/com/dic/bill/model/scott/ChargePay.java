@@ -14,8 +14,8 @@ import javax.persistence.*;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_CHARGEPAY2", schema="SCOTT")
-@IdClass(ChargePayId.class) // суррогатный первичный ключ
+//@Table(name = "C_CHARGEPAY2", schema="SCOTT")
+@Table(name = "C_CHARGEPAY2", schema="LOADER1")
 @Getter @Setter
 public class ChargePay implements java.io.Serializable, Compress {
 
@@ -26,7 +26,7 @@ public class ChargePay implements java.io.Serializable, Compress {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_C_Chargepay2_id")
 	@SequenceGenerator(name = "SEQ_C_Chargepay2_id", sequenceName = "scott.c_chargepay2_id", allocationSize = 1)
 	@Column(name = "ID", updatable = false, nullable = false)
-	private Integer id;
+	private Long id;
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,6 +41,9 @@ public class ChargePay implements java.io.Serializable, Compress {
 
     @Column(name = "summa", updatable = false, nullable = false)
 	private Double summa; // сумма задолженности
+
+    @Column(name = "summap", updatable = false, nullable = false)
+	private Double summap; // сумма оплаты пени
 
 	// Начало действия записи
 	@Column(name = "mgfrom", nullable = false)
@@ -70,12 +73,22 @@ public class ChargePay implements java.io.Serializable, Compress {
 	}
 
 	@Override
+	public int hashCode() {
+		if (id != null) {
+			return id.hashCode();
+		} else {
+			return super.hashCode();
+		}
+	}
+
+	@Override
 	public boolean isTheSame(Compress compr) {
 		ChargePay chargePay = (ChargePay) compr;
 
 		if (kart != null ? !kart.equals(chargePay.kart) : chargePay.kart != null) return false;
 		if (type != null ? !type.equals(chargePay.type) : chargePay.type != null) return false;
 		if (mg != null ? !mg.equals(chargePay.mg) : chargePay.mg != null) return false;
+		if (summap != null ? !summap.equals(chargePay.summap) : chargePay.summap != null) return false;
 		return summa != null ? summa.equals(chargePay.summa) : chargePay.summa == null;
 
 	}
@@ -86,6 +99,7 @@ public class ChargePay implements java.io.Serializable, Compress {
 		result = 31 * result + (type != null ? type.hashCode() : 0);
 		result = 31 * result + (mg != null ? mg.hashCode() : 0);
 		result = 31 * result + (summa != null ? summa.hashCode() : 0);
+		result = 31 * result + (summap != null ? summap.hashCode() : 0);
 		return result;
 	}
 }
