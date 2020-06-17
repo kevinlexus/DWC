@@ -14,8 +14,7 @@ import javax.persistence.*;
  */
 @SuppressWarnings("serial")
 @Entity
-//@Table(name = "C_CHARGEPAY2", schema="SCOTT")
-@Table(name = "C_CHARGEPAY2", schema="LOADER1")
+@Table(name = "C_CHARGEPAY2", schema="SCOTT")
 @Getter @Setter
 public class ChargePay implements java.io.Serializable, Compress {
 
