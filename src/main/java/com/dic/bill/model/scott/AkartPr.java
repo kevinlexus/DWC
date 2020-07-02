@@ -232,6 +232,9 @@ public class AkartPr implements java.io.Serializable, Compress {
     private Integer useGisDivideEls;
 
 
+    /**
+     * Сравнить все поля, кроме id, mgFrom, mgTo - для компаратора
+     */
     @Override
     public boolean isTheSame(Compress compr) {
         AkartPr akartPr = (AkartPr) compr;
@@ -289,7 +292,7 @@ public class AkartPr implements java.io.Serializable, Compress {
 
     }
 
-    // сравнивать по Id зарегистрированного
+    // сравнивать по idPerson зарегистрированного
     @Override
     public String getKey() {
         return getIdPerson().toString();
@@ -310,6 +313,18 @@ public class AkartPr implements java.io.Serializable, Compress {
         return id.equals(other.getId());
     }
 
+    @Override
+    public int hashCode() {
+        if (id != null) {
+            return id.hashCode();
+        } else {
+            return super.hashCode();
+        }
+    }
+
+    /**
+     * Получить hash всех полей, кроме id, mgFrom, mgTo - для компаратора
+     */
     @Override
     public int getHash() {
         int result = idPerson != null ? idPerson.hashCode() : 0;

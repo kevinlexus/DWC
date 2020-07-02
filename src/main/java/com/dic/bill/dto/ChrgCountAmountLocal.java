@@ -422,9 +422,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * Сохранить и округлить начисление в C_CHARGE
      *
      * @param ko        - квартира
-     * @param lstSelUsl - список выбранных услуг // fixme почему никем не используется?
      */
-    public /*synchronized */void saveChargeAndRound(Ko ko, List<Usl> lstSelUsl) throws ErrorWhileChrg { //note synchronized???? - убрал! ред.05.07.2019
+    public /*synchronized */void saveChargeAndRound(Ko ko) throws ErrorWhileChrg { //note synchronized???? - убрал! ред.05.07.2019
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
