@@ -117,8 +117,8 @@ public class Kart {
     // updatable = false - чтобы не было Update Foreign key
     private Ko koKw;
 
-    // Ko помещения
-    @OneToOne(fetch = FetchType.LAZY)
+    // Ko помещения -- почему OneToOne? исправил ред.08.06.20
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Ko koPremise;
 

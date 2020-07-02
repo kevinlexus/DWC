@@ -22,8 +22,10 @@ public interface KartExtDAO extends JpaRepository<KartExt, Integer> {
     /**
      * Получить внешние лиц.счета по дому и квартире
      */
-    @Query(value = "select t from KartExt t join t.kart k " +
-            " where k.house.id=:houseId and k.num=:kw and k.psch not in (8,9) and t.v=1")
+    @Query(value = "select t from KartExt t " +
+            " where exists (select k from Kart k where k.house.id=:houseId and k.num=:kw " +
+            "and k.psch not in (8,9) " +
+            "and (t.koKw.id=k.koKw.id or t.koPremise.id=k.koPremise.id or t.kart.id=k.id)) and t.v=1")
     List<KartExt> getKartExtByHouseIdAndKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
 
 }

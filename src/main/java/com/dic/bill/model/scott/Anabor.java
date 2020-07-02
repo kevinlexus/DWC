@@ -119,7 +119,6 @@ public class Anabor implements java.io.Serializable, Compress {
 
 	/**
 	 * Получить hash всех полей, кроме id, mgFrom, mgTo - для компаратора
-	 * @return
 	 */
 	@Override
 	public int getHash() {
@@ -150,7 +149,6 @@ public class Anabor implements java.io.Serializable, Compress {
 
 	/**
 	 * Сравнить все поля, кроме id, mgFrom, mgTo - для компаратора
-	 * @return
 	 */
 	@Override
 	public boolean isTheSame(Compress compr) {
