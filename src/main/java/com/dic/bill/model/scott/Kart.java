@@ -101,7 +101,7 @@ public class Kart {
     @JoinColumn(name = "FK_TP", referencedColumnName = "ID", updatable = false)
     private Lst tp;
 
-    // статус лиц.счета
+    // статус лиц.счета (Муницип, Приват, Аренда)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
     private Status status;
@@ -242,7 +242,7 @@ public class Kart {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<PenCur> penCur = new ArrayList<>(0);
 
-    // архивная пеня (долги)
+    // пеня (долги)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private Set<Penya> penya = new HashSet<>(0);
