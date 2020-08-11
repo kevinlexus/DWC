@@ -3,7 +3,7 @@
 
 	<groupId>com.dic.bill</groupId>
 	<artifactId>DWC</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.5</version>
 
 	<name>DWC</name>
 	<description>Model classes</description>

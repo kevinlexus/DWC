@@ -64,11 +64,14 @@ public class MeterMngImpl implements MeterMng {
 
     @Override
     public Optional<Meter> getActualMeterByKo(Ko ko, String usl, Date dt) {
-        // список уникальных фин.лиц. к которым привязаны счетчики (бред)
+        // список уникальных фин.лиц. к которым привязаны счетчики
         List<Ko> lstKoFinLsk = ko.getKartByPremise().stream().map(Kart::getKoKw).distinct().collect(Collectors.toList());
         for (Ko koFinLsk : lstKoFinLsk) {
             // найти первый попавшийся счетчик по всем фин.лиц. в помещении
-            return getActualMeterByKoUsl(koFinLsk, usl, dt);
+            Optional<Meter> actualMeter = getActualMeterByKoUsl(koFinLsk, usl, dt);
+            if (actualMeter.isPresent()) {
+                return actualMeter;
+            }
         }
         // не найдено
         return Optional.empty();
