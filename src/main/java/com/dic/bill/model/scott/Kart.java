@@ -185,6 +185,7 @@ public class Kart {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     // updatable = false - чтобы не было Update Foreign key
+    @Fetch(FetchMode.JOIN)
     private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
