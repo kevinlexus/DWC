@@ -129,6 +129,7 @@ public class Kart {
 
     // детализация по лиц.счету
     @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private KartDetail kartDetail;
 
     // объект Eolink лиц.счета, здесь OneToMany, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
@@ -176,15 +177,14 @@ public class Kart {
 
     // набор услуг
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    //@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    //@Fetch(FetchMode.JOIN) возможно вызывало когда-то OutOfMemory - убрал
     private Set<Nabor> nabor = new HashSet<>(0);
 
     // проживающие
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
-// updatable = false - чтобы не было Update Foreign key
-    @Fetch(FetchMode.JOIN)
+    // updatable = false - чтобы не было Update Foreign key
     private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
