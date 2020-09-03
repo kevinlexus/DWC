@@ -421,7 +421,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     /**
      * Сохранить и округлить начисление в C_CHARGE
      *
-     * @param ko        - квартира
+     * @param ko - квартира
      */
     public /*synchronized */void saveChargeAndRound(Ko ko) throws ErrorWhileChrg { //note synchronized???? - убрал! ред.05.07.2019
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
@@ -453,8 +453,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 BigDecimal parentUslSumma = ko.getKart().stream()
                         .flatMap(t -> t.getCharge().stream())
                         .filter(t -> t.getType().equals(1) && !t.getIsSch() &&
-                                (t.getUsl().equals(u.getUsl().getParentUsl()) ||
-                                        t.getUsl().equals(u.getUsl().getParentUsl().getUslEmpt()))
+                                // захардкодил условие, так как только для Полыс.
+                                (u.getUsl().getId().equals("092") && Utl.in(t.getUsl().getId(), "011", "057")
+                                        || u.getUsl().getId().equals("094")
+                                        && Utl.in(t.getUsl().getId(), "015", "058", "109", "110"))
                         )
                         .map(Charge::getSumma)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);

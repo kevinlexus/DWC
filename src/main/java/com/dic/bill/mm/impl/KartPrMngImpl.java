@@ -221,11 +221,12 @@ public class KartPrMngImpl implements KartPrMng {
     @Override
     public SocStandart getSocStdtVol(Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
         SocStandart socStandart = new SocStandart();
-        BigDecimal norm = BigDecimal.ZERO;
+        BigDecimal norm;
         socStandart.vol = BigDecimal.ZERO;
         switch (nabor.getUsl().getFkCalcTp()) {
             case 17: // х.в.
             case 18: // г.в.
+            case 52: // ХВС для гвс
             case 19: {// водоотв.
                 // соцнорма из набора
                 norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
