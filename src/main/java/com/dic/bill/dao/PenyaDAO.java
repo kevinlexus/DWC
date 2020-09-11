@@ -25,14 +25,14 @@ public interface PenyaDAO extends JpaRepository<Penya, Integer> {
      * Получить лиц.счета, которые имеют задолженность или текущее начисление
      * @param ukId - Id УК
      */
-    @Query(value = "select distinct k from Kart k join fetch k.penya p where k.uk.id=:ukId")
-    List<Kart> getKartWhereDebitExistsByReu(@Param("ukId") Integer ukId);
+    @Query(value = "select distinct k from Kart k left join fetch k.penya p where k.uk.id=:ukId")
+    List<Kart> getKartWithDebitByReu(@Param("ukId") Integer ukId);
 
     /**
      * Получить лиц.счета, которые имеют задолженность или текущее начисление
      * @param grpDeb - группа организаций для объединения задолженности в один файл
      */
-    @Query(value = "select distinct k from Kart k join fetch k.penya p where k.uk.grpDeb=:grpDeb")
-    List<Kart> getKartWhereDebitExistsByGrpDeb(@Param("grpDeb") Integer grpDeb);
+    @Query(value = "select distinct k from Kart k left join fetch k.penya p where k.uk.grpDeb=:grpDeb")
+    List<Kart> getKartWithDebitByGrpDeb(@Param("grpDeb") Integer grpDeb);
 
 }
