@@ -43,5 +43,19 @@ public class PenCorr implements java.io.Serializable {
 	@Column(name = "DTEK", updatable = false)
 	private Date dt;
 
+	// услуга
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
+	private Usl usl;
+
+	// организация - поставщик услуги
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
+	private Org org;
+
+	// документ корректировки
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_DOC", referencedColumnName="ID")
+	private ChangeDoc changeDoc;
 }
 

@@ -10,6 +10,7 @@ import com.dic.bill.dto.SumRec;
 import com.dic.bill.model.scott.PenUslCorr;
 
 
+@Deprecated
 public interface PenUslCorrDAO extends JpaRepository<PenUslCorr, Integer> {
 
 	/**

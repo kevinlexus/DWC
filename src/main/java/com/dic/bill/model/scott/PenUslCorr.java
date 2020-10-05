@@ -1,18 +1,11 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Корректировки пени по организациям - услугам - периодам
@@ -23,6 +16,7 @@ import lombok.Setter;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "C_PEN_USL_CORR", schema="SCOTT")
+@Deprecated
 public class PenUslCorr implements java.io.Serializable{
 
 	public PenUslCorr() {
