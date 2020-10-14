@@ -33,6 +33,7 @@ public interface AkwtpDAO extends JpaRepository<Akwtp, Integer> {
             "where t.mg=:period\n" +
             "and t.org=:orgId\n" +
             "and t.summa is not null\n" +
+            "and t.priznak = 1\n" +
             "and coalesce(e.ext_lsk, e2.ext_lsk) is not null\n" +
             "order by coalesce(e.ext_lsk, e2.ext_lsk) ", nativeQuery = true)
     List<KartExtPaymentRec> getPaymentByPeriod(@Param("period") String period, @Param("orgId") Integer orgId);

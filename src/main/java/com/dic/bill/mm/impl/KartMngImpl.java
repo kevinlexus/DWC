@@ -282,6 +282,7 @@ public class KartMngImpl implements KartMng {
             kartMain.ifPresent(t -> t.getKartDetail().setIsMain(true));
 
             // обновление главного лиц.счета по FK_KLSK_PREMISE (Актуальный, желательно LSK_TP_MAIN, далее по lsk)
+            // fixme работает очень неэффективно переделать бы на сохранение по 1 помещению ред.13.10.20
             kartMain = kart.getKoPremise().getKartByPremise().stream().min(Comparator.comparing((Kart o1) -> !o1.isActual())
                     .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_MAIN"))
                     .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
