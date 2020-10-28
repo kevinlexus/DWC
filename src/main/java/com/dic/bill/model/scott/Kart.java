@@ -267,6 +267,10 @@ public class Kart {
     @Column(name = "DIVIDED", updatable = false)
     private Boolean isDivided;
 
+    // ЕЛС ГИС ЖКХ
+    @Column(name = "ELSK")
+    private String elsk;
+
     // активный ли лицевой счет?
     @Transient
     public boolean isActual() {
