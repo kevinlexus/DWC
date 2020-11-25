@@ -133,6 +133,24 @@ public class KartMngImpl implements KartMng {
     }
 
     /**
+     * Получить основной лиц.счет, без кэша, вернуть сущность (используется в выгрузке долгов Сбер по ЕЛС)
+     * @param kart - текущий лиц.счет
+     * @return - основной лиц.счет
+     */
+    @Override
+    public Kart getKartMain(Kart kart) {
+        for (Kart t : kart.getKoKw().getKart()) {
+            if (t.isActual()) {
+                if (t.getTp().getCd().equals("LSK_TP_MAIN")) {
+                    return t;
+                }
+            }
+        }
+        // не найден основной лиц.счет, вернуть текущий
+        return kart;
+    }
+
+    /**
      * Возвращает состояние лиц.счета на указанную дату
      *
      * @param kart - лиц.счет

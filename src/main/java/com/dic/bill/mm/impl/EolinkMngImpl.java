@@ -3,6 +3,7 @@ package com.dic.bill.mm.impl;
 import com.dic.bill.dao.EolinkDAO;
 import com.dic.bill.dao.EolinkDAO2;
 import com.dic.bill.mm.EolinkMng;
+import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.exs.Eolink;
 import com.dic.bill.model.scott.Kart;
 import lombok.Getter;
@@ -14,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -26,10 +29,12 @@ public class EolinkMngImpl implements EolinkMng {
     private EntityManager em;
     private final EolinkDAO eolinkDAO;
     private final EolinkDAO2 eolinkDAO2;
+    private final KartMng kartMng;
 
-    public EolinkMngImpl(EolinkDAO eolinkDAO, EolinkDAO2 eolinkDAO2) {
+    public EolinkMngImpl(EolinkDAO eolinkDAO, EolinkDAO2 eolinkDAO2, KartMng kartMng) {
         this.eolinkDAO = eolinkDAO;
         this.eolinkDAO2 = eolinkDAO2;
+        this.kartMng = kartMng;
     }
 
     /**
@@ -54,7 +59,7 @@ public class EolinkMngImpl implements EolinkMng {
      * @param - tp - тип объекта
      */
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     //rollbackFor=Exception.class - означает, что все исключения, выбрасываемые данным методом, должны приводить к откату транзакции.
     public void setChildActive(Eolink eolink, String tp, Integer status) {
         eolink.getChild().stream().forEach(t -> {
@@ -147,13 +152,15 @@ public class EolinkMngImpl implements EolinkMng {
     }
 
     /**
-     * Получить параметры лиц.счета
-     * @param eolink - объект лиц.счета
+     * Получить параметры объекта Eolink по основному лиц счету
      * @param kart - лиц.счет
      * @return - DTO с параметрами
      */
     @Override
-    public EolinkParams getActualEolinkParams(Optional<Eolink> eolink, Kart kart) {
+    public EolinkParams getEolinkParamsOfKartMain(Kart kart) {
+        Kart kartMain = kartMng.getKartMain(kart);
+        Optional<Eolink> eolink = kartMain.getEolink().stream().findFirst();
+
         EolinkParams eolinkParams = new EolinkParams();
         // получить первый актуальный объект типа "Дом" по данному лиц.счету
         eolink.ifPresent(value -> getEolinkByEolinkUpHierarchy(value, "Дом").ifPresent(t -> {
@@ -161,8 +168,8 @@ public class EolinkMngImpl implements EolinkMng {
             eolinkParams.setUn(value.getUn());
         }));
         if (!eolink.isPresent()) {
-            if (kart.getHouse().getGuid()!=null) {
-                eolinkParams.setHouseGUID(kart.getHouse().getGuid());
+            if (kartMain.getHouse().getGuid()!=null) {
+                eolinkParams.setHouseGUID(kartMain.getHouse().getGuid());
             }
         }
         return eolinkParams;

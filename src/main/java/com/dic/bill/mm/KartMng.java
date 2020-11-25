@@ -22,6 +22,8 @@ public interface KartMng {
 
     String getKartMainLsk(Kart kart);
 
+    Kart getKartMain(Kart kart);
+
     Optional<StateSch> getKartStateByDate(Kart kart, Date dt);
 
     void saveShortKartDescription(Ko ko);
