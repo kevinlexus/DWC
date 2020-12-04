@@ -159,7 +159,7 @@ public class EolinkMngImpl implements EolinkMng {
     @Override
     public EolinkParams getEolinkParamsOfKartMain(Kart kart) {
         Kart kartMain = kartMng.getKartMain(kart);
-        Optional<Eolink> eolink = kartMain.getEolink().stream().findFirst();
+        Optional<Eolink> eolink = kartMain.getEolink().stream().filter(t -> t.getUn() != null).findFirst();
 
         EolinkParams eolinkParams = new EolinkParams();
         // получить первый актуальный объект типа "Дом" по данному лиц.счету
