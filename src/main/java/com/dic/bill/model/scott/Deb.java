@@ -1,4 +1,5 @@
 package com.dic.bill.model.scott;
+/*
 
 import java.math.BigDecimal;
 
@@ -17,16 +18,20 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+// fixme пока оставил, потом удалить ред.09.12.2020
+
+*/
 /**
  * Задолженность по организациям - услугам - периодам
  * @author lev
  * @version 1.2
- */
+ *//*
+
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "DEB", schema="SCOTT")
-public class Deb implements java.io.Serializable{
+public class OLD_Deb_KMP implements java.io.Serializable{
 
 	public Deb() {
 	}
@@ -109,18 +114,22 @@ public class Deb implements java.io.Serializable{
 	    }
 	}
 
-	/**
+	*/
+/**
 	 * Creates builder to build {@link Deb}.
 	 * @return created builder
-	 */
+	 *//*
+
 	@Generated("SparkTools")
 	public static Builder builder() {
 		return new Builder();
 	}
 
-	/**
+	*/
+/**
 	 * Builder to build {@link Deb}.
-	 */
+	 *//*
+
 	@Generated("SparkTools")
 	public static final class Builder {
 		private Long id;
@@ -189,3 +198,4 @@ public class Deb implements java.io.Serializable{
 
 }
 
+*/

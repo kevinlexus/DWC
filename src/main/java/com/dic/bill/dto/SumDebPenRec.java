@@ -12,14 +12,8 @@ public interface SumDebPenRec {
 
 	// Id записи
 	Long getId();
-	// Id услуги
-	String getUslId();
-	// Id организации
-	Integer getOrgId();
-	// исходящий долг
+	// долг
 	BigDecimal getDebOut();
-	// исходящий, свернутый долг
-	BigDecimal getDebRolled();
 	// период
 	Integer getMg();
 	// дата операции
