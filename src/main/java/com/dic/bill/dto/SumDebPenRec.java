@@ -1,7 +1,6 @@
 package com.dic.bill.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /*
  * Projection для хранения записи финансовой операции (входящии записи по долгу)
@@ -10,12 +9,8 @@ import java.util.Date;
  */
 public interface SumDebPenRec {
 
-	// Id записи
-	Long getId();
 	// долг
 	BigDecimal getDebOut();
 	// период
 	Integer getMg();
-	// дата операции
-	Date getDt();
 }

@@ -3,6 +3,7 @@ package com.dic.bill.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,13 +17,13 @@ public class CalcStoreLocal {
 	// задолженность предыдущего периода
 	List<SumDebPenRec> lstDebFlow;
 	// текущее начисление
-	List<SumRec> lstChrgFlow;
+	BigDecimal lstChrgFlow;
 	// перерасчеты
-	List<SumRec> lstChngFlow;
+	List<SumRecMg> lstChngFlow;
 	// оплата долга
-	List<SumRec> lstPayFlow;
+	List<SumRecMg> lstPayFlow;
 	// корректировки оплаты
-	List<SumRec> lstPayCorrFlow;
+	List<SumRecMg> lstPayCorrFlow;
 	// общий список всех финансовых операций
 	List<UslOrg> lstAll;
 	// код УК в числовом выражении (для ускорения фильтров)

@@ -2,6 +2,7 @@ package com.dic.bill.dao;
 
 import java.util.List;
 
+import com.dic.bill.dto.SumRecMg;
 import com.dic.bill.dto.SumUslOrgRec;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,6 +36,16 @@ public interface CorrectPayDAO extends JpaRepository<CorrectPay, Integer> {
 			+ "and nvl(t.summa,0) <> 0 "
 			+ "group by t.usl.id, t.org.id")
 	List<SumUslOrgRec> getCorrectPayByLskGrouped(@Param("lsk") String lsk, @Param("mg") String mg);
+
+	/**
+	 * Получить сгруппированные записи корректировок оплат текущего периода
+	 * @param lsk - лицевой счет
+	 */
+	@Query(value = "select t.mg, coalesce(sum(t.summa),0) as summa "
+			+ "from CorrectPay t "
+			+ "where t.kart.lsk=:lsk and t.mg=:mg "
+			+ "group by t.mg")
+	List<SumRecMg> getCorrectByPeriodAndLsk(@Param("lsk") String lsk, @Param("mg") String mg);
 
 	/**
 	 * Получить записи корректировок оплаты по услугам - организациям за выбраный период DOPL

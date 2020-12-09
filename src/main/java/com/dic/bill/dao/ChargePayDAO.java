@@ -1,16 +1,31 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.dto.SumDebPenRec;
 import com.dic.bill.model.scott.ChargePay;
 import com.dic.bill.model.scott.ChargePayId;
 import com.dic.bill.model.scott.Kart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 
 public interface ChargePayDAO extends JpaRepository<ChargePay, ChargePayId> {
 
+
+    /**
+     * Получить записи долгов, по услугам
+     * @param lsk - лицевой счет
+     * @param period - бухгалтерский период
+     */
+	@Query(value = "select sum(decode(t.type,0,t.summa,-1*t.summa)) as debOut, " +
+            "        t.mg from scott.c_chargepay2 t " +
+            "        where t.lsk=:lsk and :period between t.mgFrom and t.mgTo " +
+            "        group by t.mg"
+            , nativeQuery = true
+			)
+	List<SumDebPenRec> getDebitByLsk(@Param("lsk") String lsk, @Param("period") Integer period);
 
     /**
      * Получить все элементы по лиц.счету, начиная с заданного периода

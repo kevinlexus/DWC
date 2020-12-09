@@ -14,10 +14,6 @@ public interface SumRec {
 	String getUslId();
 	// Id организации
 	Integer getOrgId();
-	// cумма задолженности (исходящее сальдо по задолженности)
-	BigDecimal getDebOut();
-	// задолженность по пене (исходящее сальдо по пене)
-	BigDecimal getPenOut();
 	// прочие суммы по операциям
 	BigDecimal getSumma();
 	// период

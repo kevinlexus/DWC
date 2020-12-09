@@ -1,14 +1,15 @@
 package com.dic.bill.dao;
 
-import java.util.List;
-
+import com.dic.bill.dto.SumRec;
+import com.dic.bill.dto.SumRecMg;
 import com.dic.bill.dto.SumUslOrgRec;
+import com.dic.bill.model.scott.Charge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.dic.bill.dto.SumRec;
-import com.dic.bill.model.scott.Charge;
+import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -28,6 +29,16 @@ public interface ChargeDAO extends JpaRepository<Charge, Integer> {
 			+ "where t.kart.lsk=:lsk and t.type=1 "
 			+ "and nvl(t.summa,0) <> 0")
 	List<SumRec> getChargeByLsk(@Param("lsk") String lsk);
+
+
+	/**
+	 * Получить записи текущих начислений по периодам
+	 * @param lsk - лицевой счет
+	 */
+	@Query(value = "select coalesce(sum(t.summa),0) as summa "
+			+ " from Charge t "
+			+ "where t.kart.lsk=:lsk and t.type=1 ")
+	BigDecimal getChargeByPeriodAndLsk(@Param("lsk") String lsk);
 
 	/**
 	 * Получить сгруппированные записи начислений текущего периода
