@@ -21,7 +21,7 @@ public class CalcStoreLocal {
 	// перерасчеты
 	List<SumRecMg> lstChngFlow;
 	// оплата долга
-	List<SumRecMg> lstPayFlow;
+	List<SumRecMgDt> lstPayFlow;
 	// корректировки оплаты
 	List<SumRecMg> lstPayCorrFlow;
 	// общий список всех финансовых операций

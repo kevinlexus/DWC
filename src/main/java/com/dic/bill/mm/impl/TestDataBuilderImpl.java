@@ -298,10 +298,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.getCharge().add(charge);
     }
 
+/*
 
-    /**
+    */
+/**
      * Добавить записи задолженности
-     */
+     *//*
+
     @Override
     public void addDebForTest(Kart kart, String uslId, int orgId, int mgFrom, int mgTo, int mg, String strDebOut) {
         Deb deb = new Deb();
@@ -319,6 +322,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         deb.setMg(mg);
         kart.getDeb().add(deb);
     }
+*/
 
     @Override
     public ChangeDoc buildChangeDocForTest(String strDt, String mgChange) {

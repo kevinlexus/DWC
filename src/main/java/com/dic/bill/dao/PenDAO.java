@@ -1,17 +1,16 @@
 package com.dic.bill.dao;
 
-import java.util.List;
-
+import com.dic.bill.dto.SumDebPenRec;
+import com.dic.bill.model.scott.Pen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.dic.bill.dto.SumDebPenRec;
-import com.dic.bill.model.scott.Deb;
+import java.util.List;
 
 
-public interface PenDAO extends JpaRepository<Deb, Integer> {
+public interface PenDAO extends JpaRepository<Pen, Integer> {
 
 	/**
 	 * Получить записи задолженности по пени, по услугам
@@ -20,12 +19,12 @@ public interface PenDAO extends JpaRepository<Deb, Integer> {
 	 * @return
 	 */
 	@Query(value = "select t.id as id, t.usl.id as uslId, t.org.id as orgId, "
-			+ "nvl(t.penIn,0) as penIn, "
-			+ "nvl(t.penChrg,0) as penChrg, "
-			+ "nvl(t.penCorr,0) as penCorr, "
-			+ "nvl(t.penPay,0) as penPay, "
-			+ "nvl(t.penOut,0) as penOut, "
-			+ "nvl(t.days,0) as days, "
+			+ "coalesce(t.penIn,0) as penIn, "
+			+ "coalesce(t.penChrg,0) as penChrg, "
+			+ "coalesce(t.penCorr,0) as penCorr, "
+			+ "coalesce(t.penPay,0) as penPay, "
+			+ "coalesce(t.penOut,0) as penOut, "
+			+ "coalesce(t.days,0) as days, "
 			+ "t.mg as mg, 8 as tp from Pen t where :period between t.mgFrom and t.mgTo and t.kart.lsk=:lsk "
 			//+ "and nvl(t.penOut,0) <> 0 "
 			)

@@ -234,9 +234,11 @@ public class Kart {
     private Set<KwtpDay> kwtpDay = new HashSet<>(0);
 
     // задолженность
+/*
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
     private List<Deb> deb = new ArrayList<>(0);
+*/
 
     // текущая пеня
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
