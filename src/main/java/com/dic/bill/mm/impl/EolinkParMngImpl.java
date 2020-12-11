@@ -98,7 +98,7 @@ public class EolinkParMngImpl implements EolinkParMng {
 			} else {
 				// создать значение
 				ap = new EolinkPar(eolink, par, val1, null, null);
-				em.persist(ap); // note Используй crud.save
+				em.persist(ap);
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -147,7 +147,7 @@ public class EolinkParMngImpl implements EolinkParMng {
 			} else {
 				// создать значение
 				ap = new EolinkPar(eolink, par, val, null, null);
-				em.persist(ap); // note Используй crud.save
+				em.persist(ap);
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -197,7 +197,7 @@ public class EolinkParMngImpl implements EolinkParMng {
 			} else {
 				// создать значение
 				ap = new EolinkPar(eolink, par, null, val, null);
-				em.persist(ap); // note Используй crud.save
+				em.persist(ap);
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");
@@ -246,7 +246,7 @@ public class EolinkParMngImpl implements EolinkParMng {
 			} else {
 				// создать значение
 				ap = new EolinkPar(eolink, par, null, null, val);
-				em.persist(ap); // note Используй crud.save
+				em.persist(ap);
 			}
 		} else {
 			throw new WrongGetMethod("Параметр "+parCd+" имеет другой тип или тип данного");

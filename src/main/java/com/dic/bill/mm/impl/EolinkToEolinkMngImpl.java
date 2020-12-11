@@ -42,7 +42,7 @@ public class EolinkToEolinkMngImpl implements EolinkToEolinkMng {
 			return false;
 		} else {
 			EolinkToEolink eolToEol = new EolinkToEolink(parent, child, lstMng.getByCD(tp));
-			em.persist(eolToEol); // note Используй crud.save
+			em.persist(eolToEol);
 			return true;
 		}
 

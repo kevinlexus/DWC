@@ -193,7 +193,7 @@ public class TaskEolinkParMngImpl implements TaskEolinkParMng {
 			if (ep==null) {
 				//Параметра нет, создать
 				ep = new EolinkPar(task.getEolink(), t.getPar(), t.getN1(), t.getS1(), t.getD1());
-				em.persist(ep); // note Используй crud.save
+				em.persist(ep);
 			} else {
 				//Параметр есть, и изменился, обновить
 				if (ep.getPar().getTp().equals("NM")) {
