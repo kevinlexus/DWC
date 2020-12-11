@@ -36,7 +36,7 @@ public class Kart {
     }
 
     @Id
-    @Column(name = "LSK", updatable = false, nullable = false)
+    @Column(name = "LSK", nullable = false)
     private String lsk;
 
     // УК
@@ -49,27 +49,27 @@ public class Kart {
     private String kul;
 
     // номер дома
-    @Column(name = "ND", updatable = false, nullable = false)
+    @Column(name = "ND", nullable = false)
     private String nd;
 
     // номер помещения
-    @Column(name = "KW", updatable = false, nullable = false)
+    @Column(name = "KW", nullable = false)
     private String num;
 
     // фамилия
-    @Column(name = "K_FAM", updatable = false, nullable = false)
+    @Column(name = "K_FAM", nullable = false)
     private String kFam;
 
     // имя
-    @Column(name = "K_IM", updatable = false, nullable = false)
+    @Column(name = "K_IM", nullable = false)
     private String kIm;
 
     // отчество
-    @Column(name = "K_OT", updatable = false, nullable = false)
+    @Column(name = "K_OT", nullable = false)
     private String kOt;
 
     // дата ограничения пени
-    @Column(name = "PN_DT", updatable = false, nullable = false)
+    @Column(name = "PN_DT", nullable = false)
     private Date pnDt;
 
     // номер подъезда
@@ -98,33 +98,34 @@ public class Kart {
 
     // тип лиц.счета
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_TP", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_TP", referencedColumnName = "ID")
     private Lst tp;
 
     // статус лиц.счета
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
+    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false)
     private Status status;
 
     // улица
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "KUL", referencedColumnName = "ID", nullable = false, updatable = false)
+    @JoinColumn(name = "KUL", referencedColumnName = "ID", nullable = false)
     private Spul spul;
 
     // Ko финансового лиц.счета
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID")
     // updatable = false - чтобы не было Update Foreign key
+    // fixme ред.11.12.20  убрал ВЕЗДЕ в данном классе updatable = false - не работают тесты, позже разобраться (может начать тормозить в долгах сбера!)
     private Ko koKw;
 
     // Ko помещения -- почему OneToOne? исправил ред.08.06.20
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID")
     private Ko koPremise;
 
     // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID")
     private Ko koLsk;
 
     // детализация по лиц.счету
@@ -139,12 +140,12 @@ public class Kart {
 
     // дом
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HOUSE_ID", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "HOUSE_ID", referencedColumnName = "ID")
     private House house;
 
     // родительский лицевой счет (привязка)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "PARENT_LSK", referencedColumnName = "LSK")
     private Kart parentKart;
 
     // общая площадь
@@ -177,60 +178,60 @@ public class Kart {
 
     // набор услуг
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     //@Fetch(FetchMode.JOIN) возможно вызывало когда-то OutOfMemory - убрал
     private Set<Nabor> nabor = new HashSet<>(0);
 
     // проживающие
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     // updatable = false - чтобы не было Update Foreign key
     @Fetch(FetchMode.JOIN)
     private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<Charge> charge = new ArrayList<>(0);
 
     // внешние лиц счета
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<KartExt> kartExt = new ArrayList<>(0);
 
     // перерасчеты
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<Change> change = new ArrayList<>(0);
 
     // корректировки оплатой
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<CorrectPay> correctPay = new ArrayList<>(0);
 
     // подготовительная информация для расчета начисления
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<ChargePrep> chargePrep = new ArrayList<>(0);
 
     // сальдо
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<SaldoUsl> saldoUsl = new HashSet<>(0);
 
     // платеж, заголовок
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<Kwtp> kwtp = new HashSet<>(0);
 
     // платеж, распределение по периодам
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<KwtpMg> kwtpMg = new HashSet<>(0);
 
     // платеж, распределение по услугам, орг.
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<KwtpDay> kwtpDay = new HashSet<>(0);
 
     // задолженность
@@ -242,17 +243,17 @@ public class Kart {
 
     // текущая пеня
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<PenCur> penCur = new ArrayList<>(0);
 
     // архивная пеня (долги)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<Penya> penya = new HashSet<>(0);
 
     // кран из системы отопления
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "KRAN1", updatable = false, nullable = false)
+    @Column(name = "KRAN1", nullable = false)
     private Boolean isKran1;
 
     // список коротких наименований услуг, по лиц.счету  (для удобного представления счета при оплате) обновляется при начислении
@@ -261,12 +262,12 @@ public class Kart {
 
     // статус лиц.счета (открыт, закрыт, наличие счетчиков
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<StateSch> stateSch = new HashSet<>(0);
 
     // разделенный в ГИС ЖКХ ЕЛС?
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "DIVIDED", updatable = false)
+    @Column(name = "DIVIDED")
     private Boolean isDivided;
 
     // ЕЛС ГИС ЖКХ

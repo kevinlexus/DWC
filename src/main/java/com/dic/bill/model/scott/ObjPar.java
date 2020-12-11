@@ -20,7 +20,7 @@ public class ObjPar implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ObjPar_id")
-	@SequenceGenerator(name="SEQ_ObjPar_id", sequenceName="scott.u_list_id", allocationSize=1)
+	@SequenceGenerator(name="SEQ_ObjPar_id", sequenceName="scott.T_OBJXPAR_id", allocationSize=1)
     @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 

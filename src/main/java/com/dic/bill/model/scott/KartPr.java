@@ -2,7 +2,6 @@ package com.dic.bill.model.scott;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -90,7 +89,7 @@ public class KartPr implements java.io.Serializable {
 
     // использовать информацию о собственнике в разделенном ЕЛС ГИС ЖКХ?
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "USE_GIS_DIVIDE_ELS", updatable = false)
+    @Column(name = "USE_GIS_DIVIDE_ELS") // , updatable = false - убрал - не работали тесты
     private Boolean isUseDividedEls;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,6 +1,6 @@
 package com.dic.bill.dao;
 
-import com.dic.bill.dto.SumRecMg;
+import com.dic.bill.dto.SumRecMgDt;
 import com.dic.bill.dto.SumUslOrgRec;
 import com.dic.bill.model.scott.Change;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,10 +29,10 @@ public interface ChangeDAO extends JpaRepository<Change, Integer> {
      * Получить сгруппированные записи перерасчетов текущего периода
      * @param lsk - лицевой счет
      */
-    @Query(value = "select t.mg, coalesce(sum(t.summa),0) as summa "
+    @Query(value = "select t.mgchange as mg, coalesce(sum(t.summa),0) as summa, t.dt "
             + "from Change t "
             + "where t.kart.lsk=:lsk "
-            + "group by t.mg")
-    List<SumRecMg> getChangeByPeriodAndLsk(@Param("lsk") String lsk);
+            + "group by t.mgchange, t.dt")
+    List<SumRecMgDt> getChangeByPeriodAndLsk(@Param("lsk") String lsk);
 
 }

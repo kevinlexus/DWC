@@ -25,7 +25,7 @@ public class Spul {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", updatable = false, nullable = false)
-    private Integer id;
+    private String id;
 
     // наименование
     @Column(name = "NAME", updatable = false, nullable = true)

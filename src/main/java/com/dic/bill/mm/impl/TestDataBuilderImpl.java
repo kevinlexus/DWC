@@ -46,8 +46,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
     public Ko buildKartForTest(House house, String suffix, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
                                int statusId, int psch, int ukId) {
 
-        // помещение
+        // Фин.лс.
         Ko ko = new Ko();
+        // помещение
+        Ko premise = new Ko();
+        em.persist(premise);
+
+        // лиц.сч.
         Kart kart = new Kart();
         // УК
         Org uk = em.find(Org.class, ukId);
@@ -60,6 +65,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         //Status status = em.find(Status.class, 2);
 
         kart.setKoKw(ko);
+        kart.setKoPremise(premise);
         kart.setHouse(house);
         kart.setLsk("ОСН_" + suffix);
 
@@ -67,7 +73,9 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.setSchEl(1);
 
         kart.setOpl(area);
-        kart.setKul("0001");
+        //kart.setKul("0001");
+        Spul spul = em.find(Spul.class, "0001");
+        kart.setSpul(spul);
         kart.setNd("000001");
         kart.setNum("0000001");
         kart.setKpr(0);
@@ -77,6 +85,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.setMgFrom("201401");
         kart.setMgTo("201412");
         kart.setStatus(status);
+        kart.setIsDivided(false);
         ko.getKart().add(kart);
 
         if (isAddPers) {
@@ -105,11 +114,13 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         //status = em.find(Status.class, 1);
 
         kart.setKoKw(ko);
+        kart.setKoPremise(premise);
         kart.setHouse(house);
         kart.setLsk("РСО_" + suffix);
         kart.setPsch(psch);
         kart.setOpl(area);
-        kart.setKul("0001");
+        //kart.setKul("0001");
+        kart.setSpul(spul);
         kart.setNd("000001");
         kart.setNum("0000001");
         kart.setKpr(0);
@@ -120,6 +131,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.setMgTo("201412");
         kart.setStatus(status);
         ko.getKart().add(kart);
+        kart.setIsDivided(false);
 
         if (isAddNabor) {
             // наборы услуг
@@ -141,11 +153,12 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         //status = em.find(Status.class, 1);
 
         kart.setKoKw(ko);
+        kart.setKoPremise(premise);
         kart.setHouse(house);
         kart.setLsk("КАП_" + suffix);
         kart.setPsch(0);
         kart.setOpl(area);
-        kart.setKul("0001");
+        kart.setSpul(spul);
         kart.setNd("000001");
         kart.setNum("0000001");
         kart.setKpr(0);
@@ -156,6 +169,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.setMgTo("201412");
         //kart.setStatus(status);
         ko.getKart().add(kart);
+        kart.setIsDivided(false);
 
         if (isAddNabor) {
             // наборы услуг
@@ -251,6 +265,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         objPar.setLst(lst);
         objPar.setN1(vol);
         objPar.setMg(mg);
+        objPar.setStatus(0);
         meter.getObjPar().add(objPar);
     }
 
@@ -554,6 +569,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         KartPr kartPr = new KartPr();
         kartPr.setKart(kart);
         kartPr.setFio(fio);
+        kartPr.setIsUseDividedEls(false);
         try {
             kartPr.setDtBirdth(Utl.getDateFromStr(dtBirdth));
             kartPr.setDtReg(Utl.getDateFromStr(dtReg));
