@@ -214,6 +214,11 @@ public class Kart {
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private List<ChargePrep> chargePrep = new ArrayList<>(0);
 
+    // движение по лиц.счету
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    private List<ChargePay> chargepay = new ArrayList<>(0);
+
     // сальдо
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LSK", referencedColumnName = "LSK")

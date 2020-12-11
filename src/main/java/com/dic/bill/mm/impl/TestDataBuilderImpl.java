@@ -101,6 +101,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         buildMeterForTest(kart);
         house.getKart().add(kart);
         em.persist(kart);
+/*
 
         // Лиц.счет РСО
         kart = new Kart();
@@ -178,6 +179,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
 
         house.getKart().add(kart);
         em.persist(kart);
+*/
         return ko;
     }
 
@@ -313,31 +315,21 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.getCharge().add(charge);
     }
 
-/*
-
-    */
-/**
+    /**
      * Добавить записи задолженности
-     *//*
-
+     */
     @Override
-    public void addDebForTest(Kart kart, String uslId, int orgId, int mgFrom, int mgTo, int mg, String strDebOut) {
-        Deb deb = new Deb();
-        deb.setKart(kart);
-
-        Usl usl = em.find(Usl.class, uslId);
-        Org org = em.find(Org.class, orgId);
+    public void addDebForTest(Kart kart, int mgFrom, int mgTo, int mg, String strDebOut) {
+        ChargePay chargePay = new ChargePay();
+        chargePay.setKart(kart);
         BigDecimal debout = new BigDecimal(strDebOut);
-
-        deb.setUsl(usl);
-        deb.setOrg(org);
-        deb.setDebOut(debout);
-        deb.setMgFrom(mgFrom);
-        deb.setMgTo(mgTo);
-        deb.setMg(mg);
-        kart.getDeb().add(deb);
+        chargePay.setSumma(debout.doubleValue());
+        chargePay.setMgFrom(mgFrom);
+        chargePay.setMgTo(mgTo);
+        chargePay.setMg(String.valueOf(mg));
+        kart.getChargepay().add(chargePay);
     }
-*/
+
 
     @Override
     public ChangeDoc buildChangeDocForTest(String strDt, String mgChange) {

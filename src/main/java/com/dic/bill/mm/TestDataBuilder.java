@@ -18,6 +18,8 @@ public interface TestDataBuilder {
 
     //void addDebForTest(Kart kart, String uslId, int orgId, int mgFrom, int mgTo, int mg, String strDebOut);
 
+    void addDebForTest(Kart kart, int mgFrom, int mgTo, int mg, String strDebOut);
+
     ChangeDoc buildChangeDocForTest(String strDt, String mgChange);
 
     void addChangeForTest(Kart kart, ChangeDoc changeDoc, int userId, String uslId, Integer orgId,
