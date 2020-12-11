@@ -17,9 +17,9 @@ public class CalcStoreLocal {
 	// задолженность предыдущего периода
 	List<SumDebPenRec> lstDebFlow;
 	// текущее начисление
-	BigDecimal lstChrgFlow;
+	BigDecimal chrgSum;
 	// перерасчеты
-	List<SumRecMg> lstChngFlow;
+	List<SumRecMgDt> lstChngFlow;
 	// оплата долга
 	List<SumRecMgDt> lstPayFlow;
 	// корректировки оплаты
