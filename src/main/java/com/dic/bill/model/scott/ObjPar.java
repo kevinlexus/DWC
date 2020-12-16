@@ -26,7 +26,7 @@ public class ObjPar implements java.io.Serializable {
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_LSK", referencedColumnName="LSK", updatable = false, nullable = true)
+	@JoinColumn(name="FK_LSK", referencedColumnName="LSK")
 	private Kart kart;
 
 	// параметр BD
@@ -47,7 +47,7 @@ public class ObjPar implements java.io.Serializable {
 
 	// Ko объекта
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_K_LSK", referencedColumnName="ID", updatable = false, insertable = true, nullable = true)
+	@JoinColumn(name="FK_K_LSK", referencedColumnName="ID")
 	private Ko ko;
 
 	// параметр

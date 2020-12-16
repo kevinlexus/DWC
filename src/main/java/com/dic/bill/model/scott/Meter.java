@@ -34,7 +34,7 @@ public class Meter implements java.io.Serializable {
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_USL", referencedColumnName="USL", updatable = false, nullable = false)
+	@JoinColumn(name="FK_USL", referencedColumnName="USL", nullable = false)
 	private Usl usl;
 
 	// дата начала работы
@@ -47,25 +47,24 @@ public class Meter implements java.io.Serializable {
 
 	// Ko счетчика
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID", updatable = false)
+	@JoinColumn(name="K_LSK_ID", referencedColumnName="ID")
 	private Ko ko;
 
 	// Ko объекта, к которому присоединен счетчик
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID", updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name="FK_KLSK_OBJ", referencedColumnName="ID")
 	private Ko koObj;
 
 	// объемы, показания и другие параметры
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="FK_K_LSK", referencedColumnName="K_LSK_ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@OneToMany(mappedBy = "ko", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<ObjPar> objPar = new ArrayList<>(0);
 
 	// последнее показание
-	@Column(name = "N1", updatable = false)
+	@Column(name = "N1")
 	private BigDecimal n1;
 
 	// тип обмена с ГИС ЖКХ (null, 0 - нет обмена, 1-принимать показания от ГИС, 2-отправлять показания в ГИС, 3-принимать и отправлять показания в ГИС)
-	@Column(name = "GIS_CONN_TP", updatable = false)
+	@Column(name = "GIS_CONN_TP")
 	private Integer gisConnTp;
 
 	/**

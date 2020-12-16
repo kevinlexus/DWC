@@ -38,44 +38,43 @@ public class KwtpMg implements java.io.Serializable {
     private Kart kart;
 
     // сумма
-    @Column(name = "SUMMA", updatable = false)
+    @Column(name = "SUMMA")
     private BigDecimal summa;
 
     // пеня
-    @Column(name = "PENYA", updatable = false)
+    @Column(name = "PENYA")
     private BigDecimal penya;
 
     // период оплаты
-    @Column(name = "DOPL", updatable = false)
+    @Column(name = "DOPL")
     private String dopl;
 
     // дата платежа
-    @Column(name = "DTEK", updatable = false)
+    @Column(name = "DTEK")
     private Date dt;
 
     // № компьютера
-    @Column(name = "NKOM", updatable = false)
+    @Column(name = "NKOM")
     private String nkom;
 
     // код операции
-    @Column(name = "OPER", updatable = false)
+    @Column(name = "OPER")
     private String oper;
 
     // № инкассации
-    @Column(name = "NINK", updatable = false)
+    @Column(name = "NINK")
     private Integer nink;
 
     // дата инкассации
-    @Column(name = "DAT_INK", updatable = false)
+    @Column(name = "DAT_INK")
     private Date dtInk;
 
     // задолженность на момент распределения по периоду в C_GET_PAY строка 580
-    @Column(name = "DEBT", updatable = false)
+    @Column(name = "DEBT")
     private BigDecimal debt;
 
     // детализация платежа по услугам
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID", updatable = false)
+    @OneToMany(mappedBy = "kwtpMg", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KwtpDay> KwtpDay = new ArrayList<>(0);
 
     // заголовок платежа
@@ -84,8 +83,7 @@ public class KwtpMg implements java.io.Serializable {
     private Kwtp kwtp;
 
     // комментарий распределения строки платежа
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", updatable = false)
+    @OneToMany(mappedBy = "kwtpMg", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KwtpDayLog> kwtpMgLog = new ArrayList<>(0);
 
     @Override

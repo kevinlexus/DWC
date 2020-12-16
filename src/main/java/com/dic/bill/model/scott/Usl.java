@@ -61,66 +61,63 @@ public class Usl implements java.io.Serializable  {
 	private Integer npp;
 
 	// для справочника дат начала обязательств по долгу -  PEN_DT Тип услуги (0-прочие услуги, 1-капремонт)
-    @Column(name = "TP_PEN_DT", updatable = false)
+    @Column(name = "TP_PEN_DT")
     private Integer tpPenDt;
 
 	// для справочника ставок рефинансирования - PEN_REF Тип услуги (0-прочие услуги, 1-капремонт)
-    @Column(name = "TP_PEN_REF", updatable = false)
+    @Column(name = "TP_PEN_REF")
     private Integer tpPenRef;
 
 	// 0 - коэфф. в справочнике тарифов, 1 - норматив в справочнике тарифов,
 	// 2 - koeff-коэфф и norm-норматив, 3-koeff и norm-оба коэфф
 	// 4 - koeff-коэфф и norm-норматив, только если koeff == 0, то берётся в объемы, и не берётся в c_charge (для х.в., г.в. и водоотведения)
-	@Column(name = "SPTARN", updatable = false)
+	@Column(name = "SPTARN")
 	private Integer sptarn;
 
 	// родительская услуга (например Х.В. 0 прожив --> Х.В.)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="PARENT_USL", referencedColumnName="USl", updatable = false, nullable = false)
+	@JoinColumn(name="PARENT_USL", referencedColumnName="USl")
 	private Usl parentUsl;
 
 	// услуга без проживающих
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="USL_EMPT", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@JoinColumn(name="USL_EMPT", referencedColumnName="USL")
 	private Usl uslEmpt;
 
 	// услуга свыше соцнормы
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="USL_P", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@JoinColumn(name="USL_P", referencedColumnName="USL")
 	private Usl uslOverSoc;
 
 	// услуга для определения объема (иногда делается подстановка)
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="USL_VOL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@JoinColumn(name="USL_VOL", referencedColumnName="USL")
 	private Usl uslVol;
 
 	// тип услуги 2 -- 0 - услуга коммунальная (х.в.), 1 - услуга жилищная (тек.сод.)
-	@Column(name = "USL_TYPE2", updatable = false)
+	@Column(name = "USL_TYPE2")
 	private Integer type2;
 
 	// вариант расчета услуги
-	@Column(name = "FK_CALC_TP", updatable = false)
+	@Column(name = "FK_CALC_TP")
 	private Integer fkCalcTp;
 
 	// цены по услуге
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	//@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
+	@OneToMany(mappedBy = "usl", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	private Set<Price> price = new HashSet<>(0);
 
 	// порядок расчета услуг
-	@Column(name = "USL_ORDER", updatable = false)
+	@Column(name = "USL_ORDER")
 	private Integer uslOrder;
 
 	// дочерняя услуга (связанная) например х.в.--> х.в.МОП.
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_USL_CHLD", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@JoinColumn(name="FK_USL_CHLD", referencedColumnName="USL")
 	private Usl uslChild;
 
 	// коды REU, для округления, для ГИС ЖКХ
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="USL", referencedColumnName="USL", updatable = false) // updatable = false - чтобы не было Update Foreign key
-	//@Fetch(FetchMode.JOIN) возможно приводит к утечке памяти (до 700 тыс объектов, при расчете по всем УК) ред.06.03.2019
+	@JoinColumn(name="USL", referencedColumnName="USL")
 	private Set<UslRound> uslRound = new HashSet<>(0);
 
 	/**

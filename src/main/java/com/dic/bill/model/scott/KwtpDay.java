@@ -48,12 +48,12 @@ public class KwtpDay implements java.io.Serializable  {
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl")
 	private Usl usl;
 
 	// организация
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
+	@JoinColumn(name="ORG", referencedColumnName="ID")
 	private Org org;
 
 	// № компьютера
@@ -77,12 +77,12 @@ public class KwtpDay implements java.io.Serializable  {
 	private String oper;
 
 	// fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
-	@Column(name = "KWTP_ID")
+	@Column(name = "KWTP_ID", insertable = false, updatable = false)
 	private Integer fkKwtpMg;
 
 	// распределение платежа по периоду
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="KWTP_ID", referencedColumnName="ID", insertable = false, updatable = false)
+	@JoinColumn(name="KWTP_ID", referencedColumnName="ID")
 	private KwtpMg kwtpMg;
 
 	@Override

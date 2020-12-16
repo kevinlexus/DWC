@@ -38,42 +38,34 @@ public class Ko implements java.io.Serializable {
     // объект Eolink
     @OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY)
     private Eolink eolink;
-    //@OneToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "ID", referencedColumnName = "FK_KLSK_OBJ", updatable = false)
-    //private Eolink eolink;
 
     // счетчик
     @OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
     private Meter meter;
 
     // счетчики, через Id фин.лиц.счета
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "koObj", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID", updatable = false)
     private Set<Meter> meterByKo = new HashSet<>(0);
 
-    // лицевые счета
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // лицевые счета по фин.лиц.счету
+    @OneToMany(mappedBy = "koKw", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "K_LSK_ID", referencedColumnName = "ID", updatable = false)
     private Set<Kart> kart = new HashSet<>(0);
 
     // лицевые счета, через Id помещения
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "koPremise", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Set<Kart> kartByPremise = new HashSet<>(0);
 
     // внешние лиц.счета, через помещение
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "koPremise", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
     private Set<KartExt> kartExtByPremise = new HashSet<>(0);
 
     // внешние лиц.счета, через фин.лиц.счет
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "koKw", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "FK_KLSK_ID", referencedColumnName = "ID", updatable = false)
     private Set<KartExt> kartExtByKoKw = new HashSet<>(0);
 
     public Ko() {

@@ -7,7 +7,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Наборов услуг по организациям в лицевом счете
@@ -34,22 +33,22 @@ public class Nabor implements java.io.Serializable {
 
     // лиц.счет
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
     private Kart kart;
 
     // услуга
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
+    @JoinColumn(name = "USL", referencedColumnName = "USl", nullable = false)
     private Usl usl;
 
     // организация - поставщик услуги
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
+    @JoinColumn(name = "ORG", referencedColumnName = "ID", nullable = false)
     private Org org;
 
     // ввод
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_VVOD", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_VVOD", referencedColumnName = "ID")
     private Vvod vvod;
 
     @Column(name = "KOEFF")

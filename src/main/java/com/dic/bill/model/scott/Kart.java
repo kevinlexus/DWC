@@ -134,8 +134,7 @@ public class Kart {
     private KartDetail kartDetail;
 
     // объект Eolink лиц.счета, здесь OneToMany, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false)
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Eolink> eolink = new HashSet<>(0);
 
     // дом
@@ -177,66 +176,53 @@ public class Kart {
     private String mgTo;
 
     // набор услуг
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     //@Fetch(FetchMode.JOIN) возможно вызывало когда-то OutOfMemory - убрал
     private Set<Nabor> nabor = new HashSet<>(0);
 
     // проживающие
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
-    // updatable = false - чтобы не было Update Foreign key
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     private Set<KartPr> kartPr = new HashSet<>(0);
 
-    // текущие начисления
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    // текущие начисления note убрать JoinColumn со стороны One и использовать везде mappedBy, иначе после insert всегда будут update!!! ред.16.12.2020
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Charge> charge = new ArrayList<>(0);
 
     // внешние лиц счета
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KartExt> kartExt = new ArrayList<>(0);
 
     // перерасчеты
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Change> change = new ArrayList<>(0);
 
     // корректировки оплатой
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CorrectPay> correctPay = new ArrayList<>(0);
 
     // подготовительная информация для расчета начисления
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChargePrep> chargePrep = new ArrayList<>(0);
 
     // движение по лиц.счету
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChargePay> chargepay = new ArrayList<>(0);
 
     // сальдо
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SaldoUsl> saldoUsl = new HashSet<>(0);
 
     // платеж, заголовок
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Kwtp> kwtp = new HashSet<>(0);
 
     // платеж, распределение по периодам
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<KwtpMg> kwtpMg = new HashSet<>(0);
 
     // платеж, распределение по услугам, орг.
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<KwtpDay> kwtpDay = new HashSet<>(0);
 
     // задолженность
@@ -247,13 +233,11 @@ public class Kart {
 */
 
     // текущая пеня
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PenCur> penCur = new ArrayList<>(0);
 
     // архивная пеня (долги)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Penya> penya = new HashSet<>(0);
 
     // кран из системы отопления
@@ -267,7 +251,6 @@ public class Kart {
 
     // статус лиц.счета (открыт, закрыт, наличие счетчиков
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
     private Set<StateSch> stateSch = new HashSet<>(0);
 
     // разделенный в ГИС ЖКХ ЕЛС?

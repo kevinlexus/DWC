@@ -1,17 +1,14 @@
 package com.dic.bill.model.exs;
 
-import java.util.*;
+import com.dic.bill.model.bs.Lst2;
+import com.ric.cmn.Utl;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
-
-import com.ric.cmn.Utl;
-import org.hibernate.annotations.DynamicUpdate;
-
-import com.dic.bill.model.bs.Lst2;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.*;
 
 
 /**
@@ -75,28 +72,6 @@ public class Task implements java.io.Serializable  {
 	@JoinColumn(name="DEP_ID", referencedColumnName="ID")
 	private List<Task> slave = new ArrayList<Task>(0);
 
-	// кол-во ошибок при запросе ACK - не используется?
-    //@Column(name = "ERRACKCNT", updatable = true, nullable = true)
-	//private Integer errAckCnt;
-
-	// Дочерние задания, связанные через TASKXTASK - короче это всё работает, но как обработать тип связи?? TASKXTASK.FK_TP
-	// Возможный ответ -  @Filter and @FilterJoinTable ред.09.10.2017 почитать: http://www.concretepage.com/hibernate/hibernate-filter-and-filterjointable-annotation-example
-	/*@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "EXS.TASKXTASK", joinColumns = {
-			@JoinColumn(name = "FK_PARENT", nullable = false, updatable = false) },
-			inverseJoinColumns = { @JoinColumn(name = "FK_CHILD",
-					nullable = false, updatable = false) })
-	private List<Task> childLinked = new ArrayList<Task>(0);*/
-
-	// Родительские задания, связанные через TASKXTASK
-	/*@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "EXS.TASKXTASK", joinColumns = {
-			@JoinColumn(name = "FK_CHILD", nullable = false, updatable = false) },
-			inverseJoinColumns = { @JoinColumn(name = "FK_PARENT",
-					nullable = false, updatable = false) })
-	private List<Task> parentLinked = new ArrayList<Task>(0);*/
-
-
 	// CD
 	@Column(name = "CD")
 	private String cd;
@@ -111,11 +86,11 @@ public class Task implements java.io.Serializable  {
 	private Lst2 act;
 
 	// GUID объекта присвоенный ГИС
-	@Column(name = "GUID", updatable = true, nullable = true)
+	@Column(name = "GUID")
 	private String guid;
 
 	// GUID Задания, присвоенный ГИС
-	@Column(name = "MSGGUID", updatable = true, nullable = true)
+	@Column(name = "MSGGUID")
 	private String msgGuid;
 
 	// уникальный номер объекта во внешней системе
@@ -160,20 +135,20 @@ public class Task implements java.io.Serializable  {
 	private String npp;
 
 	// приоритет - больше значение - выше приоритет обработки
-	@Column(name = "priority", updatable = false)
+	@Column(name = "priority")
 	private Integer priority;
 
 	// уровень трассировки (0 - не трассировать в лог, 1 - только XML)
-	@Column(name = "trace", updatable = false, nullable = false)
+	@Column(name = "trace", nullable = false)
 	private Integer trace;
 
 
 	// загружать объекты начиная с Id, для проверки XML запроса в ГИС, если не заполнено - возьмутся все объекты
-	@Column(name = "ID_FROM", updatable = false)
+	@Column(name = "ID_FROM")
 	private Integer idFrom;
 
 	// загружать объекты по Id, для проверки XML запроса в ГИС, если не заполнено - возьмутся все объекты
-	@Column(name = "ID_TO", updatable = false)
+	@Column(name = "ID_TO")
 	private Integer idTo;
 
 	// последний обработанный объект, в задачах, где обрабатывать необходимо по N объектов

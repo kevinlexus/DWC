@@ -86,7 +86,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         kart.setMgTo("201412");
         kart.setStatus(status);
         kart.setIsDivided(false);
-        ko.getKart().add(kart);
+       // ko.getKart().add(kart);
 
         if (isAddPers) {
             // проживающие

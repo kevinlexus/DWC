@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,7 @@ public class KwtpDayLog implements java.io.Serializable {
 
 
     // fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
-    @Column(name = "FK_C_KWTP_MG")
+    @Column(name = "FK_C_KWTP_MG", insertable = false, updatable = false)
     private Integer fkKwtpMg;
 
     // № п.п.
@@ -40,7 +39,7 @@ public class KwtpDayLog implements java.io.Serializable {
 
     // распределение платежа по периоду
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID", insertable = false, updatable = false)
+    @JoinColumn(name = "FK_C_KWTP_MG", referencedColumnName = "ID")
     private KwtpMg kwtpMg;
 
     // комментарий распределения

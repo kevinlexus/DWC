@@ -33,68 +33,66 @@ public class KartPr implements java.io.Serializable {
 
     // лиц.счет
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
     private Kart kart;
 
     // статус
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS", referencedColumnName = "ID", updatable = false, nullable = false)
+    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false)
     private StatusPr statusPr;
 
     // родственная связь
-    @ManyToOne(fetch = FetchType.LAZY) // сделал EAGER - иногда приводит к LazyInitialisationException ред. 06.03.2019
-    @JoinColumn(name = "RELAT_ID", referencedColumnName = "ID", updatable = false, nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELAT_ID", referencedColumnName = "ID")
     private Relation relation;
 
     // дата рождения
-    @Column(name = "DAT_ROG", updatable = false, nullable = true)
+    @Column(name = "DAT_ROG")
     private Date dtBirdth;
 
     // дата прописки
-    @Column(name = "DAT_PROP", updatable = false, nullable = true)
+    @Column(name = "DAT_PROP")
     private Date dtReg;
 
     // дата убытия
-    @Column(name = "DAT_UB", updatable = false, nullable = true)
+    @Column(name = "DAT_UB")
     private Date dtUnReg;
 
     // ф.и.о.
-    @Column(name = "FIO", updatable = false, nullable = true)
+    @Column(name = "FIO")
     private String fio;
 
     // тип документа
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_DOC_TP", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_DOC_TP", referencedColumnName = "ID")
     private Lst docTp;
 
     // документ: серия
-    @Column(name = "DOK_C", updatable = false)
+    @Column(name = "DOK_C")
     private String docSeries;
 
     // документ: номер
-    @Column(name = "DOK_N", updatable = false)
+    @Column(name = "DOK_N")
     private String docNumber;
 
     // документ: дата выдачи
-    @Column(name = "DOK_D", updatable = false)
+    @Column(name = "DOK_D")
     private Date docDtIssued;
 
     // документ: выдан
-    @Column(name = "DOK_V", updatable = false)
+    @Column(name = "DOK_V")
     private String docIssued;
 
     // СНИЛС
-    @Column(name = "DOK_SNILS", updatable = false)
+    @Column(name = "DOK_SNILS")
     private String snils;
 
     // использовать информацию о собственнике в разделенном ЕЛС ГИС ЖКХ?
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @Column(name = "USE_GIS_DIVIDE_ELS") // , updatable = false - убрал - не работали тесты
+    @Column(name = "USE_GIS_DIVIDE_ELS")
     private Boolean isUseDividedEls;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "FK_KART_PR", referencedColumnName = "ID", updatable = false)
-    // updatable = false - чтобы не было Update Foreign key
+    @OneToMany(mappedBy = "kartPr", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StatePr> statePr = new ArrayList<>(0);
 
     // использовать ли документы проживающего для разделения ЕЛС в ГИС ЖКХ?

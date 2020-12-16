@@ -93,7 +93,7 @@ public class Eolink implements java.io.Serializable  {
 
 	// тип объекта, например "Дом"
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_OBJTP", referencedColumnName="ID", updatable = false)
+	@JoinColumn(name="FK_OBJTP", referencedColumnName="ID")
 	private AddrTp objTp;
 
 	// тип информационной системы (0- "Квартплата", 1 - "Новая разработка")
