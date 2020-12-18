@@ -65,6 +65,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         //Status status = em.find(Status.class, 2);
 
         kart.setKoKw(ko);
+        ko.getKart().add(kart);
         kart.setKoPremise(premise);
         kart.setHouse(house);
         kart.setLsk("ОСН_" + suffix);
@@ -291,6 +292,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         }
         meter.setKo(ko);
         meter.setKoObj(koObj);
+        koObj.getMeterByKo().add(meter);
         Usl usl = em.find(Usl.class, uslId);
         meter.setUsl(usl);
         em.persist(ko);
@@ -327,6 +329,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         chargePay.setMgFrom(mgFrom);
         chargePay.setMgTo(mgTo);
         chargePay.setMg(String.valueOf(mg));
+        chargePay.setType(0);
         kart.getChargepay().add(chargePay);
     }
 
