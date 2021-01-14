@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -64,6 +65,22 @@ public class KartExt implements java.io.Serializable {
     @Column(name = "V", nullable = false)
     private Integer v;
 
+    // вх.остаток
+    @Column(name = "INSAL")
+    private BigDecimal insal;
+
+    // исх.остаток (сумма задолженности)
+    @Column(name = "OUTSAL")
+    private BigDecimal outsal;
+
+    // начислено
+    @Column(name = "CHRG")
+    private BigDecimal chrg;
+
+    // оплачено
+    @Column(name = "PAYMENT")
+    private BigDecimal payment;
+
     // активный ли лицевой счет?
     @Transient
     public boolean isActual() {
@@ -101,6 +118,14 @@ public class KartExt implements java.io.Serializable {
         private Date updDt;
         // статус (1-действующий, 0-закрыт)
         private Integer v;
+        // вх.остаток
+        private BigDecimal insal;
+        // исх.остаток (сумма задолженности)
+        private BigDecimal outsal;
+        // начислено
+        private BigDecimal chrg;
+        // оплачено
+        private BigDecimal payment;
 
         private KartExtBuilder() {
         }
@@ -149,6 +174,26 @@ public class KartExt implements java.io.Serializable {
             return this;
         }
 
+        public KartExtBuilder withInsal(BigDecimal insal) {
+            this.insal = insal;
+            return this;
+        }
+
+        public KartExtBuilder withOutsal(BigDecimal outsal) {
+            this.outsal = outsal;
+            return this;
+        }
+
+        public KartExtBuilder withChrg(BigDecimal chrg) {
+            this.chrg = chrg;
+            return this;
+        }
+
+        public KartExtBuilder withPayment(BigDecimal payment) {
+            this.payment = payment;
+            return this;
+        }
+
         public KartExt build() {
             KartExt kartExt = new KartExt();
             kartExt.setKart(kart);
@@ -159,6 +204,10 @@ public class KartExt implements java.io.Serializable {
             kartExt.setDtCrt(dtCrt);
             kartExt.setUpdDt(updDt);
             kartExt.setV(v);
+            kartExt.setInsal(insal);
+            kartExt.setOutsal(outsal);
+            kartExt.setChrg(chrg);
+            kartExt.setPayment(payment);
             return kartExt;
         }
     }

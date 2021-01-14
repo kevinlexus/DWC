@@ -89,6 +89,20 @@ public class Org implements java.io.Serializable {
 	@Column(name = "IS_EXCHANGE_EXT", updatable = false)
 	private Boolean isExchangeExt;
 
+	// при загрузке реестра внешних лиц счетов, создавать ли лиц.счета в Kart (Например Кис - Кап.ремонт)
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "IS_CREATE_EXT_LSK_IN_KART", updatable = false)
+	private Boolean isCretateExtLskInKart;// fixme исправить в БД
+
+	// услуга для создания внешних лиц счетов (работает в случае isCretateExtLskInKart==true)
+	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="USL_FOR_CREATE_EXT_LSK", referencedColumnName="USL", updatable = false) // note убрать после merge с доработаким по пене - updatable = false - чтобы не было Update Foreign key
+	private Usl uslForCreateExtLskKart;// fixme исправить в БД
+
+	// формат загрузочного файла внешних лиц.счетов (обычно: 0-Полыс(ЧГК), 1-Кис(ФКП))
+	@Column(name = "EXT_LSK_FORMAT_TP")
+	private Integer extLskFormatTp;
+
 	@Transient
 	public boolean isUO() {
 		if (orgTpGis == null) {

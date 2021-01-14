@@ -69,9 +69,21 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "PERIOD_DEB")
     private String periodDeb;
 
-    // сумма задолженности
+    // вх.остаток
+    @Column(name = "INSAL")
+    private BigDecimal insal;
+
+    // исх.остаток (сумма задолженности)
     @Column(name = "SUMMA")
     private BigDecimal summa;
+
+    // начислено
+    @Column(name = "CHRG")
+    private BigDecimal chrg;
+
+    // оплачено
+    @Column(name = "PAYMENT")
+    private BigDecimal payment;
 
     // комментарий по загрузке
     @Column(name = "COMM")
@@ -116,8 +128,14 @@ public class LoadKartExt implements java.io.Serializable {
         private String nm;
         // период задолженности
         private String periodDeb;
-        // сумма задолженности
+        // вх.остаток
+        private BigDecimal insal;
+        // исх.остаток (сумма задолженности)
         private BigDecimal summa;
+        // начислено
+        private BigDecimal chrg;
+        // оплачено
+        private BigDecimal payment;
         // комментарий по загрузке
         private String comm;
         // статус (0 - принять к загрузке, 1 - уже загружен, 2 - ошибка (смотреть COMM)
@@ -180,8 +198,23 @@ public class LoadKartExt implements java.io.Serializable {
             return this;
         }
 
+        public LoadKartExtBuilder withInsal(BigDecimal insal) {
+            this.insal = insal;
+            return this;
+        }
+
         public LoadKartExtBuilder withSumma(BigDecimal summa) {
             this.summa = summa;
+            return this;
+        }
+
+        public LoadKartExtBuilder withChrg(BigDecimal chrg) {
+            this.chrg = chrg;
+            return this;
+        }
+
+        public LoadKartExtBuilder withPayment(BigDecimal payment) {
+            this.payment = payment;
             return this;
         }
 
@@ -207,7 +240,10 @@ public class LoadKartExt implements java.io.Serializable {
             loadKartExt.setCode(code);
             loadKartExt.setNm(nm);
             loadKartExt.setPeriodDeb(periodDeb);
+            loadKartExt.setInsal(insal);
             loadKartExt.setSumma(summa);
+            loadKartExt.setChrg(chrg);
+            loadKartExt.setPayment(payment);
             loadKartExt.setComm(comm);
             loadKartExt.setStatus(status);
             return loadKartExt;
