@@ -65,6 +65,10 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "NM")
     private String nm;
 
+    // № помещения (квартиры)
+    @Column(name = "KW")
+    private String kw;
+
     // период задолженности
     @Column(name = "PERIOD_DEB")
     private String periodDeb;
@@ -126,6 +130,8 @@ public class LoadKartExt implements java.io.Serializable {
         private Integer code;
         // наименование услуги
         private String nm;
+        // № помещения (квартиры)
+        private String kw;
         // период задолженности
         private String periodDeb;
         // вх.остаток
@@ -193,6 +199,11 @@ public class LoadKartExt implements java.io.Serializable {
             return this;
         }
 
+        public LoadKartExtBuilder withKw(String kw) {
+            this.kw = kw;
+            return this;
+        }
+
         public LoadKartExtBuilder withPeriodDeb(String periodDeb) {
             this.periodDeb = periodDeb;
             return this;
@@ -239,6 +250,7 @@ public class LoadKartExt implements java.io.Serializable {
             loadKartExt.setAddress(address);
             loadKartExt.setCode(code);
             loadKartExt.setNm(nm);
+            loadKartExt.setKw(kw);
             loadKartExt.setPeriodDeb(periodDeb);
             loadKartExt.setInsal(insal);
             loadKartExt.setSumma(summa);

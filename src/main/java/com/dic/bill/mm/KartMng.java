@@ -3,8 +3,10 @@ package com.dic.bill.mm;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
+import com.ric.cmn.excp.WrongParam;
 import com.ric.cmn.excp.WrongValue;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +37,11 @@ public interface KartMng {
     void updateKartDetailOrd1() throws WrongValue;
 
     boolean getIsRenter(Kart kart);
+
+    Ko buildKart(String houseGUID, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
+                 int statusId, int psch, int ukId, String lskTp) throws WrongParam;
+
+    String createKart(String lskTp, String reu, String kw,
+                      Integer houseId, Long klskId, Long klskPremise,
+                      String fam, String im, String ot);
 }

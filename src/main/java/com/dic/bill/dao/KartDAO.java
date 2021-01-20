@@ -37,7 +37,7 @@ public interface KartDAO extends JpaRepository<Kart, String> {
                                           @Param("houseId") Integer houseId, @Param("kw") String kw);
 
     @Query("select t from Kart t where t.house.id = :houseId and t.num=:kw")
-    List<Kart> findByReuHouseIdTpKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
+    List<Kart> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
 
     @Query("select distinct t from Kart t join t.nabor n where t.tp.cd=:tpCd and n.usl.id=:uslId " +
             "and t.house.id = :houseId and t.num=:kw and t.psch not in (8,9)")

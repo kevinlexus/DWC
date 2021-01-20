@@ -3,7 +3,7 @@
 
 	<groupId>com.dic.bill</groupId>
 	<artifactId>DWC</artifactId>
-	<version>0.0.6</version>
+	<version>0.0.7</version>
 
 	<name>DWC</name>
 	<description>Model classes</description>
@@ -27,11 +27,11 @@
 
 <dependencies>
 
-		<!-- BillCommon -->
+	<!-- BillCommon -->
 		<dependency>
 			<groupId>com.ric.cmn</groupId>
 			<artifactId>BillCommon</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>0.0.5</version>
 		</dependency>
 
 		<dependency>

@@ -1,13 +1,12 @@
 package com.dic.bill.mm.impl;
 
-import com.dic.bill.dao.KartDAO;
-import com.dic.bill.dao.KartDetailDAO;
-import com.dic.bill.dao.OrgDAO;
+import com.dic.bill.dao.*;
 import com.dic.bill.mm.KartMng;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.Utl;
 import com.ric.cmn.excp.DifferentKlskBySingleAdress;
 import com.ric.cmn.excp.EmptyId;
+import com.ric.cmn.excp.WrongParam;
 import com.ric.cmn.excp.WrongValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,7 +15,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -30,14 +32,18 @@ public class KartMngImpl implements KartMng {
     private final KartDAO kartDao;
     private final KartDetailDAO kartDetailDAO;
     private final OrgDAO orgDao;
+    private final UlstDAO ulstDAO;
+    private final HouseDAO houseDAO;
 
     @PersistenceContext
     private EntityManager em;
 
-    public KartMngImpl(KartDAO kartDao, KartDetailDAO kartDetailDAO, OrgDAO orgDao) {
+    public KartMngImpl(KartDAO kartDao, KartDetailDAO kartDetailDAO, OrgDAO orgDao, UlstDAO ulstDAO, HouseDAO houseDAO) {
         this.kartDao = kartDao;
         this.kartDetailDAO = kartDetailDAO;
         this.orgDao = orgDao;
+        this.ulstDAO = ulstDAO;
+        this.houseDAO = houseDAO;
     }
 
     /**
@@ -134,6 +140,7 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Получить основной лиц.счет, без кэша, вернуть сущность (используется в выгрузке долгов Сбер по ЕЛС)
+     *
      * @param kart - текущий лиц.счет
      * @return - основной лиц.счет
      */
@@ -322,4 +329,114 @@ public class KartMngImpl implements KartMng {
                 .anyMatch(t -> t.isValid(true) && t.getUsl().isMain()
                         && t.getUsl().getCd().equals("найм"));
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Ko buildKart(String houseGUID, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
+                        int statusId, int psch, int ukId, String lskTp) throws WrongParam {
+        // помещение
+        Ko ko = new Ko();
+        Kart kart = new Kart();
+        // УК
+        Org uk = em.find(Org.class, ukId);
+        // тип счета
+        Lst tp = ulstDAO.getByCd(lskTp);
+        kart.setTp(tp);
+        // статус
+        Status status = em.find(Status.class, statusId);
+
+        kart.setKoKw(ko);
+
+        Optional<House> houseOpt = houseDAO.findByGuid(houseGUID);
+        if (!houseOpt.isPresent()) {
+            throw new WrongParam("Не найден дом по GUID=" + houseGUID);
+        } else {
+            kart.setKul(houseOpt.get().getKul());
+            kart.setHouse(houseOpt.get());
+            kart.setNd(houseOpt.get().getNd());
+        }
+
+        // fixme вызов p_houses.kart_lsk_group_add
+
+        // fixme kart.setLsk(получить новый lsk);
+
+        kart.setPsch(psch);
+        kart.setSchEl(0);
+
+        kart.setOpl(area);
+        kart.setNum("0000001");
+        kart.setKpr(0);
+        kart.setKprOt(0);
+        kart.setKprWr(0);
+        kart.setUk(uk);
+        kart.setMgFrom("201401");
+        kart.setMgTo("201412");
+        kart.setStatus(status);
+        ko.getKart().add(kart);
+
+        if (isAddPers) {
+            // проживающие
+            // fixme buildKartPrForTest(kart, persCount);
+        }
+        if (isAddNabor) {
+            // наборы услуг
+            // fixme buildNaborForTest(kart, 0);
+        }
+
+        // счетчики
+        // fixme buildMeterForTest(kart);
+        // fixme house.getKart().add(kart);
+        em.persist(kart); // note Используй crud.save
+
+        // fixme
+        return null;
+    }
+
+    /**
+     * Создать лицевой счет
+     * @param lskTp тип
+     * @param reu код УК
+     * @param kw № помещения
+     * @param houseId Id дома
+     * @param klskId klsk фин.лиц.сч. (если null, будет создан новый)
+     * @param klskPremise klsk помещения (если null, будет создано новое)
+     * @param fam фамилия
+     * @param im имя
+     * @param ot отчество владельца
+     * @return № созданного лиц.счета
+     */
+    @Override
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public String createKart(String lskTp, String reu, String kw,
+                             Integer houseId, Long klskId, Long klskPremise,
+                             String fam, String im, String ot) {
+        StoredProcedureQuery qr;
+        qr = em.createStoredProcedureQuery("scott.p_houses.kart_lsk_add");
+        qr.registerStoredProcedureParameter("p_lsk_tp", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_lsk_new", String.class, ParameterMode.INOUT);
+        qr.registerStoredProcedureParameter("p_var", Integer.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_kw", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_reu", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_house", Integer.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_result", Integer.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_klsk_dst", Long.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_klsk_premise_dst", Long.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_fam", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_im", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_ot", String.class, ParameterMode.IN);
+        qr.setParameter("p_lsk_tp", lskTp);
+        qr.setParameter("p_var", 3); // создать лиц.счет без копирования с другого
+        qr.setParameter("p_kw", kw);
+        qr.setParameter("p_reu", reu);
+        qr.setParameter("p_house", houseId);
+        qr.setParameter("p_klsk_dst", klskId);
+        qr.setParameter("p_klsk_premise_dst", klskPremise);
+        qr.setParameter("p_fam", fam);
+        qr.setParameter("p_im", im);
+        qr.setParameter("p_ot", ot);
+        return qr.getOutputParameterValue("p_lsk_new").toString();
+    }
+
+
+
 }
