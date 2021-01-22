@@ -270,10 +270,11 @@ public class NaborMngImpl implements NaborMng {
      * @param vvod ввод
      */
     @Override
-    public Nabor createNabor(Usl usl, Org org,
+    public Nabor createNabor(Kart kart, Usl usl, Org org,
                              BigDecimal koeff, BigDecimal norm,
                              BigDecimal vol, BigDecimal volAdd, Vvod vvod) {
         Nabor nabor = new Nabor();
+        nabor.setKart(kart);
         nabor.setOrg(org);
         nabor.setUsl(usl);
         nabor.setKoeff(koeff);
@@ -281,6 +282,7 @@ public class NaborMngImpl implements NaborMng {
         nabor.setVol(vol);
         nabor.setVolAdd(volAdd);
         nabor.setVvod(vvod);
+        kart.getNabor().add(nabor);
         if (vvod != null) {
             vvod.getNabor().add(nabor);
         }

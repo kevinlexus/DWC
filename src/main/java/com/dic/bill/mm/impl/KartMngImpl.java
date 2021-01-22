@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class KartMngImpl implements KartMng {
 
-    private final KartDAO kartDAO;
+    private final KartDAO kartDao;
     private final KartDetailDAO kartDetailDAO;
     private final OrgDAO orgDao;
     private final UlstDAO ulstDAO;
@@ -39,7 +39,7 @@ public class KartMngImpl implements KartMng {
     private EntityManager em;
 
     public KartMngImpl(KartDAO kartDAO, KartDetailDAO kartDetailDAO, OrgDAO orgDao, UlstDAO ulstDAO, HouseDAO houseDAO) {
-        this.kartDAO = kartDAO;
+        this.kartDao = kartDAO;
         this.kartDetailDAO = kartDetailDAO;
         this.orgDao = orgDao;
         this.ulstDAO = ulstDAO;
@@ -56,7 +56,7 @@ public class KartMngImpl implements KartMng {
      */
     @Override
     public Ko getKoPremiseByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
-        List<Kart> lst = kartDAO.findByKulNdKw(kul, nd, kw);
+        List<Kart> lst = kartDao.findByKulNdKw(kul, nd, kw);
         Ko ko = null;
         for (Kart kart : lst) {
             if (kart.getKoPremise() == null) {
@@ -281,7 +281,7 @@ public class KartMngImpl implements KartMng {
 
         kartDetailDAO.updateOrd1ToNull();
         int i = 0;
-        List<Kart> lstKart = kartDAO.findAll().stream()
+        List<Kart> lstKart = kartDao.findAll().stream()
                 .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
                         .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
                         .thenComparing(Kart::getNdIndex)
@@ -394,16 +394,17 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Создать лицевой счет
-     * @param lskSrc лиц.счет для копирования
-     * @param lskTp тип
-     * @param reu код УК
-     * @param kw № помещения
-     * @param houseId Id дома
-     * @param klskId klsk фин.лиц.сч. (если null, будет создан новый)
+     *
+     * @param lskSrc      лиц.счет для копирования
+     * @param lskTp       тип
+     * @param reu         код УК
+     * @param kw          № помещения
+     * @param houseId     Id дома
+     * @param klskId      klsk фин.лиц.сч. (если null, будет создан новый)
      * @param klskPremise klsk помещения (если null, будет создано новое)
-     * @param fam фамилия
-     * @param im имя
-     * @param ot отчество владельца
+     * @param fam         фамилия
+     * @param im          имя
+     * @param ot          отчество владельца
      * @return № созданного лиц.счета
      */
     @Override
@@ -438,10 +439,10 @@ public class KartMngImpl implements KartMng {
         qr.setParameter("p_im", im);
         qr.setParameter("p_ot", ot);
         String lsk = qr.getOutputParameterValue("p_lsk_new").toString().trim();
-        Optional<Kart> kartOpt = kartDAO.findById(lsk);
-
-        if (kartOpt.isPresent()) {
-            return kartOpt.get();
+        //Optional<Kart> kartOpt = kartDAO.findById(lsk);
+        Kart kart = em.find(Kart.class, lsk);
+        if (kart != null) {
+            return kart;
         } else {
             throw new WrongParam("Не найден созданный KART по лиц счету lsk=" + lsk);
         }

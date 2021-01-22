@@ -49,4 +49,6 @@ public interface KartDAO extends JpaRepository<Kart, String> {
             "and t.psch not in (8,9) and t.status.cd in (:statusLst) order by t.kartDetail.ord1")
     List<Kart> findActualByReuStatusOrderedByAddress(@Param("reu") String reu,
                                                      @Param("statusLst") List<String> statusLst, @Param("tpCd") String tpCd);
+
+
 }

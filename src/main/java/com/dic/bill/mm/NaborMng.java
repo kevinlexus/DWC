@@ -20,7 +20,7 @@ public interface NaborMng {
 
     DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg;
 
-    Nabor createNabor(Usl usl, Org org,
+    Nabor createNabor(Kart kart, Usl usl, Org org,
                       BigDecimal koeff, BigDecimal norm,
                       BigDecimal vol, BigDecimal volAdd, Vvod vvod);
 }
