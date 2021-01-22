@@ -87,6 +87,11 @@ public class KartExt implements java.io.Serializable {
         return v.equals(1);
     }
 
+    // УК - владелец счета
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_UK", referencedColumnName = "ID", updatable = false, nullable = false)
+    private Org uk;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,6 +131,8 @@ public class KartExt implements java.io.Serializable {
         private BigDecimal chrg;
         // оплачено
         private BigDecimal payment;
+        // УК - владелец счета
+        private Org uk;
 
         private KartExtBuilder() {
         }
@@ -194,6 +201,11 @@ public class KartExt implements java.io.Serializable {
             return this;
         }
 
+        public KartExtBuilder withUk(Org uk) {
+            this.uk = uk;
+            return this;
+        }
+
         public KartExt build() {
             KartExt kartExt = new KartExt();
             kartExt.setKart(kart);
@@ -208,6 +220,7 @@ public class KartExt implements java.io.Serializable {
             kartExt.setOutsal(outsal);
             kartExt.setChrg(chrg);
             kartExt.setPayment(payment);
+            kartExt.setUk(uk);
             return kartExt;
         }
     }

@@ -4,6 +4,7 @@ import com.dic.bill.dto.DetailUslPrice;
 import com.dic.bill.model.scott.*;
 import com.ric.cmn.excp.ErrorWhileChrg;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,4 +19,8 @@ public interface NaborMng {
     Integer getVvodDistTp(List<Nabor> lstNabor, Usl usl);
 
     DetailUslPrice getDetailUslPrice(Kart kartMain, Nabor nabor) throws ErrorWhileChrg;
+
+    Nabor createNabor(Usl usl, Org org,
+                      BigDecimal koeff, BigDecimal norm,
+                      BigDecimal vol, BigDecimal volAdd, Vvod vvod);
 }

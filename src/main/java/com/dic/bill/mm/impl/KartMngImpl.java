@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class KartMngImpl implements KartMng {
 
-    private final KartDAO kartDao;
+    private final KartDAO kartDAO;
     private final KartDetailDAO kartDetailDAO;
     private final OrgDAO orgDao;
     private final UlstDAO ulstDAO;
@@ -38,8 +38,8 @@ public class KartMngImpl implements KartMng {
     @PersistenceContext
     private EntityManager em;
 
-    public KartMngImpl(KartDAO kartDao, KartDetailDAO kartDetailDAO, OrgDAO orgDao, UlstDAO ulstDAO, HouseDAO houseDAO) {
-        this.kartDao = kartDao;
+    public KartMngImpl(KartDAO kartDAO, KartDetailDAO kartDetailDAO, OrgDAO orgDao, UlstDAO ulstDAO, HouseDAO houseDAO) {
+        this.kartDAO = kartDAO;
         this.kartDetailDAO = kartDetailDAO;
         this.orgDao = orgDao;
         this.ulstDAO = ulstDAO;
@@ -56,7 +56,7 @@ public class KartMngImpl implements KartMng {
      */
     @Override
     public Ko getKoPremiseByKulNdKw(String kul, String nd, String kw) throws DifferentKlskBySingleAdress, EmptyId {
-        List<Kart> lst = kartDao.findByKulNdKw(kul, nd, kw);
+        List<Kart> lst = kartDAO.findByKulNdKw(kul, nd, kw);
         Ko ko = null;
         for (Kart kart : lst) {
             if (kart.getKoPremise() == null) {
@@ -281,7 +281,7 @@ public class KartMngImpl implements KartMng {
 
         kartDetailDAO.updateOrd1ToNull();
         int i = 0;
-        List<Kart> lstKart = kartDao.findAll().stream()
+        List<Kart> lstKart = kartDAO.findAll().stream()
                 .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
                         .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
                         .thenComparing(Kart::getNdIndex)
@@ -394,6 +394,7 @@ public class KartMngImpl implements KartMng {
 
     /**
      * Создать лицевой счет
+     * @param lskSrc лиц.счет для копирования
      * @param lskTp тип
      * @param reu код УК
      * @param kw № помещения
@@ -406,13 +407,14 @@ public class KartMngImpl implements KartMng {
      * @return № созданного лиц.счета
      */
     @Override
-    @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public String createKart(String lskTp, String reu, String kw,
-                             Integer houseId, Long klskId, Long klskPremise,
-                             String fam, String im, String ot) {
+    @Transactional(rollbackFor = Exception.class)
+    public Kart createKart(String lskSrc, Integer var, String lskTp, String reu, String kw,
+                           Integer houseId, Long klskId, Long klskPremise,
+                           String fam, String im, String ot) throws WrongParam {
         StoredProcedureQuery qr;
         qr = em.createStoredProcedureQuery("scott.p_houses.kart_lsk_add");
         qr.registerStoredProcedureParameter("p_lsk_tp", String.class, ParameterMode.IN);
+        qr.registerStoredProcedureParameter("p_lsk_src", String.class, ParameterMode.IN);
         qr.registerStoredProcedureParameter("p_lsk_new", String.class, ParameterMode.INOUT);
         qr.registerStoredProcedureParameter("p_var", Integer.class, ParameterMode.IN);
         qr.registerStoredProcedureParameter("p_kw", String.class, ParameterMode.IN);
@@ -425,7 +427,8 @@ public class KartMngImpl implements KartMng {
         qr.registerStoredProcedureParameter("p_im", String.class, ParameterMode.IN);
         qr.registerStoredProcedureParameter("p_ot", String.class, ParameterMode.IN);
         qr.setParameter("p_lsk_tp", lskTp);
-        qr.setParameter("p_var", 3); // создать лиц.счет без копирования с другого
+        qr.setParameter("p_lsk_src", lskSrc);
+        qr.setParameter("p_var", var); // 0 - скопировать лиц.счет с существующего, 3 - создать новый лиц.сч.
         qr.setParameter("p_kw", kw);
         qr.setParameter("p_reu", reu);
         qr.setParameter("p_house", houseId);
@@ -434,9 +437,15 @@ public class KartMngImpl implements KartMng {
         qr.setParameter("p_fam", fam);
         qr.setParameter("p_im", im);
         qr.setParameter("p_ot", ot);
-        return qr.getOutputParameterValue("p_lsk_new").toString();
+        String lsk = qr.getOutputParameterValue("p_lsk_new").toString().trim();
+        Optional<Kart> kartOpt = kartDAO.findById(lsk);
+
+        if (kartOpt.isPresent()) {
+            return kartOpt.get();
+        } else {
+            throw new WrongParam("Не найден созданный KART по лиц счету lsk=" + lsk);
+        }
+
     }
-
-
 
 }

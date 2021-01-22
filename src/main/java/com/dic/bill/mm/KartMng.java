@@ -41,7 +41,8 @@ public interface KartMng {
     Ko buildKart(String houseGUID, BigDecimal area, int persCount, boolean isAddPers, boolean isAddNabor,
                  int statusId, int psch, int ukId, String lskTp) throws WrongParam;
 
-    String createKart(String lskTp, String reu, String kw,
-                      Integer houseId, Long klskId, Long klskPremise,
-                      String fam, String im, String ot);
+    Kart createKart(String lsk, Integer var, String lskTp, String reu, String kw,
+                    Integer houseId, Long klskId, Long klskPremise,
+                    String fam, String im, String ot) throws WrongParam;
+
 }

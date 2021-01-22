@@ -259,4 +259,32 @@ public class NaborMngImpl implements NaborMng {
         return detail;
     }
 
+    /**
+     * Создать запись набора услуг
+     * @param usl услуга
+     * @param org организация
+     * @param koeff коэффициент
+     * @param norm норматив
+     * @param vol объем
+     * @param volAdd доп.объем
+     * @param vvod ввод
+     */
+    @Override
+    public Nabor createNabor(Usl usl, Org org,
+                             BigDecimal koeff, BigDecimal norm,
+                             BigDecimal vol, BigDecimal volAdd, Vvod vvod) {
+        Nabor nabor = new Nabor();
+        nabor.setOrg(org);
+        nabor.setUsl(usl);
+        nabor.setKoeff(koeff);
+        nabor.setNorm(norm);
+        nabor.setVol(vol);
+        nabor.setVolAdd(volAdd);
+        nabor.setVvod(vvod);
+        if (vvod != null) {
+            vvod.getNabor().add(nabor);
+        }
+        return nabor;
+    }
+
 }
