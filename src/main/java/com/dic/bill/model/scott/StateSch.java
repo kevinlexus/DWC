@@ -4,7 +4,6 @@ import com.dic.bill.model.exs.Ulist;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
@@ -21,8 +20,9 @@ import java.util.Date;
 public class StateSch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", updatable = false, nullable = true)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_States_sch_id")
+    @SequenceGenerator(name="SEQ_States_sch_id", sequenceName="scott.c_states_sch_id", allocationSize=1)
+    @Column(name = "ID", updatable = false, nullable = false)
     private Integer id;
 
     // статус (0-норматив, 1 - х.в.+г.в., 2-х.в., 3-г.в., 8-старый фонд, 9-закрытый фонд)
@@ -31,11 +31,11 @@ public class StateSch {
     private Integer fkStatus;
 
     // дата начала действия
-    @Column(name = "DT1", updatable = false, nullable = false)
+    @Column(name = "DT1")
     private Date dt1;
 
     // дата окончания действия
-    @Column(name = "DT2", updatable = false, nullable = false)
+    @Column(name = "DT2")
     private Date dt2;
 
     // причина закрытия
@@ -48,6 +48,11 @@ public class StateSch {
     public boolean isActual(){
         return !Utl.in(fkStatus,8,9);
     }
+
+    // статус лиц.счета
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
+    private Kart kart;
 
     @Override
     public boolean equals(Object o) {

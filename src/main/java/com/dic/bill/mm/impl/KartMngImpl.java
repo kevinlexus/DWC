@@ -19,10 +19,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -449,4 +446,50 @@ public class KartMngImpl implements KartMng {
 
     }
 
+    /**
+     * Установить признак актуальности лиц.счета
+     *
+     * @param kart лиц.счет
+     * @param psch признак (0,1-открыт, 8 - старый фонд (закрыт), 9 - закрыт по другим причинам)
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setStateSch(Kart kart, Date curDt, int psch) {
+        kart.setPsch(0);
+        ArrayList<StateSch> removeLst = new ArrayList<>();
+        ArrayList<StateSch> addLst = new ArrayList<>();
+        for (StateSch st : kart.getStateSch()) {
+            Date firstDtMonth = Utl.getFirstDate(curDt);
+            Date lastDtMonth = Utl.getLastDate(curDt);
+            Date lastDtPreviosMonth = Utl.getLastDate(Utl.addMonths(curDt, -1));
+
+            if ((Utl.between(st.getDt1(), firstDtMonth, lastDtMonth) ||
+                    Utl.between(st.getDt2(), firstDtMonth, lastDtMonth))) {
+                if (!st.getFkStatus().equals(psch)) {
+                    // ограничить предыдущ. периодом или удалить периоды с несоответ.признаком
+                    if (st.getDt1() == null) {
+                        st.setDt2(lastDtPreviosMonth);
+                    } else {
+                        removeLst.add(st);
+                        StateSch stateSch = new StateSch();
+                        stateSch.setKart(kart);
+                        stateSch.setFkStatus(psch);
+                        stateSch.setDt1(firstDtMonth);
+                        stateSch.setDt2(null);
+                        addLst.add(stateSch);
+                    }
+                } else {
+                    // установить корректные периоды действия статуса
+                    if (st.getDt1() != null && !st.getDt1().equals(firstDtMonth)) {
+                        st.setDt1(firstDtMonth);
+                    }
+                    if (st.getDt2() != null) {
+                        st.setDt2(null);
+                    }
+                }
+            }
+        }
+        kart.getStateSch().removeAll(removeLst);
+        kart.getStateSch().addAll(addLst);
+    }
 }
