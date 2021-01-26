@@ -498,8 +498,10 @@ public class KartMngImpl implements KartMng {
                 }
             }
         }
-        kart.getStateSch().removeAll(removeLst);
-        em.flush(); // flush - потому что Hibernate вызывает порядок операций: insert, затем delete, см.https://vladmihalcea.com/hibernate-facts-knowing-flush-operations-order-matters/
+        if (removeLst.size()>0) {
+            kart.getStateSch().removeAll(removeLst);
+            em.flush(); // flush - потому что Hibernate вызывает порядок операций: insert, затем delete, см.https://vladmihalcea.com/hibernate-facts-knowing-flush-operations-order-matters/
+        }
         kart.getStateSch().addAll(addLst);
     }
 }
