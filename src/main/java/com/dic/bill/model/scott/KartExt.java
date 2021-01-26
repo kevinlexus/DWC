@@ -36,13 +36,13 @@ public class KartExt implements java.io.Serializable {
     private Kart kart;
 
     // Ko фин лиц.счета
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_KLSK_ID", referencedColumnName = "ID", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_ID", referencedColumnName = "ID")
     private Ko koKw;
 
     // Ko помещения
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_KLSK_PREMISE", referencedColumnName = "ID")
     private Ko koPremise;
 
     // Уникальный лиц.счет во внешней системе

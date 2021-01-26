@@ -20,13 +20,13 @@ public class ObjPar implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ObjPar_id")
-	@SequenceGenerator(name="SEQ_ObjPar_id", sequenceName="scott.u_list_id", allocationSize=1)
+	@SequenceGenerator(name="SEQ_ObjPar_id", sequenceName="scott.T_OBJXPAR_id", allocationSize=1)
     @Column(name = "ID", updatable = false, nullable = false)
 	private Integer id; //id
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_LSK", referencedColumnName="LSK", updatable = false, nullable = true)
+	@JoinColumn(name="FK_LSK", referencedColumnName="LSK")
 	private Kart kart;
 
 	// параметр BD
@@ -47,7 +47,7 @@ public class ObjPar implements java.io.Serializable {
 
 	// Ko объекта
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_K_LSK", referencedColumnName="ID", updatable = false, insertable = true, nullable = true)
+	@JoinColumn(name="FK_K_LSK", referencedColumnName="ID")
 	private Ko ko;
 
 	// параметр

@@ -455,41 +455,51 @@ public class KartMngImpl implements KartMng {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void setStateSch(Kart kart, Date curDt, int psch) {
-        kart.setPsch(0);
+        kart.setPsch(psch);
         ArrayList<StateSch> removeLst = new ArrayList<>();
         ArrayList<StateSch> addLst = new ArrayList<>();
+        boolean isSetStatus = false;
         for (StateSch st : kart.getStateSch()) {
             Date firstDtMonth = Utl.getFirstDate(curDt);
             Date lastDtMonth = Utl.getLastDate(curDt);
             Date lastDtPreviosMonth = Utl.getLastDate(Utl.addMonths(curDt, -1));
+            Date dt1 = st.getDt1() != null ? st.getDt1() : Utl.getFirstDt();
+            Date dt2 = st.getDt2() != null ? st.getDt2() : Utl.getLastDt();
 
-            if ((Utl.between(st.getDt1(), firstDtMonth, lastDtMonth) ||
-                    Utl.between(st.getDt2(), firstDtMonth, lastDtMonth))) {
+            if (Utl.between(firstDtMonth, dt1, dt2) ||
+                    Utl.between(lastDtMonth, dt1, dt2)) {
                 if (!st.getFkStatus().equals(psch)) {
                     // ограничить предыдущ. периодом или удалить периоды с несоответ.признаком
-                    if (st.getDt1() == null) {
+                    if (st.getDt1() == null || st.getDt1().getTime() < firstDtMonth.getTime()) {
                         st.setDt2(lastDtPreviosMonth);
                     } else {
                         removeLst.add(st);
-                        StateSch stateSch = new StateSch();
-                        stateSch.setKart(kart);
-                        stateSch.setFkStatus(psch);
-                        stateSch.setDt1(firstDtMonth);
-                        stateSch.setDt2(null);
-                        addLst.add(stateSch);
                     }
                 } else {
                     // установить корректные периоды действия статуса
-                    if (st.getDt1() != null && !st.getDt1().equals(firstDtMonth)) {
-                        st.setDt1(firstDtMonth);
+                    if (!isSetStatus) {
+                            st.setDt1(firstDtMonth);
+                            st.setDt2(null);
+                            st.setFkStatus(psch);
+                        isSetStatus = true;
+                    } else {
+                        removeLst.add(st);
                     }
-                    if (st.getDt2() != null) {
-                        st.setDt2(null);
-                    }
+                }
+
+                if (!isSetStatus) {
+                    StateSch stateSch = new StateSch();
+                    stateSch.setKart(kart);
+                    stateSch.setFkStatus(psch);
+                    stateSch.setDt1(firstDtMonth);
+                    stateSch.setDt2(null);
+                    addLst.add(stateSch);
+                    isSetStatus = true;
                 }
             }
         }
         kart.getStateSch().removeAll(removeLst);
+        em.flush(); // flush - потому что Hibernate вызывает порядок операций: insert, затем delete, см.https://vladmihalcea.com/hibernate-facts-knowing-flush-operations-order-matters/
         kart.getStateSch().addAll(addLst);
     }
 }

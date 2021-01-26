@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,17 +51,15 @@ public class ChangeDoc implements java.io.Serializable  {
 
 	// пользователь
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, nullable = false)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
 	private Tuser user;
 
 	// перерасчеты
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="DOC_ID", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@OneToMany(mappedBy = "changeDoc", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Change> change = new ArrayList<>(0);
 
 	// корректировки оплатой
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="FK_DOC", referencedColumnName="ID", updatable = false) // updatable = false - чтобы не было Update Foreign key
+	@OneToMany(mappedBy = "changeDoc", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<CorrectPay> correctPay = new ArrayList<>(0);
 
 

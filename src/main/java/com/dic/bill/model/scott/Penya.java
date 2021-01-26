@@ -1,11 +1,10 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Исходящее сальдо по пене
@@ -14,7 +13,7 @@ import lombok.Setter;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_PENYA", schema="SCOTT")
+@Table(name = "C_PENYA_KMP", schema="SCOTT") // fixme временно изменил наименование
 @Getter @Setter
 public class Penya implements java.io.Serializable {
 
@@ -29,23 +28,23 @@ public class Penya implements java.io.Serializable {
 
 	// лиц.счет
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="LSK", referencedColumnName="LSK", updatable = true, nullable = false, insertable = true)
+	@JoinColumn(name="LSK", referencedColumnName="LSK", nullable = false)
 	private Kart kart;
 
 	// долг
-    @Column(name = "SUMMA", updatable = false, nullable = false)
+    @Column(name = "SUMMA")
 	private BigDecimal summa;
 
     // пеня
-    @Column(name = "PENYA", updatable = false, nullable = false)
+    @Column(name = "PENYA")
 	private BigDecimal penya;
 
 	// кол-во дней долга
-    @Column(name = "DAYS", updatable = false, nullable = false)
+    @Column(name = "DAYS")
 	private Integer days;
 
 	// период долга
-    @Column(name = "MG1", updatable = false, nullable = false)
+    @Column(name = "MG1")
 	private String mg1;
 
 }

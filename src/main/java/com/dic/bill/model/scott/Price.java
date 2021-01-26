@@ -7,8 +7,6 @@ import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Цена услуги
@@ -36,24 +34,24 @@ public class Price implements java.io.Serializable {
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, insertable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl")
 	private Usl usl;
 
 	// организация, по которой действует выделенная расценка
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="FK_ORG", referencedColumnName="ID", updatable = false, insertable = false)
+	@JoinColumn(name="FK_ORG", referencedColumnName="ID")
 	private Org org;
 
 	// цена
-	@Column(name = "SUMMA", updatable = false, nullable = true)
+	@Column(name = "SUMMA", updatable = false)
 	private BigDecimal price;
 
 	// цена дополнительная (например за Гкал.)
-	@Column(name = "SUMMA2", updatable = false, nullable = true)
+	@Column(name = "SUMMA2", updatable = false)
 	private BigDecimal priceAddit;
 
 	// цена без проживающих
-	@Column(name = "SUMMA3", updatable = false, nullable = true)
+	@Column(name = "SUMMA3", updatable = false)
 	private BigDecimal priceEmpt;
 
 	@Override

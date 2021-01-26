@@ -7,7 +7,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Наборов услуг по организациям в лицевом счете

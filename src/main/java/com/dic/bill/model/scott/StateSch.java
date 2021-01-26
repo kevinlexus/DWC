@@ -4,7 +4,6 @@ import com.dic.bill.model.exs.Ulist;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,7 +14,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Immutable
 @Table(name = "C_STATES_SCH", schema = "SCOTT")
 public class StateSch {
 
@@ -24,6 +22,11 @@ public class StateSch {
     @SequenceGenerator(name="SEQ_States_sch_id", sequenceName="scott.c_states_sch_id", allocationSize=1)
     @Column(name = "ID", updatable = false, nullable = false)
     private Integer id;
+
+    // лиц.счет
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
+    private Kart kart;
 
     // статус (0-норматив, 1 - х.в.+г.в., 2-х.в., 3-г.в., 8-старый фонд, 9-закрытый фонд)
     // обычно в самой карточке лиц.счета, скрываю статусы 1,2,3 и меняю их визуально на "открытый"
@@ -48,11 +51,6 @@ public class StateSch {
     public boolean isActual(){
         return !Utl.in(fkStatus,8,9);
     }
-
-    // статус лиц.счета
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
-    private Kart kart;
 
     @Override
     public boolean equals(Object o) {

@@ -42,44 +42,43 @@ public class Kwtp implements java.io.Serializable, KwtpPay {
     private Kart kart;
 
     // сумма
-    @Column(name = "SUMMA", updatable = false)
+    @Column(name = "SUMMA")
     private BigDecimal summa;
 
     // пеня
-    @Column(name = "PENYA", updatable = false)
+    @Column(name = "PENYA")
     private BigDecimal penya;
 
     // дата платежа
-    @Column(name = "DTEK", updatable = false)
+    @Column(name = "DTEK")
     private Date dt;
 
     // распределение платежа по услугам, организациям
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "C_KWTP_ID", referencedColumnName = "ID", updatable = false)
+    @OneToMany(mappedBy = "kwtp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KwtpMg> kwtpMg = new ArrayList<>(0);
 
     // № платежного документа (из банка, из ГИС ЖКХ)
-    @Column(name = "NUM_DOC", updatable = false)
+    @Column(name = "NUM_DOC")
     private String numDoc;
 
     // период оплаты - на этом уровне не используется, оставлено для совместимости
-    @Column(name = "DOPL", updatable = false)
+    @Column(name = "DOPL")
     private String dopl;
 
     // № компьютера
-    @Column(name = "NKOM", updatable = false)
+    @Column(name = "NKOM")
     private String nkom;
 
     // № инкассации
-    @Column(name = "NINK", updatable = false)
+    @Column(name = "NINK")
     private Integer nink;
 
     // дата инкассации
-    @Column(name = "DAT_INK", updatable = false)
+    @Column(name = "DAT_INK")
     private Date dtInk;
 
     // код операции
-    @Column(name = "OPER", updatable = false)
+    @Column(name = "OPER")
     private String oper;
 
     // ПД из ГИС ЖКХ

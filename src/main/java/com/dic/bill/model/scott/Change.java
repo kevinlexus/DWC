@@ -1,13 +1,12 @@
 package com.dic.bill.model.scott;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
-
-import javax.persistence.*;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Перерасчет
@@ -41,35 +40,35 @@ public class Change implements java.io.Serializable  {
 	private ChangeDoc changeDoc;
 
 	// сумма
-	@Column(name = "SUMMA", updatable = false)
+	@Column(name = "SUMMA")
 	private BigDecimal summa;
 
 	// период за который перерасчет
-	@Column(name = "MGCHANGE", updatable = false)
+	@Column(name = "MGCHANGE")
 	private String mgchange;
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false)
+	@JoinColumn(name = "USL", referencedColumnName = "USl", nullable = false)
 	private Usl usl;
 
 	// организация - поставщик услуги
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ORG", referencedColumnName = "ID", updatable = false, nullable = false)
+	@JoinColumn(name = "ORG", referencedColumnName = "ID", nullable = false)
 	private Org org;
 
 	// пользователь
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, nullable = false)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
 	private Tuser user;
 
 	// период, которым надо провести разовые изменения
 	// (сделано, чтобы можно было проводить доначисление за прошлый период, не трогая расчёт пени)
-	@Column(name = "MG2", updatable = false)
+	@Column(name = "MG2")
 	private String mg2;
 
 	// Дата перерасчета
-	@Column(name = "DTEK", updatable = false)
+	@Column(name = "DTEK")
 	private Date dt;
 
 	@Override

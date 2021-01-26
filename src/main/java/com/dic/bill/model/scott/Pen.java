@@ -1,27 +1,18 @@
 package com.dic.bill.model.scott;
 
-import java.math.BigDecimal;
-
-import javax.annotation.Generated;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.annotation.Generated;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Пеня по организациям - услугам - периодам - для отчета
  * @author lev
  * @version 1.00
  */
+@Deprecated
 @Getter @Setter
 @SuppressWarnings("serial")
 @Entity
@@ -44,48 +35,48 @@ public class Pen implements java.io.Serializable{
 
 	// услуга
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="USL", referencedColumnName="USl", updatable = false, nullable = false)
+	@JoinColumn(name="USL", referencedColumnName="USl")
 	private Usl usl;
 
 	// организация
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ORG", referencedColumnName="ID", updatable = false, nullable = false)
+	@JoinColumn(name="ORG", referencedColumnName="ID")
 	private Org org;
 
     // входящее сальдо по пене
-    @Column(name = "PENIN", updatable = false, nullable = false)
+    @Column(name = "PENIN")
 	private BigDecimal penIn;
 
     // пеня начисленная в текущем периоде (в т.ч. корректировки пени)
-    @Column(name = "PENCHRG", updatable = false, nullable = false)
+    @Column(name = "PENCHRG")
 	private BigDecimal penChrg;
 
     // корректировки начисления пени
-    @Column(name = "PENCORR", updatable = false, nullable = false)
+    @Column(name = "PENCORR")
 	private BigDecimal penCorr;
 
     // пеня оплаченная
-    @Column(name = "PENPAY", updatable = false, nullable = false)
+    @Column(name = "PENPAY")
 	private BigDecimal penPay;
 
     // исходящее сальдо по пене
-    @Column(name = "PENOUT", updatable = false, nullable = false)
+    @Column(name = "PENOUT")
 	private BigDecimal penOut;
 
     // дней просрочки
-    @Column(name = "DAYS", updatable = false, nullable = false)
+    @Column(name = "DAYS")
 	private Integer days;
 
     // период задолжности
-    @Column(name = "MG", updatable = false, nullable = false)
+    @Column(name = "MG")
 	private Integer mg;
 
     // бухгалтерский период - начало
-    @Column(name = "MGFROM", updatable = false, nullable = false)
+    @Column(name = "MGFROM")
 	private Integer mgFrom;
 
     // бухгалтерский период - окончание
-    @Column(name = "MGTO", updatable = false, nullable = false)
+    @Column(name = "MGTO")
 	private Integer mgTo;
 
 	@Generated("SparkTools")

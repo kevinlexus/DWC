@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_PEN_CUR", schema="SCOTT")
+@Table(name = "C_PEN_CUR_KMP", schema="SCOTT") // fixme временно изменил наименование
 @Getter @Setter
 @NoArgsConstructor
 public class PenCur implements java.io.Serializable {

@@ -26,7 +26,7 @@ public class ChargePrep {
 
     // лиц.счет
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK", updatable = false, nullable = false, insertable = true)
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", nullable = false)
     private Kart kart;
 
     // Тип записи (0-предварительный подсчет,1 - сгруппированный до ключевых структур,
@@ -35,26 +35,26 @@ public class ChargePrep {
     // 7 - просто, наличие счетчика 8-детализация льготы, 9 - наличие льготы (используется совместно с dt1,dt2)
     // NOTE ИСПОЛЬЗОВАТЬ В JAVA только 4! Решил использовать только данный тип, так как остальные - не нужны в
     // NOTE Java - начислении ред.16.01.2019
-    @Column(name = "TP", updatable = false, nullable = false, insertable = true)
+    @Column(name = "TP", nullable = false)
     private Integer tp;
 
     // услуга
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USL", referencedColumnName = "USl", updatable = false, nullable = false, insertable = true)
+    @JoinColumn(name = "USL", referencedColumnName = "USl", nullable = false)
     private Usl usl;
 
     // объем
-    @Column(name = "VOL", updatable = false, nullable = false)
+    @Column(name = "VOL", nullable = false)
     private BigDecimal vol;
 
     // наличие счетчика
     @Type(type= "org.hibernate.type.NumericBooleanType")
-    @Column(name = "SCH", updatable = false, nullable = false)
+    @Column(name = "SCH", nullable = false)
     private Boolean isExistMeter;
 
     // льгота
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FK_SPK", referencedColumnName = "ID", updatable = false)
+    @JoinColumn(name = "FK_SPK", referencedColumnName = "ID")
     private Spk spk;
 
 }
