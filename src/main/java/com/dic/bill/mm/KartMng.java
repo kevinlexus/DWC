@@ -45,5 +45,5 @@ public interface KartMng {
                     Integer houseId, Long klskId, Long klskPremise,
                     String fam, String im, String ot) throws WrongParam;
 
-    void setStateSch(Kart kart, Date curDt, int psch);
+    void checkStateSch(Kart kart, Date curDt, int psch);
 }

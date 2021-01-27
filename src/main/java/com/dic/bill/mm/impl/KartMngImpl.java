@@ -450,11 +450,12 @@ public class KartMngImpl implements KartMng {
      * Установить признак актуальности лиц.счета
      *
      * @param kart лиц.счет
+     * @param curDt текущая дата
      * @param psch признак (0,1-открыт, 8 - старый фонд (закрыт), 9 - закрыт по другим причинам)
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void setStateSch(Kart kart, Date curDt, int psch) {
+    public void checkStateSch(Kart kart, Date curDt, int psch) {
         kart.setPsch(psch);
         ArrayList<StateSch> removeLst = new ArrayList<>();
         ArrayList<StateSch> addLst = new ArrayList<>();
