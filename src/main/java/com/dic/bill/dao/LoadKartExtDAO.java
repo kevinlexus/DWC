@@ -27,7 +27,7 @@ public interface LoadKartExtDAO extends JpaRepository<LoadKartExt, Integer> {
     /**
      * Обработать все, предназначенные для загрузки внешние лиц.счета
      */
-    @Query(value = "from LoadKartExt t where t.status not in (1,2)")
+    @Query(value = "from LoadKartExt t where t.status not in (1,2,10)")
     List<LoadKartExt> findApprovedForLoadFormat1();
 
 }

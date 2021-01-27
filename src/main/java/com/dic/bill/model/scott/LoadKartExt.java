@@ -97,6 +97,14 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "STATUS")
     private Integer status;
 
+    // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
+    @Column(name = "RASCHET_SCHET")
+    private String rSchet;
+
+    // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
+    @Column(name = "RASCHET_SCHET_COLUMN")
+    private Integer rSchetColumn;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -146,6 +154,10 @@ public class LoadKartExt implements java.io.Serializable {
         private String comm;
         // статус (0 - принять к загрузке, 1 - уже загружен, 2 - ошибка (смотреть COMM)
         private Integer status;
+        // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
+        private String rSchet;
+        // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
+        private Integer rSchetColumn;
 
         private LoadKartExtBuilder() {
         }
@@ -239,6 +251,16 @@ public class LoadKartExt implements java.io.Serializable {
             return this;
         }
 
+        public LoadKartExtBuilder withRSchet(String rSchet) {
+            this.rSchet = rSchet;
+            return this;
+        }
+
+        public LoadKartExtBuilder withRSchetColumn(Integer rSchetColumn) {
+            this.rSchetColumn = rSchetColumn;
+            return this;
+        }
+
         public LoadKartExt build() {
             LoadKartExt loadKartExt = new LoadKartExt();
             loadKartExt.setKart(kart);
@@ -258,6 +280,8 @@ public class LoadKartExt implements java.io.Serializable {
             loadKartExt.setPayment(payment);
             loadKartExt.setComm(comm);
             loadKartExt.setStatus(status);
+            loadKartExt.setRSchet(rSchet);
+            loadKartExt.setRSchetColumn(rSchetColumn);
             return loadKartExt;
         }
     }

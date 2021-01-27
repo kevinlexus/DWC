@@ -56,7 +56,11 @@ public class Org implements java.io.Serializable {
 
 	// расчетный счет
     @Column(name = "RASCHET_SCHET")
-	private String operAcc;
+	private String rSchet;
+
+	// расчетный счет - 2
+    @Column(name = "RASCHET_SCHET2")
+	private String rSchet2;
 
 	// расчетный счет для гис ЖКХ
 	@Column(name = "R_SCH_GIS")
