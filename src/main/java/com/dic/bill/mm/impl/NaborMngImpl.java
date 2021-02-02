@@ -31,8 +31,8 @@ public class NaborMngImpl implements NaborMng {
      * @param curDt - текущая дата (на будущее, для вкл./выкл. услуги в течении месяца)
      */
     @Override
-    public List<Nabor> getValidNabor(Ko ko, Date curDt) {
-        // перебрать все открытые лиц счета по фин.лиц.счету, получить все наборы услуг, отсортировать по порядку расчета начисления
+    public List<Nabor> getActualNabor(Ko ko, Date curDt) {
+        // перебрать все действующие лиц счета по фин.лиц.счету, получить все наборы услуг, отсортировать по порядку расчета начисления
         return ko.getKart().stream().filter(Kart::isActual) // только действующие
                 .flatMap(k -> k.getNabor().stream())
                 .filter(t -> t.isValid(true) && t.getUsl().isMain())

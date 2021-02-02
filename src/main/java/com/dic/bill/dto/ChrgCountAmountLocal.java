@@ -423,7 +423,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      *
      * @param ko - квартира
      */
-    public /*synchronized */void saveChargeAndRound(Ko ko) throws ErrorWhileChrg { //note synchronized???? - убрал! ред.05.07.2019
+    public void saveChargeAndRound(Ko ko) throws ErrorWhileChrg {
         // удалить информацию по текущему начислению, по квартире, только по type=0,1
         for (Kart kart : ko.getKart()) {
             kart.getCharge().removeIf(t -> t.getType().equals(0) || t.getType().equals(1));
@@ -431,7 +431,26 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         log.trace("Сохранено в C_CHARGE:");
         int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
-            if (u.getUsl().getFkCalcTp() == null || u.getUsl().getFkCalcTp() != null && !u.getUsl().getFkCalcTp().equals(34)) {
+            if (u.kart.getKartExt() != null) {
+                // внешние лиц.счета, получить сумму начисления из внешнего источника
+                for (KartExt kartExt : u.kart.getKartExt()) {
+                    if (kartExt.isActual()) {
+                        BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
+                        BigDecimal summa = kartExt.getChrg();
+
+                        // тип 1
+                        addCharge(i, 1, u, area, summa);
+                        // тип 0
+                        addCharge(i, 0, u, area, summa);
+
+                        i++;
+                        log.trace("lsk={}, usl={}, testOpl={}, opl={}, testCena={}, isSch={}, summa={}",
+                                u.kart.getLsk(), u.usl.getId(), u.vol, area, u.price, u.isMeter, summa);
+                        break;
+                    }
+                }
+            } else if (u.getUsl().getFkCalcTp() == null || u.getUsl().getFkCalcTp() != null
+                    && !u.getUsl().getFkCalcTp().equals(34)) {
                 BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
                 BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
 

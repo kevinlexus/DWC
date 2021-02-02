@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface NaborMng {
 
-    List<Nabor> getValidNabor(Ko ko, Date curDt);
+    List<Nabor> getActualNabor(Ko ko, Date curDt);
 
     Integer getCached(String str1, Integer int2, Date dt3);
 
