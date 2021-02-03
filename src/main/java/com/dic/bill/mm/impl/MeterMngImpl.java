@@ -238,7 +238,7 @@ public class MeterMngImpl implements MeterMng {
      */
     @Override
     public List<ObjPar> getValuesByMeter(Meter meter, int status, String period) {
-        return meter.getObjPar().stream()
+        return meter.getKo().getObjPar().stream()
                 .filter(t -> t.getLst().getCd().equals("ins_sch") && t.getMg().equals(period)
                         && t.getStatus().equals(status))
                 .sorted(Comparator.comparing(ObjPar::getId).reversed())

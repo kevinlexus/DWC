@@ -77,12 +77,12 @@ public class KwtpDay implements java.io.Serializable  {
 	private String oper;
 
 	// fk на C_KWTP_MG - сделано, так как не возможно видеть KwtpMg на этапе вставки записи из пакета PL/SQL
-	@Column(name = "KWTP_ID", insertable = false, updatable = false)
+	@Column(name = "KWTP_ID")
 	private Integer fkKwtpMg;
 
 	// распределение платежа по периоду
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="KWTP_ID", referencedColumnName="ID")
+	@JoinColumn(name="KWTP_ID", referencedColumnName="ID", insertable = false, updatable = false) // не убирать insert,update=false, не будет привязана оплата!!!
 	private KwtpMg kwtpMg;
 
 	@Override

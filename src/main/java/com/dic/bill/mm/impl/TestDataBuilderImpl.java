@@ -251,7 +251,7 @@ public class TestDataBuilderImpl implements TestDataBuilder {
         objPar.setLst(lst);
         objPar.setN1(vol);
         objPar.setMg(mg);
-        meter.getObjPar().add(objPar);
+        meter.getKo().getObjPar().add(objPar);
     }
 
     /**

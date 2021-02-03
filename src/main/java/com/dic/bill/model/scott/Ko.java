@@ -9,7 +9,9 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -67,6 +69,10 @@ public class Ko implements java.io.Serializable {
     @OneToMany(mappedBy = "koKw", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     private Set<KartExt> kartExtByKoKw = new HashSet<>(0);
+
+    // параметры
+    @OneToMany(mappedBy = "ko", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<ObjPar> objPar = new ArrayList<>(0);
 
     public Ko() {
         super();

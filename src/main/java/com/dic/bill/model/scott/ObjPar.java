@@ -29,6 +29,11 @@ public class ObjPar implements java.io.Serializable {
 	@JoinColumn(name="FK_LSK", referencedColumnName="LSK")
 	private Kart kart;
 
+	// счетчик
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="FK_K_LSK", referencedColumnName="K_LSK_ID", insertable = false, updatable = false) // здесь повтор FK_K_LSK, так что нельзя обновлять
+	private Meter meter;
+
 	// параметр BD
 	@Column(name = "N1", updatable = false, nullable = true)
 	private BigDecimal n1;

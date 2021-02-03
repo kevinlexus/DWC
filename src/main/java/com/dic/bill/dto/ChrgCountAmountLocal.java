@@ -233,6 +233,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 .collect(Collectors.toList());
 
         int round;
+        // note Для отображения округлённого объема в карточках так же используется поле USL.CHRG_ROUND!
         if (usl.isCalcByArea()) {
             // до 2 знаков - услуги, рассчитываемые по площади
             round = 2;
@@ -431,7 +432,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         log.trace("Сохранено в C_CHARGE:");
         int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
-            if (u.kart.getKartExt() != null) {
+            if (u.kart.getKartExt() != null && u.kart.getKartExt().size()>0) {
                 // внешние лиц.счета, получить сумму начисления из внешнего источника
                 for (KartExt kartExt : u.kart.getKartExt()) {
                     if (kartExt.isActual()) {

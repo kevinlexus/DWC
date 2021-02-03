@@ -56,7 +56,7 @@ public class Meter implements java.io.Serializable {
 	private Ko koObj;
 
 	// объемы, показания и другие параметры
-	@OneToMany(mappedBy = "ko", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "meter", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<ObjPar> objPar = new ArrayList<>(0);
 
 	// последнее показание

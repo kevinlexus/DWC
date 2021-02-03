@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -119,6 +120,11 @@ public class Usl implements java.io.Serializable  {
 	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="USL", referencedColumnName="USL")
 	private Set<UslRound> uslRound = new HashSet<>(0);
+
+	// использовать ли объем, в расчете водоотведения, например для двухкомпонентной услуги (х.в. для г.в.+ тепл.энерг для г.в.) (0,null -нет, 1-да)
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "USE_VOL_CAN", updatable = false)
+	private Boolean isUseVolCan;
 
 	/**
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)

@@ -10,10 +10,10 @@ import com.ric.cmn.excp.ErrorWhileChrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -227,6 +227,7 @@ public class KartPrMngImpl implements KartPrMng {
             case 17: // х.в.
             case 18: // г.в.
             case 52: // ХВС для гвс
+            case 53: // компонент тепл.энерг.для г.в.
             case 19: {// водоотв.
                 // соцнорма из набора
                 norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
