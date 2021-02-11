@@ -453,8 +453,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             } else if (u.getUsl().getFkCalcTp() == null || u.getUsl().getFkCalcTp() != null
                     && !u.getUsl().getFkCalcTp().equals(34)) {
                 BigDecimal area = u.area.setScale(2, BigDecimal.ROUND_HALF_UP);
-                BigDecimal summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
-
+                BigDecimal summa = BigDecimal.ZERO;
+                if (!u.getUsl().getIsHideChrg()) {
+                    summa = u.vol.multiply(u.price).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
                 // тип 1
                 addCharge(i, 1, u, area, summa);
                 // тип 0
@@ -480,7 +482,10 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                         )
                         .map(Charge::getSumma)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
-                BigDecimal summa = parentUslSumma.multiply(u.vol).setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal summa = BigDecimal.ZERO;
+                if (!u.getUsl().getIsHideChrg()) {
+                    summa = parentUslSumma.multiply(u.vol).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
                 // тип 1
                 addCharge(i, 1, u, area,
                         summa);

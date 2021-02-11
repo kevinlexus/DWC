@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "C_PENYA_KMP", schema="SCOTT") // fixme временно изменил наименование
+@Table(name = "C_PENYA", schema="SCOTT")
 @Getter @Setter
 public class Penya implements java.io.Serializable {
 

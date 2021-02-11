@@ -121,10 +121,15 @@ public class Usl implements java.io.Serializable  {
 	@JoinColumn(name="USL", referencedColumnName="USL")
 	private Set<UslRound> uslRound = new HashSet<>(0);
 
-	// использовать ли объем, в расчете водоотведения, например для двухкомпонентной услуги (х.в. для г.в.+ тепл.энерг для г.в.) (0,null -нет, 1-да)
+	// использовать ли объем, в расчете водоотведения, например для двухкомпонентной услуги (х.в. для г.в.+ тепл.энерг для г.в.)
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "USE_VOL_CAN", updatable = false)
 	private Boolean isUseVolCan;
+
+	// cкрыть начисление (используется для получения расценки по вирт.услуг в счетах)
+	@Type(type= "org.hibernate.type.NumericBooleanType")
+	@Column(name = "HIDE_CHRG", updatable = false)
+	private Boolean isHideChrg;
 
 	/**
 	 * Получить фактическую услугу, поставляющую объем (иногда нужно, например для услуги fkCalcTp=31)
