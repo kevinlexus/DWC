@@ -15,11 +15,10 @@ import javax.persistence.*;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "A_NABOR2", schema="SCOTT")
-public class Anabor implements java.io.Serializable, Compress {
+public class Anabor extends BaseNabor implements java.io.Serializable, Compress {
 
 	public Anabor() {
 	}
-
 
     @Id
 	@Column(name = "id", updatable = false, nullable = false)
@@ -30,20 +29,11 @@ public class Anabor implements java.io.Serializable, Compress {
 	@JoinColumn(name="LSK", referencedColumnName="LSK")
 	private Kart kart;
 
-	@Column(name = "usl", updatable = false, nullable = false)
-	private String usl; // код услуги
-
 	@Column(name = "mgfrom", updatable = true, nullable = false)
 	private Integer mgFrom; // Начало действия записи
 
 	@Column(name = "mgto", updatable = true, nullable = false)
 	private Integer mgTo; // Окончание действия записи
-
-	@Column(name = "org", updatable = false, nullable = false)
-	private Double org; // код орг.
-
-	@Column(name = "koeff", updatable = false, nullable = false)
-	private Double koeff;
 
 	@Column(name = "fk_tarif", updatable = false, nullable = false)
 	private Double fkTarif;
@@ -59,9 +49,6 @@ public class Anabor implements java.io.Serializable, Compress {
 
 	@Column(name = "vol_add", updatable = false, nullable = false)
 	private Double volAdd;
-
-	@Column(name = "norm", updatable = false, nullable = false)
-	private Double norm;
 
 	@Column(name = "kf_kpr", updatable = false, nullable = false)
 	private Double kfKpr;
@@ -134,14 +121,14 @@ public class Anabor implements java.io.Serializable, Compress {
 		result = prime * result + ((kfKprWroSch == null) ? 0 : kfKprWroSch.hashCode());
 		result = prime * result + ((kfKprWrz == null) ? 0 : kfKprWrz.hashCode());
 		result = prime * result + ((kfKprWrzSch == null) ? 0 : kfKprWrzSch.hashCode());
-		result = prime * result + ((koeff == null) ? 0 : koeff.hashCode());
+		result = prime * result + ((this.getKoeff() == null) ? 0 : this.getKoeff().hashCode());
 		result = prime * result + ((kart.getLsk() == null) ? 0 : kart.getLsk().hashCode());
 		result = prime * result + ((nrmKpr == null) ? 0 : nrmKpr.hashCode());
 		result = prime * result + ((nrmKpr2 == null) ? 0 : nrmKpr2.hashCode());
-		result = prime * result + ((norm == null) ? 0 : norm.hashCode());
-		result = prime * result + ((org == null) ? 0 : org.hashCode());
+		result = prime * result + ((this.getNorm() == null) ? 0 : this.getNorm().hashCode());
+		result = prime * result + ((this.getOrg() == null) ? 0 : this.getOrg().hashCode());
 		result = prime * result + ((schAuto == null) ? 0 : schAuto.hashCode());
-		result = prime * result + ((usl == null) ? 0 : usl.hashCode());
+		result = prime * result + ((this.getUsl() == null) ? 0 : this.getUsl().hashCode());
 		result = prime * result + ((vol == null) ? 0 : vol.hashCode());
 		result = prime * result + ((volAdd == null) ? 0 : volAdd.hashCode());
 		return result;
@@ -153,8 +140,8 @@ public class Anabor implements java.io.Serializable, Compress {
 	@Override
 	public boolean isTheSame(Compress compr) {
 		Anabor other = (Anabor) compr;
-		if (norm == null) {
-			if (other.norm != null)
+		if (this.getNorm() == null) {
+			if (other.getNorm() != null)
 				return false;
 		} else if (Limit == null) {
 			if (other.Limit != null)
@@ -206,10 +193,10 @@ public class Anabor implements java.io.Serializable, Compress {
 				return false;
 		} else if (!kfKprWrzSch.equals(other.kfKprWrzSch))
 			return false;
-		if (koeff == null) {
-			if (other.koeff != null)
+		if (this.getKoeff() == null) {
+			if (other.getKoeff() != null)
 				return false;
-		} else if (!koeff.equals(other.koeff))
+		} else if (!this.getKoeff().equals(other.getKoeff()))
 			return false;
 		if (kart == null) {
 			if (other.kart != null)
@@ -226,20 +213,20 @@ public class Anabor implements java.io.Serializable, Compress {
 				return false;
 		} else if (!nrmKpr2.equals(other.nrmKpr2))
 			return false;
-		if (org == null) {
-			if (other.org != null)
+		if (this.getOrg() == null) {
+			if (other.getOrg() != null)
 				return false;
-		} else if (!org.equals(other.org))
+		} else if (!this.getOrg().equals(other.getOrg()))
 			return false;
 		if (schAuto == null) {
 			if (other.schAuto != null)
 				return false;
 		} else if (!schAuto.equals(other.schAuto))
 			return false;
-		if (usl == null) {
-			if (other.usl != null)
+		if (this.getUsl() == null) {
+			if (other.getUsl() != null)
 				return false;
-		} else if (!usl.equals(other.usl))
+		} else if (!this.getUsl().equals(other.getUsl()))
 			return false;
 		if (vol == null) {
 			if (other.vol != null)
@@ -257,8 +244,7 @@ public class Anabor implements java.io.Serializable, Compress {
 	// ключ
 	@Override
 	public String getKey() {
-		return getUsl();
+		return getUsl().getId();
 	}
-
 }
 

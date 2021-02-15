@@ -28,9 +28,8 @@ public interface KartMng {
 
     Optional<StateSch> getKartStateByDate(Kart kart, Date dt);
 
-    void saveShortKartDescription(Ko ko);
-
-    String generateUslNameShort(Kart kart, int var, int maxWords, String delimiter);
+    String getUslNameShort(Kart kart, int var, int maxWords, String delimiter,
+                           String period, String curPeriod);
 
     String getAdrWithCity(Kart kart);
 

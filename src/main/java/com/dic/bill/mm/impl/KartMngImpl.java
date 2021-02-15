@@ -170,51 +170,48 @@ public class KartMngImpl implements KartMng {
         return Optional.empty();
     }
 
-
-    /**
-     * Сохранить в Kart короткое описание Лиц.счета и услуг
-     *
-     * @param ko - объект Ko
-     */
-    @Override
-    @Transactional(
-            propagation = Propagation.REQUIRED,
-            rollbackFor = Exception.class)
-    public void saveShortKartDescription(Ko ko) {
-        ko.getKart().forEach(t -> {
-            String uslNameShort = generateUslNameShort(t, 0, 5, ",");
-            if (t.getUslNameShort() == null ||
-                    !t.getUslNameShort().equals(uslNameShort)) {
-                t.setUslNameShort(uslNameShort);
-            }
-        });
-
-    }
-
     /**
      * Сформировать список укороченных наименований услуг по фин.лиц.счету
      *
-     * @param kart      - лиц.сч.
-     * @param var       - использовать: 0-по USL.NM_SHORT, 1-по USL.NM2, 2-по USL.ID (код)
-     * @param maxWords  - макс.кол-во наименований услуг с списке
-     * @param delimiter - разделитель
+     * @param kart      лиц.сч.
+     * @param var       использовать: 0-по USL.NM_SHORT, 1-по USL.NM2, 2-по USL.ID (код)
+     * @param maxWords  макс.кол-во наименований услуг с списке
+     * @param delimiter разделитель
+     * @param period    период
+     * @param curPeriod текущий период
      */
     @Override
-    public String generateUslNameShort(Kart kart, int var, int maxWords, String delimiter) {
+    @Transactional(readOnly = true)
+    public String getUslNameShort(Kart kart, int var, int maxWords, String delimiter,
+                                  String period, String curPeriod) {
         StringBuilder uslNameShort = new StringBuilder();
 
+        // todo сделать интерфейс для выборки nabor и anabor
         // получить действующие, главные услуги, по которым есть короткие наименования
-        List<Nabor> lst = kart.getNabor().stream()
-                .filter(t -> t.isValid(false) && t.getUsl().isMain() &&
-                        (var == 0 && t.getUsl().getNameShort() != null ||
-                                var == 1 && t.getUsl().getNm2() != null ||
-                                var == 2 && t.getUsl().getId() != null)
-                )
-                .sorted(Comparator.comparing(t -> t.getUsl().getNpp())).collect(Collectors.toList());
-
+        List<Nabors> lst;
+        if (period.equals(curPeriod)) {
+            lst = kart.getNabor().stream().map(t -> (Nabors) t)
+                    .filter(t -> t.isValid(false) && t.getUsl().isMain() &&
+                            (var == 0 && t.getUsl().getNameShort() != null ||
+                                    var == 1 && t.getUsl().getNm2() != null ||
+                                    var == 2 && t.getUsl().getId() != null)
+                    )
+                    .sorted(Comparator.comparing(t -> t.getUsl().getNpp())).collect(Collectors.toList());
+        } else {
+            lst = kart.getAnabor().stream()
+                    .filter(t -> Utl.between(Integer.parseInt(period),
+                            t.getMgFrom(), t.getMgTo()))
+                    .map(t -> (Nabors) t)
+                    .filter(t -> t.isValid(false) && t.getUsl().isMain() &&
+                            (var == 0 && t.getUsl().getNameShort() != null ||
+                                    var == 1 && t.getUsl().getNm2() != null ||
+                                    var == 2 && t.getUsl().getId() != null)
+                    )
+                    .sorted(Comparator.comparing(t -> t.getUsl().getNpp())).collect(Collectors.toList());
+        }
         int i = 1;
 
-        for (Nabor nabor : lst) {
+        for (Nabors nabor : lst) {
             String localDelimiter = "";
             if (i < lst.size() && i < maxWords) {
                 localDelimiter = delimiter;
@@ -449,9 +446,9 @@ public class KartMngImpl implements KartMng {
     /**
      * Установить признак актуальности лиц.счета
      *
-     * @param kart лиц.счет
+     * @param kart  лиц.счет
      * @param curDt текущая дата
-     * @param psch признак (0,1-открыт, 8 - старый фонд (закрыт), 9 - закрыт по другим причинам)
+     * @param psch  признак (0,1-открыт, 8 - старый фонд (закрыт), 9 - закрыт по другим причинам)
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -479,9 +476,9 @@ public class KartMngImpl implements KartMng {
                 } else {
                     // установить корректные периоды действия статуса
                     if (!isSetStatus) {
-                            st.setDt1(firstDtMonth);
-                            st.setDt2(null);
-                            st.setFkStatus(psch);
+                        st.setDt1(firstDtMonth);
+                        st.setDt2(null);
+                        st.setFkStatus(psch);
                         isSetStatus = true;
                     } else {
                         removeLst.add(st);
@@ -499,7 +496,7 @@ public class KartMngImpl implements KartMng {
                 }
             }
         }
-        if (removeLst.size()>0) {
+        if (removeLst.size() > 0) {
             kart.getStateSch().removeAll(removeLst);
             em.flush(); // flush - потому что Hibernate вызывает порядок операций: insert, затем delete, см.https://vladmihalcea.com/hibernate-facts-knowing-flush-operations-order-matters/
         }

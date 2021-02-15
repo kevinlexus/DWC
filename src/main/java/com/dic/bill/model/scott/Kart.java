@@ -180,12 +180,17 @@ public class Kart {
     //@Fetch(FetchMode.JOIN) возможно вызывало когда-то OutOfMemory - убрал
     private Set<Nabor> nabor = new HashSet<>(0);
 
+    // набор услуг, в архиве
+    @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    //@Fetch(FetchMode.JOIN) возможно вызывало когда-то OutOfMemory - убрал
+    private Set<Anabor> anabor = new HashSet<>(0);
+
     // проживающие
     @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.JOIN)
     private Set<KartPr> kartPr = new HashSet<>(0);
 
-    // текущие начисления note убрать JoinColumn со стороны One и использовать везде mappedBy, иначе после insert всегда будут update!!! ред.16.12.2020
+    // текущие начисления
     @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Charge> charge = new ArrayList<>(0);
 
