@@ -38,11 +38,11 @@ public class Ko implements java.io.Serializable {
     private Long id; //id
 
     // объект Eolink
-    @OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "koObj", fetch = FetchType.LAZY, optional = false) //optional = false - чтобы не вызывать запрос проверки наличия eolink
     private Eolink eolink;
 
     // счетчик
-    @OneToOne(mappedBy = "ko", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "ko", fetch = FetchType.LAZY, optional = false)
     private Meter meter;
 
     // счетчики, через Id фин.лиц.счета

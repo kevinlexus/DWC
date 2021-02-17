@@ -92,9 +92,9 @@ public class KartExt implements java.io.Serializable {
     @JoinColumn(name = "FK_UK", referencedColumnName = "ID", updatable = false, nullable = false)
     private Org uk;
 
-    // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
-    @Column(name = "RASCHET_SCHET_COLUMN")
-    private Integer rSchetColumn;
+    // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
+    @Column(name = "RASCHET_SCHET")
+    private String rSchet;
 
     @Override
     public boolean equals(Object o) {
@@ -137,8 +137,8 @@ public class KartExt implements java.io.Serializable {
         private BigDecimal payment;
         // УК - владелец счета
         private Org uk;
-        // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
-        private Integer rSchetColumn;
+        // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
+        private String rSchet;
 
         private KartExtBuilder() {
         }
@@ -212,8 +212,8 @@ public class KartExt implements java.io.Serializable {
             return this;
         }
 
-        public KartExtBuilder withRSchetColumn(Integer rSchetColumn) {
-            this.rSchetColumn = rSchetColumn;
+        public KartExtBuilder withRSchet(String rSchet) {
+            this.rSchet = rSchet;
             return this;
         }
 
@@ -232,7 +232,7 @@ public class KartExt implements java.io.Serializable {
             kartExt.setChrg(chrg);
             kartExt.setPayment(payment);
             kartExt.setUk(uk);
-            kartExt.setRSchetColumn(rSchetColumn);
+            kartExt.setRSchet(rSchet);
             return kartExt;
         }
     }

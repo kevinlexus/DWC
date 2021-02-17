@@ -1,6 +1,7 @@
 package com.dic.bill.dao;
 
 import com.dic.bill.model.scott.Kart;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,6 +37,7 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     List<Kart> findActualByReuHouseIdTpKw(@Param("reu") String reu, @Param("tpCd") String tpCd,
                                           @Param("houseId") Integer houseId, @Param("kw") String kw);
 
+    @EntityGraph(attributePaths = {"kartDetail", "kartPr"})
     @Query("select t from Kart t where t.house.id = :houseId and t.num=:kw")
     List<Kart> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
 

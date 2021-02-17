@@ -186,7 +186,6 @@ public class KartMngImpl implements KartMng {
                                   String period, String curPeriod) {
         StringBuilder uslNameShort = new StringBuilder();
 
-        // todo сделать интерфейс для выборки nabor и anabor
         // получить действующие, главные услуги, по которым есть короткие наименования
         List<Nabors> lst;
         if (period.equals(curPeriod)) {

@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 /**
  * Лицевой счет (он же - помещение)
  *
- * @author lev
  */
 @SuppressWarnings("serial")
 @Entity
@@ -124,12 +123,12 @@ public class Kart {
     private Ko koPremise;
 
     // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID")
     private Ko koLsk;
 
     // детализация по лиц.счету
-    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY, optional = false)
     @Fetch(FetchMode.JOIN)
     private KartDetail kartDetail;
 
@@ -253,10 +252,6 @@ public class Kart {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @Column(name = "KRAN1", nullable = false)
     private Boolean isKran1;
-
-    // список коротких наименований услуг, по лиц.счету  (для удобного представления счета при оплате) обновляется при начислении
-    @Column(name = "USL_NAME_SHORT")
-    private String uslNameShort;
 
     // разделенный в ГИС ЖКХ ЕЛС?
     @Type(type = "org.hibernate.type.NumericBooleanType")

@@ -101,10 +101,6 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "RASCHET_SCHET")
     private String rSchet;
 
-    // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
-    @Column(name = "RASCHET_SCHET_COLUMN")
-    private Integer rSchetColumn;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -156,8 +152,6 @@ public class LoadKartExt implements java.io.Serializable {
         private Integer status;
         // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
         private String rSchet;
-        // расчетный счет, используемая колнока в t_org (1-RASCHET_SCHET,2-RASCHET_SCHET2)
-        private Integer rSchetColumn;
 
         private LoadKartExtBuilder() {
         }
@@ -256,11 +250,6 @@ public class LoadKartExt implements java.io.Serializable {
             return this;
         }
 
-        public LoadKartExtBuilder withRSchetColumn(Integer rSchetColumn) {
-            this.rSchetColumn = rSchetColumn;
-            return this;
-        }
-
         public LoadKartExt build() {
             LoadKartExt loadKartExt = new LoadKartExt();
             loadKartExt.setKart(kart);
@@ -281,7 +270,6 @@ public class LoadKartExt implements java.io.Serializable {
             loadKartExt.setComm(comm);
             loadKartExt.setStatus(status);
             loadKartExt.setRSchet(rSchet);
-            loadKartExt.setRSchetColumn(rSchetColumn);
             return loadKartExt;
         }
     }
