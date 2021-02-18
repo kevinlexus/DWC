@@ -49,6 +49,11 @@ public class KartDetail implements java.io.Serializable {
     @Column(name = "IS_MAIN_IN_PREMISE")
     Boolean isMainInPremise;
 
+    // на текущий момент, в контексте K_LSK_ID: Основной(Если нет основного - РСО), незакрытый лиц.счет.-1 Остальные - 0
+    @Type(type= "org.hibernate.type.NumericBooleanType")
+    @Column(name = "IS_MAIN_IN_KLSK")
+    Boolean isMainInKlsk;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

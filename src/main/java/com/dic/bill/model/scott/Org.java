@@ -96,7 +96,7 @@ public class Org implements java.io.Serializable {
 	// при загрузке реестра внешних лиц счетов, создавать ли лиц.счета в Kart (Например Кис - Кап.ремонт)
 	@Type(type= "org.hibernate.type.NumericBooleanType")
 	@Column(name = "IS_CREATE_EXT_LSK_IN_KART", updatable = false)
-	private Boolean isCretateExtLskInKart;
+	private Boolean isCreateExtLskInKart;
 
 	// услуга для создания внешних лиц счетов (работает в случае isCretateExtLskInKart==true)
 	@OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)

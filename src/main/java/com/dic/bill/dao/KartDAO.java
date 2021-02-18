@@ -1,7 +1,7 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.dto.KartLsk;
 import com.dic.bill.model.scott.Kart;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,9 +37,10 @@ public interface KartDAO extends JpaRepository<Kart, String> {
     List<Kart> findActualByReuHouseIdTpKw(@Param("reu") String reu, @Param("tpCd") String tpCd,
                                           @Param("houseId") Integer houseId, @Param("kw") String kw);
 
-    @EntityGraph(attributePaths = {"kartDetail", "kartPr"})
-    @Query("select t from Kart t where t.house.id = :houseId and t.num=:kw")
-    List<Kart> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
+    //@EntityGraph(attributePaths = {"kartDetail", "kartPr"})
+    @Query("select t.lsk as lsk, t.koKw.id as klskId, t.psch as psch from Kart t where t.house.id = :houseId and t.num=:kw")
+    List<KartLsk> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
+    //List<String> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
 
     @Query("select distinct t from Kart t join t.nabor n where t.tp.cd=:tpCd and n.usl.id=:uslId " +
             "and t.house.id = :houseId and t.num=:kw and t.psch not in (8,9)")

@@ -1,5 +1,6 @@
 package com.dic.bill.dao;
 
+import com.dic.bill.dto.LoadedKartExt;
 import com.dic.bill.model.scott.KartExt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,13 @@ import java.util.Optional;
 public interface KartExtDAO extends JpaRepository<KartExt, Integer> {
 
     Optional<KartExt> findByExtLsk(String extLsk);
+
+
+    /**
+     * Получить загруженные внешние лиц.счета
+     */
+    @Query(value = "select t.extLsk as extLsk, t.v as v, k.psch as psch from KartExt t join t.kart k")
+    List<LoadedKartExt> getLoadedKartExt();
 
     /**
      * Получить внешние лиц.счета по дому и квартире

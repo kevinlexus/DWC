@@ -23,6 +23,20 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "KART", schema = "SCOTT")
 @DynamicUpdate
+/*
+@NamedStoredProcedureQuery
+        (
+                name="xxx",
+                procedureName="scott.p_houses.kart_lsk_add"*/
+/*,
+                parameters = {
+                        @StoredProcedureParameter(name="in_route", mode=ParameterMode.IN, type=String.class),
+                        @StoredProcedureParameter(name="in_round", mode=ParameterMode.IN, type=String.class)
+                },
+                resultSetMappings={"AccountRouteRoundMapping"}*//*
+
+        )
+*/
 @Getter
 @Setter
 public class Kart {

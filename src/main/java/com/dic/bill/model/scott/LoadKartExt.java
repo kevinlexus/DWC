@@ -26,9 +26,13 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "id", unique = true, updatable = false, nullable = false)
     private Integer id;
 
+    // лиц.счет, чтобы обновлять быстро, не как сущностью
+    @Column(name = "LSK")
+    private String lsk;
+
     // лиц.счет в системе "Директ"
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LSK", referencedColumnName = "LSK")
+    @JoinColumn(name = "LSK", referencedColumnName = "LSK", insertable = false, updatable = false)
     private Kart kart;
 
     // Ko фин лиц.счета

@@ -9,6 +9,7 @@ import com.ric.cmn.excp.EmptyId;
 import com.ric.cmn.excp.WrongParam;
 import com.ric.cmn.excp.WrongValue;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.procedure.ProcedureOutputs;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -306,6 +307,13 @@ public class KartMngImpl implements KartMng {
                     .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
                     .thenComparing(Kart::getLsk));
             kartMain.ifPresent(t -> t.getKartDetail().setIsMainInPremise(true));
+
+            // обновление главного лиц.счета по K_LSK_ID (Актуальный, желательно LSK_TP_MAIN, далее по lsk)
+            kartMain = kart.getKoKw().getKart().stream().min(Comparator.comparing((Kart o1) -> !o1.isActual())
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_MAIN"))
+                    .thenComparing(t -> !t.getTp().getCd().equals("LSK_TP_RSO"))
+                    .thenComparing(Kart::getLsk));
+            kartMain.ifPresent(t -> t.getKartDetail().setIsMainInKlsk(true));
         }
 
         log.info("Окончание обновления порядка следования адресов Kart");
@@ -432,6 +440,9 @@ public class KartMngImpl implements KartMng {
         qr.setParameter("p_im", im);
         qr.setParameter("p_ot", ot);
         String lsk = qr.getOutputParameterValue("p_lsk_new").toString().trim();
+
+        qr.unwrap(ProcedureOutputs.class).release(); // чтоб не было MAXIMUM OPEN CURSOR в БД
+
         //Optional<Kart> kartOpt = kartDAO.findById(lsk);
         Kart kart = em.find(Kart.class, lsk);
         if (kart != null) {
@@ -439,7 +450,6 @@ public class KartMngImpl implements KartMng {
         } else {
             throw new WrongParam("Не найден созданный KART по лиц счету lsk=" + lsk);
         }
-
     }
 
     /**
