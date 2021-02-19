@@ -97,6 +97,10 @@ public class LoadKartExt implements java.io.Serializable {
     @Column(name = "COMM")
     private String comm;
 
+    // результат сохранения в базу
+    @Column(name = "APPROVE_RESULT")
+    private String approveResult;
+
     // статус (0 - принять к загрузке, 1 - уже загружен, 2 - ошибка (смотреть COMM)
     @Column(name = "STATUS")
     private Integer status;
@@ -120,6 +124,8 @@ public class LoadKartExt implements java.io.Serializable {
 
 
     public static final class LoadKartExtBuilder {
+        // лиц.счет, чтобы обновлять быстро, не как сущностью
+        private String lsk;
         // лиц.счет в системе "Директ"
         private Kart kart;
         // Ko фин лиц.счета
@@ -152,6 +158,8 @@ public class LoadKartExt implements java.io.Serializable {
         private BigDecimal payment;
         // комментарий по загрузке
         private String comm;
+        // результат сохранения в базу
+        private String approveResult;
         // статус (0 - принять к загрузке, 1 - уже загружен, 2 - ошибка (смотреть COMM)
         private Integer status;
         // расчетный счет, для выставления счетов на оплату (используется в REP_BILLS_COMPOUND)
@@ -162,6 +170,11 @@ public class LoadKartExt implements java.io.Serializable {
 
         public static LoadKartExtBuilder aLoadKartExt() {
             return new LoadKartExtBuilder();
+        }
+
+        public LoadKartExtBuilder withLsk(String lsk) {
+            this.lsk = lsk;
+            return this;
         }
 
         public LoadKartExtBuilder withKart(Kart kart) {
@@ -244,6 +257,11 @@ public class LoadKartExt implements java.io.Serializable {
             return this;
         }
 
+        public LoadKartExtBuilder withApproveResult(String approveResult) {
+            this.approveResult = approveResult;
+            return this;
+        }
+
         public LoadKartExtBuilder withStatus(Integer status) {
             this.status = status;
             return this;
@@ -256,6 +274,7 @@ public class LoadKartExt implements java.io.Serializable {
 
         public LoadKartExt build() {
             LoadKartExt loadKartExt = new LoadKartExt();
+            loadKartExt.setLsk(lsk);
             loadKartExt.setKart(kart);
             loadKartExt.setKoKw(koKw);
             loadKartExt.setKoPremise(koPremise);
@@ -272,6 +291,7 @@ public class LoadKartExt implements java.io.Serializable {
             loadKartExt.setChrg(chrg);
             loadKartExt.setPayment(payment);
             loadKartExt.setComm(comm);
+            loadKartExt.setApproveResult(approveResult);
             loadKartExt.setStatus(status);
             loadKartExt.setRSchet(rSchet);
             return loadKartExt;

@@ -38,7 +38,8 @@ public interface KartDAO extends JpaRepository<Kart, String> {
                                           @Param("houseId") Integer houseId, @Param("kw") String kw);
 
     //@EntityGraph(attributePaths = {"kartDetail", "kartPr"})
-    @Query("select t.lsk as lsk, t.koKw.id as klskId, t.psch as psch from Kart t where t.house.id = :houseId and t.num=:kw")
+    @Query("select t.lsk as lsk, t.koKw.id as klskId, t.psch as psch from Kart t " +
+            "where t.house.id = :houseId and t.num=:kw")
     List<KartLsk> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
     //List<String> findByHouseIdKw(@Param("houseId") Integer houseId, @Param("kw") String kw);
 
