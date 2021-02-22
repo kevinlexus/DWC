@@ -45,6 +45,8 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
      * @param u - объект объема
      */
     public void groupUslVol(UslPriceVolKart u) {
+        // note ред.22.02.21 - возможны проблемы с добавлением объемов по услуге 54 - отопление гкал со сверх.норм.
+        // note пока не стал вносить изменения
         // детализированный объем
         // округленный объем
         BigDecimal vol = u.vol.add(u.volOverSoc);
@@ -205,8 +207,20 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         for (Usl usl : lstUsl) {
             BigDecimal summSample = roundByLst(getLstUslVolKartGrp(), usl, null);
             roundByLst(getLstUslVolVvod(), usl, summSample);
-            roundByLst(getLstUslPriceVolKartDt(), usl, summSample);
+            roundByLst2(getLstUslPriceVolKartDt(), usl, summSample);
+            //log.trace("usl={}", usl.getId());
         }
+
+/* какой бред!
+        getLstUslPriceVolKartDt().stream().forEach(t-> log.trace("usl2={}", t.usl.getId()));
+        // ред.22.02.21 - округлить услуги не вошедшие в список округляемых по вводу
+        List<Usl> lstUslOther = getLstUslPriceVolKartDt().stream()
+                .filter(t -> !lstUsl.contains(t.usl))
+                .map(t -> t.usl).distinct().collect(Collectors.toList());
+        for (Usl usl : lstUslOther) {
+            roundByLst2(getLstUslPriceVolKartDt(), usl);
+        }
+*/
     }
 
     /**
@@ -255,11 +269,82 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             lstSrc.stream()
                     .filter(t -> t.usl.equals(usl))
                     .reduce((first, second) -> second) // найти последний элемент
-                    //.findFirst()
                     .ifPresent(t -> t.vol = t.vol.add(diff));
         }
         return summSample;
     }
+
+    private BigDecimal roundByLst2(List<UslPriceVolKartDt> lstSrc, Usl usl, BigDecimal summSample) {
+        List<UslPriceVolKartDt> lst = lstSrc.stream()
+                .filter(t -> t.usl.equals(usl))
+                .collect(Collectors.toList());
+
+        int round;
+        // note Для отображения округлённого объема в карточках так же используется поле USL.CHRG_ROUND!
+        if (usl.isCalcByArea()) {
+            // до 2 знаков - услуги, рассчитываемые по площади
+            round = 2;
+        } else {
+            // остальные услуги до 5 знаков
+            round = 5;
+        }
+        if (summSample == null) {
+            summSample = lst.stream().map(t -> t.vol.add(t.volOverSoc)).reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .setScale(round, BigDecimal.ROUND_HALF_UP);
+        }
+        lst.forEach(t -> {
+            t.vol = t.vol.setScale(round, BigDecimal.ROUND_HALF_UP);
+            t.volOverSoc = t.volOverSoc.setScale(round, BigDecimal.ROUND_HALF_UP);
+        });
+
+        BigDecimal sumVol2 = lst.stream().map(t -> t.vol.add(t.volOverSoc)).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal diff = summSample.subtract(sumVol2);
+        if (diff.compareTo(BigDecimal.ZERO) != 0) {
+            lstSrc.stream()
+                    .filter(t -> t.usl.equals(usl))
+                    .reduce((first, second) -> second) // найти последний элемент
+                    .ifPresent(t -> t.vol = t.vol.add(diff));
+        }
+        return summSample;
+    }
+
+/*
+    private void roundByLst2(List<UslPriceVolKartDt> lstSrc, Usl usl) {
+        List<UslPriceVolKartDt> lst = lstSrc.stream()
+                .filter(t -> t.usl.equals(usl))
+                .collect(Collectors.toList());
+
+        int round;
+        if (usl.isCalcByArea()) {
+            // до 2 знаков - услуги, рассчитываемые по площади
+            round = 2;
+        } else {
+            // остальные услуги до 5 знаков
+            round = 5;
+        }
+        BigDecimal summSample = lst.stream().map(t -> t.vol).reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(round, BigDecimal.ROUND_HALF_UP);
+        BigDecimal summSampleOverSoc = lst.stream().map(t -> t.volOverSoc).reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(round, BigDecimal.ROUND_HALF_UP);
+        lst.forEach(t -> t.vol = t.vol.setScale(round, BigDecimal.ROUND_HALF_UP));
+        lst.forEach(t -> t.volOverSoc = t.volOverSoc.setScale(round, BigDecimal.ROUND_HALF_UP));
+        BigDecimal sumVol = lst.stream().map(t -> t.vol).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal diff = summSample.subtract(sumVol);
+        sumVol = lst.stream().map(t -> t.volOverSoc).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal diffOverSoc = summSampleOverSoc.subtract(sumVol);
+        if (diff.compareTo(BigDecimal.ZERO) != 0 || diffOverSoc.compareTo(BigDecimal.ZERO) != 0) {
+            lstSrc.stream()
+                    .filter(t -> t.usl.equals(usl))
+                    .reduce((first, second) -> second) // найти последний элемент
+                    .ifPresent(t ->
+                            {
+                                t.vol = t.vol.add(diff);
+                                t.volOverSoc = t.volOverSoc.add(diffOverSoc);
+                            }
+                    );
+        }
+    }
+*/
 
     /**
      * Распечатать объемы по лиц.счетам
@@ -284,7 +369,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 if (uslId == null || t.usl.getId().equals(uslId)) {
                     log.trace("dt={}-{}, lsk={}, usl={}, uslOverSoc={}, uslEmpt={}, ar={}, arOv={}, empt={}, met={}, res={}, " +
                                     "org={}, prc={}, prcE={}, prcO={}, std={} " +
-                                    "kprNorm={}, kprO={}, kprW={}, kprM={}, vol={}, volO={}",
+                                    "kprNorm={}, kprO={}, kprW={}, kprM={}, vol={}, volOvSc={}",
                             Utl.getStrFromDate(t.dtFrom), Utl.getStrFromDate(t.dtTo),
                             t.kart.getLsk(), t.usl.getId(), t.uslOverSoc.getId(), t.uslEmpt.getId(),
                             t.area.setScale(4, BigDecimal.ROUND_HALF_UP).stripTrailingZeros(),
@@ -328,17 +413,15 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
     /**
      * Распечатать объемы по лиц.счетам для начисления
-     *
-     * @param uslId - код услуги, если не заполнено, то все
      */
 
-    public void printVolAmntChrg(String uslId) {
+    public void printVolAmntChrg() {
         Logger root = (Logger) LoggerFactory.getLogger("com.ric");
         if (root.isTraceEnabled()) {
             log.trace("");
             log.trace("****** ПРОВЕРКА объема UslPriceVolKartDt, для сохранения в C_CHARGE:");
             for (UslPriceVolKartDt u : getLstUslPriceVolKartDt()) {
-                log.info("lsk={}, usl={}, vol={}, volOverSoc={} *******",
+                log.trace("lsk={}, usl={}, vol={}, volOverSoc={} *******",
                         u.kart.getLsk(), u.usl.getId(), u.vol, u.volOverSoc);
             }
         }
@@ -432,7 +515,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
         log.trace("Сохранено в C_CHARGE:");
         int i = 0; // № п.п.
         for (UslVolCharge u : getLstUslVolCharge()) {
-            if (u.kart.getKartExt() != null && u.kart.getKartExt().size()>0) {
+            if (u.kart.getKartExt() != null && u.kart.getKartExt().size() > 0) {
                 // внешние лиц.счета, получить сумму начисления из внешнего источника
                 for (KartExt kartExt : u.kart.getKartExt()) {
                     if (kartExt.isActual()) {
