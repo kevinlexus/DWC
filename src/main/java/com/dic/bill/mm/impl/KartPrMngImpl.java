@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Slf4j
@@ -29,7 +30,8 @@ public class KartPrMngImpl implements KartPrMng {
 
     /**
      * Получить кол-во проживающих по лиц.счету и услуге, на дату
-     *  @param kartMain        - основной лиц.счет
+     *
+     * @param kartMain        - основной лиц.счет
      * @param nabor           - строка набора услуг
      * @param parVarCntKpr    - параметр, тип расчета, 0 - Кис, 1 - Полыс, 2 - ТСЖ
      * @param parCapCalcKprTp - параметр учета проживающих для капремонта (0,1-учёт ВЗ, 2=льготы отключены)
@@ -130,7 +132,7 @@ public class KartPrMngImpl implements KartPrMng {
                     countPers.kprOt++;
                     //countPers.kprMax++;
                     if (nabor.getUsl().isHousing() ||
-                            Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18,19)) {
+                            Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19)) {
                         // жилищная услуга или х.в., г.в., кан. ред.25.10.2019
                         countPers.kprNorm++;
                     }
@@ -214,14 +216,15 @@ public class KartPrMngImpl implements KartPrMng {
     /**
      * Получить объем по нормативу на всех проживающих
      *
+     * @param kartArea
      * @param nabor     - строка услуги из набора
      * @param countPers - объект, содержащий кол-во проживающих
      * @return
      */
     @Override
-    public SocStandart getSocStdtVol(Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
+    public SocStandart getSocStdtVol(BigDecimal kartArea, Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
         SocStandart socStandart = new SocStandart();
-        BigDecimal norm;
+        BigDecimal norm = BigDecimal.ZERO;
         socStandart.vol = BigDecimal.ZERO;
         switch (nabor.getUsl().getFkCalcTp()) {
             case 17: // х.в.
@@ -233,8 +236,8 @@ public class KartPrMngImpl implements KartPrMng {
                 norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
                 break;
             }
-            case 14: // отопление гкал.
-            case 25: {  // тек содерж ТСЖ, TODO отопление гкал (ТСЖ)?
+            case 54: // отопление гкал. по норме/свыше
+            case 25: {  // тек содерж
                 norm = getCommonSocStdt(countPers);
                 break;
             }
@@ -252,6 +255,16 @@ public class KartPrMngImpl implements KartPrMng {
         // кол-во прож. * соцнорму
         socStandart.norm = norm;
         socStandart.vol = norm.multiply(BigDecimal.valueOf(countPers.kprNorm));
+
+        socStandart.procNorm = BigDecimal.ONE;
+        // отопление гкал. по норме/свыше
+        if (nabor.getUsl().getFkCalcTp() == 54) {
+            BigDecimal proc = socStandart.vol.divide(kartArea, 10, RoundingMode.HALF_UP);
+            if (proc.compareTo(BigDecimal.ONE) < 1) {
+                socStandart.procNorm=proc;
+            }
+        }
+
         return socStandart;
     }
 
@@ -259,7 +272,6 @@ public class KartPrMngImpl implements KartPrMng {
      * Получить соцнорму по отоплению, тек.содержанию, по справочнику
      *
      * @param countPers - DTO кол-ва проживающих
-     * @return
      */
     private BigDecimal getCommonSocStdt(CountPers countPers) {
         BigDecimal socNorm;
@@ -277,7 +289,7 @@ public class KartPrMngImpl implements KartPrMng {
                 break;
             }
             default: {
-                socNorm = new BigDecimal("20");
+                socNorm = new BigDecimal("18");
                 break;
             }
         }

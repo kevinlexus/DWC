@@ -11,5 +11,7 @@ public class SocStandart {
   public BigDecimal norm = BigDecimal.ZERO;
   // совокупный объем соцнормы
   public BigDecimal vol = BigDecimal.ZERO;
+  // доля свыше соц.нормы
+  public BigDecimal procNorm = BigDecimal.ZERO;
 
 }
