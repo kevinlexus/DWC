@@ -83,7 +83,7 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
 
         // если услуга usl.cd="х.в. для гвс", то сохранить для услуг типа Тепл.энергия для нагрева ХВС (Кис.)
         // или х.в., г.в. для водоотведения
-        if (u.usl.getCd() != null && (Utl.in(u.usl.getFkCalcTp(), 17, 18)
+        if (u.usl.getCd() != null && (Utl.in(u.usl.getFkCalcTp(), 17, 18, 55, 56)
                 || u.usl.getCd().equals("х.в. для гвс"))) {
             lstUslPriceVolKartDetailed.add(u);
         }
@@ -446,14 +446,13 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
                 uslFact = u.uslEmpt;
                 priceFact = u.priceEmpty;
             }
-            addUslVolChrg(u, uslFact, u.vol, u.area, priceFact);
+            addUslVolChrg(u, uslFact, u.vol, u.area, priceFact, false);
             //}
 
             // свыше соц.нормы
-            // у услуг типа Текущее содержание - не должно быть объема в u.volOverSoc
             if (u.volOverSoc.compareTo(BigDecimal.ZERO) != 0) {
                 addUslVolChrg(u, u.uslOverSoc,
-                        u.volOverSoc, u.areaOverSoc, u.priceOverSoc);
+                        u.volOverSoc, u.areaOverSoc, u.priceOverSoc, true);
             }
         }
     }
@@ -461,13 +460,14 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
     /**
      * добавить строку для записи в C_CHARGE, с группировкой
      *
-     * @param u       - запись начисления
-     * @param uslFact - фактическая услуга
-     * @param vol     - объем
-     * @param area    - площадь
+     * @param u         - запись начисления
+     * @param uslFact   - фактическая услуга
+     * @param vol       - объем
+     * @param area      - площадь
+     * @param isOverSoc
      */
     private void addUslVolChrg(UslPriceVolKartDt u, Usl uslFact,
-                               BigDecimal vol, BigDecimal area, BigDecimal price) {
+                               BigDecimal vol, BigDecimal area, BigDecimal price, boolean isOverSoc) {
         UslVolCharge prev = getLstUslVolCharge().stream()
                 .filter(t -> t.kart.equals(u.kart) && t.usl.equals(uslFact)
                         && t.isMeter == u.isMeter) // price пока не контролирую, в этой версии должна быть постоянна на протяжении месяца
@@ -476,10 +476,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             // найдена запись с данным ключом
             prev.vol = prev.vol.add(vol);
             prev.area = prev.area.add(area);
-            prev.setKpr(prev.getKpr().add(u.getKpr()));
-            prev.setKprNorm(prev.getKprNorm().add(u.kprNorm));
-            prev.kprWr = prev.kprWr.add(u.kprWr);
-            prev.kprOt = prev.kprOt.add(u.kprOt);
+            if (!isOverSoc) {
+                prev.setKpr(prev.getKpr().add(u.getKpr()));
+                prev.setKprNorm(prev.getKprNorm().add(u.kprNorm));
+                prev.kprWr = prev.kprWr.add(u.kprWr);
+                prev.kprOt = prev.kprOt.add(u.kprOt);
+            }
         } else {
             // не найдена запись, создать новую
             UslVolCharge uslVolCharge = new UslVolCharge();
@@ -489,10 +491,12 @@ public class ChrgCountAmountLocal extends ChrgCountAmountBase {
             uslVolCharge.vol = vol;
             uslVolCharge.price = price;
             uslVolCharge.area = area;
-            uslVolCharge.setKpr(u.getKpr());
-            uslVolCharge.setKprNorm(u.kprNorm);
-            uslVolCharge.kprWr = u.kprWr;
-            uslVolCharge.kprOt = u.kprOt;
+            if (!isOverSoc) {
+                uslVolCharge.setKpr(u.getKpr());
+                uslVolCharge.setKprNorm(u.kprNorm);
+                uslVolCharge.kprWr = u.kprWr;
+                uslVolCharge.kprOt = u.kprOt;
+            }
             getLstUslVolCharge().add(uslVolCharge);
         }
 /*

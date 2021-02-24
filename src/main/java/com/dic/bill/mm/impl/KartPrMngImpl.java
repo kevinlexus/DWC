@@ -94,7 +94,7 @@ public class KartPrMngImpl implements KartPrMng {
                     if (nabor.getUsl().isHousing()) {
                         // жилищная услуга
                         countPers.kpr++;
-                    } else if (Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19)) {
+                    } else if (Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19, 55, 56, 57)) {
                         // х.в., г.в., водоотвед - КИС согласно ТЗ на 22.10.2019
                         // расценка по ВО - на уровне для населения
                         countPers.kpr++;
@@ -132,7 +132,7 @@ public class KartPrMngImpl implements KartPrMng {
                     countPers.kprOt++;
                     //countPers.kprMax++;
                     if (nabor.getUsl().isHousing() ||
-                            Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19)) {
+                            Utl.in(nabor.getUsl().getFkCalcTp(), 17, 18, 19, 55, 56, 57)) {
                         // жилищная услуга или х.в., г.в., кан. ред.25.10.2019
                         countPers.kprNorm++;
                     }
@@ -216,22 +216,25 @@ public class KartPrMngImpl implements KartPrMng {
     /**
      * Получить объем по нормативу на всех проживающих
      *
-     * @param kartArea
-     * @param nabor     - строка услуги из набора
-     * @param countPers - объект, содержащий кол-во проживающих
-     * @return
+     * @param factVol   факт.объем услуги, для установления соотношения нормы/сверхнормы
+     * @param nabor     строка услуги из набора
+     * @param countPers объект, содержащий кол-во проживающих
      */
     @Override
-    public SocStandart getSocStdtVol(BigDecimal kartArea, Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
+    public SocStandart getSocStdtVol(BigDecimal factVol, Nabor nabor, CountPers countPers) throws ErrorWhileChrg {
         SocStandart socStandart = new SocStandart();
-        BigDecimal norm = BigDecimal.ZERO;
+        BigDecimal norm;
         socStandart.vol = BigDecimal.ZERO;
         switch (nabor.getUsl().getFkCalcTp()) {
             case 17: // х.в.
             case 18: // г.в.
+            case 19: // водоотв.
+            case 55: // х.в. с соц.н./свыше
+            case 56: // г.в. с соц.н./свыше
+            case 57: // водоотв. с соц.н./свыше
             case 52: // ХВС для гвс
             case 53: // компонент тепл.энерг.для г.в.
-            case 19: {// водоотв.
+            {
                 // соцнорма из набора
                 norm = Utl.nvl(nabor.getNorm(), BigDecimal.ZERO);
                 break;
@@ -257,11 +260,11 @@ public class KartPrMngImpl implements KartPrMng {
         socStandart.vol = norm.multiply(BigDecimal.valueOf(countPers.kprNorm));
 
         socStandart.procNorm = BigDecimal.ONE;
-        // отопление гкал. по норме/свыше
-        if (nabor.getUsl().getFkCalcTp() == 54) {
-            BigDecimal proc = socStandart.vol.divide(kartArea, 10, RoundingMode.HALF_UP);
+        // отопление гкал. по норме/свыше, х.в. г.в., водоотв.
+        if (!countPers.isEmpty && factVol.compareTo(BigDecimal.ZERO)>0 && Utl.in(nabor.getUsl().getFkCalcTp(), 54, 55, 56, 57)) {
+            BigDecimal proc = socStandart.vol.divide(factVol, 10, RoundingMode.HALF_UP);
             if (proc.compareTo(BigDecimal.ONE) < 1) {
-                socStandart.procNorm=proc;
+                socStandart.procNorm = proc;
             }
         }
 
