@@ -275,7 +275,7 @@ public class KartMngImpl implements KartMng {
 
         kartDetailDAO.updateOrd1ToNull();
         int i = 0;
-        List<Kart> lstKart = kartDao.findAll().stream()
+        List<Kart> lstKart = kartDao.findAllForOrdering().stream()
                 .sorted(Comparator.comparing((Kart o1) -> o1.getSpul().getName())
                         .thenComparing(t -> t.getNdDigit().equals("") ? 0 : Integer.parseInt(t.getNdDigit()))
                         .thenComparing(Kart::getNdIndex)

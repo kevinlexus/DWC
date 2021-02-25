@@ -4,11 +4,11 @@ import com.dic.bill.model.exs.Eolink;
 import com.ric.cmn.Utl;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -23,20 +23,6 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "KART", schema = "SCOTT")
 @DynamicUpdate
-/*
-@NamedStoredProcedureQuery
-        (
-                name="xxx",
-                procedureName="scott.p_houses.kart_lsk_add"*/
-/*,
-                parameters = {
-                        @StoredProcedureParameter(name="in_route", mode=ParameterMode.IN, type=String.class),
-                        @StoredProcedureParameter(name="in_round", mode=ParameterMode.IN, type=String.class)
-                },
-                resultSetMappings={"AccountRouteRoundMapping"}*//*
-
-        )
-*/
 @Getter
 @Setter
 public class Kart {
@@ -139,11 +125,14 @@ public class Kart {
     // Ko лиц.счета (здесь OneToOne, cascade=CascadeType.ALL)
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "FK_KLSK_OBJ", referencedColumnName = "ID")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Ko koLsk;
 
     // детализация по лиц.счету
-    @OneToOne(mappedBy = "kart", fetch = FetchType.LAZY, optional = false)
-    @Fetch(FetchMode.JOIN)
+    @OneToOne(mappedBy = "kart", cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY, optional = false)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private KartDetail kartDetail;
 
     // объект Eolink лиц.счета, здесь OneToMany, так как в странном ГИС ЖКХ могут быть лиц.счета с одинаковым LSK и разными GUID
@@ -200,7 +189,7 @@ public class Kart {
 
     // проживающие
     @OneToMany(mappedBy = "kart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN) // note не включать!!! вызывает N+1!!! использовать entityGraph ред.24.02.21
     private Set<KartPr> kartPr = new HashSet<>(0);
 
     // текущие начисления
